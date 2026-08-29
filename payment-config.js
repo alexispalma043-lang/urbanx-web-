@@ -147,7 +147,7 @@
     return normalized;
   }
 
-  async function load(db) {
+  async function loadWithStatus(db) {
     let config =
       readLocal();
 
@@ -156,7 +156,11 @@
       ||
       typeof db.collection !== "function"
     ) {
-      return config;
+      return {
+        config,
+        remoteLoaded: false,
+        reason: "Firestore no está disponible."
+      };
     }
 
     try {
@@ -170,23 +174,46 @@
           )
           .get();
 
-      if (snapshot.exists) {
-        config =
-          normalize(
-            snapshot.data()
-          );
-
-        saveLocal(config);
+      if (!snapshot.exists) {
+        return {
+          config,
+          remoteLoaded: false,
+          reason: "No existe una configuración de pagos publicada."
+        };
       }
+
+      config =
+        normalize(
+          snapshot.data()
+        );
+
+      saveLocal(config);
+
+      return {
+        config,
+        remoteLoaded: true,
+        reason: ""
+      };
 
     } catch (error) {
       console.warn(
-        "SIXTEEN pagos: usando configuración local.",
+        "SIXTEEN pagos: no fue posible cargar la configuración remota.",
         error
       );
-    }
 
-    return config;
+      return {
+        config,
+        remoteLoaded: false,
+        reason: "No pudimos verificar los métodos de pago."
+      };
+    }
+  }
+
+  async function load(db) {
+    const result =
+      await loadWithStatus(db);
+
+    return result.config;
   }
 
   function name(method, config) {
@@ -223,6 +250,66 @@
       normalize(config);
 
     return cfg[method]?.activo === true;
+  }
+
+  function validHttpUrl(value) {
+    const url =
+      text(value);
+
+    if (!url) {
+      return false;
+    }
+
+    try {
+      const parsed =
+        new URL(url);
+
+      return [
+        "https:",
+        "http:"
+      ].includes(
+        parsed.protocol
+      );
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function ready(method, config) {
+    const cfg =
+      normalize(config);
+
+    if (!active(method, cfg)) {
+      return false;
+    }
+
+    if (method === "transferencia") {
+      return Boolean(
+        text(cfg.transferencia.banco)
+        &&
+        text(cfg.transferencia.numeroCuenta)
+        &&
+        text(cfg.transferencia.titular)
+      );
+    }
+
+    if (method === "qr") {
+      return validHttpUrl(
+        cfg.qr.imagenUrl
+      );
+    }
+
+    if (method === "tarjeta") {
+      return validHttpUrl(
+        cfg.tarjeta.urlPago
+      );
+    }
+
+    if (method === "efectivo") {
+      return true;
+    }
+
+    return false;
   }
 
   function initialState(method) {
@@ -356,8 +443,10 @@
     readLocal,
     saveLocal,
     load,
+    loadWithStatus,
     name,
     active,
+    ready,
     initialState,
     instructions
   };

@@ -7908,3 +7908,76 @@ body {
     font-size: 10px;
   }
 }
+
+/* =========================================================
+   SIXTEEN · CHECKOUT PRE-FINAL · PASO 4
+========================================================= */
+
+.checkout-status,
+.checkout-config-status,
+.checkout-error {
+  min-height: 20px;
+  margin: 0 0 15px;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.checkout-status {
+  color: #8e8a83;
+}
+
+.checkout-config-status {
+  padding: 10px 12px;
+  border: 1px solid var(--sixteen-line);
+  background: #090909;
+  color: #8e8a83;
+}
+
+.checkout-config-status.ok {
+  border-color: rgba(216,170,85,.34);
+  color: var(--sixteen-gold-light);
+}
+
+.checkout-config-status.error {
+  border-color: rgba(201,71,60,.45);
+  color: #e78d83;
+}
+
+.checkout-error {
+  margin-top: 12px;
+  color: #e78d83;
+  font-weight: 700;
+}
+
+.checkout-empty {
+  padding: 32px 12px;
+  text-align: center;
+  color: #8e8a83;
+}
+
+.checkout-empty p {
+  margin: 0 0 14px;
+}
+
+.checkout-empty a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  color: var(--sixteen-gold-light);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.opcion-checkout.payment-disabled {
+  opacity: .42;
+  cursor: not-allowed;
+}
+
+.opcion-checkout.payment-disabled * {
+  cursor: not-allowed;
+}

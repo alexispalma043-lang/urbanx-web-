@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 // ==========================================================
-// URBANX
+// SIXTEEN
 // CHECKOUT
 // FIREBASE AUTH + FIRESTORE
 // ==========================================================
@@ -210,6 +210,12 @@ document.addEventListener(
       );
 
 
+    const checkoutConfigStatus =
+      document.getElementById(
+        "checkoutConfigStatus"
+      );
+
+
     const mensajeCheckout =
       document.getElementById(
         "mensajeCheckout"
@@ -257,6 +263,22 @@ document.addEventListener(
 
     let procesandoPedido =
       false;
+
+
+    let enviosConfiguracionLista =
+      false;
+
+
+    let pagosConfiguracionLista =
+      false;
+
+
+    let configuracionEnvioMotivo =
+      "Verificando tarifas de envío...";
+
+
+    let configuracionPagoMotivo =
+      "Verificando métodos de pago...";
 
 
     let toastTimer;
@@ -310,13 +332,75 @@ document.addEventListener(
     };
 
 
-    let tarifasEnvio = {
-      ...tarifasEnvioFallback
-    };
+    // Las tarifas base quedan solo como referencia visual/técnica.
+    // En producción el checkout exige una configuración remota válida
+    // antes de permitir registrar un pedido.
+    let tarifasEnvio = {};
 
 
     let enviosRemotos =
       null;
+
+
+    // ======================================================
+    // ESTADO DE CONFIGURACIÓN CRÍTICA
+    // ======================================================
+
+    function actualizarEstadoConfiguracion() {
+
+      if (!checkoutConfigStatus) {
+        return;
+      }
+
+      const errores = [];
+
+      if (!enviosConfiguracionLista) {
+        errores.push(
+          configuracionEnvioMotivo
+          ||
+          "No pudimos verificar las tarifas de envío."
+        );
+      }
+
+      if (!pagosConfiguracionLista) {
+        errores.push(
+          configuracionPagoMotivo
+          ||
+          "No pudimos verificar los métodos de pago."
+        );
+      }
+
+      if (errores.length) {
+        checkoutConfigStatus.textContent =
+          errores.join(" ");
+        checkoutConfigStatus.classList.remove("ok");
+        checkoutConfigStatus.classList.add("error");
+      } else {
+        checkoutConfigStatus.textContent =
+          "Tarifas de envío y métodos de pago verificados.";
+        checkoutConfigStatus.classList.remove("error");
+        checkoutConfigStatus.classList.add("ok");
+      }
+
+      actualizarDisponibilidadFinalizar();
+    }
+
+
+    function actualizarDisponibilidadFinalizar() {
+
+      if (!finalizarPedidoBtn) {
+        return;
+      }
+
+      finalizarPedidoBtn.disabled =
+        procesandoPedido
+        ||
+        !carritoValidado
+        ||
+        !enviosConfiguracionLista
+        ||
+        !pagosConfiguracionLista;
+    }
 
 
     // ======================================================
@@ -735,6 +819,16 @@ document.addEventListener(
 
     async function cargarTarifasEnvioRemotas() {
 
+      enviosConfiguracionLista =
+        false;
+
+      configuracionEnvioMotivo =
+        "Verificando tarifas de envío...";
+
+      tarifasEnvio = {};
+
+      actualizarEstadoConfiguracion();
+
       try {
 
         const snapshot =
@@ -743,21 +837,24 @@ document.addEventListener(
             .get();
 
         if (snapshot.empty) {
-          return;
+          enviosRemotos =
+            null;
+
+          configuracionEnvioMotivo =
+            "No existen tarifas de envío publicadas.";
+
+          actualizarEstadoConfiguracion();
+          return false;
         }
 
-        const configuracion =
-          {};
-
-        const tarifas =
-          {};
+        const configuracion = {};
+        const tarifas = {};
 
         snapshot.forEach(
           function (doc) {
 
             const datos =
-              doc.data() ||
-              {};
+              doc.data() || {};
 
             const provinciaNombre =
               String(
@@ -769,55 +866,54 @@ document.addEventListener(
               return;
             }
 
-            configuracion[
-              provinciaNombre
-            ] = {
+            configuracion[provinciaNombre] = {
               activo:
-                datos.activo ===
-                true,
+                datos.activo === true,
 
               tarifa:
                 Math.max(
                   0,
-                  numero(
-                    datos.tarifa
-                  )
+                  numero(datos.tarifa)
                 )
             };
 
-            if (
-              datos.activo ===
-              true
-            ) {
-
-              tarifas[
-                provinciaNombre
-              ] =
+            if (datos.activo === true) {
+              tarifas[provinciaNombre] =
                 Math.max(
                   0,
-                  numero(
-                    datos.tarifa
-                  )
+                  numero(datos.tarifa)
                 );
             }
           }
         );
 
-        if (
-          Object.keys(
-            configuracion
-          ).length >
-          0
-        ) {
-
+        if (!Object.keys(configuracion).length) {
           enviosRemotos =
-            configuracion;
+            null;
 
-          tarifasEnvio =
-            tarifas;
+          configuracionEnvioMotivo =
+            "Las tarifas de envío publicadas no son válidas.";
 
-          aplicarEstadoProvinciasRemotas();
+          actualizarEstadoConfiguracion();
+          return false;
         }
+
+        enviosRemotos =
+          configuracion;
+
+        tarifasEnvio =
+          tarifas;
+
+        enviosConfiguracionLista =
+          true;
+
+        configuracionEnvioMotivo =
+          "";
+
+        aplicarEstadoProvinciasRemotas();
+        actualizarEstadoConfiguracion();
+
+        return true;
 
       } catch (error) {
 
@@ -825,6 +921,17 @@ document.addEventListener(
           "Tarifas remotas:",
           error
         );
+
+        enviosRemotos =
+          null;
+
+        tarifasEnvio = {};
+
+        configuracionEnvioMotivo =
+          "No pudimos verificar las tarifas de envío. Revisa tu conexión.";
+
+        actualizarEstadoConfiguracion();
+        return false;
       }
     }
 
@@ -1031,7 +1138,7 @@ document.addEventListener(
 
         carritoValidado=true;
         estadoCheckout.textContent="Pedido verificado · precios, variante y stock actualizados.";
-        finalizarPedidoBtn.disabled=false;
+        actualizarDisponibilidadFinalizar();
         return true;
 
       }catch(error){
@@ -1039,7 +1146,7 @@ document.addEventListener(
         carritoValidado=false;
         estadoCheckout.textContent="El pedido necesita revisión.";
         mensajeCheckout.textContent=error.message||"No fue posible verificar tu carrito.";
-        finalizarPedidoBtn.disabled=true;
+        actualizarDisponibilidadFinalizar();
         return false;
       }
     }
@@ -1191,27 +1298,12 @@ document.addEventListener(
 
         checkoutProductos.innerHTML = `
 
-          <div
-            style="
-              padding:30px 0;
-              text-align:center;
-              color:#777;
-            "
-          >
+          <div class="checkout-empty">
 
-            Tu carrito está vacío.
+            <p>Tu carrito está vacío.</p>
 
-            <br><br>
-
-            <a
-              href="./index.html#productos"
-              style="
-                color:#111;
-                font-weight:900;
-                text-decoration:underline;
-              "
-            >
-              Ver productos
+            <a href="./index.html#productos">
+              Ver productos →
             </a>
 
           </div>
@@ -1644,6 +1736,30 @@ document.addEventListener(
 
 
       if (
+        !enviosConfiguracionLista
+      ) {
+
+        mostrarToast(
+          "No pudimos verificar las tarifas de envío."
+        );
+
+        return false;
+      }
+
+
+      if (
+        !pagosConfiguracionLista
+      ) {
+
+        mostrarToast(
+          "No pudimos verificar los métodos de pago."
+        );
+
+        return false;
+      }
+
+
+      if (
         !validarCorreo(
           email.value.trim()
         )
@@ -1725,16 +1841,19 @@ document.addEventListener(
       }
 
 
+      const identificacionCliente =
+        identificacion.value.trim();
+
+
       if (
-        identificacion.value
-          .trim()
-          .length <
-        10
+        !/^\d{10}(?:\d{3})?$/.test(
+          identificacionCliente
+        )
       ) {
 
 
         mostrarToast(
-          "Revisa la identificación."
+          "Ingresa una cédula de 10 dígitos o identificación/RUC de 13 dígitos."
         );
 
 
@@ -1761,6 +1880,20 @@ document.addEventListener(
 
         return false;
 
+      }
+
+
+      if (
+        tarifasEnvio[provincia.value] ===
+        undefined
+      ) {
+
+        mostrarToast(
+          "La provincia seleccionada no tiene una tarifa de envío activa."
+        );
+
+        provincia.focus();
+        return false;
       }
 
 
@@ -1925,11 +2058,21 @@ document.addEventListener(
       metodo
     ) {
 
-      if (!PAYMENTS) {
-        return (
-          metodo === "transferencia"
-          ||
-          metodo === "efectivo"
+      if (
+        !PAYMENTS
+        ||
+        !pagosConfiguracionLista
+      ) {
+        return false;
+      }
+
+      if (
+        typeof PAYMENTS.ready ===
+        "function"
+      ) {
+        return PAYMENTS.ready(
+          metodo,
+          paymentConfig
         );
       }
 
@@ -2127,17 +2270,73 @@ document.addEventListener(
 
     async function cargarMetodosPago() {
 
+      pagosConfiguracionLista =
+        false;
+
+      configuracionPagoMotivo =
+        "Verificando métodos de pago...";
+
+      actualizarEstadoConfiguracion();
+
       if (!PAYMENTS) {
+        configuracionPagoMotivo =
+          "El módulo de pagos no se pudo cargar.";
         renderMetodosPago();
-        return;
+        actualizarEstadoConfiguracion();
+        return false;
       }
 
+      const resultado =
+        typeof PAYMENTS.loadWithStatus ===
+        "function"
+          ? await PAYMENTS.loadWithStatus(db)
+          : {
+              config: await PAYMENTS.load(db),
+              remoteLoaded: true,
+              reason: ""
+            };
+
       paymentConfig =
-        await PAYMENTS.load(
-          db
-        );
+        resultado.config;
+
+      pagosConfiguracionLista =
+        resultado.remoteLoaded === true;
+
+      configuracionPagoMotivo =
+        pagosConfiguracionLista
+          ? ""
+          : (
+              resultado.reason
+              ||
+              "No pudimos verificar los métodos de pago."
+            );
 
       renderMetodosPago();
+
+      const disponibles =
+        Array.from(
+          document.querySelectorAll(
+            'input[name="pago"]:not(:disabled)'
+          )
+        );
+
+      if (
+        pagosConfiguracionLista
+        &&
+        disponibles.length === 0
+      ) {
+        pagosConfiguracionLista =
+          false;
+
+        configuracionPagoMotivo =
+          "No hay métodos de pago activos y correctamente configurados.";
+
+        renderMetodosPago();
+      }
+
+      actualizarEstadoConfiguracion();
+
+      return pagosConfiguracionLista;
     }
 
 
@@ -3330,8 +3529,7 @@ document.addEventListener(
           }
 
 
-          finalizarPedidoBtn.disabled =
-            !carritoValidado;
+          actualizarDisponibilidadFinalizar();
 
 
           mostrarToast(
@@ -3538,7 +3736,13 @@ document.addEventListener(
       cargarCarrito();
 
 
-      await cargarTarifasEnvioRemotas();
+      actualizarEstadoConfiguracion();
+
+
+      await Promise.all([
+        cargarTarifasEnvioRemotas(),
+        cargarMetodosPago()
+      ]);
 
 
       await cargarPerfilCuentaCheckout();
@@ -3558,14 +3762,13 @@ document.addEventListener(
 
       await validarCarritoFirestore();
 
+
+      actualizarEstadoConfiguracion();
+
     }
 
 
     iniciarCheckout();
-
-
-
-    cargarMetodosPago();
 
   }
 );

@@ -19,7 +19,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=3100"
+    href="./styles.css?v=4600"
   >
 
   <meta name="robots" content="noindex,nofollow,noarchive">
@@ -174,6 +174,7 @@
               name="email"
               placeholder="correo@ejemplo.com"
               autocomplete="email"
+              maxlength="160"
               required
             >
 
@@ -193,6 +194,7 @@
               inputmode="numeric"
               placeholder="0999999999"
               autocomplete="tel"
+              maxlength="10"
               required
             >
 
@@ -240,6 +242,7 @@
                 id="nombres"
                 name="nombres"
                 autocomplete="given-name"
+                maxlength="100"
                 required
               >
 
@@ -257,6 +260,7 @@
                 id="apellidos"
                 name="apellidos"
                 autocomplete="family-name"
+                maxlength="100"
                 required
               >
 
@@ -442,6 +446,7 @@
                 id="ciudad"
                 name="ciudad"
                 autocomplete="address-level2"
+                maxlength="100"
                 required
               >
 
@@ -463,6 +468,7 @@
               name="direccion"
               placeholder="Calle principal y secundaria"
               autocomplete="street-address"
+              maxlength="250"
               required
             >
 
@@ -479,6 +485,7 @@
               id="referencia"
               name="referencia"
               rows="3"
+              maxlength="300"
               placeholder="Casa, edificio, color, punto de referencia..."
             ></textarea>
 
@@ -765,15 +772,17 @@
 
     <p
       id="estadoCheckout"
-      style="
-        min-height:20px;
-        margin-bottom:15px;
-        color:#777;
-        font-size:11px;
-      "
+      class="checkout-status"
+      aria-live="polite"
     >
       Verificando productos...
     </p>
+
+    <p
+      id="checkoutConfigStatus"
+      class="checkout-config-status"
+      aria-live="polite"
+    ></p>
 
 
 
@@ -858,15 +867,9 @@
 
     <p
       id="mensajeCheckout"
-      style="
-        min-height:20px;
-        margin:12px 0;
-        color:#c9473c;
-        font-size:11px;
-        font-weight:700;
-      "
-    >
-    </p>
+      class="checkout-error"
+      aria-live="assertive"
+    ></p>
 
 
 
@@ -905,7 +908,8 @@
         </strong>
 
         SIXTEEN no almacena datos de tarjetas
-        directamente en esta página.
+        directamente en esta página. El stock y los importes
+        se verifican nuevamente antes de registrar el pedido.
 
       </p>
 
@@ -1071,9 +1075,9 @@
 
 <script src="./cart-sync.js?v=3100"></script>
 
-<script src="./payment-config.js?v=3400"></script>
+<script src="./payment-config.js?v=4600"></script>
 
-<script src="./checkout.js?v=4500"></script>
+<script src="./checkout.js?v=4600"></script>
 
 
 <script src="./pwa.js?v=2700"></script>
