@@ -470,6 +470,34 @@ document.addEventListener(
       }
 
       if (
+        next.transferencia.activo
+        &&
+        (
+          !next.transferencia.banco
+          ||
+          !next.transferencia.numeroCuenta
+          ||
+          !next.transferencia.titular
+        )
+      ) {
+        setMessage(
+          "Para activar transferencia completa banco, número de cuenta y titular."
+        );
+        return;
+      }
+
+      if (
+        next.qr.activo
+        &&
+        !next.qr.imagenUrl
+      ) {
+        setMessage(
+          "Para activar pago QR debes configurar la URL de la imagen QR."
+        );
+        return;
+      }
+
+      if (
         next.tarjeta.activo
         &&
         !next.tarjeta.urlPago
