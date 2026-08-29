@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Seguimiento de pedido | SIXTEEN</title>
+
+  <meta
+    name="theme-color"
+    content="#050505"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./seguimiento.css?v=2700"
+  >
+
+  <meta name="robots" content="noindex,nofollow,noarchive">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//firestore.googleapis.com">
+  <link rel="dns-prefetch" href="//res.cloudinary.com">
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body>
+
+
+<div class="track-topbar">
+  SIXTEEN / URBAN LUXURY / ORDER TRACKING
+</div>
+
+
+<header class="track-header">
+
+  <a
+    href="./index.html"
+    class="track-brand"
+  >
+
+    <img
+      src="./assets/logo-sixteen.jpg"
+      alt="SIXTEEN Urban Luxury"
+    >
+
+    <div>
+      <strong>SIXTEEN</strong>
+      <span>URBAN LUXURY</span>
+    </div>
+
+  </a>
+
+
+  <nav>
+    <a href="./index.html">TIENDA</a>
+    <a href="./cuenta.html">MI CUENTA</a>
+  </nav>
+
+</header>
+
+
+<main class="track-main">
+
+
+  <section class="track-hero">
+
+    <p class="eyebrow">
+      ORDER TRACKING
+    </p>
+
+    <h1>
+      SIGUE TU PEDIDO
+    </h1>
+
+    <p>
+      Consulta en tiempo real el estado de tus compras SIXTEEN.
+    </p>
+
+  </section>
+
+
+  <section
+    class="track-loading"
+    id="trackLoading"
+  >
+
+    <span></span>
+
+    <p>
+      CARGANDO PEDIDOS...
+    </p>
+
+  </section>
+
+
+  <section
+    class="track-login"
+    id="trackLogin"
+    hidden
+  >
+
+    <div class="track-login-icon">
+      S
+    </div>
+
+    <h2>
+      Inicia sesión para continuar
+    </h2>
+
+    <p>
+      Por seguridad, el seguimiento solo muestra pedidos vinculados a tu sesión.
+    </p>
+
+    <a href="./cuenta.html">
+      IR A MI CUENTA
+    </a>
+
+  </section>
+
+
+  <section
+    class="track-shell"
+    id="trackShell"
+    hidden
+  >
+
+    <div class="track-selector-card">
+
+      <div>
+
+        <p class="eyebrow">
+          YOUR ORDERS
+        </p>
+
+        <h2>
+          Selecciona un pedido
+        </h2>
+
+      </div>
+
+
+      <select id="trackOrderSelect">
+        <option value="">
+          Selecciona
+        </option>
+      </select>
+
+    </div>
+
+
+    <section
+      class="track-order-card"
+      id="trackOrderCard"
+      hidden
+    >
+
+
+      <div class="track-order-head">
+
+        <div>
+
+          <p class="eyebrow">
+            CURRENT ORDER
+          </p>
+
+          <h2 id="trackOrderNumber">
+            Pedido
+          </h2>
+
+          <p id="trackOrderDate">
+            -
+          </p>
+
+        </div>
+
+
+        <div class="track-status-box">
+
+          <span>
+            ESTADO ACTUAL
+          </span>
+
+          <strong id="trackCurrentStatus">
+            Pendiente
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <div class="track-progress">
+
+        <article
+          class="track-step"
+          data-track-step="Pendiente"
+        >
+          <span>01</span>
+          <strong>Pedido recibido</strong>
+          <small>Registrado en SIXTEEN</small>
+        </article>
+
+        <div class="track-line"></div>
+
+        <article
+          class="track-step"
+          data-track-step="Confirmado"
+        >
+          <span>02</span>
+          <strong>Confirmado</strong>
+          <small>Pedido validado</small>
+        </article>
+
+        <div class="track-line"></div>
+
+        <article
+          class="track-step"
+          data-track-step="En preparación"
+        >
+          <span>03</span>
+          <strong>Preparación</strong>
+          <small>Alistando productos</small>
+        </article>
+
+        <div class="track-line"></div>
+
+        <article
+          class="track-step"
+          data-track-step="Enviado"
+        >
+          <span>04</span>
+          <strong>Enviado</strong>
+          <small>Pedido en camino</small>
+        </article>
+
+        <div class="track-line"></div>
+
+        <article
+          class="track-step"
+          data-track-step="Entregado"
+        >
+          <span>05</span>
+          <strong>Entregado</strong>
+          <small>Compra completada</small>
+        </article>
+
+      </div>
+
+
+      <div
+        class="track-cancelled"
+        id="trackCancelled"
+        hidden
+      >
+        <strong>
+          PEDIDO CANCELADO
+        </strong>
+
+        <span>
+          Este pedido fue marcado como cancelado.
+        </span>
+      </div>
+
+
+      <div class="track-info-grid">
+
+        <article>
+          <span>TOTAL</span>
+          <strong id="trackTotal">$0.00</strong>
+        </article>
+
+        <article>
+          <span>MÉTODO DE PAGO</span>
+          <strong id="trackPayment">-</strong>
+        </article>
+
+        <article>
+          <span>PROVINCIA</span>
+          <strong id="trackProvince">-</strong>
+        </article>
+
+        <article>
+          <span>CIUDAD</span>
+          <strong id="trackCity">-</strong>
+        </article>
+
+      </div>
+
+
+      <div class="track-address">
+
+        <p class="eyebrow">
+          DELIVERY
+        </p>
+
+        <h3>
+          Dirección de entrega
+        </h3>
+
+        <p id="trackAddress">
+          -
+        </p>
+
+      </div>
+
+
+      <div class="track-products">
+
+        <div class="track-products-head">
+
+          <div>
+            <p class="eyebrow">
+              PRODUCTS
+            </p>
+
+            <h3>
+              Productos del pedido
+            </h3>
+          </div>
+
+          <span id="trackProductsCount">
+            0 PRODUCTOS
+          </span>
+
+        </div>
+
+        <div id="trackProductsList"></div>
+
+      </div>
+
+
+      <div class="track-actions">
+
+        <a href="./cuenta.html">
+          VER MI CUENTA
+        </a>
+
+        <a href="./index.html">
+          SEGUIR COMPRANDO
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <section
+      class="track-empty"
+      id="trackEmpty"
+      hidden
+    >
+
+      <span>
+        XVI
+      </span>
+
+      <h2>
+        No encontramos pedidos
+      </h2>
+
+      <p>
+        Cuando realices una compra, aparecerá aquí para que puedas seguirla.
+      </p>
+
+      <a href="./index.html">
+        EXPLORAR PRODUCTOS
+      </a>
+
+    </section>
+
+  </section>
+
+</main>
+
+
+<div
+  class="track-toast"
+  id="trackToast"
+></div>
+
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
+<script src="./seguimiento.js?v=2300"></script>
+
+
+<script src="./pwa.js?v=2700"></script>
+
+</body>
+
+</html>

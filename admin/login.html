@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Administración | SIXTEEN Urban Luxury</title>
+
+  <meta
+    name="robots"
+    content="noindex, nofollow"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./admin.css?v=1200"
+  >
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body class="admin-login-body">
+
+
+<main class="admin-login-page">
+
+
+  <!-- =====================================
+       MARCA
+  ====================================== -->
+
+  <section class="admin-login-brand">
+
+
+    <a class="admin-login-logo sixteen-admin-brand" href="../index.html" aria-label="SIXTEEN Urban Luxury">
+      <img src="../assets/logo-sixteen.jpg" alt="SIXTEEN Urban Luxury">
+      <span class="sixteen-admin-brand-text">
+        <strong>SIXTEEN</strong>
+        <small>URBAN LUXURY</small>
+      </span>
+    </a>
+
+
+    <div class="admin-login-brand-content">
+
+
+      <p class="admin-mini">
+
+        SIXTEEN MANAGEMENT
+
+      </p>
+
+
+      <h1>
+
+        CONTROL
+
+        <span>
+          TOTAL.
+        </span>
+
+      </h1>
+
+
+      <p class="admin-brand-text">
+
+        Administra productos, precios,
+        inventario, imágenes, pedidos y
+        experiencias SIXTEEN 3D.
+
+      </p>
+
+
+    </div>
+
+
+    <div class="admin-login-x">
+
+      X
+
+    </div>
+
+
+    <div class="admin-copyright">
+
+      © 2026 SIXTEEN Urban Luxury · Plataforma desarrollada por LEX
+
+    </div>
+
+
+  </section>
+
+
+
+  <!-- =====================================
+       LOGIN
+  ====================================== -->
+
+  <section class="admin-login-form-section">
+
+
+    <div class="admin-login-form-container">
+
+
+      <div class="admin-login-heading">
+
+
+        <p class="admin-mini">
+
+          ACCESO RESTRINGIDO
+
+        </p>
+
+
+        <h2>
+
+          Administrador
+
+        </h2>
+
+
+        <p>
+
+          Ingresa tus credenciales
+          administrativas para acceder
+          al panel SIXTEEN.
+
+        </p>
+
+
+      </div>
+
+
+
+      <form
+        id="adminLoginForm"
+        class="admin-login-form"
+      >
+
+
+        <!-- CORREO -->
+
+        <div class="admin-field">
+
+
+          <label for="adminUsuario">
+
+            CORREO ELECTRÓNICO
+
+          </label>
+
+
+          <div class="admin-input-wrap">
+
+
+            <span>
+              ◉
+            </span>
+
+
+            <input
+              type="email"
+              id="adminUsuario"
+              placeholder="administrador@sixteen.com"
+              autocomplete="username"
+              required
+            >
+
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- CONTRASEÑA -->
+
+        <div class="admin-field">
+
+
+          <label for="adminPassword">
+
+            CONTRASEÑA
+
+          </label>
+
+
+          <div class="admin-input-wrap">
+
+
+            <span>
+              ◆
+            </span>
+
+
+            <input
+              type="password"
+              id="adminPassword"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+            >
+
+
+            <button
+              type="button"
+              id="mostrarPasswordBtn"
+              class="mostrar-password"
+            >
+
+              VER
+
+            </button>
+
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- RECORDAR -->
+
+        <label class="admin-recordar">
+
+
+          <input
+            type="checkbox"
+            id="recordarSesion"
+          >
+
+
+          <span>
+
+            Mantener sesión iniciada
+
+          </span>
+
+
+        </label>
+
+
+
+        <!-- RECUPERAR CONTRASEÑA -->
+
+        <button
+          type="button"
+          id="recuperarPasswordBtn"
+          class="admin-recuperar-btn"
+        >
+
+          ¿OLVIDASTE TU CONTRASEÑA?
+
+        </button>
+
+
+
+        <!-- MENSAJE -->
+
+        <p
+          class="admin-login-mensaje"
+          id="adminLoginMensaje"
+          aria-live="polite"
+        >
+        </p>
+
+
+
+        <!-- INGRESAR -->
+
+        <button
+          type="submit"
+          class="admin-login-btn"
+          id="adminLoginBtn"
+        >
+
+          INGRESAR AL PANEL
+
+          <span>
+            →
+          </span>
+
+        </button>
+
+
+      </form>
+
+
+
+      <!-- SEGURIDAD -->
+
+      <div class="admin-security">
+
+
+        <span>
+          🔒
+        </span>
+
+
+        <p>
+
+          <strong>
+            Acceso protegido
+          </strong>
+
+          Las credenciales se validan
+          mediante Firebase Authentication.
+
+        </p>
+
+
+      </div>
+
+
+
+      <a
+        href="../index.html"
+        class="admin-volver"
+      >
+
+        ← Volver a SIXTEEN
+
+      </a>
+
+
+    </div>
+
+
+  </section>
+
+
+</main>
+
+
+<!--
+IMPORTANTE:
+
+admin.js ahora es un módulo JavaScript.
+-->
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+
+<script src="./admin.js?v=2310"></script>
+
+</body>
+</html>

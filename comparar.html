@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Comparar productos | SIXTEEN</title>
+
+  <meta
+    name="theme-color"
+    content="#050505"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./comparar.css?v=2700"
+  >
+
+  <meta name="robots" content="noindex,nofollow,noarchive">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//firestore.googleapis.com">
+  <link rel="dns-prefetch" href="//res.cloudinary.com">
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body>
+
+
+<div class="compare-topbar">
+  SIXTEEN / URBAN LUXURY / PRODUCT COMPARISON
+</div>
+
+
+<header class="compare-header">
+
+  <a
+    href="./index.html"
+    class="compare-brand"
+  >
+
+    <img
+      src="./assets/logo-sixteen.jpg"
+      alt="SIXTEEN Urban Luxury"
+    >
+
+    <div>
+
+      <strong>
+        SIXTEEN
+      </strong>
+
+      <span>
+        URBAN LUXURY
+      </span>
+
+    </div>
+
+  </a>
+
+
+  <nav>
+
+    <a href="./index.html#productos">
+      TIENDA
+    </a>
+
+    <a href="./cuenta.html">
+      MI CUENTA
+    </a>
+
+  </nav>
+
+</header>
+
+
+<main class="compare-main">
+
+
+  <section class="compare-hero">
+
+    <p class="eyebrow">
+      COMPARE / DECIDE / WEAR
+    </p>
+
+    <h1>
+      COMPARA TU SELECCIÓN
+    </h1>
+
+    <p>
+      Revisa las diferencias entre tus productos SIXTEEN antes de elegir.
+    </p>
+
+  </section>
+
+
+
+  <section
+    class="compare-loading"
+    id="compareLoading"
+  >
+
+    <span></span>
+
+    <p>
+      CARGANDO PRODUCTOS...
+    </p>
+
+  </section>
+
+
+
+  <section
+    class="compare-empty"
+    id="compareEmpty"
+    hidden
+  >
+
+    <div class="compare-empty-mark">
+      XVI
+    </div>
+
+    <h2>
+      Tu comparador está vacío
+    </h2>
+
+    <p>
+      Agrega hasta tres productos desde la tienda usando el botón COMPARAR.
+    </p>
+
+    <a href="./index.html#productos">
+      EXPLORAR PRODUCTOS
+    </a>
+
+  </section>
+
+
+
+  <section
+    class="compare-shell"
+    id="compareShell"
+    hidden
+  >
+
+
+    <div class="compare-toolbar">
+
+      <div>
+
+        <p class="eyebrow">
+          SELECTED ITEMS
+        </p>
+
+        <h2 id="compareCountTitle">
+          Productos seleccionados
+        </h2>
+
+      </div>
+
+
+      <div class="compare-toolbar-actions">
+
+        <a href="./index.html#productos">
+          + AGREGAR PRODUCTO
+        </a>
+
+        <button
+          type="button"
+          id="compareClearBtn"
+        >
+          LIMPIAR TODO
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="compare-product-grid"
+      id="compareProductGrid"
+    >
+    </div>
+
+
+
+    <div class="compare-table-wrap">
+
+      <table class="compare-table">
+
+        <tbody id="compareTableBody">
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+
+    <div
+      class="compare-note"
+      id="compareNote"
+    >
+    </div>
+
+
+  </section>
+
+
+</main>
+
+
+<div
+  class="compare-toast"
+  id="compareToast"
+  aria-live="polite"
+></div>
+
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
+<script src="./comparar.js?v=2500"></script>
+
+
+<script src="./pwa.js?v=2700"></script>
+
+</body>
+
+</html>

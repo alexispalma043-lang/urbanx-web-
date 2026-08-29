@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /urbanx-web-/admin/
+
+Sitemap: https://alexispalma043-lang.github.io/urbanx-web-/sitemap.xml

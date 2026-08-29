@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Finalizar compra | SIXTEEN Urban Luxury</title>
+
+  <meta
+    name="description"
+    content="Finaliza tu compra SIXTEEN Urban Luxury."
+  >
+
+  <link
+    rel="stylesheet"
+    href="./styles.css?v=2700"
+  >
+
+  <meta name="robots" content="noindex,nofollow,noarchive">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//firestore.googleapis.com">
+  <link rel="dns-prefetch" href="//res.cloudinary.com">
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     BARRA SUPERIOR
+===================================== -->
+
+<div class="top-bar">
+
+  <p>
+    SIXTEEN · COMPRA SEGURA
+  </p>
+
+</div>
+
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header class="checkout-header">
+
+
+  <a
+    href="./index.html"
+    class="sixteen-brand"
+    aria-label="SIXTEEN Urban Luxury"
+  >
+    <img
+      src="./assets/logo-sixteen.jpg"
+      alt="Logotipo SIXTEEN Urban Luxury"
+      class="sixteen-brand-logo"
+    >
+    <div class="sixteen-brand-name">
+      <strong>SIXTEEN</strong>
+      <span>URBAN LUXURY</span>
+    </div>
+  </a>
+
+
+  <div class="checkout-seguro">
+    🔒 CHECKOUT SEGURO
+  </div>
+
+
+</header>
+
+
+
+<!-- =====================================
+     TÍTULO
+===================================== -->
+
+<section class="checkout-titulo">
+
+
+  <p class="section-mini">
+    SIXTEEN STORE
+  </p>
+
+
+  <h1>
+
+    FINALIZAR
+
+    <span>
+      COMPRA
+    </span>
+
+  </h1>
+
+
+</section>
+
+
+
+<!-- =====================================
+     CHECKOUT
+===================================== -->
+
+<main class="checkout-layout">
+
+
+  <!-- =================================
+       FORMULARIO
+  ================================= -->
+
+  <section class="checkout-formulario">
+
+
+    <form id="checkoutForm">
+
+
+      <!-- =============================
+           CONTACTO
+      ============================= -->
+
+      <div class="checkout-seccion">
+
+
+        <div class="checkout-numero">
+          01
+        </div>
+
+
+        <div class="checkout-contenido">
+
+
+          <h2>
+            Información de contacto
+          </h2>
+
+
+          <div class="campo">
+
+            <label for="email">
+              CORREO ELECTRÓNICO
+            </label>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="correo@ejemplo.com"
+              autocomplete="email"
+              required
+            >
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="telefono">
+              TELÉFONO
+            </label>
+
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              inputmode="numeric"
+              placeholder="0999999999"
+              autocomplete="tel"
+              required
+            >
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =============================
+           CLIENTE
+      ============================= -->
+
+      <div class="checkout-seccion">
+
+
+        <div class="checkout-numero">
+          02
+        </div>
+
+
+        <div class="checkout-contenido">
+
+
+          <h2>
+            Datos del cliente
+          </h2>
+
+
+          <div class="campos-dobles">
+
+
+            <div class="campo">
+
+              <label for="nombres">
+                NOMBRES
+              </label>
+
+              <input
+                type="text"
+                id="nombres"
+                name="nombres"
+                autocomplete="given-name"
+                required
+              >
+
+            </div>
+
+
+            <div class="campo">
+
+              <label for="apellidos">
+                APELLIDOS
+              </label>
+
+              <input
+                type="text"
+                id="apellidos"
+                name="apellidos"
+                autocomplete="family-name"
+                required
+              >
+
+            </div>
+
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="identificacion">
+              CÉDULA / IDENTIFICACIÓN
+            </label>
+
+            <input
+              type="text"
+              id="identificacion"
+              name="identificacion"
+              inputmode="numeric"
+              maxlength="13"
+              required
+            >
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =============================
+           DIRECCIÓN
+      ============================= -->
+
+      <div class="checkout-seccion">
+
+
+        <div class="checkout-numero">
+          03
+        </div>
+
+
+        <div class="checkout-contenido">
+
+
+          <h2>
+            Dirección de entrega
+          </h2>
+
+
+          <div class="campos-dobles">
+
+
+            <div class="campo">
+
+              <label for="provincia">
+                PROVINCIA
+              </label>
+
+              <select
+                id="provincia"
+                name="provincia"
+                required
+              >
+
+                <option value="">
+                  Selecciona
+                </option>
+
+                <option value="Azuay">
+                  Azuay
+                </option>
+
+                <option value="Bolívar">
+                  Bolívar
+                </option>
+
+                <option value="Cañar">
+                  Cañar
+                </option>
+
+                <option value="Carchi">
+                  Carchi
+                </option>
+
+                <option value="Chimborazo">
+                  Chimborazo
+                </option>
+
+                <option value="Cotopaxi">
+                  Cotopaxi
+                </option>
+
+                <option value="El Oro">
+                  El Oro
+                </option>
+
+                <option value="Esmeraldas">
+                  Esmeraldas
+                </option>
+
+                <option value="Galápagos">
+                  Galápagos
+                </option>
+
+                <option value="Guayas">
+                  Guayas
+                </option>
+
+                <option value="Imbabura">
+                  Imbabura
+                </option>
+
+                <option value="Loja">
+                  Loja
+                </option>
+
+                <option value="Los Ríos">
+                  Los Ríos
+                </option>
+
+                <option value="Manabí">
+                  Manabí
+                </option>
+
+                <option value="Morona Santiago">
+                  Morona Santiago
+                </option>
+
+                <option value="Napo">
+                  Napo
+                </option>
+
+                <option value="Orellana">
+                  Orellana
+                </option>
+
+                <option value="Pastaza">
+                  Pastaza
+                </option>
+
+                <option value="Pichincha">
+                  Pichincha
+                </option>
+
+                <option value="Santa Elena">
+                  Santa Elena
+                </option>
+
+                <option value="Santo Domingo de los Tsáchilas">
+                  Santo Domingo de los Tsáchilas
+                </option>
+
+                <option value="Sucumbíos">
+                  Sucumbíos
+                </option>
+
+                <option value="Tungurahua">
+                  Tungurahua
+                </option>
+
+                <option value="Zamora Chinchipe">
+                  Zamora Chinchipe
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="campo">
+
+              <label for="ciudad">
+                CIUDAD
+              </label>
+
+              <input
+                type="text"
+                id="ciudad"
+                name="ciudad"
+                autocomplete="address-level2"
+                required
+              >
+
+            </div>
+
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="direccion">
+              DIRECCIÓN
+            </label>
+
+            <input
+              type="text"
+              id="direccion"
+              name="direccion"
+              placeholder="Calle principal y secundaria"
+              autocomplete="street-address"
+              required
+            >
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="referencia">
+              REFERENCIA
+            </label>
+
+            <textarea
+              id="referencia"
+              name="referencia"
+              rows="3"
+              placeholder="Casa, edificio, color, punto de referencia..."
+            ></textarea>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =============================
+           ENTREGA
+      ============================= -->
+
+      <div class="checkout-seccion">
+
+
+        <div class="checkout-numero">
+          04
+        </div>
+
+
+        <div class="checkout-contenido">
+
+
+          <h2>
+            Método de entrega
+          </h2>
+
+
+          <label class="opcion-checkout">
+
+
+            <input
+              type="radio"
+              name="envio"
+              value="domicilio"
+              checked
+            >
+
+
+            <span class="opcion-checkout-info">
+
+              <strong>
+                Envío a domicilio
+              </strong>
+
+              <small>
+                El costo dependerá de tu ubicación.
+              </small>
+
+            </span>
+
+
+            <strong id="costoEnvioOpcion">
+              Por calcular
+            </strong>
+
+
+          </label>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =============================
+           PAGO · PASO 16C
+      ============================= -->
+
+      <div class="checkout-seccion">
+
+
+        <div class="checkout-numero">
+          05
+        </div>
+
+
+        <div class="checkout-contenido">
+
+
+          <h2>
+            Método de pago
+          </h2>
+
+
+          <label
+            class="opcion-checkout"
+            id="pagoOpcionTransferencia"
+          >
+
+
+            <input
+              type="radio"
+              name="pago"
+              value="transferencia"
+              checked
+            >
+
+
+            <span class="opcion-checkout-info">
+
+              <strong>
+                Transferencia bancaria
+              </strong>
+
+              <small>
+                El pago será verificado antes de confirmar el pedido.
+              </small>
+
+            </span>
+
+
+          </label>
+
+
+
+          <label
+            class="opcion-checkout"
+            id="pagoOpcionQr"
+          >
+
+
+            <input
+              type="radio"
+              name="pago"
+              value="qr"
+            >
+
+
+            <span class="opcion-checkout-info">
+
+              <strong id="pagoQrNombreCheckout">
+                Pago QR
+              </strong>
+
+              <small>
+                Escanea el código configurado por SIXTEEN.
+              </small>
+
+            </span>
+
+
+          </label>
+
+
+
+          <label
+            class="opcion-checkout"
+            id="pagoOpcionTarjeta"
+          >
+
+
+            <input
+              type="radio"
+              name="pago"
+              value="tarjeta"
+            >
+
+
+            <span class="opcion-checkout-info">
+
+              <strong>
+                Tarjeta de crédito / débito
+              </strong>
+
+              <small>
+                Pago mediante una pasarela externa segura.
+              </small>
+
+            </span>
+
+
+          </label>
+
+
+
+          <label
+            class="opcion-checkout"
+            id="pagoOpcionEfectivo"
+          >
+
+
+            <input
+              type="radio"
+              name="pago"
+              value="efectivo"
+            >
+
+
+            <span class="opcion-checkout-info">
+
+              <strong>
+                Pago contra entrega
+              </strong>
+
+              <small>
+                Sujeto a confirmación de disponibilidad de entrega.
+              </small>
+
+            </span>
+
+
+          </label>
+
+
+          <div
+            class="checkout-payment-info"
+            id="checkoutPaymentInfo"
+            aria-live="polite"
+          >
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =============================
+           ACEPTACIÓN
+      ============================= -->
+
+      <div class="checkout-aceptacion">
+
+
+        <label>
+
+          <input
+            type="checkbox"
+            id="aceptarTerminos"
+            required
+          >
+
+          <span>
+            Acepto los
+            <a href="./politicas.html#terminos" target="_blank" rel="noopener noreferrer">
+              términos y condiciones
+            </a>
+            y la
+            <a href="./politicas.html#privacidad" target="_blank" rel="noopener noreferrer">
+              política de privacidad
+            </a>
+            de SIXTEEN.
+          </span>
+
+        </label>
+
+
+      </div>
+
+
+    </form>
+
+
+  </section>
+
+
+
+  <!-- =================================
+       RESUMEN
+  ================================= -->
+
+  <aside class="checkout-resumen">
+
+
+    <p class="section-mini">
+      TU PEDIDO
+    </p>
+
+
+    <h2>
+      Resumen
+    </h2>
+
+
+    <p
+      id="estadoCheckout"
+      style="
+        min-height:20px;
+        margin-bottom:15px;
+        color:#777;
+        font-size:11px;
+      "
+    >
+      Verificando productos...
+    </p>
+
+
+
+    <div
+      class="checkout-productos"
+      id="checkoutProductos"
+    >
+
+      <p class="checkout-cargando">
+        Cargando pedido...
+      </p>
+
+    </div>
+
+
+
+    <!-- SUBTOTAL -->
+
+    <div class="checkout-linea">
+
+      <span>
+        Subtotal
+      </span>
+
+      <strong id="checkoutSubtotal">
+        $0.00
+      </strong>
+
+    </div>
+
+
+
+    <!-- DESCUENTO -->
+
+    <div class="checkout-linea">
+
+      <span>
+        Descuento
+      </span>
+
+      <strong id="checkoutDescuento">
+        $0.00
+      </strong>
+
+    </div>
+
+
+
+    <!-- ENVÍO -->
+
+    <div class="checkout-linea">
+
+      <span>
+        Envío
+      </span>
+
+      <strong id="checkoutEnvio">
+        Por calcular
+      </strong>
+
+    </div>
+
+
+
+    <!-- TOTAL -->
+
+    <div class="checkout-total">
+
+      <span>
+        TOTAL
+      </span>
+
+      <strong id="checkoutTotal">
+        $0.00
+      </strong>
+
+    </div>
+
+
+
+    <!-- VALIDACIÓN -->
+
+    <p
+      id="mensajeCheckout"
+      style="
+        min-height:20px;
+        margin:12px 0;
+        color:#c9473c;
+        font-size:11px;
+        font-weight:700;
+      "
+    >
+    </p>
+
+
+
+    <!-- BOTÓN -->
+
+    <button
+      type="submit"
+      form="checkoutForm"
+      class="finalizar-pedido-btn"
+      id="finalizarPedidoBtn"
+      disabled
+    >
+      REALIZAR PEDIDO
+    </button>
+
+
+    <a
+      href="./carrito.html"
+      class="volver-carrito"
+    >
+      ← Volver al carrito
+    </a>
+
+
+
+    <div class="checkout-proteccion">
+
+      <span>
+        🔒
+      </span>
+
+      <p>
+
+        <strong>
+          Compra segura
+        </strong>
+
+        SIXTEEN no almacena datos de tarjetas
+        directamente en esta página.
+
+      </p>
+
+    </div>
+
+
+  </aside>
+
+
+</main>
+
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
+
+<footer class="footer">
+
+  <div class="footer-principal">
+
+    <div class="footer-marca">
+
+      <img
+        src="./assets/logo-sixteen.jpg"
+        alt="SIXTEEN Urban Luxury"
+        class="sixteen-footer-logo"
+      >
+
+      <div class="footer-logo">
+        SIXTEEN
+      </div>
+
+      <p>
+        Urban Luxury.<br>
+        Street Culture.<br>
+        Art.<br>
+        Identity.
+      </p>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        COMPRAR
+      </h4>
+
+      <a href="./index.html#productos">
+        Productos
+      </a>
+
+      <a href="./index.html#categorias">
+        Categorías
+      </a>
+
+      <a href="./carrito.html">
+        Carrito
+      </a>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        AYUDA
+      </h4>
+
+      <a href="./politicas.html#envios">Envíos</a>
+
+      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
+
+      <a href="./soporte.html">Contacto</a>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        SIXTEEN
+      </h4>
+
+      <a href="./index.html#sixteen">
+        Nosotros
+      </a>
+
+      <a href="../urbanx-3d/index.html">
+        SIXTEEN Experience 3D
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <div class="footer-derechos">
+
+      <p>
+        © 2026 SIXTEEN Urban Luxury.
+        Todos los derechos reservados.
+      </p>
+
+      <p>
+        Producto, diseño e identidad SIXTEEN
+        protegidos por sus respectivos derechos
+        de propiedad intelectual.
+      </p>
+
+    </div>
+
+    <div class="footer-lex">
+
+      <p>
+        © 2026 LEX
+      </p>
+
+      <span>
+        Diseño y desarrollo de la plataforma web.
+        Todos los derechos reservados.
+      </span>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+
+<!-- =====================================
+     NOTIFICACIÓN
+===================================== -->
+
+<div
+  class="toast"
+  id="toastCheckout"
+  aria-live="polite"
+>
+</div>
+
+
+
+<!-- =====================================
+     FIREBASE
+===================================== -->
+
+<script src="./compat.js?v=3200"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
+
+
+<!-- =====================================
+     CHECKOUT
+===================================== -->
+
+<script src="./variant-utils.js?v=2900"></script>
+
+<script src="./cart-sync.js?v=2300"></script>
+
+<script src="./payment-config.js?v=3400"></script>
+
+<script src="./checkout.js?v=4400"></script>
+
+
+<script src="./pwa.js?v=2700"></script>
+
+</body>
+
+</html>

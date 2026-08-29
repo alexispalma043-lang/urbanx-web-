@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Mi cuenta | SIXTEEN Urban Luxury</title>
+
+  <meta
+    name="theme-color"
+    content="#050505"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./cuenta.css?v=2700"
+  >
+
+  <meta name="robots" content="noindex,nofollow,noarchive">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//firestore.googleapis.com">
+  <link rel="dns-prefetch" href="//res.cloudinary.com">
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     TOP BAR
+====================================================== -->
+
+<div class="top-bar">
+  <p>
+    SIXTEEN / URBAN LUXURY / MEMBER EXPERIENCE
+  </p>
+</div>
+
+
+<!-- ======================================================
+     HEADER
+====================================================== -->
+
+<header class="cuenta-header">
+
+  <a
+    href="./index.html"
+    class="brand"
+  >
+
+    <span class="brand-logo-wrap">
+      <img
+        src="./assets/logo-sixteen.jpg"
+        alt="SIXTEEN Urban Luxury"
+      >
+    </span>
+
+    <div class="brand-copy">
+      <strong>
+        SIXTEEN
+      </strong>
+
+      <span>
+        URBAN LUXURY
+      </span>
+    </div>
+
+  </a>
+
+
+  <nav>
+
+    <a href="./index.html">
+      TIENDA
+    </a>
+
+    <a href="./carrito.html">
+      CARRITO
+    </a>
+
+    <button
+      type="button"
+      id="logoutHeaderBtn"
+      hidden
+    >
+      CERRAR SESIÓN
+    </button>
+
+  </nav>
+
+</header>
+
+
+<!-- ======================================================
+     MAIN
+====================================================== -->
+
+<main class="cuenta-main">
+
+
+  <!-- ====================================================
+       HERO SOLO PARA LOGIN / REGISTRO
+  ===================================================== -->
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <div>
+
+        <p class="eyebrow">
+          SIXTEEN CUSTOMER ACCOUNT
+        </p>
+
+        <h1>
+          MI CUENTA
+        </h1>
+
+        <p class="hero-description">
+          Tu perfil, tus pedidos y tu experiencia SIXTEEN,
+          reunidos en un solo lugar.
+        </p>
+
+      </div>
+
+
+      <div class="hero-mark">
+        <span>
+          S
+        </span>
+
+        <small>
+          MEMBER
+        </small>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ====================================================
+       CARGANDO
+  ===================================================== -->
+
+  <section
+    class="loading"
+    id="loading"
+  >
+
+    <span></span>
+
+    <p>
+      CARGANDO TU CUENTA
+    </p>
+
+  </section>
+
+
+  <!-- ====================================================
+       AUTENTICACIÓN
+  ===================================================== -->
+
+  <section
+    class="auth-shell"
+    id="authShell"
+    hidden
+  >
+
+    <div class="auth-intro">
+
+      <div class="auth-badge">
+        PRIVATE ACCESS
+      </div>
+
+      <p class="eyebrow">
+        MEMBER ACCESS
+      </p>
+
+      <h2>
+        Tu experiencia SIXTEEN empieza aquí.
+      </h2>
+
+      <p class="auth-intro-text">
+        Inicia sesión para consultar tus pedidos, administrar
+        tus datos y guardar tu dirección para futuras compras.
+      </p>
+
+
+      <div class="auth-benefits">
+
+        <article>
+          <span>01</span>
+          <strong>Historial de pedidos</strong>
+        </article>
+
+        <article>
+          <span>02</span>
+          <strong>Checkout más rápido</strong>
+        </article>
+
+        <article>
+          <span>03</span>
+          <strong>Dirección guardada</strong>
+        </article>
+
+      </div>
+
+
+      <div
+        class="guest-note"
+        id="guestNote"
+        hidden
+      >
+
+        <strong>
+          SESIÓN DE INVITADO DETECTADA
+        </strong>
+
+        <span>
+          Si creas tu cuenta ahora, conservaremos el mismo UID
+          para mantener vinculados tus pedidos.
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="auth-card">
+
+      <div class="auth-card-brand">
+
+        <span class="auth-card-icon">
+          S
+        </span>
+
+        <div>
+          <strong>
+            SIXTEEN MEMBER
+          </strong>
+
+          <small>
+            SECURE CUSTOMER ACCESS
+          </small>
+        </div>
+
+      </div>
+
+
+      <div class="auth-tabs">
+
+        <button
+          type="button"
+          id="tabLogin"
+          class="activo"
+        >
+          INICIAR SESIÓN
+        </button>
+
+        <button
+          type="button"
+          id="tabRegistro"
+        >
+          CREAR CUENTA
+        </button>
+
+      </div>
+
+
+      <!-- LOGIN -->
+
+      <form
+        id="loginForm"
+        class="auth-form activo"
+      >
+
+        <div class="field">
+
+          <label for="loginEmail">
+            CORREO ELECTRÓNICO
+          </label>
+
+          <input
+            type="email"
+            id="loginEmail"
+            autocomplete="email"
+            placeholder="cliente@correo.com"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="loginPassword">
+            CONTRASEÑA
+          </label>
+
+          <input
+            type="password"
+            id="loginPassword"
+            autocomplete="current-password"
+            minlength="6"
+            placeholder="••••••••"
+            required
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="primary"
+          id="loginBtn"
+        >
+          ENTRAR A MI CUENTA
+        </button>
+
+
+        <button
+          type="button"
+          class="text-btn"
+          id="resetBtn"
+        >
+          ¿OLVIDASTE TU CONTRASEÑA?
+        </button>
+
+      </form>
+
+
+      <!-- REGISTRO -->
+
+      <form
+        id="registerForm"
+        class="auth-form"
+      >
+
+        <div class="form-grid">
+
+          <div class="field">
+
+            <label for="regNombres">
+              NOMBRES *
+            </label>
+
+            <input
+              type="text"
+              id="regNombres"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="regApellidos">
+              APELLIDOS *
+            </label>
+
+            <input
+              type="text"
+              id="regApellidos"
+              required
+            >
+
+          </div>
+
+
+          <div class="field full">
+
+            <label for="regEmail">
+              CORREO *
+            </label>
+
+            <input
+              type="email"
+              id="regEmail"
+              autocomplete="email"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="regPassword">
+              CONTRASEÑA *
+            </label>
+
+            <input
+              type="password"
+              id="regPassword"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="regPassword2">
+              REPETIR CONTRASEÑA *
+            </label>
+
+            <input
+              type="password"
+              id="regPassword2"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="primary"
+          id="registerBtn"
+        >
+          CREAR MI CUENTA
+        </button>
+
+      </form>
+
+
+      <p
+        class="message"
+        id="authMessage"
+        aria-live="polite"
+      ></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ====================================================
+       CUENTA DEL CLIENTE
+  ===================================================== -->
+
+  <section
+    class="customer-shell"
+    id="customerShell"
+    hidden
+  >
+
+
+    <!-- CABECERA DE PERFIL -->
+
+    <section class="account-cover">
+
+      <div class="account-cover-glow"></div>
+
+
+      <div class="account-identity">
+
+        <div class="account-avatar">
+          <span>
+            S
+          </span>
+        </div>
+
+
+        <div>
+
+          <p class="eyebrow">
+            SIXTEEN MEMBER
+          </p>
+
+          <h2 id="welcomeName">
+            Hola
+          </h2>
+
+          <p id="welcomeEmail">
+            -
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="account-cover-actions">
+
+        <button
+          type="button"
+          class="cover-link notification-cover-btn"
+          id="notificationsCoverBtn"
+        >
+          <span>
+            NOTIFICACIONES
+          </span>
+
+          <strong
+            class="notification-badge"
+            id="notificationsBadge"
+            hidden
+          >
+            0
+          </strong>
+        </button>
+
+        <a
+          href="./index.html"
+          class="cover-link"
+        >
+          SEGUIR COMPRANDO
+        </a>
+
+        <button
+          type="button"
+          class="secondary"
+          id="logoutBtn"
+        >
+          CERRAR SESIÓN
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- KPIS -->
+
+    <div class="kpis">
+
+      <article>
+
+        <div class="kpi-icon">
+          01
+        </div>
+
+        <div>
+          <span>PEDIDOS</span>
+          <strong id="kpiPedidos">0</strong>
+          <small>Total registrado</small>
+        </div>
+
+      </article>
+
+
+      <article>
+
+        <div class="kpi-icon">
+          02
+        </div>
+
+        <div>
+          <span>COMPRAS VÁLIDAS</span>
+          <strong id="kpiCompras">0</strong>
+          <small>Confirmadas o completadas</small>
+        </div>
+
+      </article>
+
+
+      <article>
+
+        <div class="kpi-icon">
+          03
+        </div>
+
+        <div>
+          <span>TOTAL COMPRADO</span>
+          <strong id="kpiTotal">$0.00</strong>
+          <small>Pedidos válidos</small>
+        </div>
+
+      </article>
+
+
+      <article>
+
+        <div class="kpi-icon">
+          04
+        </div>
+
+        <div>
+          <span>PENDIENTES</span>
+          <strong id="kpiPendientes">0</strong>
+          <small>Por confirmar</small>
+        </div>
+
+      </article>
+
+    </div>
+
+
+    <!-- ==================================================
+         NOTIFICACIONES
+    =================================================== -->
+
+    <section
+      class="card notifications-card"
+      id="notificationsSection"
+    >
+
+      <div class="card-header notifications-header">
+
+        <div>
+
+          <p class="eyebrow">
+            ORDER UPDATES
+          </p>
+
+          <h3>
+            Notificaciones
+          </h3>
+
+          <p class="card-subtitle">
+            Cambios importantes de tus pedidos SIXTEEN.
+          </p>
+
+        </div>
+
+
+        <div class="notifications-header-actions">
+
+          <span
+            class="notifications-unread-label"
+            id="notificationsUnreadLabel"
+          >
+            0 SIN LEER
+          </span>
+
+          <button
+            type="button"
+            class="notifications-read-all-btn"
+            id="markAllNotificationsBtn"
+          >
+            MARCAR TODO LEÍDO
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="notifications-list"
+        id="notificationsList"
+      >
+
+        <div class="empty notifications-empty">
+
+          <div class="empty-icon">
+            ◌
+          </div>
+
+          <strong>
+            CARGANDO NOTIFICACIONES...
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTENIDO -->
+
+    <div class="customer-grid">
+
+
+      <!-- PERFIL -->
+
+      <section class="card profile-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <p class="eyebrow">
+              PROFILE
+            </p>
+
+            <h3>
+              Mis datos
+            </h3>
+
+            <p class="card-subtitle">
+              Información personal y dirección predeterminada.
+            </p>
+
+          </div>
+
+
+          <span class="editable-badge">
+            EDITABLE
+          </span>
+
+        </div>
+
+
+        <form
+          id="profileForm"
+          class="profile-form"
+        >
+
+          <div class="form-section">
+
+            <div class="form-section-title">
+              <span>01</span>
+
+              <div>
+                <strong>
+                  Datos personales
+                </strong>
+
+                <small>
+                  Información básica de tu cuenta
+                </small>
+              </div>
+            </div>
+
+
+            <div class="form-grid">
+
+              <div class="field">
+
+                <label for="profileNombres">
+                  NOMBRES
+                </label>
+
+                <input
+                  type="text"
+                  id="profileNombres"
+                  required
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="profileApellidos">
+                  APELLIDOS
+                </label>
+
+                <input
+                  type="text"
+                  id="profileApellidos"
+                  required
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="profileId">
+                  IDENTIFICACIÓN
+                </label>
+
+                <input
+                  type="text"
+                  id="profileId"
+                  inputmode="numeric"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="profileTelefono">
+                  TELÉFONO
+                </label>
+
+                <input
+                  type="tel"
+                  id="profileTelefono"
+                >
+
+              </div>
+
+
+              <div class="field full">
+
+                <label for="profileEmail">
+                  CORREO
+                </label>
+
+                <input
+                  type="email"
+                  id="profileEmail"
+                  disabled
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-section">
+
+            <div class="form-section-title">
+              <span>02</span>
+
+              <div>
+                <strong>
+                  Dirección predeterminada
+                </strong>
+
+                <small>
+                  Se utilizará para agilizar el checkout
+                </small>
+              </div>
+            </div>
+
+
+            <div class="form-grid">
+
+              <div class="field">
+
+                <label for="profileProvincia">
+                  PROVINCIA
+                </label>
+
+                <select id="profileProvincia">
+
+                  <option value="">
+                    Selecciona
+                  </option>
+
+                  <option>Pichincha</option>
+                  <option>Guayas</option>
+                  <option>Azuay</option>
+                  <option>Tungurahua</option>
+                  <option>Manabí</option>
+                  <option>Loja</option>
+                  <option>Imbabura</option>
+                  <option>Cotopaxi</option>
+                  <option>Chimborazo</option>
+                  <option>El Oro</option>
+                  <option>Santo Domingo de los Tsáchilas</option>
+                  <option>Bolívar</option>
+                  <option>Cañar</option>
+                  <option>Carchi</option>
+                  <option>Esmeraldas</option>
+                  <option>Los Ríos</option>
+                  <option>Morona Santiago</option>
+                  <option>Napo</option>
+                  <option>Orellana</option>
+                  <option>Pastaza</option>
+                  <option>Santa Elena</option>
+                  <option>Sucumbíos</option>
+                  <option>Zamora Chinchipe</option>
+                  <option>Galápagos</option>
+
+                </select>
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="profileCiudad">
+                  CIUDAD
+                </label>
+
+                <input
+                  type="text"
+                  id="profileCiudad"
+                >
+
+              </div>
+
+
+              <div class="field full">
+
+                <label for="profileDireccion">
+                  DIRECCIÓN
+                </label>
+
+                <input
+                  type="text"
+                  id="profileDireccion"
+                >
+
+              </div>
+
+
+              <div class="field full">
+
+                <label for="profileReferencia">
+                  REFERENCIA
+                </label>
+
+                <textarea
+                  id="profileReferencia"
+                  rows="3"
+                ></textarea>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <p
+            class="message"
+            id="profileMessage"
+            aria-live="polite"
+          ></p>
+
+
+          <button
+            type="submit"
+            class="primary"
+            id="saveProfileBtn"
+          >
+            GUARDAR CAMBIOS
+          </button>
+
+        </form>
+
+      </section>
+
+
+      <!-- PEDIDOS -->
+
+      <section class="card orders-card">
+
+        <div class="card-header orders-header">
+
+          <div>
+
+            <p class="eyebrow">
+              ORDER HISTORY
+            </p>
+
+            <h3>
+              Mis pedidos
+            </h3>
+
+            <p class="card-subtitle">
+              Consulta el estado y detalle de tus compras.
+            </p>
+
+          </div>
+
+
+          <select
+            id="ordersFilter"
+            class="mini-select"
+          >
+
+            <option value="">
+              Todos
+            </option>
+
+            <option value="Pendiente">
+              Pendientes
+            </option>
+
+            <option value="Confirmado">
+              Confirmados
+            </option>
+
+            <option value="En preparación">
+              En preparación
+            </option>
+
+            <option value="Enviado">
+              Enviados
+            </option>
+
+            <option value="Entregado">
+              Entregados
+            </option>
+
+            <option value="Cancelado">
+              Cancelados
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div
+          class="orders-list"
+          id="ordersList"
+        >
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              S
+            </div>
+
+            <strong>
+              CARGANDO PEDIDOS...
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         PASO 16F5B · MIS COMPROBANTES
+    =================================================== -->
+
+    <section
+      class="card comprobantes-card"
+      id="comprobantesSection"
+    >
+
+      <div class="card-header comprobantes-header">
+
+        <div>
+
+          <p class="eyebrow">
+            SRI DOCUMENTS
+          </p>
+
+          <h3>
+            Mis comprobantes
+          </h3>
+
+          <p class="card-subtitle">
+            Consulta los comprobantes electrónicos vinculados a tu cuenta.
+            El RIDE y XML se habilitan cuando el documento está autorizado.
+          </p>
+
+        </div>
+
+
+        <span class="comprobantes-count">
+          <strong id="comprobantesAutorizadosCount">
+            0
+          </strong>
+          AUTORIZADOS
+        </span>
+
+      </div>
+
+
+      <div class="comprobantes-toolbar">
+
+        <label>
+          TIPO
+
+          <select
+            id="comprobantesTipoFiltro"
+            class="mini-select"
+          >
+            <option value="">Todos</option>
+            <option value="FACTURA">Factura</option>
+            <option value="NOTA_CREDITO">Nota de crédito</option>
+            <option value="NOTA_DEBITO">Nota de débito</option>
+            <option value="GUIA_REMISION">Guía de remisión</option>
+            <option value="RETENCION">Comprobante de retención</option>
+          </select>
+
+        </label>
+
+
+        <label>
+          ESTADO
+
+          <select
+            id="comprobantesEstadoFiltro"
+            class="mini-select"
+          >
+            <option value="">Todos</option>
+            <option value="AUTORIZADO">Autorizado</option>
+            <option value="XML_GENERADO">En proceso</option>
+            <option value="RECIBIDA">Recibido</option>
+            <option value="NO_AUTORIZADO">No autorizado</option>
+            <option value="ERROR">Error</option>
+          </select>
+
+        </label>
+
+      </div>
+
+
+      <div
+        class="comprobantes-list"
+        id="comprobantesList"
+      >
+
+        <div class="empty">
+
+          <div class="empty-icon">
+            R
+          </div>
+
+          <strong>
+            CARGANDO COMPROBANTES...
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         FAVORITOS
+    =================================================== -->
+
+    <section class="card favorites-card">
+
+      <div class="card-header favorites-header">
+
+        <div>
+
+          <p class="eyebrow">
+            SAVED ITEMS
+          </p>
+
+          <h3>
+            Mis favoritos
+          </h3>
+
+          <p class="card-subtitle">
+            Productos guardados en tu cuenta SIXTEEN.
+          </p>
+
+        </div>
+
+
+        <span
+          class="favorites-count"
+          id="favoritesCount"
+        >
+          0 FAVORITOS
+        </span>
+
+      </div>
+
+
+      <div
+        class="favorites-grid"
+        id="favoritesList"
+      >
+
+        <div class="empty favorites-empty">
+
+          <div class="empty-icon">
+            ♥
+          </div>
+
+          <strong>
+            CARGANDO FAVORITOS...
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+
+<!-- ======================================================
+     MODAL PEDIDO
+====================================================== -->
+
+<div
+  class="modal"
+  id="orderModal"
+  aria-hidden="true"
+>
+
+  <div class="modal-card">
+
+
+    <div class="modal-header">
+
+      <div>
+
+        <p class="eyebrow">
+          ORDER DETAIL
+        </p>
+
+        <h2 id="modalOrderNumber">
+          Pedido
+        </h2>
+
+      </div>
+
+
+      <button
+        type="button"
+        id="closeOrderModal"
+        class="modal-close"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div class="modal-kpis">
+
+      <article>
+        <span>FECHA</span>
+        <strong id="modalOrderDate">-</strong>
+      </article>
+
+      <article>
+        <span>ESTADO</span>
+        <strong id="modalOrderStatus">-</strong>
+      </article>
+
+      <article>
+        <span>PAGO</span>
+        <strong id="modalOrderPayment">-</strong>
+      </article>
+
+      <article>
+        <span>TOTAL</span>
+        <strong id="modalOrderTotal">$0.00</strong>
+      </article>
+
+    </div>
+
+
+    <section class="modal-section">
+
+      <p class="eyebrow">
+        PRODUCTS
+      </p>
+
+      <div id="modalProducts"></div>
+
+    </section>
+
+
+    <section class="modal-section">
+
+      <p class="eyebrow">
+        DELIVERY
+      </p>
+
+      <p
+        id="modalAddress"
+        class="address"
+      >
+        -
+      </p>
+
+    </section>
+
+
+    <div class="modal-tracking-actions">
+
+      <a
+        href="./seguimiento.html"
+        id="modalTrackingLink"
+      >
+        SEGUIR ESTE PEDIDO
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     TOAST
+====================================================== -->
+
+<div
+  class="toast"
+  id="toast"
+  aria-live="polite"
+></div>
+
+
+<!-- ======================================================
+     FIREBASE
+====================================================== -->
+
+<script src="./compat.js?v=3200"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
+
+<!-- ======================================================
+     JS
+====================================================== -->
+
+<script src="./ride.js?v=4000"></script>
+
+<script src="./cuenta.js?v=4000"></script>
+
+
+<script src="./pwa.js?v=2700"></script>
+
+</body>
+
+</html>

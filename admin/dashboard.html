@@ -1,0 +1,5520 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Panel de Administración | SIXTEEN Urban Luxury</title>
+
+  <meta
+    name="robots"
+    content="noindex, nofollow"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./admin.css?v=4300"
+  >
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body class="admin-body">
+
+
+<div
+  class="admin-shell"
+  id="adminShell"
+  style="visibility:hidden;"
+>
+
+
+  <!-- ==========================================
+       SIDEBAR
+  =========================================== -->
+
+  <aside class="admin-sidebar">
+
+
+    <a class="admin-sidebar-logo sixteen-admin-brand" href="../index.html" aria-label="SIXTEEN Urban Luxury">
+      <img src="../assets/logo-sixteen.jpg" alt="SIXTEEN Urban Luxury">
+      <span class="sixteen-admin-brand-text">
+        <strong>SIXTEEN</strong>
+        <small>URBAN LUXURY</small>
+      </span>
+    </a>
+
+
+    <nav class="admin-nav">
+
+      <a
+        href="#inicio"
+        class="activo"
+        id="menuDashboard"
+      >
+        <span>●</span>
+        Dashboard
+      </a>
+
+      <a
+        href="#reportes"
+        id="menuReportes"
+      >
+        <span>▥</span>
+        Reportes
+      </a>
+
+      <a
+        href="#analitica"
+        id="menuAnalitica"
+      >
+        <span>◈</span>
+        Analítica
+      </a>
+
+      <a
+        href="#backups"
+        id="menuBackups"
+      >
+        <span>⇩</span>
+        Backups
+      </a>
+
+      <a
+        href="#comercial"
+        id="menuComercial"
+      >
+        <span>%</span>
+        Cupones y envíos
+      </a>
+
+      <a
+        href="#pagos"
+        id="menuPagos"
+      >
+        <span>$</span>
+        Métodos de pago
+      </a>
+
+      <a
+        href="#productos"
+        id="menuProductos"
+      >
+        <span>◆</span>
+        Productos
+      </a>
+
+      <a
+        href="#pedidos"
+        id="menuPedidos"
+      >
+        <span>▦</span>
+        Pedidos
+        <strong
+          class="admin-menu-count"
+          id="pedidosPendientesBadge"
+        >
+          0
+        </strong>
+      </a>
+
+      <a
+        href="#facturacion"
+        id="menuFacturacion"
+      >
+        <span>▤</span>
+        Facturación
+        <strong
+          class="admin-menu-count vacio"
+          id="facturacionPendientesBadge"
+        >
+          0
+        </strong>
+      </a>
+
+      <a
+        href="#clientes"
+        id="menuClientes"
+      >
+        <span>◎</span>
+        Clientes
+        <strong
+          class="admin-menu-count vacio"
+          id="clientesBadge"
+        >
+          0
+        </strong>
+      </a>
+
+      <a
+        href="#inventario"
+        id="menuInventario"
+      >
+        <span>□</span>
+        Inventario
+      </a>
+
+      <a
+        href="#sixteen3d"
+        id="menuUrbanx3d"
+      >
+        <span>X</span>
+        SIXTEEN 3D
+      </a>
+
+    </nav>
+
+
+    <div class="admin-sidebar-footer">
+
+      <button
+        type="button"
+        id="cerrarSesionBtn"
+        class="admin-logout-btn"
+      >
+        CERRAR SESIÓN
+      </button>
+
+    </div>
+
+
+  </aside>
+
+
+
+  <!-- ==========================================
+       CONTENIDO
+  =========================================== -->
+
+  <main
+    class="admin-main"
+    id="inicio"
+  >
+
+
+    <header class="admin-topbar">
+
+
+      <div>
+
+        <p class="admin-eyebrow">
+          SIXTEEN MANAGEMENT
+        </p>
+
+        <h1>
+          Dashboard
+        </h1>
+
+      </div>
+
+
+      <div class="admin-user">
+
+
+        <div class="admin-user-text">
+
+          <strong id="adminEmail">
+            Administrador
+          </strong>
+
+          <span>
+            Administrador SIXTEEN
+          </span>
+
+        </div>
+
+
+        <div
+          class="admin-avatar"
+          id="adminAvatar"
+        >
+          U
+        </div>
+
+
+      </div>
+
+
+    </header>
+
+
+
+    <section class="admin-content">
+
+
+      <!-- ========================================
+           CABECERA
+      ========================================= -->
+
+      <div class="admin-page-header">
+
+
+        <div>
+
+          <p class="admin-eyebrow">
+            PANEL GENERAL
+          </p>
+
+          <h2>
+            CONTROL SIXTEEN
+          </h2>
+
+          <p class="admin-page-description">
+            Gestiona productos, stock, pedidos e imágenes SIXTEEN.
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          id="nuevoProductoBtn"
+          class="admin-primary-btn"
+        >
+          + NUEVO PRODUCTO
+        </button>
+
+
+      </div>
+
+
+
+      <!-- ========================================
+           KPIs
+      ========================================= -->
+
+      <div class="admin-kpis">
+
+
+        <article class="admin-kpi">
+
+          <p>
+            PRODUCTOS
+          </p>
+
+          <strong id="kpiProductos">
+            0
+          </strong>
+
+          <span>
+            Productos registrados
+          </span>
+
+        </article>
+
+
+        <article class="admin-kpi">
+
+          <p>
+            PEDIDOS
+          </p>
+
+          <strong id="kpiPedidos">
+            0
+          </strong>
+
+          <span>
+            Pedidos registrados
+          </span>
+
+        </article>
+
+
+        <article class="admin-kpi">
+
+          <p>
+            STOCK
+          </p>
+
+          <strong id="kpiStock">
+            0
+          </strong>
+
+          <span>
+            Unidades disponibles
+          </span>
+
+        </article>
+
+
+        <article class="admin-kpi">
+
+          <p>
+            VENTAS
+          </p>
+
+          <strong id="kpiVentas">
+            $0.00
+          </strong>
+
+          <span>
+            Ventas registradas
+          </span>
+
+        </article>
+
+
+      </div>
+
+
+
+      <!-- ========================================
+           DASHBOARD Y REPORTES
+      ========================================= -->
+
+      <section
+        class="admin-card admin-section-anchor reportes-section"
+        id="reportes"
+      >
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">
+              BUSINESS INTELLIGENCE
+            </p>
+
+            <h3>
+              Dashboard y reportes
+            </h3>
+          </div>
+
+          <div class="reportes-header-actions">
+
+            <select
+              id="reportePeriodoDias"
+              aria-label="Periodo del gráfico"
+            >
+              <option value="7">
+                Últimos 7 días
+              </option>
+
+              <option value="30" selected>
+                Últimos 30 días
+              </option>
+
+              <option value="90">
+                Últimos 90 días
+              </option>
+            </select>
+
+            <button
+              type="button"
+              class="admin-primary-btn"
+              id="exportarReporteBtn"
+            >
+              EXPORTAR CSV
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="reportes-kpis">
+
+          <article>
+            <span>VENTAS HOY</span>
+            <strong id="reporteVentaHoy">$0.00</strong>
+            <small id="reportePedidosHoy">0 pedidos</small>
+          </article>
+
+          <article>
+            <span>VENTAS SEMANA</span>
+            <strong id="reporteVentaSemana">$0.00</strong>
+            <small id="reportePedidosSemana">0 pedidos</small>
+          </article>
+
+          <article>
+            <span>VENTAS MES</span>
+            <strong id="reporteVentaMes">$0.00</strong>
+            <small id="reportePedidosMes">0 pedidos</small>
+          </article>
+
+          <article>
+            <span>TICKET PROMEDIO</span>
+            <strong id="reporteTicketPromedio">$0.00</strong>
+            <small id="reporteVentasValidas">0 compras válidas</small>
+          </article>
+
+          <article>
+            <span>UNIDADES VENDIDAS</span>
+            <strong id="reporteUnidadesVendidas">0</strong>
+            <small>Pedidos confirmados o completados</small>
+          </article>
+
+          <article>
+            <span>CLIENTES RECURRENTES</span>
+            <strong id="reporteClientesRecurrentes">0</strong>
+            <small id="reporteClientesTotal">0 clientes</small>
+          </article>
+
+        </div>
+
+        <div class="reportes-grid">
+
+          <article class="reporte-panel reporte-panel-evolucion">
+
+            <div class="reporte-panel-header">
+
+              <div>
+                <p class="admin-eyebrow">
+                  TENDENCIA
+                </p>
+
+                <h4>
+                  Evolución de ventas
+                </h4>
+              </div>
+
+              <strong id="reportePeriodoTotal">
+                $0.00
+              </strong>
+
+            </div>
+
+            <div
+              class="ventas-chart"
+              id="ventasChart"
+              aria-label="Gráfico de evolución de ventas"
+            >
+              <p class="reportes-vacio">
+                Sin datos de ventas.
+              </p>
+            </div>
+
+          </article>
+
+          <article class="reporte-panel">
+
+            <div class="reporte-panel-header">
+
+              <div>
+                <p class="admin-eyebrow">
+                  OPERACIÓN
+                </p>
+
+                <h4>
+                  Pedidos por estado
+                </h4>
+              </div>
+
+            </div>
+
+            <div
+              class="estado-chart"
+              id="pedidosEstadoChart"
+            >
+              <p class="reportes-vacio">
+                Sin pedidos.
+              </p>
+            </div>
+
+          </article>
+
+          <article class="reporte-panel">
+
+            <div class="reporte-panel-header">
+
+              <div>
+                <p class="admin-eyebrow">
+                  PRODUCTOS
+                </p>
+
+                <h4>
+                  Más vendidos
+                </h4>
+              </div>
+
+            </div>
+
+            <div class="admin-table-wrap reporte-table-wrap">
+
+              <table class="admin-table reporte-ranking-table">
+
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>PRODUCTO</th>
+                    <th>UNIDADES</th>
+                    <th>VENTAS</th>
+                  </tr>
+                </thead>
+
+                <tbody id="topProductosBody">
+                  <tr>
+                    <td colspan="4">
+                      Sin ventas registradas.
+                    </td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </article>
+
+          <article class="reporte-panel">
+
+            <div class="reporte-panel-header">
+
+              <div>
+                <p class="admin-eyebrow">
+                  CLIENTES
+                </p>
+
+                <h4>
+                  Mejores clientes
+                </h4>
+              </div>
+
+            </div>
+
+            <div class="admin-table-wrap reporte-table-wrap">
+
+              <table class="admin-table reporte-ranking-table">
+
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>CLIENTE</th>
+                    <th>COMPRAS</th>
+                    <th>TOTAL</th>
+                  </tr>
+                </thead>
+
+                <tbody id="topClientesBody">
+                  <tr>
+                    <td colspan="4">
+                      Sin clientes con compras válidas.
+                    </td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </article>
+
+          <article class="reporte-panel reporte-panel-pagos">
+
+            <div class="reporte-panel-header">
+
+              <div>
+                <p class="admin-eyebrow">
+                  COBROS
+                </p>
+
+                <h4>
+                  Ventas por método de pago
+                </h4>
+              </div>
+
+            </div>
+
+            <div
+              class="metodos-pago-chart"
+              id="metodosPagoChart"
+            >
+              <p class="reportes-vacio">
+                Sin ventas registradas.
+              </p>
+            </div>
+
+          </article>
+
+        </div>
+
+        <p class="reportes-nota">
+          Los reportes de ventas incluyen únicamente pedidos en estado
+          Confirmado, En preparación, Enviado o Entregado.
+        </p>
+
+      </section>
+
+
+      <!-- ========================================
+           PASO 15 · ANALÍTICA COMERCIAL
+      ========================================= -->
+
+      <section
+        class="admin-card admin-section-anchor analitica-section"
+        id="analitica"
+      >
+
+        <div class="admin-card-header analitica-main-header">
+
+          <div>
+
+            <p class="admin-eyebrow">
+              CUSTOMER & SALES INTELLIGENCE
+            </p>
+
+            <h3>
+              Analítica comercial
+            </h3>
+
+            <p class="analitica-subtitle">
+              Comportamiento de compra calculado con los datos que SIXTEEN ya registra.
+            </p>
+
+          </div>
+
+
+          <div class="analitica-header-actions">
+
+            <select
+              id="analiticaPeriodo"
+              aria-label="Periodo de analítica"
+            >
+              <option value="30">
+                Últimos 30 días
+              </option>
+
+              <option value="90" selected>
+                Últimos 90 días
+              </option>
+
+              <option value="180">
+                Últimos 180 días
+              </option>
+
+              <option value="365">
+                Últimos 365 días
+              </option>
+
+              <option value="all">
+                Todo el historial
+              </option>
+            </select>
+
+
+            <button
+              type="button"
+              class="admin-primary-btn"
+              id="exportarAnaliticaBtn"
+            >
+              EXPORTAR CSV
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- KPIs -->
+
+        <div class="analitica-kpis">
+
+          <article>
+
+            <span>
+              VENTAS DEL PERIODO
+            </span>
+
+            <strong id="analiticaVentasPeriodo">
+              $0.00
+            </strong>
+
+            <small id="analiticaPeriodoTexto">
+              Últimos 90 días
+            </small>
+
+          </article>
+
+
+          <article>
+
+            <span>
+              PEDIDOS VÁLIDOS
+            </span>
+
+            <strong id="analiticaPedidosValidos">
+              0
+            </strong>
+
+            <small>
+              Confirmados o completados
+            </small>
+
+          </article>
+
+
+          <article>
+
+            <span>
+              TICKET PROMEDIO
+            </span>
+
+            <strong id="analiticaTicketPromedio">
+              $0.00
+            </strong>
+
+            <small>
+              Por compra válida
+            </small>
+
+          </article>
+
+
+          <article>
+
+            <span>
+              TASA DE RECOMPRA
+            </span>
+
+            <strong id="analiticaRecompra">
+              0%
+            </strong>
+
+            <small id="analiticaRecompraMeta">
+              0 clientes recurrentes
+            </small>
+
+          </article>
+
+
+          <article>
+
+            <span>
+              CANCELACIÓN
+            </span>
+
+            <strong id="analiticaCancelacion">
+              0%
+            </strong>
+
+            <small id="analiticaCancelacionMeta">
+              0 pedidos cancelados
+            </small>
+
+          </article>
+
+
+          <article>
+
+            <span>
+              USO DE CUPONES
+            </span>
+
+            <strong id="analiticaCuponUso">
+              0%
+            </strong>
+
+            <small id="analiticaCuponMeta">
+              0 compras con cupón
+            </small>
+
+          </article>
+
+        </div>
+
+
+        <!-- INSIGHTS -->
+
+        <div class="analitica-panel analitica-insights-panel">
+
+          <div class="analitica-panel-header">
+
+            <div>
+
+              <p class="admin-eyebrow">
+                AUTOMATIC INSIGHTS
+              </p>
+
+              <h4>
+                Hallazgos del negocio
+              </h4>
+
+            </div>
+
+            <span class="analitica-live-badge">
+              DATOS EN VIVO
+            </span>
+
+          </div>
+
+
+          <div
+            class="analitica-insights-grid"
+            id="analiticaInsights"
+          >
+
+            <article>
+              <span>ANALIZANDO</span>
+              <strong>Cargando información...</strong>
+            </article>
+
+          </div>
+
+        </div>
+
+
+        <!-- SEGMENTOS -->
+
+        <div class="analitica-grid analitica-grid-two">
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  CUSTOMER SEGMENTS
+                </p>
+
+                <h4>
+                  Segmentación de clientes
+                </h4>
+
+              </div>
+
+              <small>
+                Historial total
+              </small>
+
+            </div>
+
+
+            <div
+              class="analitica-segmentos"
+              id="analiticaSegmentos"
+            >
+            </div>
+
+          </article>
+
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  PURCHASE RHYTHM
+                </p>
+
+                <h4>
+                  Días con más compras
+                </h4>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="analitica-bars"
+              id="analiticaDiasChart"
+            >
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <!-- CATEGORÍAS / HORARIOS -->
+
+        <div class="analitica-grid analitica-grid-two">
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  PRODUCT MIX
+                </p>
+
+                <h4>
+                  Categorías con mayor venta
+                </h4>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="analitica-bars"
+              id="analiticaCategoriasChart"
+            >
+            </div>
+
+          </article>
+
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  SHOPPING TIME
+                </p>
+
+                <h4>
+                  Horario de compra
+                </h4>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="analitica-bars"
+              id="analiticaHorasChart"
+            >
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <!-- PREFERENCIAS -->
+
+        <div class="analitica-grid analitica-grid-two">
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  PRODUCT PREFERENCES
+                </p>
+
+                <h4>
+                  Tallas más compradas
+                </h4>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="analitica-tags-ranking"
+              id="analiticaTallas"
+            >
+            </div>
+
+          </article>
+
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  COLOR PREFERENCES
+                </p>
+
+                <h4>
+                  Colores más comprados
+                </h4>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="analitica-tags-ranking"
+              id="analiticaColores"
+            >
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <!-- GEO / CUPONES -->
+
+        <div class="analitica-grid analitica-grid-two">
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  GEOGRAPHY
+                </p>
+
+                <h4>
+                  Demanda por provincia
+                </h4>
+
+              </div>
+
+            </div>
+
+
+            <div class="admin-table-wrap">
+
+              <table class="admin-table analitica-table">
+
+                <thead>
+
+                  <tr>
+                    <th>#</th>
+                    <th>PROVINCIA</th>
+                    <th>PEDIDOS</th>
+                    <th>VENTAS</th>
+                  </tr>
+
+                </thead>
+
+                <tbody id="analiticaProvinciasBody">
+
+                  <tr>
+                    <td colspan="4">
+                      Sin datos.
+                    </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </article>
+
+
+          <article class="analitica-panel">
+
+            <div class="analitica-panel-header">
+
+              <div>
+
+                <p class="admin-eyebrow">
+                  PROMOTIONS
+                </p>
+
+                <h4>
+                  Rendimiento de cupones
+                </h4>
+
+              </div>
+
+            </div>
+
+
+            <div class="admin-table-wrap">
+
+              <table class="admin-table analitica-table">
+
+                <thead>
+
+                  <tr>
+                    <th>CUPÓN</th>
+                    <th>USOS</th>
+                    <th>DESCUENTO</th>
+                    <th>VENTAS</th>
+                  </tr>
+
+                </thead>
+
+                <tbody id="analiticaCuponesBody">
+
+                  <tr>
+                    <td colspan="4">
+                      Sin uso de cupones.
+                    </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <p class="analitica-nota">
+          Esta analítica usa pedidos y clientes ya existentes. No instala
+          rastreadores externos, no crea nuevas colecciones y no añade costos.
+          La tasa de recompra se calcula sobre clientes con compras válidas.
+        </p>
+
+      </section>
+
+
+
+      <!-- ========================================
+           CUPONES Y ENVÍOS
+      ========================================= -->
+
+      <!-- ========================================
+           PASO 16E · BACKUPS Y EXPORTACIONES
+      ========================================= -->
+
+      <section
+        class="admin-card admin-section-anchor backup-center"
+        id="backups"
+      >
+
+        <div class="admin-card-header">
+          <div>
+            <p class="admin-eyebrow">PASO 16E · DATA SAFETY</p>
+            <h3>Backups y exportaciones</h3>
+            <p class="backup-subtitle">
+              Descarga copias locales de productos, pedidos, clientes,
+              inventario, cupones y envíos.
+            </p>
+          </div>
+
+          <span class="admin-status">SIN COSTO</span>
+        </div>
+
+        <div class="backup-kpis">
+          <article><span>PRODUCTOS</span><strong id="backupKpiProductos">0</strong></article>
+          <article><span>PEDIDOS</span><strong id="backupKpiPedidos">0</strong></article>
+          <article><span>CLIENTES</span><strong id="backupKpiClientes">0</strong></article>
+          <article><span>INVENTARIO</span><strong id="backupKpiInventario">0</strong></article>
+          <article><span>CUPONES</span><strong id="backupKpiCupones">0</strong></article>
+          <article><span>ENVÍOS</span><strong id="backupKpiEnvios">0</strong></article>
+        </div>
+
+        <div class="backup-main-actions">
+
+          <article class="backup-primary-card">
+            <p class="admin-eyebrow">RESPALDO MAESTRO</p>
+            <h4>Copia completa JSON</h4>
+            <p>
+              Incluye todos los datos cargados por el Admin, configuración
+              pública de tienda, conteos y verificación SHA-256.
+            </p>
+
+            <button
+              type="button"
+              class="admin-primary-btn"
+              id="descargarBackupCompletoBtn"
+            >
+              DESCARGAR RESPALDO COMPLETO
+            </button>
+
+            <small id="backupUltimaDescarga">
+              Todavía no se ha generado un respaldo en esta sesión.
+            </small>
+          </article>
+
+          <article class="backup-primary-card">
+            <p class="admin-eyebrow">VERIFICACIÓN</p>
+            <h4>Validar un respaldo</h4>
+            <p>
+              Comprueba un JSON creado por SIXTEEN sin escribir ni restaurar
+              información en Firestore.
+            </p>
+
+            <label class="backup-file-label">
+              <input
+                type="file"
+                id="validarBackupInput"
+                accept=".json,application/json"
+              >
+              <span>SELECCIONAR RESPALDO JSON</span>
+            </label>
+
+            <div
+              class="backup-validation"
+              id="backupValidacionResultado"
+              aria-live="polite"
+            >
+              Esperando archivo...
+            </div>
+          </article>
+
+        </div>
+
+        <div class="backup-export-grid">
+          <article>
+            <span>PRODUCTOS</span>
+            <p>Catálogo, stock y variantes.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="productos">CSV PRODUCTOS</button>
+          </article>
+
+          <article>
+            <span>PEDIDOS</span>
+            <p>Cliente, entrega, pago y productos.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="pedidos">CSV PEDIDOS</button>
+          </article>
+
+          <article>
+            <span>CLIENTES</span>
+            <p>Resumen de clientes derivado de pedidos.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="clientes">CSV CLIENTES</button>
+          </article>
+
+          <article>
+            <span>KARDEX</span>
+            <p>Movimientos de inventario y variantes.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="inventario">CSV INVENTARIO</button>
+          </article>
+
+          <article>
+            <span>CUPONES</span>
+            <p>Configuración y usos.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="cupones">CSV CUPONES</button>
+          </article>
+
+          <article>
+            <span>ENVÍOS</span>
+            <p>Tarifas y zonas.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="envios">CSV ENVÍOS</button>
+          </article>
+
+          <article>
+            <span>CONFIGURACIÓN</span>
+            <p>Datos públicos de tienda y soporte.</p>
+            <button type="button" class="admin-secondary-btn" id="exportarConfiguracionBtn">JSON CONFIGURACIÓN</button>
+          </article>
+        </div>
+
+        <div class="backup-notes">
+          <p><strong>Clientes:</strong> se construyen a partir de los pedidos; no existe una colección independiente clientes.</p>
+          <p><strong>Seguridad:</strong> no se incluyen contraseñas, firma electrónica ni claves privadas.</p>
+          <p><strong>Restauración:</strong> esta fase valida y exporta; no sobrescribe Firestore.</p>
+        </div>
+
+      </section>
+
+
+      <section
+        class="admin-card admin-section-anchor comercial-section"
+        id="comercial"
+      >
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">
+              SALES CONFIGURATION
+            </p>
+
+            <h3>
+              Cupones y métodos de envío
+            </h3>
+          </div>
+
+          <span class="admin-status">
+            FIRESTORE
+          </span>
+
+        </div>
+
+        <!-- ===================== CUPONES ===================== -->
+
+        <div class="comercial-bloque">
+
+          <div class="comercial-bloque-header">
+
+            <div>
+              <p class="admin-eyebrow">
+                DESCUENTOS
+              </p>
+
+              <h4>
+                Cupones
+              </h4>
+            </div>
+
+            <button
+              type="button"
+              class="admin-primary-btn"
+              id="nuevoCuponBtn"
+            >
+              + NUEVO CUPÓN
+            </button>
+
+          </div>
+
+          <div class="comercial-kpis">
+
+            <article>
+              <span>TOTAL</span>
+              <strong id="cuponesKpiTotal">0</strong>
+              <small>Cupones creados</small>
+            </article>
+
+            <article>
+              <span>ACTIVOS</span>
+              <strong id="cuponesKpiActivos">0</strong>
+              <small>Disponibles en la tienda</small>
+            </article>
+
+            <article>
+              <span>USOS</span>
+              <strong id="cuponesKpiUsos">0</strong>
+              <small>Usos registrados</small>
+            </article>
+
+          </div>
+
+          <div class="comercial-toolbar">
+
+            <div>
+              <label for="cuponBuscar">
+                BUSCAR CUPÓN
+              </label>
+
+              <input
+                type="search"
+                id="cuponBuscar"
+                placeholder="Código..."
+                autocomplete="off"
+              >
+            </div>
+
+            <div>
+              <label for="cuponFiltroEstado">
+                ESTADO
+              </label>
+
+              <select id="cuponFiltroEstado">
+                <option value="">
+                  Todos
+                </option>
+
+                <option value="activo">
+                  Activos
+                </option>
+
+                <option value="inactivo">
+                  Inactivos
+                </option>
+
+                <option value="vencido">
+                  Vencidos
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="admin-table-wrap">
+
+            <table class="admin-table cupones-table">
+
+              <thead>
+                <tr>
+                  <th>CÓDIGO</th>
+                  <th>DESCUENTO</th>
+                  <th>VIGENCIA</th>
+                  <th>USOS</th>
+                  <th>ESTADO</th>
+                  <th>ACCIÓN</th>
+                </tr>
+              </thead>
+
+              <tbody id="cuponesAdminBody">
+                <tr>
+                  <td colspan="6">
+                    Cargando cupones...
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+        <!-- ====================== ENVÍOS ===================== -->
+
+        <div class="comercial-bloque comercial-envios">
+
+          <div class="comercial-bloque-header">
+
+            <div>
+              <p class="admin-eyebrow">
+                LOGÍSTICA
+              </p>
+
+              <h4>
+                Tarifas de envío por provincia
+              </h4>
+            </div>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="restaurarTarifasBtn"
+            >
+              RESTAURAR TARIFAS BASE
+            </button>
+
+          </div>
+
+          <div class="comercial-kpis">
+
+            <article>
+              <span>PROVINCIAS</span>
+              <strong id="enviosKpiTotal">0</strong>
+              <small>Tarifas configuradas</small>
+            </article>
+
+            <article>
+              <span>ACTIVAS</span>
+              <strong id="enviosKpiActivos">0</strong>
+              <small>Disponibles en checkout</small>
+            </article>
+
+            <article>
+              <span>PROMEDIO</span>
+              <strong id="enviosKpiPromedio">$0.00</strong>
+              <small>Tarifa promedio activa</small>
+            </article>
+
+          </div>
+
+          <div class="admin-table-wrap">
+
+            <table class="admin-table envios-table">
+
+              <thead>
+                <tr>
+                  <th>PROVINCIA</th>
+                  <th>TARIFA</th>
+                  <th>ESTADO</th>
+                  <th>ACTUALIZADO</th>
+                  <th>ACCIÓN</th>
+                </tr>
+              </thead>
+
+              <tbody id="enviosAdminBody">
+                <tr>
+                  <td colspan="5">
+                    Cargando tarifas...
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           PRODUCTOS
+      ========================================= -->
+
+      
+      <!-- ==================================================
+           PASO 16C · MÉTODOS DE PAGO
+      =================================================== -->
+
+      <section
+        class="admin-section"
+        id="pagos"
+      >
+
+        <div class="admin-section-header pagos-header">
+
+          <div>
+            <p class="admin-eyebrow">
+              CHECKOUT · SIN ALMACENAR DATOS DE TARJETAS
+            </p>
+
+            <h1>
+              Métodos de pago
+            </h1>
+
+            <p>
+              Configura qué opciones verá el cliente durante la compra.
+              Transferencia, QR y contra entrega funcionan sin pasarela.
+              Tarjeta solo se habilita mediante un enlace HTTPS externo.
+            </p>
+          </div>
+
+          <div class="pagos-status-card">
+            <span>ESTADO</span>
+            <strong id="pagosConfigEstado">
+              Cargando...
+            </strong>
+          </div>
+
+        </div>
+
+        <form
+          id="pagosConfigForm"
+          class="pagos-config-form"
+        >
+
+          <article class="pago-admin-card">
+
+            <div class="pago-admin-card-head">
+              <div>
+                <span>01</span>
+                <h2>Transferencia bancaria</h2>
+              </div>
+
+              <label class="pago-switch">
+                <input
+                  type="checkbox"
+                  id="pagoTransferenciaActivo"
+                >
+                <span>ACTIVA</span>
+              </label>
+            </div>
+
+            <div class="pagos-grid">
+
+              <label>
+                BANCO
+                <input
+                  type="text"
+                  id="pagoBanco"
+                  maxlength="100"
+                  placeholder="Completar al final"
+                >
+              </label>
+
+              <label>
+                TIPO DE CUENTA
+                <input
+                  type="text"
+                  id="pagoTipoCuenta"
+                  maxlength="80"
+                  placeholder="Ahorros / corriente"
+                >
+              </label>
+
+              <label>
+                NÚMERO DE CUENTA
+                <input
+                  type="text"
+                  id="pagoNumeroCuenta"
+                  maxlength="60"
+                  placeholder="Completar al final"
+                >
+              </label>
+
+              <label>
+                TITULAR
+                <input
+                  type="text"
+                  id="pagoTitular"
+                  maxlength="160"
+                  placeholder="Completar al final"
+                >
+              </label>
+
+              <label>
+                IDENTIFICACIÓN
+                <input
+                  type="text"
+                  id="pagoIdentificacion"
+                  maxlength="20"
+                  placeholder="Completar al final"
+                >
+              </label>
+
+              <label class="span-2">
+                INSTRUCCIONES
+                <textarea
+                  id="pagoTransferenciaNota"
+                  maxlength="500"
+                  rows="3"
+                ></textarea>
+              </label>
+
+            </div>
+
+          </article>
+
+
+          <article class="pago-admin-card">
+
+            <div class="pago-admin-card-head">
+              <div>
+                <span>02</span>
+                <h2>Pago QR</h2>
+              </div>
+
+              <label class="pago-switch">
+                <input
+                  type="checkbox"
+                  id="pagoQrActivo"
+                >
+                <span>ACTIVO</span>
+              </label>
+            </div>
+
+            <div class="pagos-grid">
+
+              <label>
+                NOMBRE
+                <input
+                  type="text"
+                  id="pagoQrNombre"
+                  maxlength="80"
+                  placeholder="Pago QR"
+                >
+              </label>
+
+              <label class="span-2">
+                URL PÚBLICA DEL QR
+                <input
+                  type="url"
+                  id="pagoQrImagen"
+                  maxlength="500"
+                  placeholder="https://..."
+                >
+              </label>
+
+              <label class="span-2">
+                INSTRUCCIONES
+                <textarea
+                  id="pagoQrNota"
+                  maxlength="500"
+                  rows="3"
+                ></textarea>
+              </label>
+
+            </div>
+
+          </article>
+
+
+          <article class="pago-admin-card">
+
+            <div class="pago-admin-card-head">
+              <div>
+                <span>03</span>
+                <h2>Tarjeta</h2>
+              </div>
+
+              <label class="pago-switch">
+                <input
+                  type="checkbox"
+                  id="pagoTarjetaActivo"
+                >
+                <span>ACTIVA</span>
+              </label>
+            </div>
+
+            <div class="pagos-grid">
+
+              <label>
+                PROVEEDOR / PASARELA
+                <input
+                  type="text"
+                  id="pagoTarjetaProveedor"
+                  maxlength="100"
+                  placeholder="Se elegirá después"
+                >
+              </label>
+
+              <label class="span-2">
+                URL SEGURA DE PAGO
+                <input
+                  type="url"
+                  id="pagoTarjetaUrl"
+                  maxlength="500"
+                  placeholder="https://..."
+                >
+              </label>
+
+              <label class="span-2">
+                MENSAJE AL CLIENTE
+                <textarea
+                  id="pagoTarjetaNota"
+                  maxlength="500"
+                  rows="3"
+                ></textarea>
+              </label>
+
+            </div>
+
+            <div class="pagos-security-note">
+              <strong>SEGURIDAD:</strong>
+              SIXTEEN no solicita, procesa ni almacena números de tarjeta,
+              CVV ni claves. La tarjeta solo se habilita con una pasarela
+              externa HTTPS.
+            </div>
+
+          </article>
+
+
+          <article class="pago-admin-card">
+
+            <div class="pago-admin-card-head">
+              <div>
+                <span>04</span>
+                <h2>Pago contra entrega</h2>
+              </div>
+
+              <label class="pago-switch">
+                <input
+                  type="checkbox"
+                  id="pagoEfectivoActivo"
+                >
+                <span>ACTIVO</span>
+              </label>
+            </div>
+
+            <div class="pagos-grid">
+
+              <label class="span-2">
+                CONDICIONES
+                <textarea
+                  id="pagoEfectivoNota"
+                  maxlength="500"
+                  rows="3"
+                ></textarea>
+              </label>
+
+            </div>
+
+          </article>
+
+
+          <div
+            class="admin-form-message"
+            id="pagosConfigMensaje"
+            aria-live="polite"
+          ></div>
+
+          <div class="pagos-save-row">
+            <button
+              type="submit"
+              class="admin-primary-btn"
+              id="guardarPagosConfigBtn"
+            >
+              GUARDAR MÉTODOS
+            </button>
+          </div>
+
+        </form>
+
+      </section>
+
+
+<section
+        class="admin-card"
+        id="productos"
+      >
+
+
+        <div class="admin-card-header">
+
+
+          <div>
+
+            <p class="admin-eyebrow">
+              FIRESTORE
+            </p>
+
+            <h3>
+              Productos
+            </h3>
+
+          </div>
+
+
+          <span class="admin-status">
+            ACTIVO
+          </span>
+
+
+        </div>
+
+
+        <div class="admin-table-wrap">
+
+
+          <table class="admin-table">
+
+
+            <thead>
+
+              <tr>
+
+                <th>CÓDIGO</th>
+                <th>PRODUCTO</th>
+                <th>CATEGORÍA</th>
+                <th>PRECIO</th>
+                <th>STOCK</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="productosAdminBody">
+
+              <tr>
+
+                <td colspan="7">
+                  Cargando productos...
+                </td>
+
+              </tr>
+
+            </tbody>
+
+
+          </table>
+
+
+        </div>
+
+
+      </section>
+
+
+
+
+      <!-- ========================================
+           PEDIDOS
+      ========================================= -->
+
+      <!-- ========================================
+           PASO 16F1 · FACTURACIÓN ELECTRÓNICA
+      ========================================= -->
+
+      <section
+        class="admin-card admin-section-anchor facturacion-section"
+        id="facturacion"
+      >
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">
+              SRI · ESQUEMA OFF-LINE · FACTURA XML 2.1.0
+            </p>
+
+            <h3>
+              Facturación electrónica
+            </h3>
+
+            <p class="facturacion-subtitle">
+              Núcleo fiscal SIXTEEN: configuración, secuenciales,
+              clave de acceso, XML, historial y RIDE borrador.
+            </p>
+          </div>
+
+          <div class="facturacion-header-actions">
+
+            <span
+              class="admin-status"
+              id="facturacionAmbienteBadge"
+            >
+              PRUEBAS
+            </span>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="abrirNotaCreditoBtn"
+            >
+              + NOTA DE CRÉDITO
+            </button>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="abrirNotaDebitoBtn"
+            >
+              + NOTA DE DÉBITO
+            </button>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="abrirGuiaRemisionBtn"
+            >
+              + GUÍA DE REMISIÓN
+            </button>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="abrirRetencionBtn"
+            >
+              + COMPROBANTE DE RETENCIÓN
+            </button>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="probarBackendSriBtn"
+            >
+              PROBAR BACKEND
+            </button>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="verificarProduccionSriBtn"
+            >
+              VERIFICAR PRODUCCIÓN
+            </button>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="abrirConfiguracionSriBtn"
+            >
+              CONFIGURACIÓN SRI
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="facturacion-kpis">
+
+          <article>
+            <span>COMPROBANTES</span>
+            <strong id="facturacionKpiTotal">0</strong>
+          </article>
+
+          <article>
+            <span>XML GENERADO</span>
+            <strong id="facturacionKpiXml">0</strong>
+          </article>
+
+          <article>
+            <span>AUTORIZADOS</span>
+            <strong id="facturacionKpiAutorizados">0</strong>
+          </article>
+
+          <article>
+            <span>PENDIENTES SRI</span>
+            <strong id="facturacionKpiPendientes">0</strong>
+          </article>
+
+        </div>
+
+
+        <div class="facturacion-workbench">
+
+          <article class="facturacion-generator">
+
+            <p class="admin-eyebrow">
+              NUEVA FACTURA DESDE PEDIDO
+            </p>
+
+            <h4>
+              Generar comprobante
+            </h4>
+
+            <div class="facturacion-form-grid">
+
+              <label>
+                PEDIDO
+                <select id="facturacionPedidoSelect">
+                  <option value="">
+                    Selecciona un pedido
+                  </option>
+                </select>
+              </label>
+
+              <label>
+                FECHA EMISIÓN
+                <input
+                  type="date"
+                  id="facturacionFechaEmision"
+                >
+              </label>
+
+            </div>
+
+
+            <div
+              class="facturacion-order-preview"
+              id="facturacionPedidoPreview"
+            >
+              Selecciona un pedido para revisar los datos que se usarán
+              en la factura.
+            </div>
+
+
+            <div class="facturacion-action-row">
+
+              <button
+                type="button"
+                class="admin-primary-btn"
+                id="generarFacturaXmlBtn"
+              >
+                GENERAR FACTURA + XML
+              </button>
+
+              <span
+                class="facturacion-action-message"
+                id="facturacionGenerarMensaje"
+                aria-live="polite"
+              >
+              </span>
+
+            </div>
+
+          </article>
+
+
+          <article class="facturacion-status-panel">
+
+            <p class="admin-eyebrow">
+              ESTADO DEL MÓDULO
+            </p>
+
+            <h4>
+              Flujo electrónico
+            </h4>
+
+            <ol class="facturacion-flow">
+              <li class="done">Pedido</li>
+              <li class="done">Clave de acceso</li>
+              <li class="done">XML sin firma</li>
+              <li id="facturacionFlowFirma">Firma XAdES-BES</li>
+              <li id="facturacionFlowRecepcion">Recepción SRI</li>
+              <li id="facturacionFlowAutorizacion">Autorización SRI</li>
+              <li class="done">RIDE autorizado <small>16F5A</small></li>
+              <li class="done">Email / Mi Cuenta <small>16F5B–16F5C</small></li>
+            </ol>
+
+            <p class="facturacion-security-note">
+              La firma electrónica y su contraseña no se guardarán
+              en GitHub Pages ni en Firestore.
+            </p>
+
+            <div class="facturacion-backend-status">
+              <span>BACKEND</span>
+              <strong id="facturacionBackendEstado">
+                NO CONFIGURADO
+              </strong>
+              <small id="facturacionCertificadoInfo">
+                Sin información del certificado.
+              </small>
+            </div>
+
+          </article>
+
+        </div>
+
+
+
+        <section
+          class="sri-production-check"
+          id="sriProductionCheck"
+        >
+
+          <div class="sri-production-check-head">
+
+            <div>
+              <p class="admin-eyebrow">
+                PASO 16F6A · PUESTA EN PRODUCCIÓN
+              </p>
+
+              <h4>
+                Verificador final SRI
+              </h4>
+
+              <p>
+                Comprueba configuración fiscal, backend y certificado
+                sin mostrar ni almacenar secretos.
+              </p>
+            </div>
+
+            <span
+              class="admin-status"
+              id="sriProductionOverall"
+            >
+              SIN VERIFICAR
+            </span>
+
+          </div>
+
+
+          <div
+            class="sri-production-grid"
+            id="sriProductionGrid"
+          >
+
+            <article data-check="fiscal">
+              <span>01</span>
+              <div>
+                <strong>
+                  CONFIGURACIÓN FISCAL
+                </strong>
+                <small>
+                  Razón social, RUC, matriz, establecimiento y punto de emisión.
+                </small>
+              </div>
+              <b>PENDIENTE</b>
+            </article>
+
+            <article data-check="environment">
+              <span>02</span>
+              <div>
+                <strong>
+                  AMBIENTE
+                </strong>
+                <small>
+                  Pruebas para validación; Producción solo al final.
+                </small>
+              </div>
+              <b>PENDIENTE</b>
+            </article>
+
+            <article data-check="backend">
+              <span>03</span>
+              <div>
+                <strong>
+                  BACKEND SRI
+                </strong>
+                <small>
+                  Servicio privado de firma y comunicación con SRI.
+                </small>
+              </div>
+              <b>PENDIENTE</b>
+            </article>
+
+            <article data-check="certificate">
+              <span>04</span>
+              <div>
+                <strong>
+                  FIRMA ELECTRÓNICA
+                </strong>
+                <small>
+                  Certificado digital válido y vigente en el backend.
+                </small>
+              </div>
+              <b>PENDIENTE</b>
+            </article>
+
+            <article data-check="documents">
+              <span>05</span>
+              <div>
+                <strong>
+                  DOCUMENTOS
+                </strong>
+                <small>
+                  Factura, NC, ND, guía y retención implementados.
+                </small>
+              </div>
+              <b>LISTO</b>
+            </article>
+
+            <article data-check="ride">
+              <span>06</span>
+              <div>
+                <strong>
+                  RIDE / XML / EMAIL
+                </strong>
+                <small>
+                  Entrega al cliente solo después de autorización.
+                </small>
+              </div>
+              <b>LISTO</b>
+            </article>
+
+          </div>
+
+
+          <div
+            class="sri-production-message"
+            id="sriProductionMessage"
+            aria-live="polite"
+          >
+            Pulsa VERIFICAR PRODUCCIÓN para revisar el estado actual.
+          </div>
+
+        </section>
+
+
+        <div class="facturacion-toolbar">
+
+          <div>
+            <label for="facturacionBuscar">
+              BUSCAR
+            </label>
+
+            <input
+              type="search"
+              id="facturacionBuscar"
+              placeholder="Factura, clave, pedido, cliente..."
+              autocomplete="off"
+            >
+          </div>
+
+          <div>
+            <label for="facturacionFiltroTipo">
+              TIPO
+            </label>
+
+            <select id="facturacionFiltroTipo">
+              <option value="">Todos</option>
+              <option value="FACTURA">Factura</option>
+              <option value="NOTA_CREDITO">Nota de crédito</option>
+              <option value="NOTA_DEBITO">Nota de débito</option>
+              <option value="GUIA_REMISION">Guía de remisión</option>
+              <option value="RETENCION">Comprobante de retención</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="facturacionFiltroEstado">
+              ESTADO
+            </label>
+
+            <select id="facturacionFiltroEstado">
+              <option value="">Todos</option>
+              <option value="XML_GENERADO">XML generado</option>
+              <option value="PROCESANDO">Procesando</option>
+              <option value="FIRMADO">Firmado</option>
+              <option value="RECIBIDA">Recibida</option>
+              <option value="AUTORIZADO">Autorizado</option>
+              <option value="DEVUELTA">Devuelta</option>
+              <option value="NO_AUTORIZADO">No autorizado</option>
+              <option value="ERROR">Error</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            class="admin-secondary-btn"
+            id="exportarFacturacionCsvBtn"
+          >
+            EXPORTAR CSV
+          </button>
+
+        </div>
+
+
+        <div class="admin-table-wrap">
+
+          <table class="admin-table facturacion-table">
+
+            <thead>
+              <tr>
+                <th>COMPROBANTE</th>
+                <th>FECHA</th>
+                <th>CLIENTE</th>
+                <th>PEDIDO / SUSTENTO</th>
+                <th>TOTAL</th>
+                <th>AMBIENTE</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+
+            <tbody id="facturacionBody">
+              <tr>
+                <td colspan="8">
+                  Cargando comprobantes...
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div class="facturacion-doc-types">
+
+          <span>FACTURA · ACTIVA</span>
+          <span>NOTA DE CRÉDITO · ACTIVA</span>
+          <span>NOTA DE DÉBITO · ACTIVA</span>
+          <span>GUÍA DE REMISIÓN · ACTIVA</span>
+          <span>COMPROBANTE DE RETENCIÓN · ACTIVO EN 16F4C</span>
+          <span>NOTA DE DÉBITO · SIGUIENTE BLOQUE</span>
+          <span>GUÍA DE REMISIÓN · SIGUIENTE BLOQUE</span>
+          <span>RETENCIÓN · SIGUIENTE BLOQUE</span>
+
+        </div>
+
+      </section>
+
+
+      <section class="admin-card admin-section-anchor" id="pedidos">
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">FIRESTORE · PEDIDOS</p>
+            <h3>Pedidos</h3>
+          </div>
+
+          <span class="admin-status" id="pedidosEstadoConexion">
+            ACTIVO
+          </span>
+
+        </div>
+
+        <div class="pedidos-toolbar">
+
+          <div class="pedidos-resumen">
+
+            <article>
+              <span>TOTAL</span>
+              <strong id="pedidosConteoTotal">0</strong>
+            </article>
+
+            <article>
+              <span>PENDIENTES</span>
+              <strong id="pedidosConteoPendientes">0</strong>
+            </article>
+
+            <article>
+              <span>EN PROCESO</span>
+              <strong id="pedidosConteoProceso">0</strong>
+            </article>
+
+            <article>
+              <span>ENTREGADOS</span>
+              <strong id="pedidosConteoEntregados">0</strong>
+            </article>
+
+          </div>
+
+          <div class="pedidos-filtros">
+
+            <div class="pedidos-busqueda">
+              <label for="pedidoBuscar">
+                BUSCAR
+              </label>
+              <input
+                type="search"
+                id="pedidoBuscar"
+                placeholder="Pedido, cliente, correo, cédula..."
+                autocomplete="off"
+              >
+            </div>
+
+            <div>
+              <label for="pedidoFiltroEstado">
+                ESTADO
+              </label>
+              <select id="pedidoFiltroEstado">
+                <option value="">Todos</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Confirmado">Confirmado</option>
+                <option value="En preparación">En preparación</option>
+                <option value="Enviado">Enviado</option>
+                <option value="Entregado">Entregado</option>
+                <option value="Cancelado">Cancelado</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="pedidoFiltroPago">
+                PAGO
+              </label>
+              <select id="pedidoFiltroPago">
+                <option value="">Todos</option>
+                <option value="transferencia">Transferencia bancaria</option>
+                <option value="qr">Pago QR</option>
+                <option value="tarjeta">Tarjeta crédito / débito</option>
+                <option value="efectivo">Pago contra entrega</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="pedidoFechaDesde">
+                DESDE
+              </label>
+              <input
+                type="date"
+                id="pedidoFechaDesde"
+              >
+            </div>
+
+            <div>
+              <label for="pedidoFechaHasta">
+                HASTA
+              </label>
+              <input
+                type="date"
+                id="pedidoFechaHasta"
+              >
+            </div>
+
+            <button
+              type="button"
+              class="admin-secondary-btn pedidos-limpiar-btn"
+              id="limpiarFiltrosPedidosBtn"
+            >
+              LIMPIAR
+            </button>
+
+            <button
+              type="button"
+              class="admin-primary-btn pedidos-exportar-btn"
+              id="exportarPedidosBtn"
+            >
+              EXPORTAR CSV
+            </button>
+
+          </div>
+
+          <p
+            class="pedidos-resultado"
+            id="pedidosResultadoTexto"
+          >
+            Mostrando 0 pedidos.
+          </p>
+
+        </div>
+
+        <div class="admin-table-wrap">
+
+          <table class="admin-table admin-orders-table">
+
+            <thead>
+              <tr>
+                <th>PEDIDO</th>
+                <th>CLIENTE</th>
+                <th>FECHA</th>
+                <th>TOTAL</th>
+                <th>PAGO</th>
+                <th>ESTADO</th>
+                <th>INVENTARIO</th>
+                <th>ACCIÓN</th>
+              </tr>
+            </thead>
+
+            <tbody id="pedidosAdminBody">
+              <tr>
+                <td colspan="8">Cargando pedidos...</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           CLIENTES
+      ========================================= -->
+
+      <section class="admin-card admin-section-anchor" id="clientes">
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">SIXTEEN CRM</p>
+            <h3>Clientes</h3>
+          </div>
+
+          <button
+            type="button"
+            class="admin-primary-btn"
+            id="exportarClientesBtn"
+          >
+            EXPORTAR CSV
+          </button>
+
+        </div>
+
+        <div class="clientes-resumen">
+
+          <article>
+            <span>CLIENTES</span>
+            <strong id="clientesKpiTotal">0</strong>
+            <small>Compradores registrados por pedidos</small>
+          </article>
+
+          <article>
+            <span>RECURRENTES</span>
+            <strong id="clientesKpiRecurrentes">0</strong>
+            <small>Más de un pedido no cancelado</small>
+          </article>
+
+          <article>
+            <span>VENTAS</span>
+            <strong id="clientesKpiVentas">$0.00</strong>
+            <small>Pedidos confirmados o completados</small>
+          </article>
+
+          <article>
+            <span>TICKET PROMEDIO</span>
+            <strong id="clientesKpiTicket">$0.00</strong>
+            <small>Promedio de compras válidas</small>
+          </article>
+
+        </div>
+
+        <div class="clientes-toolbar">
+
+          <div class="clientes-busqueda">
+
+            <label for="clienteBuscar">
+              BUSCAR
+            </label>
+
+            <input
+              type="search"
+              id="clienteBuscar"
+              placeholder="Nombre, cédula, correo o teléfono..."
+              autocomplete="off"
+            >
+
+          </div>
+
+          <div>
+
+            <label for="clienteFiltroTipo">
+              TIPO
+            </label>
+
+            <select id="clienteFiltroTipo">
+
+              <option value="">
+                Todos
+              </option>
+
+              <option value="nuevo">
+                Un pedido
+              </option>
+
+              <option value="recurrente">
+                Recurrentes
+              </option>
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="clienteOrden">
+              ORDENAR
+            </label>
+
+            <select id="clienteOrden">
+
+              <option value="reciente">
+                Última compra
+              </option>
+
+              <option value="total">
+                Mayor compra
+              </option>
+
+              <option value="pedidos">
+                Más pedidos
+              </option>
+
+              <option value="nombre">
+                Nombre A-Z
+              </option>
+
+            </select>
+
+          </div>
+
+          <button
+            type="button"
+            class="admin-secondary-btn"
+            id="limpiarFiltrosClientesBtn"
+          >
+            LIMPIAR
+          </button>
+
+        </div>
+
+        <p
+          class="clientes-resultado"
+          id="clientesResultadoTexto"
+        >
+          Mostrando 0 clientes.
+        </p>
+
+        <div class="admin-table-wrap">
+
+          <table class="admin-table clientes-table">
+
+            <thead>
+
+              <tr>
+                <th>CLIENTE</th>
+                <th>IDENTIFICACIÓN</th>
+                <th>CONTACTO</th>
+                <th>PEDIDOS</th>
+                <th>TOTAL COMPRADO</th>
+                <th>ÚLTIMA COMPRA</th>
+                <th>ACCIÓN</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="clientesAdminBody">
+
+              <tr>
+                <td colspan="7">
+                  Cargando clientes...
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           INVENTARIO
+      ========================================= -->
+
+      <section class="admin-card admin-section-anchor" id="inventario">
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">CONTROL DE STOCK</p>
+            <h3>Inventario avanzado</h3>
+          </div>
+
+          <span class="admin-status">
+            EN TIEMPO REAL
+          </span>
+
+        </div>
+
+        <div class="inventario-resumen">
+
+          <article>
+            <span>UNIDADES</span>
+            <strong id="inventarioKpiUnidades">0</strong>
+            <small>Stock disponible</small>
+          </article>
+
+          <article>
+            <span>STOCK BAJO</span>
+            <strong id="inventarioKpiBajo">0</strong>
+            <small>Productos por reponer</small>
+          </article>
+
+          <article>
+            <span>AGOTADOS</span>
+            <strong id="inventarioKpiAgotados">0</strong>
+            <small>Sin unidades</small>
+          </article>
+
+          <article>
+            <span>VALOR STOCK</span>
+            <strong id="inventarioKpiValor">$0.00</strong>
+            <small>Precio × unidades</small>
+          </article>
+
+        </div>
+
+        <div class="inventario-toolbar">
+
+          <div class="inventario-busqueda">
+            <label for="inventarioBuscar">BUSCAR</label>
+            <input
+              type="search"
+              id="inventarioBuscar"
+              placeholder="Código o producto..."
+              autocomplete="off"
+            >
+          </div>
+
+          <div>
+            <label for="inventarioFiltroCategoria">CATEGORÍA</label>
+            <select id="inventarioFiltroCategoria">
+              <option value="">Todas</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="inventarioFiltroEstado">ESTADO</label>
+            <select id="inventarioFiltroEstado">
+              <option value="">Todos</option>
+              <option value="disponible">Disponible</option>
+              <option value="bajo">Stock bajo</option>
+              <option value="agotado">Agotado</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            class="admin-secondary-btn"
+            id="limpiarFiltrosInventarioBtn"
+          >
+            LIMPIAR
+          </button>
+
+        </div>
+
+        <p
+          class="inventario-resultado"
+          id="inventarioResultadoTexto"
+        >
+          Mostrando 0 productos.
+        </p>
+
+        <div class="admin-table-wrap">
+
+          <table class="admin-table inventario-table">
+
+            <thead>
+              <tr>
+                <th>CÓDIGO</th>
+                <th>PRODUCTO</th>
+                <th>CATEGORÍA</th>
+                <th>STOCK</th>
+                <th>MÍNIMO</th>
+                <th>ESTADO</th>
+                <th>ACCIÓN</th>
+              </tr>
+            </thead>
+
+            <tbody id="inventarioAdminBody">
+              <tr>
+                <td colspan="7">Cargando inventario...</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           MOVIMIENTOS DE INVENTARIO
+      ========================================= -->
+
+      <section class="admin-card admin-section-anchor" id="movimientosInventario">
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">KARDEX / HISTORIAL</p>
+            <h3>Movimientos de inventario</h3>
+          </div>
+
+          <button
+            type="button"
+            class="admin-primary-btn"
+            id="exportarInventarioBtn"
+          >
+            EXPORTAR CSV
+          </button>
+
+        </div>
+
+        <div class="movimientos-toolbar">
+
+          <div class="movimientos-busqueda">
+            <label for="movimientoBuscar">BUSCAR</label>
+            <input
+              type="search"
+              id="movimientoBuscar"
+              placeholder="Producto, código, pedido o motivo..."
+              autocomplete="off"
+            >
+          </div>
+
+          <div>
+            <label for="movimientoFiltroTipo">TIPO</label>
+            <select id="movimientoFiltroTipo">
+              <option value="">Todos</option>
+              <option value="SALIDA_VENTA">Salida por venta</option>
+              <option value="ENTRADA_CANCELACION">Entrada por cancelación</option>
+              <option value="AJUSTE_ENTRADA">Ajuste de entrada</option>
+              <option value="AJUSTE_SALIDA">Ajuste de salida</option>
+              <option value="AJUSTE_EXACTO">Ajuste exacto</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="movimientoFechaDesde">DESDE</label>
+            <input type="date" id="movimientoFechaDesde">
+          </div>
+
+          <div>
+            <label for="movimientoFechaHasta">HASTA</label>
+            <input type="date" id="movimientoFechaHasta">
+          </div>
+
+          <button
+            type="button"
+            class="admin-secondary-btn"
+            id="limpiarFiltrosMovimientosBtn"
+          >
+            LIMPIAR
+          </button>
+
+        </div>
+
+        <p
+          class="inventario-resultado"
+          id="movimientosResultadoTexto"
+        >
+          Mostrando 0 movimientos.
+        </p>
+
+        <div class="admin-table-wrap">
+
+          <table class="admin-table movimientos-table">
+
+            <thead>
+              <tr>
+                <th>FECHA</th>
+                <th>TIPO</th>
+                <th>PRODUCTO</th>
+                <th>CANTIDAD</th>
+                <th>ANTERIOR</th>
+                <th>NUEVO</th>
+                <th>ORIGEN</th>
+                <th>USUARIO</th>
+              </tr>
+            </thead>
+
+            <tbody id="movimientosInventarioBody">
+              <tr>
+                <td colspan="8">Cargando movimientos...</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           SIXTEEN EXPERIENCE 3D
+      ========================================= -->
+
+      <section class="admin-card admin-section-anchor" id="sixteen3d">
+
+        <div class="admin-card-header">
+
+          <div>
+            <p class="admin-eyebrow">DIGITAL EXPERIENCE</p>
+            <h3>SIXTEEN Experience 3D</h3>
+          </div>
+
+          <span class="admin-status">
+            PRODUCTOS COMPATIBLES
+          </span>
+
+        </div>
+
+        <div class="admin-table-wrap">
+
+          <table class="admin-table">
+
+            <thead>
+              <tr>
+                <th>CÓDIGO</th>
+                <th>PRODUCTO</th>
+                <th>MODELO 3D</th>
+                <th>ESTADO</th>
+              </tr>
+            </thead>
+
+            <tbody id="sixteen3dAdminBody">
+              <tr>
+                <td colspan="4">Cargando experiencias...</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           SISTEMA
+      ========================================= -->
+
+      <section class="admin-card admin-system-card">
+
+
+        <div class="admin-card-header">
+
+          <h3>
+            Sistema SIXTEEN
+          </h3>
+
+          <span class="admin-status">
+            ONLINE
+          </span>
+
+        </div>
+
+
+        <div class="admin-system-grid">
+
+
+          <div>
+
+            <span>
+              AUTENTICACIÓN
+            </span>
+
+            <strong>
+              Firebase Auth
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              BASE DE DATOS
+            </span>
+
+            <strong>
+              Cloud Firestore
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              IMÁGENES
+            </span>
+
+            <strong>
+              Cloudinary
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+
+    </section>
+
+
+  </main>
+
+
+</div>
+
+
+
+<!-- ======================================================
+     MODAL PRODUCTO
+====================================================== -->
+
+<div
+  class="producto-modal"
+  id="productoAdminModal"
+  aria-hidden="true"
+>
+
+
+  <div class="producto-modal-card">
+
+
+    <div class="producto-modal-header">
+
+
+      <div>
+
+        <p class="admin-eyebrow">
+          SIXTEEN PRODUCT MANAGEMENT
+        </p>
+
+        <h2 id="productoModalTitulo">
+          Nuevo producto
+        </h2>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="producto-modal-close"
+        id="cerrarProductoModal"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+
+    </div>
+
+
+
+    <form id="productoAdminForm">
+
+
+      <div class="admin-form-grid">
+
+
+        <!-- CÓDIGO -->
+
+        <div class="admin-field">
+
+          <label for="productoCodigo">
+            CÓDIGO *
+          </label>
+
+          <input
+            id="productoCodigo"
+            type="text"
+            placeholder="COD-001"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- NOMBRE -->
+
+        <div class="admin-field">
+
+          <label for="productoNombre">
+            NOMBRE *
+          </label>
+
+          <input
+            id="productoNombre"
+            type="text"
+            placeholder="SIXTEEN Signature Piece"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- CATEGORÍA -->
+
+        <div class="admin-field">
+
+          <label for="productoCategoria">
+            CATEGORÍA *
+          </label>
+
+          <select
+            id="productoCategoria"
+            required
+          >
+            <option value="">Seleccionar</option>
+            <option value="Camisetas">Camisetas</option>
+            <option value="Buzos y Gorras">Buzos y Gorras</option>
+            <option value="Accesorios">Accesorios</option>
+            <option value="Pantalones Baggy">Pantalones Baggy</option>
+            <option value="Zapatos">Zapatos</option>
+            <option value="Arte y Suministros">Arte y Suministros</option>
+            <!-- Categorías anteriores: se conservan para editar productos existentes -->
+            <option value="Calzado">Calzado</option>
+            <option value="Ropa">Ropa</option>
+          </select>
+
+        </div>
+
+
+
+        <!-- PRECIO -->
+
+        <div class="admin-field">
+
+          <label for="productoPrecio">
+            PRECIO *
+          </label>
+
+          <input
+            id="productoPrecio"
+            type="number"
+            min="0"
+            step="0.01"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- PRECIO ANTERIOR -->
+
+        <div class="admin-field">
+
+          <label for="productoPrecioAnterior">
+            PRECIO ANTERIOR
+          </label>
+
+          <input
+            id="productoPrecioAnterior"
+            type="number"
+            min="0"
+            step="0.01"
+          >
+
+        </div>
+
+
+
+        <!-- IVA / FACTURACIÓN -->
+
+        <div class="admin-field">
+
+          <label for="productoIvaTarifa">
+            IVA FACTURACIÓN
+          </label>
+
+          <select id="productoIvaTarifa">
+            <option value="15" selected>15%</option>
+            <option value="5">5%</option>
+            <option value="0">0%</option>
+          </select>
+
+        </div>
+
+
+
+        <!-- STOCK -->
+
+        <div class="admin-field">
+
+          <label for="productoStock">
+            STOCK *
+          </label>
+
+          <input
+            id="productoStock"
+            type="number"
+            min="0"
+            step="1"
+            value="0"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- COLOR -->
+
+        <div class="admin-field">
+
+          <label for="productoColor">
+            COLOR / COLORES
+          </label>
+
+          <input
+            id="productoColor"
+            type="text"
+            placeholder="Negro / Dorado"
+          >
+
+        </div>
+
+
+
+        <!-- TALLAS -->
+
+        <div class="admin-field">
+
+          <label for="productoTallas">
+            TALLAS
+          </label>
+
+          <input
+            id="productoTallas"
+            type="text"
+            placeholder="38, 39, 40, 41, 42"
+          >
+
+        </div>
+
+        <div class="admin-field admin-field-full producto-variantes-editor">
+
+          <div class="producto-variantes-header">
+
+            <div>
+              <label class="producto-variante-switch">
+                <input type="checkbox" id="productoUsaVariantes">
+                <span>CONTROLAR STOCK POR COLOR Y TALLA</span>
+              </label>
+
+              <small>
+                El stock total se calculará automáticamente sumando las variantes.
+              </small>
+            </div>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="agregarVarianteProductoBtn"
+              disabled
+            >
+              + AGREGAR VARIANTE
+            </button>
+
+          </div>
+
+          <div
+            class="producto-variantes-resumen"
+            id="productoVariantesResumen"
+            hidden
+          >
+            <span>STOCK TOTAL <strong id="productoVariantesStockTotal">0</strong></span>
+            <span>VARIANTES <strong id="productoVariantesConteo">0</strong></span>
+          </div>
+
+          <div
+            class="producto-variantes-lista"
+            id="productoVariantesLista"
+            hidden
+          ></div>
+
+          <p
+            class="producto-variantes-ayuda"
+            id="productoVariantesAyuda"
+            hidden
+          >
+            Ejemplo: Negro / M / 3 unidades. La talla puede quedar vacía
+            si el producto solo cambia de color.
+          </p>
+
+        </div>
+
+
+
+        <!-- ESTADO -->
+
+        <div class="admin-field">
+
+          <label for="productoEstado">
+            ESTADO
+          </label>
+
+          <select id="productoEstado">
+
+            <option value="Activo">
+              Activo
+            </option>
+
+            <option value="Inactivo">
+              Inactivo
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- MODELO 3D -->
+
+        <div class="admin-field">
+
+          <label for="productoModelo3d">
+            MODELO 3D (.GLB)
+          </label>
+
+          <input
+            id="productoModelo3d"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+
+        <!-- =====================================
+             IMAGEN CLOUDINARY
+        ====================================== -->
+
+        <div class="admin-field admin-field-full">
+
+
+          <label>
+            FOTO DEL PRODUCTO
+          </label>
+
+
+          <div class="admin-upload-box">
+
+
+            <div
+              class="admin-image-preview-wrap"
+              id="productoImagenPreviewWrap"
+            >
+
+
+              <img
+                id="productoImagenPreview"
+                alt="Vista previa del producto"
+              >
+
+
+              <div
+                class="admin-image-placeholder"
+                id="productoImagenPlaceholder"
+              >
+
+                <strong>
+                  UX
+                </strong>
+
+                <span>
+                  Sin fotografía
+                </span>
+
+              </div>
+
+
+            </div>
+
+
+
+            <div class="admin-upload-controls">
+
+
+              <input
+                type="file"
+                id="productoImagenArchivo"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                hidden
+              >
+
+
+              <button
+                type="button"
+                class="admin-upload-select-btn"
+                id="seleccionarImagenBtn"
+              >
+                SELECCIONAR FOTO
+              </button>
+
+
+              <button
+                type="button"
+                class="admin-upload-remove-btn"
+                id="quitarImagenBtn"
+                style="display:none;"
+              >
+                QUITAR FOTO
+              </button>
+
+
+              <p id="productoImagenNombre">
+                JPG, JPEG, PNG o WEBP · máximo 5 MB
+              </p>
+
+
+            </div>
+
+
+          </div>
+
+
+          <input
+            type="hidden"
+            id="productoImagenActual"
+          >
+
+
+          <input
+            type="hidden"
+            id="productoImagenPublicId"
+          >
+
+
+        </div>
+
+
+
+        <!-- DESCRIPCIÓN -->
+
+        <div class="admin-field admin-field-full">
+
+          <label for="productoDescripcion">
+            DESCRIPCIÓN
+          </label>
+
+          <textarea
+            id="productoDescripcion"
+            placeholder="Descripción completa..."
+          ></textarea>
+
+        </div>
+
+
+
+        <!-- MATERIALES -->
+
+        <div class="admin-field admin-field-full">
+
+          <label for="productoMateriales">
+            MATERIALES
+          </label>
+
+          <textarea
+            id="productoMateriales"
+            placeholder="Materiales y composición..."
+          ></textarea>
+
+        </div>
+
+
+
+        <!-- DETALLES -->
+
+        <div class="admin-field admin-field-full">
+
+          <label for="productoDetalles">
+            DETALLES
+          </label>
+
+          <textarea
+            id="productoDetalles"
+            placeholder="Detalle 1; Detalle 2; Detalle 3"
+          ></textarea>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- OPCIONES -->
+
+      <div class="producto-options">
+
+
+        <label>
+
+          <input
+            type="checkbox"
+            id="productoDestacado"
+          >
+
+          Destacado
+
+        </label>
+
+
+        <label>
+
+          <input
+            type="checkbox"
+            id="productoNuevo"
+          >
+
+          Nuevo
+
+        </label>
+
+
+        <label>
+
+          <input
+            type="checkbox"
+            id="producto3d"
+          >
+
+          SIXTEEN 3D
+
+        </label>
+
+
+      </div>
+
+
+
+      <!-- MENSAJE -->
+
+      <p
+        id="productoAdminMensaje"
+        class="producto-mensaje"
+      >
+      </p>
+
+
+
+      <!-- BOTONES -->
+
+      <div class="producto-modal-actions">
+
+
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarProductoBtn"
+        >
+          CANCELAR
+        </button>
+
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="guardarProductoBtn"
+        >
+          GUARDAR PRODUCTO
+        </button>
+
+
+      </div>
+
+
+    </form>
+
+
+  </div>
+
+
+</div>
+
+
+
+
+<!-- ======================================================
+     MODAL CUPÓN
+====================================================== -->
+
+<div
+  class="comercial-modal"
+  id="cuponModal"
+  aria-hidden="true"
+>
+
+  <div class="comercial-modal-card">
+
+    <div class="pedido-modal-header">
+
+      <div>
+        <p class="admin-eyebrow">
+          SIXTEEN PROMOTIONS
+        </p>
+
+        <h2 id="cuponModalTitulo">
+          Nuevo cupón
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="producto-modal-close"
+        id="cerrarCuponModal"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <form id="cuponForm">
+
+      <div class="admin-form-grid comercial-form-grid">
+
+        <div class="admin-field">
+
+          <label for="cuponCodigo">
+            CÓDIGO *
+          </label>
+
+          <input
+            type="text"
+            id="cuponCodigo"
+            maxlength="30"
+            placeholder="SIXTEEN15"
+            autocomplete="off"
+            required
+          >
+
+        </div>
+
+        <div class="admin-field">
+
+          <label for="cuponPorcentaje">
+            DESCUENTO % *
+          </label>
+
+          <input
+            type="number"
+            id="cuponPorcentaje"
+            min="1"
+            max="100"
+            step="1"
+            value="10"
+            required
+          >
+
+        </div>
+
+        <div class="admin-field">
+
+          <label for="cuponFechaInicio">
+            FECHA INICIO
+          </label>
+
+          <input
+            type="date"
+            id="cuponFechaInicio"
+          >
+
+        </div>
+
+        <div class="admin-field">
+
+          <label for="cuponFechaFin">
+            FECHA FIN
+          </label>
+
+          <input
+            type="date"
+            id="cuponFechaFin"
+          >
+
+        </div>
+
+        <div class="admin-field">
+
+          <label for="cuponLimiteUsos">
+            LÍMITE DE USOS
+          </label>
+
+          <input
+            type="number"
+            id="cuponLimiteUsos"
+            min="0"
+            step="1"
+            value="0"
+          >
+
+          <small>
+            0 = sin límite
+          </small>
+
+        </div>
+
+        <div class="admin-field comercial-check-field">
+
+          <label>
+            DISPONIBILIDAD
+          </label>
+
+          <label class="admin-check-line">
+            <input
+              type="checkbox"
+              id="cuponActivo"
+              checked
+            >
+            <span>
+              Cupón activo
+            </span>
+          </label>
+
+        </div>
+
+      </div>
+
+      <p
+        class="producto-mensaje"
+        id="cuponMensaje"
+        aria-live="polite"
+      ></p>
+
+      <div class="producto-modal-actions">
+
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarCuponBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="guardarCuponBtn"
+        >
+          GUARDAR CUPÓN
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     MODAL TARIFA DE ENVÍO
+====================================================== -->
+
+<div
+  class="comercial-modal"
+  id="envioModal"
+  aria-hidden="true"
+>
+
+  <div class="comercial-modal-card comercial-modal-card-small">
+
+    <div class="pedido-modal-header">
+
+      <div>
+        <p class="admin-eyebrow">
+          SIXTEEN SHIPPING
+        </p>
+
+        <h2>
+          Editar tarifa
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="producto-modal-close"
+        id="cerrarEnvioModal"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <form id="envioForm">
+
+      <div class="admin-form-grid comercial-form-grid">
+
+        <div class="admin-field admin-field-full">
+
+          <label>
+            PROVINCIA
+          </label>
+
+          <strong
+            class="comercial-provincia-modal"
+            id="envioModalProvincia"
+          >
+            -
+          </strong>
+
+        </div>
+
+        <div class="admin-field">
+
+          <label for="envioTarifa">
+            TARIFA USD *
+          </label>
+
+          <input
+            type="number"
+            id="envioTarifa"
+            min="0"
+            step="0.01"
+            value="0"
+            required
+          >
+
+        </div>
+
+        <div class="admin-field comercial-check-field">
+
+          <label>
+            DISPONIBILIDAD
+          </label>
+
+          <label class="admin-check-line">
+            <input
+              type="checkbox"
+              id="envioActivo"
+              checked
+            >
+            <span>
+              Provincia activa
+            </span>
+          </label>
+
+        </div>
+
+      </div>
+
+      <p
+        class="producto-mensaje"
+        id="envioMensaje"
+        aria-live="polite"
+      ></p>
+
+      <div class="producto-modal-actions">
+
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarEnvioBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="guardarEnvioBtn"
+        >
+          GUARDAR TARIFA
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     MODAL CLIENTE
+====================================================== -->
+
+<div
+  class="cliente-modal"
+  id="clienteAdminModal"
+  aria-hidden="true"
+>
+
+  <div class="cliente-modal-card">
+
+    <div class="pedido-modal-header">
+
+      <div>
+        <p class="admin-eyebrow">SIXTEEN CUSTOMER PROFILE</p>
+        <h2 id="clienteModalNombre">
+          Cliente
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="producto-modal-close"
+        id="cerrarClienteModal"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="cliente-modal-stats">
+
+      <article>
+        <span>PEDIDOS</span>
+        <strong id="clienteModalPedidos">0</strong>
+      </article>
+
+      <article>
+        <span>COMPRAS VÁLIDAS</span>
+        <strong id="clienteModalComprasValidas">0</strong>
+      </article>
+
+      <article>
+        <span>TOTAL COMPRADO</span>
+        <strong id="clienteModalTotal">$0.00</strong>
+      </article>
+
+      <article>
+        <span>TICKET PROMEDIO</span>
+        <strong id="clienteModalTicket">$0.00</strong>
+      </article>
+
+    </div>
+
+    <div class="cliente-info-grid">
+
+      <article class="cliente-info-card">
+
+        <p class="admin-eyebrow">
+          DATOS
+        </p>
+
+        <p>
+          <strong>Identificación:</strong>
+          <span id="clienteModalIdentificacion">-</span>
+        </p>
+
+        <p>
+          <strong>Correo:</strong>
+          <span id="clienteModalEmail">-</span>
+        </p>
+
+        <p>
+          <strong>Teléfono:</strong>
+          <span id="clienteModalTelefono">-</span>
+        </p>
+
+      </article>
+
+      <article class="cliente-info-card">
+
+        <p class="admin-eyebrow">
+          ÚLTIMA ENTREGA
+        </p>
+
+        <p>
+          <strong>Provincia:</strong>
+          <span id="clienteModalProvincia">-</span>
+        </p>
+
+        <p>
+          <strong>Ciudad:</strong>
+          <span id="clienteModalCiudad">-</span>
+        </p>
+
+        <p>
+          <strong>Dirección:</strong>
+          <span id="clienteModalDireccion">-</span>
+        </p>
+
+      </article>
+
+      <article class="cliente-info-card">
+
+        <p class="admin-eyebrow">
+          ACTIVIDAD
+        </p>
+
+        <p>
+          <strong>Último pedido:</strong>
+          <span id="clienteModalUltimoPedido">-</span>
+        </p>
+
+        <p>
+          <strong>Última compra:</strong>
+          <span id="clienteModalUltimaCompra">-</span>
+        </p>
+
+        <p>
+          <strong>Estado:</strong>
+          <span id="clienteModalEstado">-</span>
+        </p>
+
+      </article>
+
+    </div>
+
+    <section class="cliente-historial">
+
+      <div class="admin-card-header">
+
+        <div>
+          <p class="admin-eyebrow">
+            HISTORIAL
+          </p>
+
+          <h3>
+            Pedidos del cliente
+          </h3>
+        </div>
+
+      </div>
+
+      <div class="admin-table-wrap">
+
+        <table class="admin-table">
+
+          <thead>
+
+            <tr>
+              <th>PEDIDO</th>
+              <th>FECHA</th>
+              <th>ESTADO</th>
+              <th>PAGO</th>
+              <th>TOTAL</th>
+              <th>ACCIÓN</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="clienteHistorialBody">
+
+            <tr>
+              <td colspan="6">
+                Sin pedidos.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     MODAL AJUSTE DE INVENTARIO
+====================================================== -->
+
+<div
+  class="inventario-modal"
+  id="inventarioAjusteModal"
+  aria-hidden="true"
+>
+
+  <div class="inventario-modal-card">
+
+    <div class="pedido-modal-header">
+
+      <div>
+        <p class="admin-eyebrow">SIXTEEN INVENTORY MANAGEMENT</p>
+        <h2>Ajustar inventario</h2>
+      </div>
+
+      <button
+        type="button"
+        class="producto-modal-close"
+        id="cerrarInventarioModal"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="inventario-modal-producto">
+
+      <div>
+        <span>PRODUCTO</span>
+        <strong id="inventarioModalProducto">-</strong>
+      </div>
+
+      <div>
+        <span>STOCK ACTUAL</span>
+        <strong id="inventarioModalStock">0</strong>
+      </div>
+
+      <div>
+        <span>STOCK MÍNIMO</span>
+        <strong id="inventarioModalMinimoActual">5</strong>
+      </div>
+
+    </div>
+
+    <form id="inventarioAjusteForm">
+
+      <div class="admin-form-grid inventario-ajuste-grid">
+
+        <div class="admin-field" id="inventarioVarianteField" hidden>
+          <label for="inventarioVariante">VARIANTE</label>
+          <select id="inventarioVariante"></select>
+        </div>
+
+        <div class="admin-field">
+
+          <label for="inventarioOperacion">
+            OPERACIÓN
+          </label>
+
+          <select
+            id="inventarioOperacion"
+            required
+          >
+            <option value="entrada">
+              Entrada de stock
+            </option>
+
+            <option value="salida">
+              Salida de stock
+            </option>
+
+            <option value="exacto">
+              Establecer stock exacto
+            </option>
+          </select>
+
+        </div>
+
+        <div class="admin-field">
+
+          <label for="inventarioCantidad">
+            CANTIDAD / NUEVO STOCK
+          </label>
+
+          <input
+            type="number"
+            id="inventarioCantidad"
+            min="0"
+            step="1"
+            value="1"
+            required
+          >
+
+        </div>
+
+        <div class="admin-field">
+
+          <label for="inventarioStockMinimo">
+            STOCK MÍNIMO
+          </label>
+
+          <input
+            type="number"
+            id="inventarioStockMinimo"
+            min="0"
+            step="1"
+            value="5"
+            required
+          >
+
+        </div>
+
+        <div class="admin-field admin-field-full">
+
+          <label for="inventarioMotivo">
+            MOTIVO *
+          </label>
+
+          <textarea
+            id="inventarioMotivo"
+            placeholder="Ej.: Reposición de proveedor, producto dañado, corrección de conteo..."
+            required
+          ></textarea>
+
+        </div>
+
+      </div>
+
+      <p
+        class="producto-mensaje"
+        id="inventarioAjusteMensaje"
+        aria-live="polite"
+      ></p>
+
+      <div class="producto-modal-actions">
+
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarInventarioAjusteBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="guardarInventarioAjusteBtn"
+        >
+          GUARDAR AJUSTE
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     MODAL PEDIDO
+====================================================== -->
+
+<div
+  class="pedido-modal"
+  id="pedidoAdminModal"
+  aria-hidden="true"
+>
+
+  <div class="pedido-modal-card">
+
+    <div class="pedido-modal-header">
+
+      <div>
+        <p class="admin-eyebrow">SIXTEEN ORDER MANAGEMENT</p>
+        <h2 id="pedidoModalNumero">Pedido</h2>
+      </div>
+
+      <button
+        type="button"
+        class="producto-modal-close"
+        id="cerrarPedidoModal"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="pedido-estado-control">
+
+      <div class="admin-field">
+        <label for="pedidoEstadoSelect">ESTADO DEL PEDIDO</label>
+        <select id="pedidoEstadoSelect">
+          <option value="Pendiente">Pendiente</option>
+          <option value="Confirmado">Confirmado</option>
+          <option value="En preparación">En preparación</option>
+          <option value="Enviado">Enviado</option>
+          <option value="Entregado">Entregado</option>
+          <option value="Cancelado">Cancelado</option>
+        </select>
+      </div>
+
+      <div class="admin-field">
+        <label for="pedidoEstadoPagoSelect">ESTADO DEL PAGO</label>
+        <select id="pedidoEstadoPagoSelect">
+          <option value="Pendiente">Pendiente</option>
+          <option value="Pendiente de pasarela">Pendiente de pasarela</option>
+          <option value="Pendiente contra entrega">Pendiente contra entrega</option>
+          <option value="Por verificar">Por verificar</option>
+          <option value="Pagado">Pagado</option>
+          <option value="Reembolsado">Reembolsado</option>
+        </select>
+      </div>
+
+      <button
+        type="button"
+        class="admin-primary-btn"
+        id="guardarEstadoPedidoBtn"
+      >
+        GUARDAR ESTADO
+      </button>
+
+    </div>
+
+    <p
+      id="pedidoAdminMensaje"
+      class="producto-mensaje"
+      aria-live="polite"
+    ></p>
+
+    <div class="pedido-info-grid">
+
+      <article class="pedido-info-card">
+        <p class="admin-eyebrow">CLIENTE</p>
+        <h3 id="pedidoClienteNombre">-</h3>
+        <p><strong>Identificación:</strong> <span id="pedidoClienteIdentificacion">-</span></p>
+        <p><strong>Correo:</strong> <span id="pedidoClienteEmail">-</span></p>
+        <p><strong>Teléfono:</strong> <span id="pedidoClienteTelefono">-</span></p>
+      </article>
+
+      <article class="pedido-info-card">
+        <p class="admin-eyebrow">ENTREGA</p>
+        <h3 id="pedidoEntregaCiudad">-</h3>
+        <p><strong>Provincia:</strong> <span id="pedidoEntregaProvincia">-</span></p>
+        <p><strong>Dirección:</strong> <span id="pedidoEntregaDireccion">-</span></p>
+        <p><strong>Referencia:</strong> <span id="pedidoEntregaReferencia">-</span></p>
+      </article>
+
+      <article class="pedido-info-card">
+        <p class="admin-eyebrow">PAGO</p>
+        <h3 id="pedidoMetodoPago">-</h3>
+        <p><strong>Estado:</strong> <span id="pedidoEstadoPago">-</span></p>
+        <p><strong>Fecha:</strong> <span id="pedidoFecha">-</span></p>
+        <p>
+          <strong>Inventario:</strong>
+          <span
+            id="pedidoEstadoInventario"
+            class="pedido-inventario-texto"
+          >
+            Pendiente
+          </span>
+        </p>
+      </article>
+
+    </div>
+
+    <section class="pedido-productos-box">
+
+      <div class="admin-card-header">
+        <div>
+          <p class="admin-eyebrow">PRODUCTOS</p>
+          <h3>Detalle del pedido</h3>
+        </div>
+      </div>
+
+      <div
+        class="pedido-productos-lista"
+        id="pedidoProductosLista"
+      ></div>
+
+    </section>
+
+    <div class="pedido-totales">
+
+      <div>
+        <span>Subtotal</span>
+        <strong id="pedidoSubtotal">$0.00</strong>
+      </div>
+
+      <div>
+        <span>Descuento</span>
+        <strong id="pedidoDescuento">$0.00</strong>
+      </div>
+
+      <div>
+        <span>Envío</span>
+        <strong id="pedidoEnvio">$0.00</strong>
+      </div>
+
+      <div class="pedido-total-final">
+        <span>TOTAL</span>
+        <strong id="pedidoTotal">$0.00</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     CONFIGURACIÓN SRI · SOLO DATOS NO SECRETOS
+====================================================== -->
+
+
+
+
+
+<!-- ============================================
+     PASO 16F4C · COMPROBANTE DE RETENCIÓN ATS
+============================================= -->
+
+<div
+  class="admin-modal"
+  id="retencionModal"
+  aria-hidden="true"
+>
+  <div class="admin-modal-panel facturacion-config-modal retencion-modal-panel">
+
+    <div class="admin-modal-header">
+      <div>
+        <p class="admin-eyebrow">
+          SRI · DOCUMENTO 07 · ATS XML 2.0.0
+        </p>
+        <h3>Nuevo comprobante de retención</h3>
+      </div>
+
+      <button
+        type="button"
+        class="admin-modal-close"
+        id="cerrarRetencionBtn"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+    </div>
+
+    <form id="retencionForm">
+
+      <div class="retencion-section-title">
+        <span>01</span>
+        <div>
+          <strong>SUJETO RETENIDO</strong>
+          <small>Proveedor o beneficiario de la compra.</small>
+        </div>
+      </div>
+
+      <div class="facturacion-config-grid">
+
+        <label>
+          IDENTIFICACIÓN
+          <input
+            id="retencionSujetoId"
+            type="text"
+            maxlength="20"
+            placeholder="RUC / cédula"
+            required
+          >
+        </label>
+
+        <label class="span-2">
+          RAZÓN SOCIAL
+          <input
+            id="retencionSujetoNombre"
+            type="text"
+            maxlength="300"
+            placeholder="Nombre o razón social"
+            required
+          >
+        </label>
+
+        <label>
+          PARTE RELACIONADA
+          <select id="retencionParteRel">
+            <option value="NO">NO</option>
+            <option value="SI">SI</option>
+          </select>
+        </label>
+
+        <label>
+          EMAIL OPCIONAL
+          <input
+            id="retencionSujetoEmail"
+            type="email"
+            maxlength="160"
+            placeholder="proveedor@correo.com"
+          >
+        </label>
+
+        <label>
+          FECHA EMISIÓN
+          <input
+            id="retencionFechaEmision"
+            type="date"
+            required
+          >
+        </label>
+
+        <label>
+          PERÍODO FISCAL
+          <input
+            id="retencionPeriodoFiscal"
+            type="text"
+            maxlength="7"
+            placeholder="MM/AAAA"
+            required
+          >
+        </label>
+
+      </div>
+
+
+      <div class="retencion-section-title">
+        <span>02</span>
+        <div>
+          <strong>DOCUMENTO DE SUSTENTO</strong>
+          <small>Compra local estándar para la primera versión.</small>
+        </div>
+      </div>
+
+      <div class="facturacion-config-grid">
+
+        <label>
+          CÓD. SUSTENTO ATS
+          <input
+            id="retencionCodSustento"
+            type="text"
+            maxlength="3"
+            value="01"
+            required
+          >
+        </label>
+
+        <label>
+          CÓD. DOCUMENTO
+          <input
+            id="retencionCodDocSustento"
+            type="text"
+            maxlength="3"
+            value="01"
+            required
+          >
+        </label>
+
+        <label class="span-2">
+          NÚMERO DOCUMENTO
+          <input
+            id="retencionNumDocSustento"
+            type="text"
+            maxlength="20"
+            placeholder="001001000000001"
+            required
+          >
+        </label>
+
+        <label>
+          FECHA DOCUMENTO
+          <input
+            id="retencionFechaDocSustento"
+            type="date"
+            required
+          >
+        </label>
+
+        <label>
+          FECHA REGISTRO CONTABLE
+          <input
+            id="retencionFechaRegistro"
+            type="date"
+          >
+        </label>
+
+        <label class="span-2">
+          AUTORIZACIÓN / CLAVE DE ACCESO
+          <input
+            id="retencionAutDocSustento"
+            type="text"
+            maxlength="49"
+            placeholder="Opcional"
+          >
+        </label>
+
+        <label>
+          TOTAL SIN IMPUESTOS
+          <input
+            id="retencionSubtotalCompra"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+            required
+          >
+        </label>
+
+        <label>
+          IVA COMPRA
+          <select id="retencionIvaCompra">
+            <option value="15">15%</option>
+            <option value="5">5%</option>
+            <option value="0">0%</option>
+          </select>
+        </label>
+
+        <label>
+          IMPORTE TOTAL
+          <input
+            id="retencionImporteCompra"
+            type="number"
+            min="0.01"
+            step="0.01"
+            placeholder="0.00"
+            required
+          >
+        </label>
+
+        <label>
+          FORMA DE PAGO
+          <select id="retencionFormaPago">
+            <option value="01">
+              01 · Sin sistema financiero
+            </option>
+            <option value="20">
+              20 · Otros con sistema financiero
+            </option>
+          </select>
+        </label>
+
+      </div>
+
+
+      <div class="retencion-section-title">
+        <span>03</span>
+        <div>
+          <strong>RETENCIONES</strong>
+          <small>Renta, IVA o ISD. Los códigos deben corresponder al catálogo SRI/ATS.</small>
+        </div>
+      </div>
+
+      <div
+        class="retencion-lines"
+        id="retencionLineas"
+      ></div>
+
+      <div class="retencion-line-actions">
+
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="agregarRetencionLineaBtn"
+        >
+          + AGREGAR RETENCIÓN
+        </button>
+
+        <div
+          class="retencion-total"
+          id="retencionTotalPreview"
+        >
+          <span>TOTAL RETENIDO</span>
+          <strong>$0.00</strong>
+        </div>
+
+      </div>
+
+      <div class="facturacion-config-info">
+        <strong>ALCANCE 16F4C:</strong>
+        compra local estándar con un documento de sustento y múltiples
+        líneas de retención. Casos especiales ATS como pagos al exterior,
+        reembolsos, dividendos y banano se incorporarán en una fase avanzada
+        si fueran necesarios.
+      </div>
+
+      <div
+        class="facturacion-action-message"
+        id="retencionMensaje"
+        aria-live="polite"
+      ></div>
+
+      <div class="admin-modal-actions">
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarRetencionBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="generarRetencionBtn"
+        >
+          GENERAR RETENCIÓN + XML
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<!-- ============================================
+     PASO 16F4B · GUÍA DE REMISIÓN
+============================================= -->
+
+<div
+  class="admin-modal"
+  id="guiaRemisionModal"
+  aria-hidden="true"
+>
+  <div class="admin-modal-panel facturacion-config-modal">
+
+    <div class="admin-modal-header">
+      <div>
+        <p class="admin-eyebrow">
+          SRI · DOCUMENTO 06 · XML 1.0.0
+        </p>
+        <h3>Nueva guía de remisión</h3>
+      </div>
+
+      <button
+        type="button"
+        class="admin-modal-close"
+        id="cerrarGuiaRemisionBtn"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+    </div>
+
+    <form id="guiaRemisionForm">
+
+      <div class="facturacion-config-grid">
+
+        <label class="span-2">
+          PEDIDO
+          <select id="guiaPedidoSelect" required>
+            <option value="">
+              Selecciona un pedido
+            </option>
+          </select>
+        </label>
+
+        <label class="span-2">
+          DIRECCIÓN DE PARTIDA
+          <input
+            id="guiaDirPartida"
+            type="text"
+            maxlength="300"
+            placeholder="Dirección desde donde sale la mercadería"
+            required
+          >
+        </label>
+
+        <label>
+          TRANSPORTISTA
+          <input
+            id="guiaTransportistaNombre"
+            type="text"
+            maxlength="300"
+            placeholder="Nombre o razón social"
+            required
+          >
+        </label>
+
+        <label>
+          IDENTIFICACIÓN TRANSPORTISTA
+          <input
+            id="guiaTransportistaId"
+            type="text"
+            maxlength="13"
+            placeholder="Cédula o RUC"
+            required
+          >
+        </label>
+
+        <label>
+          FECHA INICIO TRANSPORTE
+          <input
+            id="guiaFechaInicio"
+            type="date"
+            required
+          >
+        </label>
+
+        <label>
+          FECHA FIN TRANSPORTE
+          <input
+            id="guiaFechaFin"
+            type="date"
+            required
+          >
+        </label>
+
+        <label>
+          PLACA
+          <input
+            id="guiaPlaca"
+            type="text"
+            maxlength="20"
+            placeholder="ABC0123"
+            required
+          >
+        </label>
+
+        <label>
+          CÓD. ESTAB. DESTINO
+          <input
+            id="guiaCodEstabDestino"
+            type="text"
+            maxlength="3"
+            inputmode="numeric"
+            placeholder="001"
+          >
+        </label>
+
+        <label class="span-2">
+          DIRECCIÓN DESTINATARIO
+          <input
+            id="guiaDirDestinatario"
+            type="text"
+            maxlength="300"
+            placeholder="Se completa desde el pedido y puede corregirse"
+            required
+          >
+        </label>
+
+        <label class="span-2">
+          MOTIVO DEL TRASLADO
+          <input
+            id="guiaMotivoTraslado"
+            type="text"
+            maxlength="300"
+            value="VENTA"
+            required
+          >
+        </label>
+
+        <label class="span-2">
+          RUTA
+          <input
+            id="guiaRuta"
+            type="text"
+            maxlength="300"
+            placeholder="Ej.: Quito - Cumbayá"
+          >
+        </label>
+
+      </div>
+
+      <div
+        class="facturacion-order-preview guia-remision-preview"
+        id="guiaRemisionPreview"
+      >
+        Selecciona un pedido para revisar destinatario, productos y
+        factura de sustento si existe.
+      </div>
+
+      <div class="facturacion-config-info">
+        <strong>16F4B:</strong>
+        genera la guía con transportista, placa, fechas, destinatario,
+        motivo, ruta y detalle de productos. Si el pedido ya tiene una
+        factura, se agrega como documento de sustento.
+      </div>
+
+      <div
+        class="facturacion-action-message"
+        id="guiaRemisionMensaje"
+        aria-live="polite"
+      ></div>
+
+      <div class="admin-modal-actions">
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarGuiaRemisionBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="generarGuiaRemisionBtn"
+        >
+          GENERAR GUÍA + XML
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<!-- ============================================
+     PASO 16F4A · NOTA DE DÉBITO
+============================================= -->
+
+<div
+  class="admin-modal"
+  id="notaDebitoModal"
+  aria-hidden="true"
+>
+  <div class="admin-modal-panel facturacion-config-modal">
+
+    <div class="admin-modal-header">
+      <div>
+        <p class="admin-eyebrow">
+          SRI · DOCUMENTO 05 · XML 1.0.0
+        </p>
+        <h3>Nueva nota de débito</h3>
+      </div>
+
+      <button
+        type="button"
+        class="admin-modal-close"
+        id="cerrarNotaDebitoBtn"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+    </div>
+
+    <form id="notaDebitoForm">
+
+      <div class="facturacion-config-grid">
+
+        <label class="span-2">
+          FACTURA DE SUSTENTO
+          <select id="notaDebitoFacturaSelect" required>
+            <option value="">
+              Selecciona una factura
+            </option>
+          </select>
+        </label>
+
+        <label>
+          FECHA EMISIÓN
+          <input
+            id="notaDebitoFecha"
+            type="date"
+            required
+          >
+        </label>
+
+        <label>
+          IVA DEL CARGO
+          <select id="notaDebitoIva" required>
+            <option value="15">15%</option>
+            <option value="5">5%</option>
+            <option value="0">0%</option>
+          </select>
+        </label>
+
+        <label class="span-2">
+          RAZÓN DEL DÉBITO
+          <input
+            id="notaDebitoRazon"
+            type="text"
+            maxlength="300"
+            placeholder="Ej.: interés por mora o cargo adicional"
+            required
+          >
+        </label>
+
+        <label>
+          VALOR BASE SIN IVA
+          <input
+            id="notaDebitoValorBase"
+            type="number"
+            min="0.01"
+            step="0.01"
+            placeholder="0.00"
+            required
+          >
+        </label>
+
+      </div>
+
+      <div
+        class="facturacion-order-preview nota-debito-preview"
+        id="notaDebitoPreview"
+      >
+        Selecciona una factura para revisar el documento de sustento.
+      </div>
+
+      <div
+        class="nota-debito-total-box"
+        id="notaDebitoTotal"
+      >
+        <span>VALOR TOTAL</span>
+        <strong>$0.00</strong>
+      </div>
+
+      <div class="facturacion-config-info">
+        <strong>16F4A:</strong>
+        la nota de débito aumenta el valor de una factura por un motivo
+        específico. El XML usa documento SRI 05 y formato notaDebito 1.0.0.
+      </div>
+
+      <div
+        class="facturacion-action-message"
+        id="notaDebitoMensaje"
+        aria-live="polite"
+      ></div>
+
+      <div class="admin-modal-actions">
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarNotaDebitoBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="generarNotaDebitoBtn"
+        >
+          GENERAR DÉBITO + XML
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<!-- ============================================
+     PASO 16F3A · NOTA DE CRÉDITO
+============================================= -->
+
+<div
+  class="admin-modal"
+  id="notaCreditoModal"
+  aria-hidden="true"
+>
+  <div class="admin-modal-panel facturacion-config-modal">
+
+    <div class="admin-modal-header">
+      <div>
+        <p class="admin-eyebrow">
+          SRI · DOCUMENTO 04 · XML 1.1.0
+        </p>
+        <h3>Nueva nota de crédito</h3>
+      </div>
+
+      <button
+        type="button"
+        class="admin-modal-close"
+        id="cerrarNotaCreditoBtn"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+    </div>
+
+    <form id="notaCreditoForm">
+
+      <div class="facturacion-config-grid">
+
+        <label class="span-2">
+          FACTURA DE SUSTENTO
+          <select id="notaCreditoFacturaSelect" required>
+            <option value="">
+              Selecciona una factura
+            </option>
+          </select>
+        </label>
+
+        <label>
+          FECHA EMISIÓN
+          <input
+            id="notaCreditoFecha"
+            type="date"
+            required
+          >
+        </label>
+
+        <label class="span-2">
+          MOTIVO
+          <input
+            id="notaCreditoMotivo"
+            type="text"
+            maxlength="300"
+            placeholder="Ej.: devolución parcial de mercadería"
+            required
+          >
+        </label>
+
+      </div>
+
+      <div
+        class="facturacion-order-preview nota-credito-preview"
+        id="notaCreditoPreview"
+      >
+        Selecciona una factura para revisar la nota de crédito.
+      </div>
+
+      <section
+        class="nota-credito-items"
+        aria-labelledby="notaCreditoItemsTitulo"
+      >
+
+        <div class="nota-credito-items-head">
+
+          <div>
+            <span>DETALLE A ACREDITAR</span>
+            <h4 id="notaCreditoItemsTitulo">
+              Productos y cantidades
+            </h4>
+          </div>
+
+          <div class="nota-credito-items-actions">
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="notaCreditoSeleccionarTodoBtn"
+            >
+              SELECCIONAR TODO
+            </button>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="notaCreditoLimpiarBtn"
+            >
+              LIMPIAR
+            </button>
+
+          </div>
+
+        </div>
+
+        <div
+          class="nota-credito-detalle-lista"
+          id="notaCreditoDetalleLista"
+        >
+          Selecciona una factura para ver sus productos.
+        </div>
+
+        <div
+          class="nota-credito-resumen"
+          id="notaCreditoResumenSeleccion"
+        >
+          <span>0 líneas seleccionadas</span>
+          <strong>$0.00</strong>
+        </div>
+
+      </section>
+
+      <div class="facturacion-config-info">
+        <strong>16F3B:</strong>
+        puedes acreditar toda la factura o únicamente productos y
+        cantidades específicas. El IVA de cada línea conserva la tarifa
+        utilizada en la factura de sustento.
+      </div>
+
+      <div
+        class="facturacion-action-message"
+        id="notaCreditoMensaje"
+        aria-live="polite"
+      ></div>
+
+      <div class="admin-modal-actions">
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarNotaCreditoBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="generarNotaCreditoBtn"
+        >
+          GENERAR NOTA + XML
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<div
+  class="admin-modal"
+  id="configuracionSriModal"
+  aria-hidden="true"
+>
+
+  <div class="admin-modal-panel facturacion-config-modal">
+
+    <div class="admin-modal-header">
+
+      <div>
+        <p class="admin-eyebrow">
+          SIXTEEN · CONFIGURACIÓN FISCAL
+        </p>
+
+        <h3>
+          Configuración SRI
+        </h3>
+      </div>
+
+      <button
+        type="button"
+        class="admin-modal-close"
+        id="cerrarConfiguracionSriBtn"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="configuracionSriForm">
+
+      <div class="facturacion-config-grid">
+
+        <label>
+          AMBIENTE
+          <select id="sriAmbiente" required>
+            <option value="1">PRUEBAS / CERTIFICACIÓN</option>
+            <option value="2">PRODUCCIÓN</option>
+          </select>
+        </label>
+
+        <label>
+          BACKEND SEGURO SRI
+          <input
+            id="sriBackendUrl"
+            type="url"
+            placeholder="https://tu-backend-seguro.example.com"
+          >
+        </label>
+
+        <label>
+          RUC
+          <input
+            id="sriRuc"
+            type="text"
+            inputmode="numeric"
+            maxlength="13"
+            placeholder="179XXXXXXXXXX"
+          >
+        </label>
+
+        <label class="span-2">
+          RAZÓN SOCIAL
+          <input
+            id="sriRazonSocial"
+            type="text"
+            maxlength="300"
+          >
+        </label>
+
+        <label class="span-2">
+          NOMBRE COMERCIAL
+          <input
+            id="sriNombreComercial"
+            type="text"
+            maxlength="300"
+            value="SIXTEEN"
+          >
+        </label>
+
+        <label class="span-2">
+          DIRECCIÓN MATRIZ
+          <input
+            id="sriDirMatriz"
+            type="text"
+            maxlength="300"
+          >
+        </label>
+
+        <label class="span-2">
+          DIRECCIÓN ESTABLECIMIENTO
+          <input
+            id="sriDirEstablecimiento"
+            type="text"
+            maxlength="300"
+          >
+        </label>
+
+        <label>
+          ESTABLECIMIENTO
+          <input
+            id="sriEstab"
+            type="text"
+            inputmode="numeric"
+            maxlength="3"
+            value="001"
+            required
+          >
+        </label>
+
+        <label>
+          PUNTO DE EMISIÓN
+          <input
+            id="sriPtoEmi"
+            type="text"
+            inputmode="numeric"
+            maxlength="3"
+            value="001"
+            required
+          >
+        </label>
+
+        <label>
+          PRÓXIMO SECUENCIAL FACTURA
+          <input
+            id="sriSecuencialFactura"
+            type="number"
+            min="1"
+            step="1"
+            value="1"
+            required
+          >
+        </label>
+
+        <label>
+          IVA PREDETERMINADO
+          <select id="sriIvaDefault">
+            <option value="15">15%</option>
+            <option value="5">5%</option>
+            <option value="0">0%</option>
+          </select>
+        </label>
+
+        <label>
+          IVA ENVÍO
+          <select id="sriIvaEnvio">
+            <option value="15">15%</option>
+            <option value="5">5%</option>
+            <option value="0">0%</option>
+          </select>
+        </label>
+
+        <label>
+          PRECIOS DE TIENDA
+          <select id="sriPreciosIncluyenIva">
+            <option value="true">INCLUYEN IVA</option>
+            <option value="false">NO INCLUYEN IVA</option>
+          </select>
+        </label>
+
+        <label>
+          OBLIGADO A LLEVAR CONTABILIDAD
+          <select id="sriObligadoContabilidad">
+            <option value="false">NO</option>
+            <option value="true">SÍ</option>
+          </select>
+        </label>
+
+        <label>
+          CONTRIBUYENTE ESPECIAL
+          <input
+            id="sriContribuyenteEspecial"
+            type="text"
+            maxlength="13"
+            placeholder="Opcional"
+          >
+        </label>
+
+        <label class="span-2">
+          RÉGIMEN / LEYENDA TRIBUTARIA
+          <input
+            id="sriRegimen"
+            type="text"
+            maxlength="300"
+            placeholder="Ej. CONTRIBUYENTE RÉGIMEN RIMPE"
+          >
+        </label>
+
+      </div>
+
+
+      <div class="facturacion-config-warning">
+        <strong>NO SE GUARDA AQUÍ:</strong>
+        archivo .p12/.pfx, contraseña de firma, clave SRI,
+        claves privadas ni secretos del futuro backend.
+      </div>
+
+      <div class="facturacion-config-info">
+        <strong>CONFIGURACIÓN POR ETAPAS:</strong>
+        puedes guardar primero únicamente la URL del backend para probar
+        la conexión. RUC, razón social y dirección serán obligatorios
+        cuando generemos una factura.
+      </div>
+
+
+      <div
+        class="admin-form-message"
+        id="configuracionSriMensaje"
+      >
+      </div>
+
+
+      <div class="admin-modal-actions">
+
+        <button
+          type="button"
+          class="admin-secondary-btn"
+          id="cancelarConfiguracionSriBtn"
+        >
+          CANCELAR
+        </button>
+
+        <button
+          type="submit"
+          class="admin-primary-btn"
+          id="guardarConfiguracionSriBtn"
+        >
+          GUARDAR CONFIGURACIÓN
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     FIREBASE
+====================================================== -->
+
+<script src="../compat.js?v=3200"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
+
+<!-- ======================================================
+     EMAILJS FREE
+====================================================== -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+></script>
+
+<script src="./emailjs-config.js?v=2310"></script>
+
+
+<!-- ======================================================
+     SIXTEEN ADMIN
+====================================================== -->
+
+<script src="../variant-utils.js?v=2900"></script>
+
+<script src="../store-config.js?v=3000"></script>
+
+<script src="../payment-config.js?v=3400"></script>
+
+<script src="../sri-core.js?v=3800"></script>
+
+<script src="./dashboard.js?v=3100"></script>
+
+<script src="./analitica.js?v=2800"></script>
+
+<script src="./backup.js?v=3100"></script>
+
+<script src="./pagos-admin.js?v=3400"></script>
+
+<script src="../ride.js?v=3900"></script>
+
+<script src="./comprobante-email.js?v=4100"></script>
+
+<script src="./facturacion.js?v=4200"></script>
+
+
+</body>
+
+</html>

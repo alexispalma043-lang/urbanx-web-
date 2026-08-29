@@ -1,0 +1,40 @@
+﻿# SIXTEEN - archivos privados / desarrollo
+
+# Credenciales y variables privadas
+.env
+.env.*
+*.p12
+*.pfx
+*.pem
+*.key
+firebase-admin.json
+*service-account*.json
+*serviceAccount*.json
+secrets/
+
+# Backend privado
+sri-backend/
+
+# Dependencias
+node_modules/
+.venv/
+venv/
+__pycache__/
+
+# VS Code / sistema
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Paquetes y respaldos
+*.zip
+*.rar
+*.7z
+
+# Documentación interna de desarrollo
+PASO_*.txt
+README_16*.txt
+AUDITORIA_*.txt
+CHECKLIST_*.txt
+REGLAS_FIRESTORE_*.txt
+PARCHE_FIRESTORE_*.txt

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Pedido confirmado | SIXTEEN Urban Luxury</title>
+
+  <meta
+    name="description"
+    content="Confirmación de pedido SIXTEEN Urban Luxury."
+  >
+
+  <link
+    rel="stylesheet"
+    href="./styles.css?v=2700"
+  >
+
+  <meta name="robots" content="noindex,nofollow,noarchive">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//firestore.googleapis.com">
+  <link rel="dns-prefetch" href="//res.cloudinary.com">
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     BARRA SUPERIOR
+===================================== -->
+
+<div class="top-bar">
+
+  <p>
+    SIXTEEN · PEDIDO CONFIRMADO
+  </p>
+
+</div>
+
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header class="checkout-header">
+
+  <a
+    href="index.html"
+    class="sixteen-brand"
+    aria-label="SIXTEEN Urban Luxury"
+  >
+    <img
+      src="./assets/logo-sixteen.jpg"
+      alt="Logotipo SIXTEEN Urban Luxury"
+      class="sixteen-brand-logo"
+    >
+    <div class="sixteen-brand-name">
+      <strong>SIXTEEN</strong>
+      <span>URBAN LUXURY</span>
+    </div>
+  </a>
+
+
+  <div class="checkout-seguro">
+
+    ✓ COMPRA REGISTRADA
+
+  </div>
+
+</header>
+
+
+
+<!-- =====================================
+     CONFIRMACIÓN PRINCIPAL
+===================================== -->
+
+<main class="confirmacion-page">
+
+
+  <section class="confirmacion-hero">
+
+
+    <div class="confirmacion-check">
+
+      ✓
+
+    </div>
+
+
+    <p class="section-mini">
+
+      SIXTEEN STORE
+
+    </p>
+
+
+    <h1>
+
+      PEDIDO
+
+      <span>
+        CONFIRMADO
+      </span>
+
+    </h1>
+
+
+    <p class="confirmacion-mensaje">
+
+      Gracias por comprar en SIXTEEN.
+
+      Hemos registrado correctamente tu pedido
+      y ahora podrás consultar todos sus detalles.
+
+    </p>
+
+
+    <div class="numero-pedido-box">
+
+
+      <span>
+
+        NÚMERO DE PEDIDO
+
+      </span>
+
+
+      <strong id="numeroPedido">
+
+        Cargando...
+
+      </strong>
+
+
+    </div>
+
+
+  </section>
+
+
+
+  <!-- =================================
+       INFORMACIÓN DEL PEDIDO
+  ================================= -->
+
+  <section class="confirmacion-contenido">
+
+
+    <!-- COLUMNA IZQUIERDA -->
+
+    <div class="confirmacion-detalles">
+
+
+      <!-- CLIENTE -->
+
+      <div class="confirmacion-bloque">
+
+
+        <div class="confirmacion-bloque-header">
+
+
+          <span>
+            01
+          </span>
+
+
+          <h2>
+            Cliente
+          </h2>
+
+
+        </div>
+
+
+        <div class="confirmacion-datos">
+
+
+          <div>
+
+            <span>
+              Nombre
+            </span>
+
+            <strong id="confirmacionNombre">
+              -
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Correo
+            </span>
+
+            <strong id="confirmacionEmail">
+              -
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Teléfono
+            </span>
+
+            <strong id="confirmacionTelefono">
+              -
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- ENTREGA -->
+
+      <div class="confirmacion-bloque">
+
+
+        <div class="confirmacion-bloque-header">
+
+
+          <span>
+            02
+          </span>
+
+
+          <h2>
+            Entrega
+          </h2>
+
+
+        </div>
+
+
+        <div class="confirmacion-datos">
+
+
+          <div>
+
+            <span>
+              Provincia
+            </span>
+
+            <strong id="confirmacionProvincia">
+              -
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Ciudad
+            </span>
+
+            <strong id="confirmacionCiudad">
+              -
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Dirección
+            </span>
+
+            <strong id="confirmacionDireccion">
+              -
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Referencia
+            </span>
+
+            <strong id="confirmacionReferencia">
+              -
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- PAGO -->
+
+      <div class="confirmacion-bloque">
+
+
+        <div class="confirmacion-bloque-header">
+
+
+          <span>
+            03
+          </span>
+
+
+          <h2>
+            Pago
+          </h2>
+
+
+        </div>
+
+
+        <div class="confirmacion-datos">
+
+
+          <div>
+
+            <span>
+              Método
+            </span>
+
+            <strong id="confirmacionPago">
+              -
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Estado
+            </span>
+
+            <strong id="confirmacionEstado">
+              Pendiente
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <div
+          class="checkout-payment-info"
+          id="confirmacionPagoInstrucciones"
+          aria-live="polite"
+        ></div>
+
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         RESUMEN PEDIDO
+    ================================= -->
+
+    <aside class="confirmacion-resumen">
+
+
+      <p class="section-mini">
+
+        TU PEDIDO
+
+      </p>
+
+
+      <h2>
+
+        Resumen
+
+      </h2>
+
+
+      <div
+        class="confirmacion-productos"
+        id="confirmacionProductos"
+      >
+
+        <p>
+          Cargando productos...
+        </p>
+
+      </div>
+
+
+
+      <div class="checkout-linea">
+
+
+        <span>
+          Subtotal
+        </span>
+
+
+        <strong id="confirmacionSubtotal">
+
+          $0.00
+
+        </strong>
+
+
+      </div>
+
+
+
+      <div class="checkout-linea">
+
+
+        <span>
+          Descuento
+        </span>
+
+
+        <strong id="confirmacionDescuento">
+
+          $0.00
+
+        </strong>
+
+
+      </div>
+
+
+
+      <div class="checkout-linea">
+
+
+        <span>
+          Envío
+        </span>
+
+
+        <strong id="confirmacionEnvio">
+
+          $0.00
+
+        </strong>
+
+
+      </div>
+
+
+
+      <div class="checkout-total">
+
+
+        <span>
+
+          TOTAL
+
+        </span>
+
+
+        <strong id="confirmacionTotal">
+
+          $0.00
+
+        </strong>
+
+
+      </div>
+
+
+      <a
+        href="./seguimiento.html"
+        class="seguir-pedido-btn"
+        id="seguirPedidoBtn"
+      >
+
+        SEGUIR MI PEDIDO
+
+      </a>
+
+
+      <a
+        href="index.html"
+        class="volver-tienda-btn"
+      >
+
+        VOLVER A LA TIENDA
+
+      </a>
+
+
+    </aside>
+
+
+  </section>
+
+
+
+  <!-- =================================
+       URBANX 3D
+  ================================= -->
+
+  <section class="confirmacion-3d">
+
+
+    <div class="confirmacion-3d-texto">
+
+
+      <p class="section-mini">
+
+        SIXTEEN EXPERIENCE
+
+      </p>
+
+
+      <h2>
+
+        TU COMPRA
+
+        <span>
+          CONTINÚA EN 3D.
+        </span>
+
+      </h2>
+
+
+      <p>
+
+        Los productos SIXTEEN compatibles podrán
+        tener acceso a una experiencia digital
+        exclusiva después de la compra.
+
+      </p>
+
+
+      <a
+        href="../urbanx-3d/index.html"
+        class="btn-principal"
+        id="abrirUrbanx3d"
+      >
+
+        EXPLORAR SIXTEEN 3D
+
+      </a>
+
+
+    </div>
+
+
+    <div class="confirmacion-3d-x">
+
+      XVI
+
+    </div>
+
+
+  </section>
+
+
+</main>
+
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
+
+<footer class="footer">
+
+  <div class="footer-principal">
+
+    <div class="footer-marca">
+
+      <img
+        src="./assets/logo-sixteen.jpg"
+        alt="SIXTEEN Urban Luxury"
+        class="sixteen-footer-logo"
+      >
+
+      <div class="footer-logo">
+        SIXTEEN
+      </div>
+
+      <p>
+        Urban Luxury.<br>
+        Street Culture.<br>
+        Art.<br>
+        Identity.
+      </p>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        COMPRAR
+      </h4>
+
+      <a href="./index.html#productos">
+        Productos
+      </a>
+
+      <a href="./index.html#categorias">
+        Categorías
+      </a>
+
+      <a href="./carrito.html">
+        Carrito
+      </a>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        AYUDA
+      </h4>
+
+      <a href="./politicas.html#envios">Envíos</a>
+
+      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
+
+      <a href="./soporte.html">Contacto</a>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        SIXTEEN
+      </h4>
+
+      <a href="./index.html#sixteen">
+        Nosotros
+      </a>
+
+      <a href="../urbanx-3d/index.html">
+        SIXTEEN Experience 3D
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <div class="footer-derechos">
+
+      <p>
+        © 2026 SIXTEEN Urban Luxury.
+        Todos los derechos reservados.
+      </p>
+
+      <p>
+        Producto, diseño e identidad SIXTEEN
+        protegidos por sus respectivos derechos
+        de propiedad intelectual.
+      </p>
+
+    </div>
+
+    <div class="footer-lex">
+
+      <p>
+        © 2026 LEX
+      </p>
+
+      <span>
+        Diseño y desarrollo de la plataforma web.
+        Todos los derechos reservados.
+      </span>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+
+<!-- =====================================
+     ERROR / NOTIFICACIÓN
+===================================== -->
+
+<div
+  class="toast"
+  id="toastConfirmacion"
+  aria-live="polite"
+>
+</div>
+
+
+
+<script src="./compat.js?v=3200"></script>
+
+<script src="./payment-config.js?v=3400"></script>
+
+<script src="./confirmacion.js?v=4400"></script>
+
+
+<script src="./pwa.js?v=2700"></script>
+
+</body>
+
+</html>

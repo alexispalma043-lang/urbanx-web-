@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Carrito | SIXTEEN Urban Luxury</title>
+
+  <meta
+    name="description"
+    content="Carrito de compras SIXTEEN Urban Luxury."
+  >
+
+  <link
+    rel="stylesheet"
+    href="./styles.css?v=2700"
+  >
+
+  <meta name="robots" content="noindex,nofollow,noarchive">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//firestore.googleapis.com">
+  <link rel="dns-prefetch" href="//res.cloudinary.com">
+
+  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    http-equiv="Permissions-Policy"
+    content="geolocation=(), microphone=(), camera=()"
+  >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     BARRA SUPERIOR
+===================================== -->
+
+<div class="top-bar">
+
+  <p>
+    ENVÍOS A TODO ECUADOR
+  </p>
+
+</div>
+
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header class="header">
+
+
+  <a
+    href="./index.html"
+    class="sixteen-brand"
+    aria-label="SIXTEEN Urban Luxury"
+  >
+    <img
+      src="./assets/logo-sixteen.jpg"
+      alt="Logotipo SIXTEEN Urban Luxury"
+      class="sixteen-brand-logo"
+    >
+    <div class="sixteen-brand-name">
+      <strong>SIXTEEN</strong>
+      <span>URBAN LUXURY</span>
+    </div>
+  </a>
+
+
+  <nav class="nav">
+
+    <a href="./index.html">
+      Inicio
+    </a>
+
+    <a href="./index.html#productos">
+      Productos
+    </a>
+
+    <a href="./index.html#categorias">
+      Categorías
+    </a>
+
+    <a href="./index.html#sixteen">
+      Sixteen
+    </a>
+
+  </nav>
+
+
+  <div class="header-actions">
+
+    <a
+      href="./carrito.html"
+      class="carrito-btn"
+      aria-label="Carrito"
+    >
+
+      🛒
+
+      <span id="cantidadCarrito">
+        0
+      </span>
+
+    </a>
+
+  </div>
+
+
+</header>
+
+
+
+<!-- =====================================
+     ENCABEZADO
+===================================== -->
+
+<section class="carrito-hero">
+
+
+  <div>
+
+    <p class="section-mini">
+      SIXTEEN STORE
+    </p>
+
+    <h1>
+      TU CARRITO
+    </h1>
+
+    <p>
+      Revisa tus productos antes
+      de continuar con la compra.
+    </p>
+
+  </div>
+
+
+  <div class="carrito-x">
+    XVI
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================
+     CARRITO
+===================================== -->
+
+<main class="carrito-layout">
+
+
+  <!-- =================================
+       PRODUCTOS
+  ================================= -->
+
+  <section class="carrito-productos">
+
+
+    <div class="carrito-header">
+
+      <h2>
+        Productos
+      </h2>
+
+      <span id="cantidadProductosTexto">
+        0 productos
+      </span>
+
+    </div>
+
+
+
+    <!-- ESTADO FIRESTORE -->
+
+    <p
+      id="estadoSincronizacion"
+      style="
+        min-height:20px;
+        margin-bottom:12px;
+        color:#777;
+        font-size:11px;
+      "
+    >
+      Verificando disponibilidad y precios...
+    </p>
+
+
+
+    <!-- LISTA -->
+
+    <div
+      class="carrito-lista"
+      id="carritoLista"
+    >
+
+      <div class="carrito-cargando">
+        Cargando carrito...
+      </div>
+
+    </div>
+
+
+
+    <!-- CARRITO VACÍO -->
+
+    <div
+      class="carrito-vacio"
+      id="carritoVacio"
+    >
+
+
+      <div class="carrito-vacio-x">
+        XVI
+      </div>
+
+
+      <h2>
+        TU CARRITO ESTÁ VACÍO
+      </h2>
+
+
+      <p>
+        Explora la colección SIXTEEN
+        y encuentra tu próximo producto.
+      </p>
+
+
+      <a
+        href="./index.html#productos"
+        class="btn-principal"
+      >
+        VER PRODUCTOS
+      </a>
+
+
+    </div>
+
+
+  </section>
+
+
+
+  <!-- =================================
+       RESUMEN
+  ================================= -->
+
+  <aside
+    class="resumen-compra"
+    id="resumenCompra"
+  >
+
+
+    <p class="section-mini">
+      RESUMEN
+    </p>
+
+
+    <h2>
+      Tu pedido
+    </h2>
+
+
+
+    <!-- SUBTOTAL -->
+
+    <div class="resumen-linea">
+
+      <span>
+        Subtotal
+      </span>
+
+      <strong id="subtotalCarrito">
+        $0.00
+      </strong>
+
+    </div>
+
+
+
+    <!-- DESCUENTO -->
+
+    <div class="resumen-linea">
+
+      <span>
+        Descuento
+      </span>
+
+      <strong id="descuentoCarrito">
+        $0.00
+      </strong>
+
+    </div>
+
+
+
+    <!-- ENVÍO -->
+
+    <div class="resumen-linea">
+
+      <span>
+        Envío
+      </span>
+
+      <strong id="envioCarrito">
+        Se calcula después
+      </strong>
+
+    </div>
+
+
+
+    <!-- CUPÓN -->
+
+    <div class="cupon-box">
+
+
+      <label for="codigoCupon">
+        CÓDIGO DE DESCUENTO
+      </label>
+
+
+      <div class="cupon-input">
+
+
+        <input
+          type="text"
+          id="codigoCupon"
+          placeholder="Ej: SIXTEEN10"
+          autocomplete="off"
+        >
+
+
+        <button
+          type="button"
+          id="aplicarCuponBtn"
+        >
+          APLICAR
+        </button>
+
+
+      </div>
+
+
+      <p
+        class="mensaje-cupon"
+        id="mensajeCupon"
+      >
+      </p>
+
+
+    </div>
+
+
+
+    <!-- TOTAL -->
+
+    <div class="resumen-total">
+
+      <span>
+        TOTAL
+      </span>
+
+      <strong id="totalCarrito">
+        $0.00
+      </strong>
+
+    </div>
+
+
+
+    <!-- MENSAJE VALIDACIÓN -->
+
+    <p
+      id="mensajeValidacionCarrito"
+      style="
+        min-height:20px;
+        margin:12px 0;
+        color:#c9473c;
+        font-size:11px;
+        font-weight:700;
+      "
+    >
+    </p>
+
+
+
+    <!-- CHECKOUT -->
+
+    <button
+      class="checkout-btn"
+      id="checkoutBtn"
+      type="button"
+      disabled
+    >
+      CONTINUAR AL CHECKOUT
+    </button>
+
+
+
+    <!-- SEGUIR COMPRANDO -->
+
+    <a
+      href="./index.html#productos"
+      class="seguir-comprando"
+    >
+      ← Seguir comprando
+    </a>
+
+
+
+    <!-- SEGURIDAD -->
+
+    <div class="seguridad-compra">
+
+
+      <div>
+
+        <span>
+          🔒
+        </span>
+
+        <p>
+
+          <strong>
+            Compra protegida
+          </strong>
+
+          Tus datos se procesarán
+          de forma segura.
+
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          🚚
+        </span>
+
+        <p>
+
+          <strong>
+            Envíos a Ecuador
+          </strong>
+
+          El costo se calculará
+          según tu dirección.
+
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+  </aside>
+
+
+</main>
+
+
+
+<!-- =====================================
+     SIXTEEN EXPERIENCE
+===================================== -->
+
+<section class="carrito-experience">
+
+
+  <div>
+
+    <p class="section-mini">
+      SIXTEEN EXPERIENCE
+    </p>
+
+    <h2>
+
+      MÁS QUE
+
+      <span>
+        UNA COMPRA.
+      </span>
+
+    </h2>
+
+    <p>
+
+      Algunos productos SIXTEEN incluyen
+      acceso exclusivo a su experiencia
+      digital 3D después de la compra.
+
+    </p>
+
+  </div>
+
+
+  <div class="carrito-experience-x">
+    XVI
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
+
+<footer class="footer">
+
+  <div class="footer-principal">
+
+    <div class="footer-marca">
+
+      <img
+        src="./assets/logo-sixteen.jpg"
+        alt="SIXTEEN Urban Luxury"
+        class="sixteen-footer-logo"
+      >
+
+      <div class="footer-logo">
+        SIXTEEN
+      </div>
+
+      <p>
+        Urban Luxury.<br>
+        Street Culture.<br>
+        Art.<br>
+        Identity.
+      </p>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        COMPRAR
+      </h4>
+
+      <a href="./index.html#productos">
+        Productos
+      </a>
+
+      <a href="./index.html#categorias">
+        Categorías
+      </a>
+
+      <a href="./carrito.html">
+        Carrito
+      </a>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        AYUDA
+      </h4>
+
+      <a href="./politicas.html#envios">Envíos</a>
+
+      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
+
+      <a href="./soporte.html">Contacto</a>
+
+    </div>
+
+    <div class="footer-columna">
+
+      <h4>
+        SIXTEEN
+      </h4>
+
+      <a href="./index.html#sixteen">
+        Nosotros
+      </a>
+
+      <a href="../urbanx-3d/index.html">
+        SIXTEEN Experience 3D
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <div class="footer-derechos">
+
+      <p>
+        © 2026 SIXTEEN Urban Luxury.
+        Todos los derechos reservados.
+      </p>
+
+      <p>
+        Producto, diseño e identidad SIXTEEN
+        protegidos por sus respectivos derechos
+        de propiedad intelectual.
+      </p>
+
+    </div>
+
+    <div class="footer-lex">
+
+      <p>
+        © 2026 LEX
+      </p>
+
+      <span>
+        Diseño y desarrollo de la plataforma web.
+        Todos los derechos reservados.
+      </span>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+
+<!-- =====================================
+     MODAL ELIMINAR
+===================================== -->
+
+<div
+  class="modal"
+  id="modalEliminar"
+>
+
+
+  <div class="modal-contenido modal-eliminar">
+
+
+    <p class="section-mini">
+      SIXTEEN
+    </p>
+
+
+    <h2>
+      ¿ELIMINAR PRODUCTO?
+    </h2>
+
+
+    <p>
+      Este producto será eliminado
+      de tu carrito.
+    </p>
+
+
+    <div class="modal-acciones">
+
+
+      <button
+        type="button"
+        id="cancelarEliminarBtn"
+        class="btn-cancelar"
+      >
+        CANCELAR
+      </button>
+
+
+      <button
+        type="button"
+        id="confirmarEliminarBtn"
+        class="btn-eliminar"
+      >
+        ELIMINAR
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+
+<!-- =====================================
+     NOTIFICACIÓN
+===================================== -->
+
+<div
+  class="toast"
+  id="toastCarrito"
+  aria-live="polite"
+>
+</div>
+
+
+
+<!-- =====================================
+     FIREBASE
+===================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
+
+
+<!-- =====================================
+     CARRITO
+===================================== -->
+
+<script src="./variant-utils.js?v=2900"></script>
+
+<script src="./cart-sync.js?v=2300"></script>
+
+<script src="./carrito.js?v=2300"></script>
+
+
+<script src="./pwa.js?v=2700"></script>
+
+</body>
+
+</html>
