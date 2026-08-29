@@ -174,6 +174,25 @@ document.addEventListener(
       );
 
 
+    const newsletterStatus =
+      document.getElementById(
+        "newsletterStatus"
+      );
+
+
+    const newsletterSubmit =
+      newsletterForm
+        ?.querySelector(
+          'button[type="submit"]'
+        ) || null;
+
+
+    const header =
+      document.querySelector(
+        ".header"
+      );
+
+
     const toast =
       document.getElementById(
         "toast"
@@ -190,6 +209,75 @@ document.addEventListener(
       document.getElementById(
         "tituloProductos"
       );
+
+
+    // ======================================================
+    // OFFSET DINÁMICO · HEADER / MENÚ / BUSCADOR
+    // ======================================================
+
+    let floatingOffsetFrame = null;
+
+
+    function actualizarOffsetFlotante() {
+
+      if (!header) {
+        return;
+      }
+
+
+      if (floatingOffsetFrame) {
+        return;
+      }
+
+
+      floatingOffsetFrame =
+        window.requestAnimationFrame(
+          function () {
+
+            const rect =
+              header.getBoundingClientRect();
+
+
+            const bottom =
+              Math.max(
+                0,
+                Math.round(
+                  rect.bottom
+                )
+              );
+
+
+            document.documentElement
+              .style
+              .setProperty(
+                "--sixteen-floating-top",
+                `${bottom}px`
+              );
+
+
+            floatingOffsetFrame = null;
+
+          }
+        );
+
+    }
+
+
+    actualizarOffsetFlotante();
+
+
+    window.addEventListener(
+      "resize",
+      actualizarOffsetFlotante,
+      { passive: true }
+    );
+
+
+    window.addEventListener(
+      "scroll",
+      actualizarOffsetFlotante,
+      { passive: true }
+    );
 
 
     // ======================================================
@@ -1377,6 +1465,70 @@ document.addEventListener(
 
             }
           );
+        }
+      );
+
+
+    // ======================================================
+    // CATEGORÍAS DEL FOOTER
+    // ======================================================
+
+    document
+      .querySelectorAll(
+        "[data-footer-categoria]"
+      )
+      .forEach(
+        function (link) {
+
+          link.addEventListener(
+            "click",
+            function (event) {
+
+              const category =
+                String(
+                  link.dataset.footerCategoria ||
+                  ""
+                ).trim();
+
+
+              if (!category) {
+                return;
+              }
+
+
+              event.preventDefault();
+
+
+              catalogState.category =
+                category;
+
+
+              if (
+                catalogCategory
+              ) {
+
+                catalogCategory.value =
+                  category;
+              }
+
+
+              filtroActual =
+                "catalogo";
+
+
+              aplicarFiltrosCatalogo();
+
+
+              cerrarPanelBuscador(
+                false
+              );
+
+
+              scrollToProducts();
+
+            }
+          );
+
         }
       );
 
@@ -2895,22 +3047,9 @@ document.addEventListener(
 
         productosGrid.innerHTML = `
 
-          <div
-            style="
-              grid-column:1/-1;
-              padding:60px 20px;
-              text-align:center;
-              color:#777;
-            "
-          >
+          <div class="productos-vacio">
 
-            <strong
-              style="
-                display:block;
-                margin-bottom:8px;
-                color:#111;
-              "
-            >
+            <strong>
               SIXTEEN
             </strong>
 
@@ -3500,32 +3639,132 @@ document.addEventListener(
 
     newsletterForm?.addEventListener(
       "submit",
-      function (event) {
+      async function (event) {
 
         event.preventDefault();
 
 
         const correo =
           newsletterEmail
-            ? newsletterEmail.value.trim()
+            ? newsletterEmail.value.trim().toLowerCase()
             : "";
 
 
         if (
           !correo
+          ||
+          !newsletterEmail?.checkValidity()
         ) {
+
+          newsletterEmail?.reportValidity();
 
           return;
 
         }
 
 
-        mostrarToast(
-          "Bienvenido a SIXTEEN Community."
-        );
+        if (
+          !db
+        ) {
+
+          if (newsletterStatus) {
+            newsletterStatus.textContent =
+              "No pudimos conectar con el servicio. Intenta nuevamente.";
+          }
 
 
-        newsletterForm.reset();
+          mostrarToast(
+            "No pudimos registrar tu correo."
+          );
+
+          return;
+
+        }
+
+
+        if (newsletterSubmit) {
+          newsletterSubmit.disabled = true;
+          newsletterSubmit.textContent =
+            "GUARDANDO...";
+        }
+
+
+        if (newsletterStatus) {
+          newsletterStatus.textContent =
+            "Registrando tu suscripción...";
+        }
+
+
+        try {
+
+          const documentId =
+            encodeURIComponent(
+              correo
+            );
+
+
+          await db
+            .collection(
+              "newsletter"
+            )
+            .doc(
+              documentId
+            )
+            .set(
+              {
+                email: correo,
+                activo: true,
+                consentimientoMarketing: true,
+                origen: "sixteen-web",
+                actualizadoEn:
+                  firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
+              },
+              { merge: true }
+            );
+
+
+          if (newsletterStatus) {
+            newsletterStatus.textContent =
+              "Suscripción registrada correctamente.";
+          }
+
+
+          mostrarToast(
+            "Bienvenido a SIXTEEN Community."
+          );
+
+
+          newsletterForm.reset();
+
+        } catch (error) {
+
+          console.error(
+            "Error registrando newsletter:",
+            error
+          );
+
+
+          if (newsletterStatus) {
+            newsletterStatus.textContent =
+              "No pudimos registrar tu correo. Intenta nuevamente.";
+          }
+
+
+          mostrarToast(
+            "No pudimos registrar tu correo."
+          );
+
+        } finally {
+
+          if (newsletterSubmit) {
+            newsletterSubmit.disabled = false;
+            newsletterSubmit.textContent =
+              "UNIRME →";
+          }
+
+        }
 
       }
     );

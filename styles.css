@@ -48,6 +48,9 @@
   --radio:
     4px;
 
+  /* Posición dinámica de paneles bajo el header sticky */
+  --sixteen-floating-top: 112px;
+
 }
 
 
@@ -136,6 +139,26 @@ button {
 button:disabled {
 
   cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD · FOCO DE TECLADO
+========================================================= */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+
+  outline:
+    2px solid
+    var(--dorado-claro) !important;
+
+  outline-offset: 3px;
 
 }
 
@@ -565,7 +588,8 @@ button:disabled {
 
   position: fixed;
 
-  top: 112px;
+  top:
+    var(--sixteen-floating-top, 112px);
 
   left: 0;
 
@@ -2184,6 +2208,8 @@ button:disabled {
 
   display: flex;
 
+  flex-wrap: wrap;
+
 }
 
 
@@ -2240,6 +2266,69 @@ button:disabled {
   font-size: 9px;
 
   font-weight: 900;
+
+}
+
+
+.newsletter-legal,
+.newsletter-status {
+
+  flex-basis: 100%;
+
+  width: 100%;
+
+}
+
+
+.newsletter-legal {
+
+  margin-top: 10px;
+
+  color:
+    rgba(
+      0,
+      0,
+      0,
+      0.68
+    ) !important;
+
+  font-size: 9px;
+
+  line-height: 1.55;
+
+}
+
+
+.newsletter-legal a {
+
+  font-weight: 900;
+
+  text-decoration: underline;
+
+  text-underline-offset: 2px;
+
+}
+
+
+.newsletter-status {
+
+  min-height: 18px;
+
+  margin-top: 7px;
+
+  color: #050505 !important;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+}
+
+
+.newsletter-form button:disabled,
+#newsletterForm button:disabled {
+
+  opacity: 0.62;
 
 }
 
@@ -3996,6 +4085,42 @@ button:disabled {
 }
 
 
+
+
+/* =========================================================
+   CATÁLOGO · ESTADO VACÍO
+========================================================= */
+
+.productos-vacio {
+
+  grid-column: 1 / -1;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  color: var(--gris-claro);
+
+}
+
+
+.productos-vacio strong {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--dorado-claro);
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
+
+}
+
+
 /* =========================================================
    RESPONSIVE 1100
 ========================================================= */
@@ -4034,7 +4159,8 @@ button:disabled {
 
     position: fixed;
 
-    top: 112px;
+    top:
+      var(--sixteen-floating-top, 112px);
 
     left: 0;
 
@@ -4236,7 +4362,8 @@ button:disabled {
 
   .buscador-panel {
 
-    top: 102px;
+    top:
+      var(--sixteen-floating-top, 102px);
 
     padding:
       18px
