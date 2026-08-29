@@ -101,6 +101,23 @@ document.addEventListener(
     // ELEMENTOS
     // ======================================================
 
+    const header =
+      document.querySelector(
+        ".header"
+      );
+
+
+    const navProducto =
+      document.getElementById(
+        "navProducto"
+      );
+
+
+    const menuBtnProducto =
+      document.getElementById(
+        "menuBtnProducto"
+      );
+
     const productoCargando =
       document.getElementById(
         "productoCargando"
@@ -203,6 +220,12 @@ document.addEventListener(
       );
 
 
+    const miniaturasProducto =
+      document.getElementById(
+        "miniaturasProducto"
+      );
+
+
     const selectorColores =
       document.getElementById(
         "selectorColores"
@@ -302,6 +325,12 @@ document.addEventListener(
     const cerrarModalTallas =
       document.getElementById(
         "cerrarModalTallas"
+      );
+
+
+    const modalTallasContenido =
+      modalTallas?.querySelector(
+        ".modal-contenido"
       );
 
 
@@ -610,6 +639,108 @@ document.addEventListener(
     let toastTimer;
 
 
+    let focoAntesModalTallas =
+      null;
+
+
+    let floatingOffsetFrame =
+      null;
+
+
+    // ======================================================
+    // HEADER / MENÚ MÓVIL
+    // ======================================================
+
+    function actualizarOffsetFlotante() {
+
+      if (!header || floatingOffsetFrame) {
+        return;
+      }
+
+      floatingOffsetFrame =
+        window.requestAnimationFrame(
+          function () {
+
+            const rect =
+              header.getBoundingClientRect();
+
+            document.documentElement
+              .style
+              .setProperty(
+                "--sixteen-floating-top",
+                `${Math.max(0, Math.round(rect.bottom))}px`
+              );
+
+            floatingOffsetFrame =
+              null;
+          }
+        );
+    }
+
+
+    function cerrarMenuProducto() {
+
+      navProducto?.classList.remove(
+        "activo"
+      );
+
+      menuBtnProducto?.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+    }
+
+
+    menuBtnProducto?.addEventListener(
+      "click",
+      function () {
+
+        const abierto =
+          navProducto?.classList.toggle(
+            "activo"
+          ) === true;
+
+        menuBtnProducto.setAttribute(
+          "aria-expanded",
+          abierto ? "true" : "false"
+        );
+      }
+    );
+
+
+    navProducto
+      ?.querySelectorAll("a")
+      .forEach(
+        function (link) {
+          link.addEventListener(
+            "click",
+            cerrarMenuProducto
+          );
+        }
+      );
+
+
+    actualizarOffsetFlotante();
+
+    window.addEventListener(
+      "resize",
+      function () {
+        actualizarOffsetFlotante();
+
+        if (window.innerWidth > 900) {
+          cerrarMenuProducto();
+        }
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "scroll",
+      actualizarOffsetFlotante,
+      { passive: true }
+    );
+
+
     // ======================================================
     // VALIDAR CÓDIGO URL
     // ======================================================
@@ -720,6 +851,22 @@ document.addEventListener(
                     imagen:
                       datos.imagen ||
                       "",
+
+                    imagenes:
+                      Array.isArray(
+                        datos.imagenes
+                      )
+                        ? datos.imagenes
+                            .map(
+                              function (url) {
+                                return String(
+                                  url ||
+                                  ""
+                                ).trim();
+                              }
+                            )
+                            .filter(Boolean)
+                        : [],
 
                     modelo3d:
                       datos.modelo3d ||
@@ -974,6 +1121,15 @@ document.addEventListener(
           activo
             ? "GUARDADO EN FAVORITOS"
             : "GUARDAR EN FAVORITOS";
+
+
+        guardarFavoritoProductoBtn
+          .setAttribute(
+            "aria-label",
+            activo
+              ? "Eliminar producto de favoritos"
+              : "Agregar producto a favoritos"
+          );
       }
 
 
@@ -1009,6 +1165,14 @@ document.addEventListener(
               activo
                 ? "♥"
                 : "♡";
+
+
+            btn.setAttribute(
+              "aria-label",
+              activo
+                ? "Eliminar producto de favoritos"
+                : "Agregar producto a favoritos"
+            );
           }
         );
     }
@@ -1942,6 +2106,19 @@ document.addEventListener(
               activo
                 ? "★"
                 : "☆";
+
+
+            boton.setAttribute(
+              "role",
+              "radio"
+            );
+
+            boton.setAttribute(
+              "aria-checked",
+              valor === calificacionSeleccionada
+                ? "true"
+                : "false"
+            );
           }
         );
     }
@@ -2601,6 +2778,23 @@ document.addEventListener(
 
 
       // ====================================================
+      // GUÍA DE TALLAS
+      // ====================================================
+
+      actualizarDisponibilidadGuiaTallas();
+
+
+      // ====================================================
+      // RESEÑAS
+      // ====================================================
+
+      if (seccionResenas) {
+        seccionResenas.style.display =
+          "";
+      }
+
+
+      // ====================================================
       // 3D
       // ====================================================
 
@@ -2629,65 +2823,251 @@ document.addEventListener(
 
     function cargarImagen() {
 
-
-      if (
-        producto.imagen
-      ) {
+      const imagenes =
+        obtenerImagenesProducto();
 
 
-        imagenProducto.decoding =
-          "async";
-
-        imagenProducto.fetchPriority =
-          "high";
-
-        imagenProducto.src =
-          producto.imagen;
-
-
-        imagenProducto.alt =
-          producto.nombre;
-
-
-        imagenProducto.style.display =
-          "block";
-
-
-        imagenDemoProducto.style.display =
-          "none";
-
-
-        imagenProducto.onerror =
-          function () {
-
-
-            imagenProducto.style.display =
-              "none";
-
-
-            imagenDemoProducto.style.display =
-              "flex";
-
-          };
-
-
-      } else {
-
+      if (!imagenes.length) {
 
         imagenProducto.removeAttribute(
           "src"
         );
 
-
         imagenProducto.style.display =
           "none";
 
-
         imagenDemoProducto.style.display =
-          "flex";
+          "grid";
 
+        miniaturasProducto.hidden =
+          true;
+
+        miniaturasProducto.innerHTML =
+          "";
+
+        return;
       }
 
+
+      mostrarImagenPrincipal(
+        imagenes[0],
+        0
+      );
+
+
+      miniaturasProducto.innerHTML =
+        "";
+
+
+      if (imagenes.length <= 1) {
+
+        miniaturasProducto.hidden =
+          true;
+
+        return;
+      }
+
+
+      miniaturasProducto.hidden =
+        false;
+
+
+      imagenes.forEach(
+        function (url, indice) {
+
+          const boton =
+            document.createElement(
+              "button"
+            );
+
+          boton.type =
+            "button";
+
+          boton.className =
+            "miniatura" +
+            (indice === 0
+              ? " activa"
+              : "");
+
+          boton.setAttribute(
+            "aria-label",
+            `Ver imagen ${indice + 1} de ${producto.nombre}`
+          );
+
+          boton.setAttribute(
+            "aria-pressed",
+            indice === 0
+              ? "true"
+              : "false"
+          );
+
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+          img.src =
+            url;
+
+          img.alt =
+            "";
+
+          img.loading =
+            "lazy";
+
+          img.decoding =
+            "async";
+
+          img.onerror =
+            function () {
+              boton.remove();
+
+              if (
+                miniaturasProducto
+                  .querySelectorAll(
+                    ".miniatura"
+                  ).length <= 1
+              ) {
+                miniaturasProducto.hidden =
+                  true;
+              }
+            };
+
+          boton.appendChild(
+            img
+          );
+
+
+          boton.addEventListener(
+            "click",
+            function () {
+
+              mostrarImagenPrincipal(
+                url,
+                indice
+              );
+            }
+          );
+
+
+          miniaturasProducto.appendChild(
+            boton
+          );
+        }
+      );
+    }
+
+
+    function obtenerImagenesProducto() {
+
+      const candidatos = [
+        producto?.imagen ||
+          "",
+        ...(Array.isArray(
+          producto?.imagenes
+        )
+          ? producto.imagenes
+          : [])
+      ];
+
+      const unicas =
+        [];
+
+      const vistas =
+        new Set();
+
+
+      candidatos.forEach(
+        function (url) {
+
+          const limpia =
+            String(
+              url ||
+              ""
+            ).trim();
+
+          if (
+            !limpia ||
+            vistas.has(limpia)
+          ) {
+            return;
+          }
+
+          vistas.add(
+            limpia
+          );
+
+          unicas.push(
+            limpia
+          );
+        }
+      );
+
+
+      return unicas;
+    }
+
+
+    function mostrarImagenPrincipal(
+      url,
+      indice
+    ) {
+
+      imagenProducto.decoding =
+        "async";
+
+      imagenProducto.fetchPriority =
+        indice === 0
+          ? "high"
+          : "auto";
+
+      imagenProducto.alt =
+        producto.nombre;
+
+      imagenProducto.style.display =
+        "block";
+
+      imagenDemoProducto.style.display =
+        "none";
+
+      imagenProducto.onerror =
+        function () {
+
+          imagenProducto.style.display =
+            "none";
+
+          imagenDemoProducto.style.display =
+            "grid";
+        };
+
+      imagenProducto.src =
+        url;
+
+
+      miniaturasProducto
+        .querySelectorAll(
+          ".miniatura"
+        )
+        .forEach(
+          function (boton, posicion) {
+
+            const activo =
+              posicion === indice;
+
+            boton.classList.toggle(
+              "activa",
+              activo
+            );
+
+            boton.setAttribute(
+              "aria-pressed",
+              activo
+                ? "true"
+                : "false"
+            );
+          }
+        );
     }
 
 
@@ -2729,6 +3109,7 @@ document.addEventListener(
         agregarCarritoBtn.disabled=true;
         comprarAhoraBtn.disabled=true;
         if(stockPunto)stockPunto.style.opacity=".3";
+        actualizarControlesCantidad();
         return;
       }
 
@@ -2738,6 +3119,7 @@ document.addEventListener(
         agregarCarritoBtn.disabled=s<=0;
         comprarAhoraBtn.disabled=s<=0;
         if(stockPunto)stockPunto.style.opacity=s>0?"1":".3";
+        actualizarControlesCantidad();
         return;
       }
 
@@ -2748,6 +3130,7 @@ document.addEventListener(
         agregarCarritoBtn.disabled=true;
         comprarAhoraBtn.disabled=true;
         if(stockPunto)stockPunto.style.opacity=".3";
+        actualizarControlesCantidad();
         return;
       }
 
@@ -2755,9 +3138,48 @@ document.addEventListener(
       agregarCarritoBtn.disabled=false;
       comprarAhoraBtn.disabled=false;
       if(stockPunto)stockPunto.style.opacity="1";
+      actualizarControlesCantidad();
     }
 
-    function cargarStock(){ actualizarStockSeleccionado(); }
+    function actualizarControlesCantidad() {
+
+      const requiereTalla =
+        producto &&
+        (
+          usaVariantesProducto()
+            ? window.SIXTEEN_VARIANTS.requiresSize(
+                producto,
+                colorActual ||
+                ""
+              )
+            : Array.isArray(
+                producto.tallas
+              ) &&
+              producto.tallas.length > 0
+        );
+
+      const seleccionIncompleta =
+        requiereTalla &&
+        !tallaSeleccionada;
+
+      const stock =
+        seleccionIncompleta
+          ? 0
+          : stockSeleccionActual();
+
+      restarCantidad.disabled =
+        cantidad <= 1;
+
+      sumarCantidad.disabled =
+        !producto ||
+        stock <= 0 ||
+        cantidad >= stock;
+    }
+
+
+    function cargarStock(){
+      actualizarStockSeleccionado();
+    }
 
     function cargarColores() {
       selectorColores.innerHTML="";
@@ -2777,7 +3199,11 @@ document.addEventListener(
         boton.type="button";
         boton.className="color-opcion";
         boton.dataset.color=color;
-        boton.setAttribute("aria-label",color);
+        boton.setAttribute("aria-label","Color " + color);
+        boton.setAttribute(
+          "aria-pressed",
+          color===colorActual?"true":"false"
+        );
         boton.style.background=obtenerColorVisual(color);
 
         const s=usaVariantesProducto()
@@ -2794,8 +3220,12 @@ document.addEventListener(
 
         boton.addEventListener("click",()=>{
           if(boton.disabled)return;
-          selectorColores.querySelectorAll(".color-opcion").forEach(x=>x.classList.remove("activo"));
+          selectorColores.querySelectorAll(".color-opcion").forEach(x=>{
+            x.classList.remove("activo");
+            x.setAttribute("aria-pressed","false");
+          });
           boton.classList.add("activo");
+          boton.setAttribute("aria-pressed","true");
           colorActual=color;
           colorSeleccionado.textContent=color;
           tallaSeleccionada=null;
@@ -2849,6 +3279,8 @@ document.addEventListener(
         boton.type="button";
         boton.textContent=talla;
         boton.dataset.talla=talla;
+        boton.setAttribute("aria-label","Talla " + talla);
+        boton.setAttribute("aria-pressed","false");
 
         const v=usaVariantesProducto()
           ?window.SIXTEEN_VARIANTS.find(producto,{color:colorActual||"",talla})
@@ -2862,8 +3294,12 @@ document.addEventListener(
 
         boton.addEventListener("click",()=>{
           if(boton.disabled)return;
-          selectorTallas.querySelectorAll("button").forEach(x=>x.classList.remove("activa"));
-          boton.classList.add("activa");
+          selectorTallas.querySelectorAll("button").forEach(x=>{
+            x.classList.remove("activo");
+            x.setAttribute("aria-pressed","false");
+          });
+          boton.classList.add("activo");
+          boton.setAttribute("aria-pressed","true");
           tallaSeleccionada=talla;
           mensajeTalla.textContent="";
           actualizarStockSeleccionado();
@@ -2873,6 +3309,33 @@ document.addEventListener(
       });
 
       actualizarStockSeleccionado();
+    }
+
+
+    function actualizarDisponibilidadGuiaTallas() {
+
+      if (!guiaTallasBtn || !producto) {
+        return;
+      }
+
+      const categoria =
+        normalizar(
+          producto.categoria
+        );
+
+      const esCalzado =
+        categoria.includes(
+          "zapato"
+        ) ||
+        categoria.includes(
+          "calzado"
+        ) ||
+        categoria.includes(
+          "sneaker"
+        );
+
+      guiaTallasBtn.hidden =
+        !esCalzado;
     }
 
 
@@ -3082,6 +3545,8 @@ document.addEventListener(
           cantidadProducto.textContent =
             cantidad;
 
+          actualizarControlesCantidad();
+
         }
 
       }
@@ -3118,6 +3583,8 @@ document.addEventListener(
 
           cantidadProducto.textContent =
             cantidad;
+
+          actualizarControlesCantidad();
 
 
         } else {
@@ -3417,29 +3884,74 @@ document.addEventListener(
     // GUÍA DE TALLAS
     // ======================================================
 
+    function abrirModalTallas() {
+
+      focoAntesModalTallas =
+        document.activeElement;
+
+      modalTallas.classList.add(
+        "activo"
+      );
+
+      modalTallas.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      document.body.classList.add(
+        "modal-open"
+      );
+
+      window.requestAnimationFrame(
+        function () {
+          modalTallasContenido?.focus();
+        }
+      );
+    }
+
+
+    function cerrarModalTallasSeguro() {
+
+      if (
+        !modalTallas.classList.contains(
+          "activo"
+        )
+      ) {
+        return;
+      }
+
+      modalTallas.classList.remove(
+        "activo"
+      );
+
+      modalTallas.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      document.body.classList.remove(
+        "modal-open"
+      );
+
+      if (
+        focoAntesModalTallas &&
+        typeof focoAntesModalTallas.focus ===
+          "function"
+      ) {
+        focoAntesModalTallas.focus();
+      }
+    }
+
+
     guiaTallasBtn.addEventListener(
       "click",
-      function () {
-
-
-        modalTallas.classList.add(
-          "activo"
-        );
-
-      }
+      abrirModalTallas
     );
 
 
     cerrarModalTallas.addEventListener(
       "click",
-      function () {
-
-
-        modalTallas.classList.remove(
-          "activo"
-        );
-
-      }
+      cerrarModalTallasSeguro
     );
 
 
@@ -3447,18 +3959,9 @@ document.addEventListener(
       "click",
       function (event) {
 
-
-        if (
-          event.target ===
-          modalTallas
-        ) {
-
-          modalTallas.classList.remove(
-            "activo"
-          );
-
+        if (event.target === modalTallas) {
+          cerrarModalTallasSeguro();
         }
-
       }
     );
 
@@ -3467,18 +3970,14 @@ document.addEventListener(
       "keydown",
       function (event) {
 
-
         if (
-          event.key ===
-          "Escape"
-        ) {
-
-          modalTallas.classList.remove(
+          event.key === "Escape" &&
+          modalTallas.classList.contains(
             "activo"
-          );
-
+          )
+        ) {
+          cerrarModalTallasSeguro();
         }
-
       }
     );
 
@@ -3864,49 +4363,6 @@ document.addEventListener(
 
 
     // ======================================================
-    // MINIATURAS
-    // ======================================================
-
-    document
-      .querySelectorAll(
-        ".miniatura"
-      )
-      .forEach(
-        function (miniatura) {
-
-
-          miniatura.addEventListener(
-            "click",
-            function () {
-
-
-              document
-                .querySelectorAll(
-                  ".miniatura"
-                )
-                .forEach(
-                  function (item) {
-
-                    item.classList.remove(
-                      "activa"
-                    );
-
-                  }
-                );
-
-
-              miniatura.classList.add(
-                "activa"
-              );
-
-            }
-          );
-
-        }
-      );
-
-
-    // ======================================================
     // ERROR
     // ======================================================
 
@@ -3963,6 +4419,38 @@ document.addEventListener(
           "none";
 
       }
+
+
+      if (seccionUrbanx3d) {
+        seccionUrbanx3d.style.display =
+          "none";
+      }
+
+
+      if (seccionResenas) {
+        seccionResenas.style.display =
+          "none";
+      }
+
+
+      document
+        .getElementById(
+          "seccionVistosRecientemente"
+        )
+        ?.setAttribute(
+          "hidden",
+          ""
+        );
+
+
+      document
+        .getElementById(
+          "recomendacionesProducto"
+        )
+        ?.setAttribute(
+          "hidden",
+          ""
+        );
 
     }
 

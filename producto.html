@@ -45,7 +45,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=2700"
+    href="./styles.css?v=3000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -102,7 +102,7 @@
   </a>
 
 
-  <nav class="nav">
+  <nav class="nav" id="navProducto">
 
     <a href="./index.html">
       Inicio
@@ -138,6 +138,18 @@
       </span>
 
     </a>
+
+
+    <button
+      type="button"
+      class="menu-btn"
+      id="menuBtnProducto"
+      aria-label="Abrir menú"
+      aria-controls="navProducto"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
 
   </div>
 
@@ -222,33 +234,9 @@
     <div
       class="miniaturas-producto"
       id="miniaturasProducto"
+      aria-label="Galería de imágenes del producto"
+      hidden
     >
-
-
-      <button
-        class="miniatura activa"
-        type="button"
-      >
-        <span>XVI</span>
-      </button>
-
-
-      <button
-        class="miniatura"
-        type="button"
-      >
-        <span>X</span>
-      </button>
-
-
-      <button
-        class="miniatura"
-        type="button"
-      >
-        <span>XVI</span>
-      </button>
-
-
     </div>
 
 
@@ -347,7 +335,7 @@
         id="stockPunto"
       ></span>
 
-      <span id="estadoStock">
+      <span id="estadoStock" aria-live="polite">
         Consultando disponibilidad...
       </span>
 
@@ -436,6 +424,7 @@
       <p
         class="mensaje-selector"
         id="mensajeTalla"
+        aria-live="polite"
       >
       </p>
 
@@ -466,12 +455,13 @@
         <button
           id="restarCantidad"
           type="button"
+          aria-label="Disminuir cantidad"
         >
           −
         </button>
 
 
-        <span id="cantidadProducto">
+        <span id="cantidadProducto" aria-live="polite" aria-atomic="true">
           1
         </span>
 
@@ -479,6 +469,7 @@
         <button
           id="sumarCantidad"
           type="button"
+          aria-label="Aumentar cantidad"
         >
           +
         </button>
@@ -764,6 +755,7 @@
 <section
   class="producto-experiencia-3d"
   id="seccionUrbanx3d"
+  style="display:none;"
 >
 
 
@@ -814,6 +806,7 @@
 <section
   class="producto-resenas"
   id="seccionResenas"
+  style="display:none;"
 >
 
   <div class="resenas-header">
@@ -1155,6 +1148,7 @@
 <section
   class="productos-relacionados"
   id="seccionRelacionados"
+  style="display:none;"
 >
 
 
@@ -1404,16 +1398,21 @@
 <div
   class="modal"
   id="modalTallas"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="tituloGuiaTallas"
 >
 
 
-  <div class="modal-contenido">
+  <div class="modal-contenido" tabindex="-1">
 
 
     <button
       class="cerrar-modal"
       id="cerrarModalTallas"
       type="button"
+      aria-label="Cerrar guía de tallas"
     >
       ✕
     </button>
@@ -1424,10 +1423,14 @@
     </p>
 
 
-    <h2>
+    <h2 id="tituloGuiaTallas">
       Guía de tallas
     </h2>
 
+
+    <p class="guia-tallas-nota">
+      Referencia para calzado. La disponibilidad exacta se muestra en cada producto.
+    </p>
 
     <div class="tabla-tallas">
 
@@ -1507,20 +1510,20 @@
      PRODUCTO JS
 ===================================== -->
 
-<script src="./variant-utils.js?v=2900"></script>
+<script src="./variant-utils.js?v=3000"></script>
 
-<script src="./cart-sync.js?v=2300"></script>
+<script src="./cart-sync.js?v=3000"></script>
 
-<script src="./product-tools.js?v=2700"></script>
+<script src="./product-tools.js?v=3000"></script>
 
-<script src="./seo-producto.js?v=2700"></script>
+<script src="./seo-producto.js?v=3000"></script>
 
-<script src="./producto.js?v=2700"></script>
+<script src="./producto.js?v=3000"></script>
 
-<script src="./recomendaciones.js?v=2700"></script>
+<script src="./recomendaciones.js?v=3000"></script>
 
 
-<script src="./pwa.js?v=2700"></script>
+<script src="./pwa.js?v=3000"></script>
 
 </body>
 

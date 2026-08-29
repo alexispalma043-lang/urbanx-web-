@@ -7783,3 +7783,58 @@ body {
   font-weight:700;
   letter-spacing:.07em
 }
+
+
+/* =========================================================
+   PASO 2 PRE-FINAL · PRODUCTO
+========================================================= */
+
+.miniaturas-producto[hidden] {
+  display: none !important;
+}
+
+.miniatura {
+  padding: 0;
+  cursor: pointer;
+}
+
+.miniatura img {
+  width: 100%;
+  height: 100%;
+  min-height: 92px;
+  object-fit: cover;
+}
+
+.cantidad-selector button:disabled,
+.selector-cantidad button:disabled {
+  opacity: .32;
+  cursor: not-allowed;
+}
+
+.guia-tallas[hidden] {
+  display: none !important;
+}
+
+.guia-tallas-nota {
+  margin: 0 0 14px;
+  color: #817a70;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .miniaturas-producto {
+    grid-template-columns: repeat(3, minmax(78px, 1fr));
+    overflow-x: auto;
+  }
+}
+
+.cantidad-selector {
+  border-color: var(--sixteen-line);
+  background: #0b0b0b;
+}
+
+.cantidad-selector button,
+.cantidad-selector span {
+  color: #fff;
+}
