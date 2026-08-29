@@ -38,3 +38,6 @@ AUDITORIA_*.txt
 CHECKLIST_*.txt
 REGLAS_FIRESTORE_*.txt
 PARCHE_FIRESTORE_*.txt
+
+# Automatizacion local GitHub
+AUTO_GITHUB_SYNC*.ps1
