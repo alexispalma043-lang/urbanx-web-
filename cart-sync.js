@@ -245,6 +245,16 @@
               item?.talla ??
               null,
 
+            varianteId:
+              String(
+                item?.varianteId ||
+                ""
+              ),
+
+            usaVariantes:
+              item?.usaVariantes ===
+              true,
+
             cantidad:
               Math.max(
                 1,

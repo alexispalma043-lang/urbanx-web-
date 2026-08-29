@@ -19,7 +19,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=2700"
+    href="./styles.css?v=3100"
   >
 
   <meta name="robots" content="noindex,nofollow,noarchive">
@@ -89,7 +89,7 @@
   </a>
 
 
-  <nav class="nav">
+  <nav class="nav" id="navCarrito">
 
     <a href="./index.html">
       Inicio
@@ -116,6 +116,8 @@
       href="./carrito.html"
       class="carrito-btn"
       aria-label="Carrito"
+      aria-current="page"
+      aria-current="page"
     >
 
       🛒
@@ -125,6 +127,18 @@
       </span>
 
     </a>
+
+
+    <button
+      type="button"
+      class="menu-btn"
+      id="menuBtnCarrito"
+      aria-label="Abrir menú"
+      aria-controls="navCarrito"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
 
   </div>
 
@@ -199,12 +213,9 @@
 
     <p
       id="estadoSincronizacion"
-      style="
-        min-height:20px;
-        margin-bottom:12px;
-        color:#777;
-        font-size:11px;
-      "
+      class="estado-sincronizacion-carrito"
+      role="status"
+      aria-live="polite"
     >
       Verificando disponibilidad y precios...
     </p>
@@ -369,8 +380,19 @@
       <p
         class="mensaje-cupon"
         id="mensajeCupon"
+        role="status"
+        aria-live="polite"
       >
       </p>
+
+      <button
+        type="button"
+        class="quitar-cupon-btn"
+        id="quitarCuponBtn"
+        hidden
+      >
+        QUITAR CUPÓN
+      </button>
 
 
     </div>
@@ -397,13 +419,9 @@
 
     <p
       id="mensajeValidacionCarrito"
-      style="
-        min-height:20px;
-        margin:12px 0;
-        color:#c9473c;
-        font-size:11px;
-        font-weight:700;
-      "
+      class="mensaje-validacion-carrito"
+      role="alert"
+      aria-live="assertive"
     >
     </p>
 
@@ -590,6 +608,8 @@
 
       <a href="./politicas.html#cambios">Cambios y devoluciones</a>
 
+      <a href="./soporte.html#faq">Preguntas frecuentes</a>
+
       <a href="./soporte.html">Contacto</a>
 
     </div>
@@ -602,6 +622,14 @@
 
       <a href="./index.html#sixteen">
         Nosotros
+      </a>
+
+      <a href="./politicas.html#terminos">
+        Términos y condiciones
+      </a>
+
+      <a href="./politicas.html#privacidad">
+        Política de privacidad
       </a>
 
       <a href="../urbanx-3d/index.html">
@@ -655,10 +683,15 @@
 <div
   class="modal"
   id="modalEliminar"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalEliminarTitulo"
+  aria-describedby="modalEliminarTexto"
+  aria-hidden="true"
 >
 
 
-  <div class="modal-contenido modal-eliminar">
+  <div class="modal-contenido modal-eliminar" tabindex="-1">
 
 
     <p class="section-mini">
@@ -666,12 +699,12 @@
     </p>
 
 
-    <h2>
+    <h2 id="modalEliminarTitulo">
       ¿ELIMINAR PRODUCTO?
     </h2>
 
 
-    <p>
+    <p id="modalEliminarTexto">
       Este producto será eliminado
       de tu carrito.
     </p>
@@ -739,9 +772,9 @@
 
 <script src="./variant-utils.js?v=2900"></script>
 
-<script src="./cart-sync.js?v=2300"></script>
+<script src="./cart-sync.js?v=3100"></script>
 
-<script src="./carrito.js?v=2300"></script>
+<script src="./carrito.js?v=3100"></script>
 
 
 <script src="./pwa.js?v=2700"></script>

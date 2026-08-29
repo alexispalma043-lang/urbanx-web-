@@ -264,32 +264,11 @@ document.addEventListener(
 
     // ======================================================
     // CUPONES
-    // Firestore + compatibilidad con códigos anteriores.
+    // Producción: los descuentos se validan exclusivamente
+    // contra Firestore. No existen códigos hardcodeados.
     // ======================================================
 
-    const cuponesFallback = {
-
-      SIXTEEN10:
-        10,
-
-      SIXTEEN20:
-        20,
-
-      URBANX10:
-        10,
-
-      URBANX20:
-        20,
-
-      LEX15:
-        15
-
-    };
-
-
-    const cupones = {
-      ...cuponesFallback
-    };
+    const cupones = {};
 
 
     let cuponRemotoActual =
@@ -530,7 +509,20 @@ document.addEventListener(
 
         return {
           valido:
-            false
+            false,
+
+          motivo:
+            "Ingresa un código."
+        };
+      }
+
+      if (!db) {
+        return {
+          valido:
+            false,
+
+          motivo:
+            "No pudimos conectar con el servicio de cupones."
         };
       }
 
@@ -544,18 +536,25 @@ document.addEventListener(
             )
             .get();
 
-        if (snapshot.exists) {
-
+        if (!snapshot.exists) {
           return {
-            ...validarDatosCupon(
-              snapshot.data() ||
-              {}
-            ),
+            valido:
+              false,
 
-            remoto:
-              true
+            motivo:
+              "El código ingresado no es válido."
           };
         }
+
+        return {
+          ...validarDatosCupon(
+            snapshot.data() ||
+            {}
+          ),
+
+          remoto:
+            true
+        };
 
       } catch (error) {
 
@@ -563,32 +562,15 @@ document.addEventListener(
           "Cupón remoto:",
           error
         );
-      }
-
-      if (
-        cuponesFallback[
-          normalizado
-        ]
-      ) {
 
         return {
           valido:
-            true,
+            false,
 
-          porcentaje:
-            cuponesFallback[
-              normalizado
-            ],
-
-          remoto:
-            false
+          motivo:
+            "No pudimos validar el cupón. Revisa tu conexión e intenta nuevamente."
         };
       }
-
-      return {
-        valido:
-          false
-      };
     }
 
 

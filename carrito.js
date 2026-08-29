@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 // ==========================================================
-// URBANX
+// SIXTEEN
 // CARRITO DE COMPRAS
 // FIRESTORE + STOCK + PRECIOS REALES
 // ==========================================================
@@ -87,6 +87,24 @@ document.addEventListener(
     // ELEMENTOS
     // ======================================================
 
+    const header =
+      document.querySelector(
+        ".header"
+      );
+
+
+    const navCarrito =
+      document.getElementById(
+        "navCarrito"
+      );
+
+
+    const menuBtnCarrito =
+      document.getElementById(
+        "menuBtnCarrito"
+      );
+
+
     const carritoLista =
       document.getElementById(
         "carritoLista"
@@ -159,6 +177,12 @@ document.addEventListener(
       );
 
 
+    const quitarCuponBtn =
+      document.getElementById(
+        "quitarCuponBtn"
+      );
+
+
     const checkoutBtn =
       document.getElementById(
         "checkoutBtn"
@@ -180,6 +204,12 @@ document.addEventListener(
     const confirmarEliminarBtn =
       document.getElementById(
         "confirmarEliminarBtn"
+      );
+
+
+    const modalEliminarTexto =
+      document.getElementById(
+        "modalEliminarTexto"
       );
 
 
@@ -236,34 +266,114 @@ document.addEventListener(
     let toastTimer;
 
 
+    let focoAntesModalEliminar =
+      null;
+
+
+    let floatingOffsetFrame =
+      null;
+
+
     // ======================================================
     // CUPONES
-    // Firestore + compatibilidad con códigos anteriores.
+    // Producción: los descuentos se validan exclusivamente
+    // contra Firestore. No existen códigos hardcodeados.
     // ======================================================
 
-    const cuponesFallback = {
+    // ======================================================
+    // HEADER / MENÚ MÓVIL
+    // ======================================================
 
-      SIXTEEN10:
-        10,
+    function actualizarOffsetFlotante() {
 
-      SIXTEEN20:
-        20,
+      if (!header || floatingOffsetFrame) {
+        return;
+      }
 
-      URBANX10:
-        10,
+      floatingOffsetFrame =
+        window.requestAnimationFrame(
+          function () {
 
-      URBANX20:
-        20,
+            const rect =
+              header.getBoundingClientRect();
 
-      LEX15:
-        15
+            document.documentElement
+              .style
+              .setProperty(
+                "--sixteen-floating-top",
+                `${Math.max(0, Math.round(rect.bottom))}px`
+              );
 
-    };
+            floatingOffsetFrame =
+              null;
+          }
+        );
+    }
 
 
-    const cupones = {
-      ...cuponesFallback
-    };
+    function cerrarMenuCarrito() {
+
+      navCarrito?.classList.remove(
+        "activo"
+      );
+
+      menuBtnCarrito?.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+    }
+
+
+    menuBtnCarrito?.addEventListener(
+      "click",
+      function () {
+
+        actualizarOffsetFlotante();
+
+        const abierto =
+          navCarrito?.classList.toggle(
+            "activo"
+          ) === true;
+
+        menuBtnCarrito.setAttribute(
+          "aria-expanded",
+          abierto ? "true" : "false"
+        );
+      }
+    );
+
+
+    navCarrito
+      ?.querySelectorAll("a")
+      .forEach(
+        function (link) {
+          link.addEventListener(
+            "click",
+            cerrarMenuCarrito
+          );
+        }
+      );
+
+
+    actualizarOffsetFlotante();
+
+    window.addEventListener(
+      "resize",
+      function () {
+        actualizarOffsetFlotante();
+
+        if (window.innerWidth > 900) {
+          cerrarMenuCarrito();
+        }
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "scroll",
+      actualizarOffsetFlotante,
+      { passive: true }
+    );
 
 
     // ======================================================
@@ -813,6 +923,8 @@ document.addEventListener(
       }
 
       if (!guardado) {
+        quitarCuponBtn.hidden =
+          true;
         return;
       }
 
@@ -831,11 +943,11 @@ document.addEventListener(
 
         guardarCupon();
 
+        quitarCuponBtn.hidden =
+          true;
+
         return;
       }
-
-      cupones[guardado] =
-        resultado.porcentaje;
 
       cuponActual =
         guardado;
@@ -855,6 +967,9 @@ document.addEventListener(
 
       mensajeCupon.className =
         "mensaje-cupon correcto";
+
+      quitarCuponBtn.hidden =
+        false;
     }
 
 
@@ -873,63 +988,68 @@ document.addEventListener(
       if (!normalizado) {
         return {
           valido:
-            false
+            false,
+
+          motivo:
+            "Ingresa un código."
         };
       }
 
-      if (db) {
+      if (!db) {
+        return {
+          valido:
+            false,
 
-        try {
-
-          const snapshot =
-            await db
-              .collection("cupones")
-              .doc(
-                normalizado
-              )
-              .get();
-
-          if (snapshot.exists) {
-
-            return validarDatosCupon(
-              snapshot.data() ||
-              {}
-            );
-          }
-
-        } catch (error) {
-
-          console.warn(
-            "Cupón remoto:",
-            error
-          );
-        }
+          motivo:
+            "No pudimos conectar con el servicio de cupones. Intenta nuevamente."
+        };
       }
 
-      if (
-        cuponesFallback[
-          normalizado
-        ]
-      ) {
+      try {
+
+        const snapshot =
+          await db
+            .collection("cupones")
+            .doc(
+              normalizado
+            )
+            .get();
+
+        if (!snapshot.exists) {
+          return {
+            valido:
+              false,
+
+            motivo:
+              "El código ingresado no es válido."
+          };
+        }
+
+        return {
+          ...validarDatosCupon(
+            snapshot.data() ||
+            {}
+          ),
+
+          remoto:
+            true
+        };
+
+      } catch (error) {
+
+        console.warn(
+          "Cupón remoto:",
+          error
+        );
 
         return {
           valido:
-            true,
+            false,
 
-          porcentaje:
-            cuponesFallback[
-              normalizado
-            ],
-
-          remoto:
-            false
+          motivo:
+            "No pudimos validar el cupón. Revisa tu conexión e intenta nuevamente."
         };
       }
-
-      return {
-        valido:
-          false
-      };
     }
 
 
@@ -1382,9 +1502,19 @@ document.addEventListener(
 
               <h3>
 
-                ${escapar(
-                  item.nombre
-                )}
+                <a
+                  class="carrito-item-link"
+                  href="./producto.html?id=${encodeURIComponent(
+                    item.id
+                  )}"
+                  aria-label="Ver ${escaparAtributo(
+                    item.nombre
+                  )}"
+                >
+                  ${escapar(
+                    item.nombre
+                  )}
+                </a>
 
               </h3>
 
@@ -1460,13 +1590,18 @@ document.addEventListener(
                   type="button"
                   class="restar-item"
                   data-index="${index}"
-                  aria-label="Disminuir cantidad"
+                  aria-label="Disminuir cantidad de ${escaparAtributo(item.nombre)}"
                 >
                   −
                 </button>
 
 
-                <span>
+                <span
+                  aria-live="polite"
+                  aria-label="Cantidad ${numero(
+                    item.cantidad
+                  )}"
+                >
                   ${numero(
                     item.cantidad
                   )}
@@ -1477,7 +1612,7 @@ document.addEventListener(
                   type="button"
                   class="sumar-item"
                   data-index="${index}"
-                  aria-label="Aumentar cantidad"
+                  aria-label="Aumentar cantidad de ${escaparAtributo(item.nombre)}"
 
                   ${
                     !disponible ||
@@ -1516,11 +1651,22 @@ document.addEventListener(
             <div class="carrito-item-final">
 
 
-              <span class="carrito-item-precio">
+              <span
+                class="carrito-item-precio${
+                  disponible
+                    ? ""
+                    : " no-disponible"
+                }"
+              >
 
-                $${subtotalItem.toFixed(
-                  2
-                )}
+                ${
+                  disponible
+                    ? "$" +
+                      subtotalItem.toFixed(
+                        2
+                      )
+                    : "NO DISPONIBLE"
+                }
 
               </span>
 
@@ -1777,15 +1923,41 @@ document.addEventListener(
       index
     ) {
 
+      if (!carrito[index]) {
+        return;
+      }
 
       itemAEliminar =
         index;
 
+      if (modalEliminarTexto) {
+        modalEliminarTexto.textContent =
+          "¿Quieres eliminar " +
+          carrito[index].nombre +
+          " de tu carrito?";
+      }
+
+      focoAntesModalEliminar =
+        document.activeElement;
 
       modalEliminar.classList.add(
         "activo"
       );
 
+      modalEliminar.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      document.body.classList.add(
+        "modal-open"
+      );
+
+      window.requestAnimationFrame(
+        function () {
+          cancelarEliminarBtn.focus();
+        }
+      );
     }
 
 
@@ -1873,31 +2045,105 @@ document.addEventListener(
       "keydown",
       function (event) {
 
-
         if (
           event.key ===
           "Escape"
         ) {
 
-          cerrarModalEliminar();
+          if (
+            modalEliminar.classList.contains(
+              "activo"
+            )
+          ) {
+            cerrarModalEliminar();
+          } else {
+            cerrarMenuCarrito();
+          }
 
+          return;
         }
 
+        if (
+          event.key === "Tab"
+          && modalEliminar.classList.contains(
+            "activo"
+          )
+        ) {
+
+          const focables =
+            Array.from(
+              modalEliminar.querySelectorAll(
+                'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+              )
+            );
+
+          if (focables.length === 0) {
+            return;
+          }
+
+          const primero =
+            focables[0];
+
+          const ultimo =
+            focables[
+              focables.length - 1
+            ];
+
+          if (
+            event.shiftKey
+            && document.activeElement === primero
+          ) {
+            event.preventDefault();
+            ultimo.focus();
+          } else if (
+            !event.shiftKey
+            && document.activeElement === ultimo
+          ) {
+            event.preventDefault();
+            primero.focus();
+          }
+        }
       }
     );
 
 
     function cerrarModalEliminar() {
 
+      if (
+        !modalEliminar.classList.contains(
+          "activo"
+        )
+      ) {
+        return;
+      }
 
       modalEliminar.classList.remove(
         "activo"
       );
 
+      modalEliminar.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      document.body.classList.remove(
+        "modal-open"
+      );
 
       itemAEliminar =
         null;
 
+      if (
+        focoAntesModalEliminar
+        && document.contains(
+          focoAntesModalEliminar
+        )
+      ) {
+        focoAntesModalEliminar.focus();
+      }
+
+      focoAntesModalEliminar =
+        null;
     }
 
 
@@ -2241,10 +2487,6 @@ document.addEventListener(
           ) {
 
 
-            cupones[codigo] =
-              resultado.porcentaje;
-
-
             descuentoPorcentaje =
               resultado.porcentaje;
 
@@ -2265,6 +2507,10 @@ document.addEventListener(
 
 
             guardarCupon();
+
+
+            quitarCuponBtn.hidden =
+              false;
 
 
             actualizarTotales();
@@ -2301,6 +2547,10 @@ document.addEventListener(
             guardarCupon();
 
 
+            quitarCuponBtn.hidden =
+              true;
+
+
             actualizarTotales();
 
           }
@@ -2318,6 +2568,42 @@ document.addEventListener(
 
         }
 
+      }
+    );
+
+
+    quitarCuponBtn.addEventListener(
+      "click",
+      function () {
+
+        if (!cuponActual) {
+          return;
+        }
+
+        cuponActual =
+          null;
+
+        descuentoPorcentaje =
+          0;
+
+        codigoCupon.value =
+          "";
+
+        mensajeCupon.textContent =
+          "Cupón eliminado.";
+
+        mensajeCupon.className =
+          "mensaje-cupon";
+
+        quitarCuponBtn.hidden =
+          true;
+
+        guardarCupon();
+        actualizarTotales();
+
+        mostrarToast(
+          "Cupón eliminado."
+        );
       }
     );
 

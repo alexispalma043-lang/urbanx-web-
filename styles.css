@@ -7838,3 +7838,73 @@ body {
 .cantidad-selector span {
   color: #fff;
 }
+
+/* =========================================================
+   SIXTEEN · PASO 3 · CARRITO PRE-FINAL
+========================================================= */
+
+.estado-sincronizacion-carrito {
+  min-height: 20px;
+  margin: 0 0 12px;
+  color: #8a8a8a;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.mensaje-validacion-carrito {
+  min-height: 20px;
+  margin: 12px 0;
+  color: #d35a50;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.quitar-cupon-btn {
+  margin-top: 9px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #9b9b9b;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.quitar-cupon-btn:hover {
+  color: var(--sixteen-gold-light, #f4c66b);
+}
+
+.quitar-cupon-btn[hidden] {
+  display: none;
+}
+
+.carrito-item-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.carrito-item-link:hover {
+  color: var(--sixteen-gold-light, #f4c66b);
+}
+
+.carrito-item-precio.no-disponible {
+  color: #d35a50;
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+.carrito-item-cantidad button:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+@media (max-width: 650px) {
+  .estado-sincronizacion-carrito,
+  .mensaje-validacion-carrito {
+    font-size: 10px;
+  }
+}
