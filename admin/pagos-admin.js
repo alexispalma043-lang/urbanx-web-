@@ -326,19 +326,15 @@ document.addEventListener(
             new URL(qrUrl);
 
           if (
-            ![
-              "https:",
-              "http:"
-            ].includes(
-              parsed.protocol
-            )
+            parsed.protocol !==
+            "https:"
           ) {
             throw new Error();
           }
 
         } catch (_) {
           throw new Error(
-            "La URL de la imagen QR no es válida."
+            "La URL de la imagen QR debe ser una dirección HTTPS válida."
           );
         }
       }
