@@ -7981,3 +7981,58 @@ body {
 .opcion-checkout.payment-disabled * {
   cursor: not-allowed;
 }
+
+
+/* =========================================================
+   SIXTEEN · PASO 5 · CONFIRMACIÓN PRE-FINAL
+========================================================= */
+
+.confirmacion-verificacion {
+  display: block;
+  margin-top: 10px;
+  color: #777;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.confirmacion-verificacion.es-remoto {
+  color: var(--sixteen-gold-light);
+}
+
+.confirmacion-error-link {
+  display: inline-block;
+  margin-left: 5px;
+  color: var(--sixteen-gold-light);
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.confirmacion-cupon-linea strong {
+  color: var(--sixteen-gold-light);
+  letter-spacing: .5px;
+}
+
+.confirmacion-page [hidden],
+.confirmacion-3d[hidden],
+.confirmacion-contenido[hidden] {
+  display: none !important;
+}
+
+.confirmacion-pago-instrucciones img,
+#confirmacionPagoInstrucciones img {
+  display: block;
+  width: min(260px, 100%);
+  height: auto;
+  margin-top: 16px;
+  border: 1px solid var(--sixteen-line);
+  background: #fff;
+}
+
+@media (max-width: 700px) {
+  .confirmacion-verificacion {
+    line-height: 1.5;
+  }
+}

@@ -264,12 +264,8 @@
       const parsed =
         new URL(url);
 
-      return [
-        "https:",
-        "http:"
-      ].includes(
-        parsed.protocol
-      );
+      return parsed.protocol ===
+        "https:";
     } catch (_) {
       return false;
     }

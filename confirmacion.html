@@ -19,7 +19,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=3100"
+    href="./styles.css?v=5000"
   >
 
   <meta name="robots" content="noindex,nofollow,noarchive">
@@ -133,7 +133,7 @@
     </h1>
 
 
-    <p class="confirmacion-mensaje">
+    <p class="confirmacion-mensaje" id="confirmacionMensaje">
 
       Gracias por comprar en SIXTEEN.
 
@@ -153,11 +153,15 @@
       </span>
 
 
-      <strong id="numeroPedido">
+      <strong id="numeroPedido" aria-live="polite">
 
-        Cargando...
+        Verificando...
 
       </strong>
+
+      <small class="confirmacion-verificacion" id="confirmacionVerificacion" aria-live="polite">
+        Verificando pedido...
+      </small>
 
 
     </div>
@@ -171,12 +175,12 @@
        INFORMACIÓN DEL PEDIDO
   ================================= -->
 
-  <section class="confirmacion-contenido">
+  <section class="confirmacion-contenido" id="confirmacionContenido">
 
 
     <!-- COLUMNA IZQUIERDA -->
 
-    <div class="confirmacion-detalles">
+    <div class="confirmacion-detalles" id="confirmacionDetalles">
 
 
       <!-- CLIENTE -->
@@ -241,6 +245,18 @@
 
           </div>
 
+          <div>
+
+            <span>
+              Fecha del pedido
+            </span>
+
+            <strong id="confirmacionFecha">
+              -
+            </strong>
+
+          </div>
+
 
         </div>
 
@@ -271,6 +287,19 @@
 
 
         <div class="confirmacion-datos">
+
+
+          <div>
+
+            <span>
+              Método de entrega
+            </span>
+
+            <strong id="confirmacionMetodoEntrega">
+              -
+            </strong>
+
+          </div>
 
 
           <div>
@@ -471,6 +500,19 @@
 
 
 
+      <div class="checkout-linea confirmacion-cupon-linea" id="confirmacionCuponLinea" hidden>
+
+        <span>
+          Cupón
+        </span>
+
+        <strong id="confirmacionCupon">
+          -
+        </strong>
+
+      </div>
+
+
       <div class="checkout-linea">
 
 
@@ -542,7 +584,7 @@
        URBANX 3D
   ================================= -->
 
-  <section class="confirmacion-3d">
+  <section class="confirmacion-3d" id="confirmacion3d">
 
 
     <div class="confirmacion-3d-texto">
@@ -662,6 +704,8 @@
 
       <a href="./politicas.html#cambios">Cambios y devoluciones</a>
 
+      <a href="./soporte.html#faq">Preguntas frecuentes</a>
+
       <a href="./soporte.html">Contacto</a>
 
     </div>
@@ -674,6 +718,14 @@
 
       <a href="./index.html#sixteen">
         Nosotros
+      </a>
+
+      <a href="./politicas.html#terminos">
+        Términos y condiciones
+      </a>
+
+      <a href="./politicas.html#privacidad">
+        Política de privacidad
       </a>
 
       <a href="../urbanx-3d/index.html">
@@ -733,11 +785,17 @@
 
 
 
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
 <script src="./compat.js?v=3200"></script>
 
-<script src="./payment-config.js?v=3400"></script>
+<script src="./payment-config.js?v=5000"></script>
 
-<script src="./confirmacion.js?v=4400"></script>
+<script src="./confirmacion.js?v=5000"></script>
 
 
 <script src="./pwa.js?v=2700"></script>

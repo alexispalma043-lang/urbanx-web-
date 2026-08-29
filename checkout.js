@@ -3471,7 +3471,7 @@ document.addEventListener(
               window.location.href =
                 "./confirmacion.html?pedido=" +
                 encodeURIComponent(
-                  pedido.numero
+                  documento.id
                 );
 
             },
