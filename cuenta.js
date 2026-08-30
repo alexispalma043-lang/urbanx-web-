@@ -523,508 +523,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // ======================================================
-  // PASO 16F5B · MIS COMPROBANTES
+  // FACTURACIÓN SIXTEEN · MIS DOCUMENTOS
   // ======================================================
 
   function stopComprobantes() {
-    if (
-      unsubscribeComprobantes
-    ) {
+    if (unsubscribeComprobantes) {
       unsubscribeComprobantes();
-      unsubscribeComprobantes =
-        null;
+      unsubscribeComprobantes = null;
     }
   }
 
-  function listenComprobantes(
-    uid
-  ) {
+  function listenComprobantes(uid) {
     stopComprobantes();
-
-    unsubscribeComprobantes =
-      db
-        .collection(
-          "facturacion"
-        )
-        .where(
-          "clienteUid",
-          "==",
-          uid
-        )
-        .onSnapshot(
-          function (
-            snapshot
-          ) {
-            comprobantes = [];
-
-            snapshot.forEach(
-              function (
-                doc
-              ) {
-                comprobantes.push({
-                  id:
-                    doc.id,
-                  ...doc.data()
-                });
-              }
-            );
-
-            comprobantes.sort(
-              (
-                a,
-                b
-              ) =>
-                dateMillis(
-                  b.creadoEn
-                )
-                -
-                dateMillis(
-                  a.creadoEn
-                )
-            );
-
-            renderComprobantes();
-          },
-          function (
-            error
-          ) {
-            console.error(
-              "Comprobantes cliente:",
-              error
-            );
-
-            if (
-              comprobantesList
-            ) {
-              comprobantesList.innerHTML = `
-                <div class="empty">
-                  <strong>
-                    NO FUE POSIBLE CARGAR TUS COMPROBANTES.
-                    REVISA LAS REGLAS DE FIRESTORE.
-                  </strong>
-                </div>
-              `;
-            }
-          }
-        );
+    unsubscribeComprobantes = db.collection("facturacion").where("clienteUid","==",uid).onSnapshot(function(snapshot){
+      comprobantes=[];
+      snapshot.forEach(function(doc){
+        const item={id:doc.id,...doc.data()};
+        if(item.sistema==="SIXTEEN_INTERNO"&&item.tipoRegistro!=="CONFIG") comprobantes.push(item);
+      });
+      comprobantes.sort((a,b)=>dateMillis(b.creadoEn)-dateMillis(a.creadoEn));
+      renderComprobantes();
+    },function(error){
+      console.error("Documentos SIXTEEN cliente:",error);
+      if(comprobantesList){comprobantesList.innerHTML='<div class="empty"><strong>NO FUE POSIBLE CARGAR TUS DOCUMENTOS SIXTEEN.</strong></div>';}
+    });
   }
 
-  function comprobanteTipoNombre(
-    type
-  ) {
-    const map = {
-      FACTURA:
-        "Factura",
-      NOTA_CREDITO:
-        "Nota de crédito",
-      NOTA_DEBITO:
-        "Nota de débito",
-      GUIA_REMISION:
-        "Guía de remisión",
-      RETENCION:
-        "Comprobante de retención"
-    };
-
-    return map[
-      String(
-        type ||
-        ""
-      )
-    ]
-    ||
-    "Comprobante";
+  function comprobanteTipoNombre(type){
+    return ({FACTURA:"Factura SIXTEEN",NOTA_CREDITO:"Nota de crédito",NOTA_DEBITO:"Nota de débito"})[String(type||"")]||"Documento SIXTEEN";
   }
 
-  function comprobanteEstadoClase(
-    state
-  ) {
-    return String(
-      state ||
-      ""
-    )
-      .toLowerCase()
-      .replace(
-        /_/g,
-        "-"
-      );
+  function comprobanteEstadoClase(state){return String(state||"").toLowerCase().replace(/_/g,"-");}
+
+  function renderComprobantes(){
+    if(!comprobantesList)return;
+    const type=String(comprobantesTipoFiltro?.value||"");
+    const state=String(comprobantesEstadoFiltro?.value||"");
+    const visible=comprobantes.filter(item=>(!type||item.tipoDocumento===type)&&(!state||item.estado===state));
+    const issued=comprobantes.filter(item=>item.estado==="EMITIDA").length;
+    if(comprobantesAutorizadosCount)comprobantesAutorizadosCount.textContent=String(issued);
+    comprobantesList.innerHTML="";
+    if(!visible.length){
+      const box=document.createElement("div");box.className="empty";
+      const strong=document.createElement("strong");strong.textContent="TODAVÍA NO HAY DOCUMENTOS EN ESTA VISTA.";
+      const p=document.createElement("p");p.textContent="Tus facturas y notas SIXTEEN aparecerán aquí cuando se generen.";
+      box.append(strong,p);comprobantesList.append(box);return;
+    }
+    visible.forEach(function(item){
+      const row=document.createElement("article");row.className="comprobante-item";
+      const info=document.createElement("div");info.append(label("TIPO"),strongText(comprobanteTipoNombre(item.tipoDocumento)),smallText(item.numero||item.id||"Documento"),smallText(item.fechaEmision||formatDate(item.creadoEn)||"—"));
+      const st=document.createElement("div");st.append(label("ESTADO"));const stateEl=document.createElement("span");stateEl.className="comprobante-state "+comprobanteEstadoClase(item.estado);stateEl.textContent=item.estado||"EMITIDA";st.append(stateEl);
+      const total=document.createElement("div");total.append(label("TOTAL"),strongText(money(item.totales?.importeTotal??item.totales?.total)));
+      const actions=document.createElement("div");actions.className="comprobante-actions";const b=document.createElement("button");b.type="button";b.className="primary";b.dataset.comprobantePdf=item.id;b.textContent="PDF / IMPRIMIR";actions.append(b);
+      row.append(info,st,total,actions);comprobantesList.append(row);
+    });
   }
-
-  function renderComprobantes() {
-    if (
-      !comprobantesList
-    ) {
-      return;
-    }
-
-    const type =
-      String(
-        comprobantesTipoFiltro
-          ?.value
-        ||
-        ""
-      );
-
-    const state =
-      String(
-        comprobantesEstadoFiltro
-          ?.value
-        ||
-        ""
-      );
-
-    const visible =
-      comprobantes.filter(
-        item =>
-          (
-            !type
-            ||
-            item.tipoDocumento ===
-            type
-          )
-          &&
-          (
-            !state
-            ||
-            item.estado ===
-            state
-          )
-      );
-
-    const authorized =
-      comprobantes.filter(
-        item =>
-          item.estado ===
-          "AUTORIZADO"
-      ).length;
-
-    if (
-      comprobantesAutorizadosCount
-    ) {
-      comprobantesAutorizadosCount.textContent =
-        String(
-          authorized
-        );
-    }
-
-    if (
-      !visible.length
-    ) {
-      comprobantesList.innerHTML = `
-        <div class="empty">
-          <div>
-            <strong>
-              TODAVÍA NO HAY COMPROBANTES EN ESTA VISTA.
-            </strong>
-            <p>
-              Tus facturas y demás documentos aparecerán aquí
-              cuando SIXTEEN los genere.
-            </p>
-          </div>
-        </div>
-      `;
-      return;
-    }
-
-    comprobantesList.innerHTML =
-      "";
-
-    visible.forEach(
-      function (
-        item
-      ) {
-        const authorized =
-          item.estado ===
-          "AUTORIZADO";
-
-        const row =
-          document.createElement(
-            "article"
-          );
-
-        row.className =
-          "comprobante-item";
-
-        row.innerHTML = `
-          <div>
-            <span class="comprobante-label">
-              ${escapeHtml(comprobanteTipoNombre(item.tipoDocumento))}
-            </span>
-
-            <strong>
-              ${escapeHtml(item.numero || item.id || "Comprobante")}
-            </strong>
-
-            <small>
-              ${escapeHtml(item.fechaEmision || formatDate(item.creadoEn) || "—")}
-            </small>
-          </div>
-
-          <div>
-            <span class="comprobante-label">
-              ESTADO
-            </span>
-
-            <span class="comprobante-state ${escapeAttr(comprobanteEstadoClase(item.estado))}">
-              ${escapeHtml(item.estado || "En proceso")}
-            </span>
-          </div>
-
-          <div>
-            <span class="comprobante-label">
-              ${
-                item.tipoDocumento === "GUIA_REMISION"
-                  ? "PEDIDO"
-                  : item.tipoDocumento === "RETENCION"
-                    ? "TOTAL RETENIDO"
-                    : "TOTAL"
-              }
-            </span>
-
-            <strong>
-              ${
-                item.tipoDocumento === "GUIA_REMISION"
-                  ? escapeHtml(item.pedidoNumero || item.pedidoId || "—")
-                  : money(
-                      item.totales?.totalRetenido
-                      ??
-                      item.totales?.importeTotal
-                    )
-              }
-            </strong>
-          </div>
-
-          <div class="comprobante-actions">
-            <button
-              type="button"
-              class="primary"
-              data-comprobante-ride="${escapeAttr(item.id)}"
-              ${authorized ? "" : "disabled"}
-            >
-              RIDE
-            </button>
-
-            <button
-              type="button"
-              data-comprobante-xml="${escapeAttr(item.id)}"
-              ${authorized ? "" : "disabled"}
-            >
-              XML
-            </button>
-          </div>
-        `;
-
-        comprobantesList.appendChild(
-          row
-        );
-      }
-    );
+  function label(v){const x=document.createElement("span");x.className="comprobante-label";x.textContent=v;return x;}
+  function strongText(v){const x=document.createElement("strong");x.textContent=String(v??"");return x;}
+  function smallText(v){const x=document.createElement("small");x.textContent=String(v??"");return x;}
+  function comprobantePorId(id){return comprobantes.find(item=>item.id===id)||null;}
+  function abrirPdfCliente(item){
+    if(!item){return;}
+    if(!window.SIXTEEN_FACTURA_PDF){showToast("No fue posible cargar el generador PDF.");return;}
+    const opened=window.SIXTEEN_FACTURA_PDF.open(item);
+    if(!opened)showToast("Permite ventanas emergentes para abrir el documento.");
   }
-
-  function comprobantePorId(
-    id
-  ) {
-    return comprobantes.find(
-      item =>
-        item.id ===
-        id
-    )
-    ||
-    null;
-  }
-
-  function descargarTexto(
-    filename,
-    content,
-    mime
-  ) {
-    const blob =
-      new Blob(
-        [
-          String(
-            content ||
-            ""
-          )
-        ],
-        {
-          type:
-            mime
-            ||
-            "text/plain;charset=utf-8"
-        }
-      );
-
-    const url =
-      URL.createObjectURL(
-        blob
-      );
-
-    const link =
-      document.createElement(
-        "a"
-      );
-
-    link.href =
-      url;
-
-    link.download =
-      filename;
-
-    document.body.appendChild(
-      link
-    );
-
-    link.click();
-    link.remove();
-
-    setTimeout(
-      function () {
-        URL.revokeObjectURL(
-          url
-        );
-      },
-      1000
-    );
-  }
-
-  function abrirRideCliente(
-    item
-  ) {
-    if (
-      !item
-      ||
-      item.estado !==
-      "AUTORIZADO"
-    ) {
-      showToast(
-        "El RIDE estará disponible cuando el SRI autorice el comprobante."
-      );
-      return;
-    }
-
-    if (
-      !window.SIXTEEN_RIDE
-    ) {
-      showToast(
-        "No fue posible cargar el RIDE."
-      );
-      return;
-    }
-
-    const opened =
-      window.SIXTEEN_RIDE.open(
-        item
-      );
-
-    if (!opened) {
-      showToast(
-        "Permite ventanas emergentes para abrir el RIDE."
-      );
-    }
-  }
-
-  function descargarXmlCliente(
-    item
-  ) {
-    if (
-      !item
-      ||
-      item.estado !==
-      "AUTORIZADO"
-    ) {
-      showToast(
-        "El XML estará disponible cuando el SRI autorice el comprobante."
-      );
-      return;
-    }
-
-    const xml =
-      item.xmlAutorizado
-      ||
-      item.xmlFirmado
-      ||
-      item.xmlSinFirma
-      ||
-      "";
-
-    if (!xml) {
-      showToast(
-        "El comprobante no tiene XML disponible."
-      );
-      return;
-    }
-
-    const safeNumber =
-      String(
-        item.numero
-        ||
-        item.id
-        ||
-        "comprobante"
-      )
-        .replace(
-          /[^0-9A-Za-z_-]+/g,
-          "_"
-        );
-
-    descargarTexto(
-      "SIXTEEN_"
-      +
-      safeNumber
-      +
-      ".xml",
-      xml,
-      "application/xml;charset=utf-8"
-    );
-  }
-
-  comprobantesTipoFiltro
-    ?.addEventListener(
-      "change",
-      renderComprobantes
-    );
-
-  comprobantesEstadoFiltro
-    ?.addEventListener(
-      "change",
-      renderComprobantes
-    );
-
-  comprobantesList
-    ?.addEventListener(
-      "click",
-      function (
-        event
-      ) {
-        const rideBtn =
-          event.target.closest(
-            "button[data-comprobante-ride]"
-          );
-
-        if (rideBtn) {
-          abrirRideCliente(
-            comprobantePorId(
-              rideBtn.dataset
-                .comprobanteRide
-            )
-          );
-          return;
-        }
-
-        const xmlBtn =
-          event.target.closest(
-            "button[data-comprobante-xml]"
-          );
-
-        if (xmlBtn) {
-          descargarXmlCliente(
-            comprobantePorId(
-              xmlBtn.dataset
-                .comprobanteXml
-            )
-          );
-        }
-      }
-    );
+  comprobantesTipoFiltro?.addEventListener("change",renderComprobantes);
+  comprobantesEstadoFiltro?.addEventListener("change",renderComprobantes);
+  comprobantesList?.addEventListener("click",function(event){const btn=event.target.closest("button[data-comprobante-pdf]");if(btn)abrirPdfCliente(comprobantePorId(btn.dataset.comprobantePdf));});
 
 
   ordersFilter.addEventListener("change", renderOrders);

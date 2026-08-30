@@ -1,4 +1,4 @@
-const VERSION="sixteen-v16f6d-13";
+const VERSION="sixteen-v16f6d-14";
 const STATIC=`${VERSION}-static`;
 const RUNTIME=`${VERSION}-runtime`;
 const OFFLINE="./offline.html";
@@ -11,7 +11,7 @@ const FILES=[
  "./app.js","./producto.js","./carrito.js","./checkout.js","./confirmacion.js",
  "./cuenta.js","./comparar.js","./seguimiento.js","./cart-sync.js",
  "./product-tools.js","./recomendaciones.js","./pwa.js","./seo-producto.js",
- "./store-config.js","./support.js","./variant-utils.js","./compat.js","./payment-config.js","./ride.js",
+ "./store-config.js","./support.js","./variant-utils.js","./compat.js","./payment-config.js","./factura-sixteen.js",
  "./manifest.webmanifest","./offline.html","./assets/logo-sixteen.jpg","./assets/favicon-32.png",
  "./assets/apple-touch-icon.png","./assets/pwa-icon-192.png",
  "./assets/pwa-icon-512.png","./assets/og-sixteen.png"

@@ -2375,3 +2375,7 @@ body.is-authenticated .cuenta-main {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+
+/* PASO 20 · Facturación SIXTEEN */
+.comprobante-state.emitida{border-color:#8d7520;color:#8d7520}.comprobante-state.anulada{border-color:#777;color:#777;text-decoration:line-through}.comprobante-actions .primary{min-width:132px}

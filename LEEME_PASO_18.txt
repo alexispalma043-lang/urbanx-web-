@@ -1,0 +1,23 @@
+SIXTEEN · PASO 18 · MÉTODOS DE PAGO
+
+Archivos principales modificados:
+- payment-config.js
+- checkout.html / checkout.js
+- confirmacion.html / confirmacion.js
+- styles.css
+- sw.js
+- admin/dashboard.html
+- admin/pagos-admin.js
+- admin/admin.css
+
+IMPORTANTE:
+1. Publica primero FIRESTORE_SIXTEEN_COMPLETO_PASO_18.rules desde el archivo entregado por separado.
+2. Sustituye TU_UID_REAL_DE_ADMIN por tu UID real antes de publicar las reglas.
+3. Luego reemplaza los archivos del proyecto y permite que Auto Sync los suba.
+4. Haz Ctrl + Shift + R.
+
+Tarjeta:
+- SIXTEEN no procesa ni almacena tarjetas.
+- El enlace HTTPS externo se muestra después de crear el pedido.
+- No existe confirmación automática del pago con el sistema actual.
+- El administrador debe verificar el pago y cambiar el estado a PAGADO.

@@ -1,0 +1,28 @@
+SIXTEEN · PASO 20 · FACTURACIÓN PROPIA
+
+ACTIVO:
+- Facturación SIXTEEN interna desde pedidos.
+- Numeración automática SIX-FAC-000000001.
+- Nota de crédito SIX-NC y nota de débito SIX-ND.
+- PDF / impresión.
+- EmailJS y acceso desde Mi Cuenta.
+- Historial y CSV.
+- Protección contra doble factura por pedido mediante transacción Firestore.
+
+DESACTIVADO DEL SITIO:
+- XML SRI.
+- Firma electrónica.
+- Recepción/autorización SRI.
+- RIDE.
+- Backend SRI.
+- Ambiente PRUEBAS/PRODUCCIÓN.
+
+RESPALDO:
+El motor SRI del Paso 19 se conserva en admin/legacy-sri/ y no se carga.
+
+IMPORTANTE:
+Las facturas SIXTEEN de este modo son documentos comerciales internos. No reemplazan un comprobante tributario cuando la ley exija uno.
+
+FIRESTORE:
+No requiere reglas nuevas: reutiliza la colección facturacion ya protegida.
+El documento facturacion/config_interna solo puede ser leído/escrito por el administrador según las reglas existentes.

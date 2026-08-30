@@ -1,0 +1,14 @@
+SIXTEEN · PASO 16 · INVENTARIO Y KARDEX
+
+Correcciones aplicadas:
+- Stock total real calculado desde variantes en tabla, KPIs, estado y valor estimado.
+- Filtro de catálogo activo/inactivo y búsqueda por color/talla/variante.
+- Exportación separada de stock actual y Kardex.
+- Kardex incluye variante, variación real, stock total y stock mínimo.
+- Validación del rango de fechas.
+- Modal de ajuste accesible con foco, Tab, Escape y retorno de foco.
+- Registro de cambios exclusivos de stock mínimo mediante AJUSTE_MINIMO.
+- Render dinámico del inventario/Kardex mediante DOM + textContent.
+- Versionado admin actualizado a v=16000.
+
+Firestore: no requiere cambios de reglas para este paso.

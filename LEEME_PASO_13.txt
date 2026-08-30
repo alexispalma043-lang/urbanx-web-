@@ -1,0 +1,23 @@
+SIXTEEN | Urban Luxury
+PASO 13 — ADMINISTRACIÓN DE PRODUCTOS
+
+Archivos modificados:
+- admin/dashboard.html
+- admin/dashboard.js
+- admin/admin.css
+
+Correcciones principales:
+1. Búsqueda y filtros de productos por código/nombre, categoría y estado.
+2. Contador y texto de resultados.
+3. Eliminación destructiva reemplazada por archivado seguro.
+4. Reactivación de productos inactivos/archivados.
+5. Modal de producto mejorado para teclado, foco y accesibilidad.
+6. Validaciones de precio, precio anterior, longitudes y URL HTTPS del modelo 3D.
+7. SIXTEEN 3D no puede activarse sin URL de modelo.
+8. Hasta 6 fotografías por producto; primera imagen = principal.
+9. Guardado compatible con imagen + imagenes[] ya soportado por producto.html.
+10. Versionado admin.css/dashboard.js actualizado a v=13000.
+
+Firestore:
+- No requiere nuevas reglas. /productos ya permite create/update/delete únicamente a isAdmin().
+- El PASO 13 usa create/update; ya no hace borrado destructivo desde la interfaz.

@@ -1,0 +1,35 @@
+SIXTEEN | PASO 6 — SEGUIMIENTO DE PEDIDOS
+
+Archivos modificados:
+- seguimiento.html
+- seguimiento.js
+- seguimiento.css
+- sw.js
+
+Correcciones principales:
+1. La página ya no muestra el selector vacío mientras Firestore todavía está cargando.
+2. Se agregó un estado de error real con botón REINTENTAR.
+3. Cuando no existen pedidos, se oculta el selector y se muestra únicamente el estado vacío.
+4. El pedido seleccionado por el usuario se conserva cuando Firestore recibe actualizaciones en tiempo real.
+5. El parámetro ?pedido= se respeta sin forzar el pedido inicial otra vez después de que el usuario cambie de pedido.
+6. Si el pedido solicitado no pertenece a la sesión, se avisa y se muestra el pedido más reciente de esa sesión.
+7. Se añadió ESTADO DEL PAGO y MÉTODO DE ENTREGA.
+8. Pago QR se muestra con un nombre correcto.
+9. Los productos se renderizan con DOM/textContent y ya no mediante innerHTML.
+10. El nombre del producto enlaza a su ficha cuando existe código.
+11. Se añadió aria-current al paso actual del seguimiento y mejoras de foco/accesibilidad.
+12. Se añadió label accesible al selector.
+13. Se agregó footer SIXTEEN completo con ayuda, legales y navegación.
+14. Service Worker actualizado a sixteen-v16f6d-7.
+
+Versiones:
+- seguimiento.css?v=6000
+- seguimiento.js?v=6000
+
+Antes de avanzar al siguiente paso, probar con un pedido real:
+- apertura desde Confirmación
+- cambio entre varios pedidos
+- actualización de estado desde Admin sin recargar
+- estado Cancelado
+- método QR / transferencia / tarjeta / contra entrega
+- error de red y botón REINTENTAR
