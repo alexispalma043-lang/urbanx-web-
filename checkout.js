@@ -3615,32 +3615,60 @@ document.addEventListener(
           // COPIA PARA CONFIRMACIÓN LOCAL
           // ==================================================
 
+          // ==================================================
+          // FALLBACK TEMPORAL PARA CONFIRMACIÓN
+          // ==================================================
+          // No se persisten datos personales completos. El pedido real se
+          // vuelve a leer desde Firestore. Esta copia vive 30 min en la pestaña.
           const pedidoConfirmacion = {
-
-            ...pedido,
-
-            firestoreId:
-              documento.id,
-
-            fecha:
-              new Date()
-                .toISOString()
-
+            firestoreId: documento.id,
+            numero: pedido.numero,
+            clienteUid: pedido.clienteUid,
+            cliente: {
+              nombres: pedido.cliente?.nombres || "",
+              apellidos: pedido.cliente?.apellidos || ""
+            },
+            entrega: {
+              metodo: pedido.entrega?.metodo || "",
+              provincia: pedido.entrega?.provincia || "",
+              ciudad: pedido.entrega?.ciudad || ""
+            },
+            pago: {
+              metodo: pedido.pago?.metodo || "",
+              nombre: pedido.pago?.nombre || "",
+              estado: pedido.pago?.estado || pedido.estadoPago || ""
+            },
+            estadoPago: pedido.estadoPago || pedido.pago?.estado || "",
+            productos: Array.isArray(pedido.productos)
+              ? pedido.productos.map(item => ({
+                  firestoreId: item.firestoreId || "",
+                  codigo: item.codigo || "",
+                  nombre: item.nombre || "Producto SIXTEEN",
+                  categoria: item.categoria || "",
+                  precioUnitario: numero(item.precioUnitario),
+                  ivaTarifa: numero(item.ivaTarifa ?? 15),
+                  color: item.color || "",
+                  talla: item.talla || null,
+                  varianteId: item.varianteId || "",
+                  cantidad: numero(item.cantidad),
+                  imagen: item.imagen || "",
+                  urbanx3d: item.urbanx3d === true,
+                  modelo3d: String(item.modelo3d || "").trim()
+                }))
+              : [],
+            resumen: { ...pedido.resumen },
+            fecha: new Date().toISOString(),
+            fallbackExpiraEn: Date.now() + 30 * 60 * 1000
           };
 
-
-          delete pedidoConfirmacion.creadoEn;
-
-
-          localStorage.setItem(
-
-            "urbanx_ultimo_pedido",
-
-            JSON.stringify(
-              pedidoConfirmacion
-            )
-
-          );
+          try {
+            sessionStorage.setItem(
+              "sixteen_ultimo_pedido_session",
+              JSON.stringify(pedidoConfirmacion)
+            );
+            // Limpia la copia histórica persistente de versiones anteriores.
+            localStorage.removeItem("urbanx_ultimo_pedido");
+          } catch (_) {}
 
 
           // ==================================================

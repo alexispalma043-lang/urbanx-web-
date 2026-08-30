@@ -121,10 +121,8 @@
 
       if (
         local
-        && coincideReferencia(
-          local,
-          referenciaUrl
-        )
+        && fallbackPerteneceAUsuario(local,usuario)
+        && coincideReferencia(local,referenciaUrl)
       ) {
         pedido = local;
         renderizarPedido();
@@ -140,19 +138,17 @@
         error
       );
 
+      const usuarioLocal = auth?.currentUser || null;
+
       if (
         local
-        && coincideReferencia(
-          local,
-          referenciaUrl
-        )
+        && fallbackPerteneceAUsuario(local,usuarioLocal)
+        && coincideReferencia(local,referenciaUrl)
       ) {
         pedido = local;
         renderizarPedido();
         marcarVerificado(false);
-        mostrarToast(
-          "Mostrando la copia guardada de tu pedido."
-        );
+        mostrarToast("Mostrando una copia temporal y limitada de tu pedido.");
         return;
       }
 
@@ -160,47 +156,98 @@
     }
   }
 
-  function leerPedidoLocal() {
-    try {
-      const raw =
-        localStorage.getItem(
-          "urbanx_ultimo_pedido"
-        );
+  const CONFIRMACION_SESSION_KEY = "sixteen_ultimo_pedido_session";
+  const CONFIRMACION_FALLBACK_MS = 30 * 60 * 1000;
 
-      if (!raw) {
+  function limpiarFallbackLegado() {
+    try { localStorage.removeItem("urbanx_ultimo_pedido"); } catch (_) {}
+  }
+
+  function sanitizarPedidoFallback(data) {
+    const cliente = data?.cliente || {};
+    const entrega = data?.entrega || {};
+    const pago = data?.pago || {};
+    const productos = Array.isArray(data?.productos)
+      ? data.productos.map(item => ({
+          firestoreId: String(item?.firestoreId || "").trim(),
+          codigo: String(item?.codigo || item?.id || "").trim().toUpperCase(),
+          nombre: String(item?.nombre || "Producto SIXTEEN").trim().slice(0,160),
+          categoria: String(item?.categoria || "").trim().slice(0,100),
+          precioUnitario: numeroSeguro(item?.precioUnitario ?? item?.precio),
+          ivaTarifa: numeroSeguro(item?.ivaTarifa ?? 15),
+          color: String(item?.color || "").trim().slice(0,160),
+          talla: item?.talla == null ? null : String(item.talla).trim().slice(0,80),
+          varianteId: String(item?.varianteId || "").trim().slice(0,160),
+          cantidad: Math.max(1,Math.floor(numeroSeguro(item?.cantidad))),
+          imagen: /^https:\/\//i.test(String(item?.imagen||"")) ? String(item.imagen).slice(0,1000) : "",
+          urbanx3d: item?.urbanx3d === true,
+          modelo3d: /^https:\/\/.*\.glb(?:[?#].*)?$/i.test(String(item?.modelo3d||"")) ? String(item.modelo3d).slice(0,1000) : ""
+        })) : [];
+
+    return {
+      firestoreId: String(data?.firestoreId || data?.id || "").trim(),
+      numero: String(data?.numero || "").trim().slice(0,100),
+      clienteUid: String(data?.clienteUid || "").trim(),
+      cliente: {
+        nombres: String(cliente.nombres || "").trim().slice(0,100),
+        apellidos: String(cliente.apellidos || "").trim().slice(0,100)
+      },
+      entrega: {
+        metodo: String(entrega.metodo || "").trim().slice(0,50),
+        provincia: String(entrega.provincia || "").trim().slice(0,80),
+        ciudad: String(entrega.ciudad || "").trim().slice(0,100)
+      },
+      pago: {
+        metodo: String(pago.metodo || "").trim().slice(0,50),
+        nombre: String(pago.nombre || "").trim().slice(0,120),
+        estado: String(pago.estado || data?.estadoPago || "").trim().slice(0,80)
+      },
+      estadoPago: String(data?.estadoPago || pago.estado || "").trim().slice(0,80),
+      productos,
+      resumen: {
+        subtotal: numeroSeguro(data?.resumen?.subtotal),
+        descuento: numeroSeguro(data?.resumen?.descuento),
+        descuentoPorcentaje: numeroSeguro(data?.resumen?.descuentoPorcentaje),
+        envio: numeroSeguro(data?.resumen?.envio),
+        cupon: data?.resumen?.cupon ? String(data.resumen.cupon).trim().slice(0,30) : null,
+        total: numeroSeguro(data?.resumen?.total)
+      },
+      fecha: obtenerFechaISO(data) || new Date().toISOString(),
+      fallbackExpiraEn: Date.now() + CONFIRMACION_FALLBACK_MS
+    };
+  }
+
+  function leerPedidoLocal() {
+    limpiarFallbackLegado();
+    try {
+      const raw = sessionStorage.getItem(CONFIRMACION_SESSION_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== "object") {
+        sessionStorage.removeItem(CONFIRMACION_SESSION_KEY);
         return null;
       }
-
-      const data =
-        JSON.parse(raw);
-
-      return data
-        && typeof data === "object"
-          ? data
-          : null;
-
-    } catch (_) {
-      return null;
-    }
+      const expires = Number(data.fallbackExpiraEn || 0);
+      if (!Number.isFinite(expires) || expires <= Date.now()) {
+        sessionStorage.removeItem(CONFIRMACION_SESSION_KEY);
+        return null;
+      }
+      return data;
+    } catch (_) { return null; }
   }
 
   function guardarPedidoLocal(data) {
+    limpiarFallbackLegado();
     try {
-      const copia = {
-        ...data,
-        fecha:
-          obtenerFechaISO(data)
-          || new Date().toISOString()
-      };
-
-      delete copia.creadoEn;
-
-      localStorage.setItem(
-        "urbanx_ultimo_pedido",
-        JSON.stringify(copia)
-      );
+      sessionStorage.setItem(CONFIRMACION_SESSION_KEY,JSON.stringify(sanitizarPedidoFallback(data)));
     } catch (_) {}
   }
+
+  function fallbackPerteneceAUsuario(data,usuario) {
+    const uid = String(data?.clienteUid || "").trim();
+    return Boolean(uid && usuario && usuario.uid === uid);
+  }
+
 
   function coincideReferencia(
     data,

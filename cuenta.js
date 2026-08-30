@@ -1847,6 +1847,10 @@ document.addEventListener("DOMContentLoaded", function () {
       stopComprobantes();
       stopFavorites();
       stopNotifications();
+      try {
+        sessionStorage.removeItem("sixteen_ultimo_pedido_session");
+        localStorage.removeItem("urbanx_ultimo_pedido");
+      } catch (_) {}
       await auth.signOut();
       showToast("Sesión cerrada.");
     } catch (error) {
