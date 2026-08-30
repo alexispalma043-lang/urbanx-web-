@@ -8,7 +8,7 @@
 <meta content="noindex,nofollow,noarchive" name="robots"/>
 <meta content="#050505" name="theme-color"/>
 <link href="../assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="./admin.css?v=24000" rel="stylesheet"/>
+<link href="./admin.css?v=27000" rel="stylesheet"/>
 <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
 <meta content="strict-origin-when-cross-origin" name="referrer"/>
 <meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
@@ -2746,6 +2746,16 @@
           </span>
 </p>
 </article>
+<article class="pedido-info-card pedido-comunicacion-card">
+<p class="admin-eyebrow">COMUNICACIÓN</p>
+<h3>Cliente</h3>
+<p><strong>Notificación:</strong> <span id="pedidoNotificacionEstado">Sin registro</span></p>
+<p><strong>Correo:</strong> <span id="pedidoCorreoEstado">Sin registro</span></p>
+<p><strong>Último evento:</strong> <span id="pedidoComunicacionUltima">-</span></p>
+<button class="admin-secondary-btn pedido-reenviar-correo" id="reenviarCorreoPedidoBtn" type="button">
+  REENVIAR CORREO DE ESTADO
+</button>
+</article>
 </div>
 <section class="pedido-productos-box">
 <div class="admin-card-header">
@@ -2809,7 +2819,7 @@
 <script src="../variant-utils.js?v=2900"></script>
 <script src="../store-config.js?v=3000"></script>
 <script src="../payment-config.js?v=18000"></script>
-<script src="./dashboard.js?v=26000"></script>
+<script src="./dashboard.js?v=27000"></script>
 <script src="./resenas-admin.js?v=24000"></script>
 <script src="./analitica.js?v=21010"></script>
 <script src="./backup.js?v=22000"></script>

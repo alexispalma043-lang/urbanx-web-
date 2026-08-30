@@ -8185,3 +8185,29 @@ td {
     justify-content:flex-start;
   }
 }
+
+
+/* =========================================
+   PASO 27 · COMUNICACIÓN DE PEDIDOS
+========================================= */
+
+.pedido-info-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pedido-comunicacion-card span {
+  overflow-wrap: anywhere;
+}
+
+.pedido-reenviar-correo {
+  width: 100%;
+  margin-top: 14px;
+}
+
+@media (max-width: 1400px) {
+  .pedido-info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1100px) {
+  .pedido-info-grid { grid-template-columns: 1fr; }
+}

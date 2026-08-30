@@ -316,6 +316,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const pedidoCupon = document.getElementById("pedidoCupon");
   const pedidoEstadoInventario = document.getElementById("pedidoEstadoInventario");
   const pedidoStockAviso = document.getElementById("pedidoStockAviso");
+  const pedidoNotificacionEstado = document.getElementById("pedidoNotificacionEstado");
+  const pedidoCorreoEstado = document.getElementById("pedidoCorreoEstado");
+  const pedidoComunicacionUltima = document.getElementById("pedidoComunicacionUltima");
+  const reenviarCorreoPedidoBtn = document.getElementById("reenviarCorreoPedidoBtn");
 
   const pedidoProductosLista = document.getElementById("pedidoProductosLista");
   const pedidoSubtotal = document.getElementById("pedidoSubtotal");
@@ -4383,6 +4387,8 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
+    renderComunicacionPedido(pedido);
+
     asegurarOpcionSelect(
       "pedidoEstadoSelect",
       pedido.estado ||
@@ -4743,7 +4749,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // ========================================================
-  // PASO 9B · NOTIFICACIONES + EMAILJS FREE
+  // PASO 27 · NOTIFICACIONES + EMAILJS
   // ========================================================
 
   function datosNotificacionEstado(
@@ -4828,111 +4834,48 @@ document.addEventListener("DOMContentLoaded", function () {
     nuevoEstado
   ) {
 
-    if (
-      !pedido ||
-      estadoAnterior ===
-      nuevoEstado
-    ) {
-      return;
-    }
+    if (!pedido || estadoAnterior === nuevoEstado) return null;
 
+    const contenido = datosNotificacionEstado(nuevoEstado);
+    if (!contenido) return null;
 
-    const contenido =
-      datosNotificacionEstado(
-        nuevoEstado
-      );
+    const clienteUid = String(pedido.clienteUid || "").trim();
+    const pedidoNumero = pedido.numero || pedido.id || pedidoEditandoId;
+    let notificacion = clienteUid ? "ERROR" : "SIN_UID";
 
-
-    if (!contenido) {
-      return;
-    }
-
-
-    const clienteUid =
-      String(
-        pedido.clienteUid ||
-        ""
-      ).trim();
-
-
-    const pedidoNumero =
-      pedido.numero ||
-      pedido.id ||
-      pedidoEditandoId;
-
-
-    // --------------------------------------------------------
-    // NOTIFICACIÓN INTERNA
-    // --------------------------------------------------------
-
-    if (
-      clienteUid
-    ) {
-
+    if (clienteUid) {
       try {
-
-        await db
-          .collection("notificaciones")
-          .doc(
-            clienteUid
-          )
+        await db.collection("notificaciones")
+          .doc(clienteUid)
           .collection("items")
           .add({
-            usuarioUid:
-              clienteUid,
-
-            tipo:
-              "estado_pedido",
-
-            pedidoId:
-              pedidoEditandoId,
-
-            pedidoNumero:
-              pedidoNumero,
-
-            estado:
-              nuevoEstado,
-
-            titulo:
-              contenido.titulo,
-
-            mensaje:
-              contenido.mensaje,
-
-            leida:
-              false,
-
-            creadoEn:
-              FieldValue.serverTimestamp(),
-
-            creadoPor:
-              usuarioActual.email ||
-              usuarioActual.uid
+            usuarioUid: clienteUid,
+            tipo: "estado_pedido",
+            pedidoId: pedidoEditandoId,
+            pedidoNumero,
+            estado: nuevoEstado,
+            titulo: contenido.titulo,
+            mensaje: contenido.mensaje,
+            leida: false,
+            creadoEn: FieldValue.serverTimestamp(),
+            creadoPor: usuarioActual.email || usuarioActual.uid
           });
-
+        notificacion = "ENVIADA";
       } catch (error) {
-
-        console.warn(
-          "Notificación del pedido:",
-          error
-        );
+        console.warn("Notificación del pedido:", error);
       }
     }
 
-
-    // --------------------------------------------------------
-    // CORREO AUTOMÁTICO GRATIS · EMAILJS
-    //
-    // No usa Firebase Extensions ni Blaze.
-    // Si EmailJS no está configurado o falla, el pedido,
-    // el stock y la notificación interna siguen funcionando.
-    // --------------------------------------------------------
-
-    await enviarCorreoEstadoPedidoEmailJS(
-      pedido,
-      contenido,
-      nuevoEstado
+    const correo = await enviarCorreoEstadoPedidoEmailJS(
+      pedido, contenido, nuevoEstado
     );
+
+    return {
+      tipo: "estado_pedido",
+      valor: nuevoEstado,
+      notificacion,
+      correo
+    };
   }
 
 
@@ -5017,96 +4960,48 @@ document.addEventListener("DOMContentLoaded", function () {
     nuevoEstadoPago
   ) {
 
-    if (
-      !pedido ||
-      estadoPagoAnterior ===
-      nuevoEstadoPago
-    ) {
-      return;
-    }
+    if (!pedido || estadoPagoAnterior === nuevoEstadoPago) return null;
 
+    const contenido = datosNotificacionPago(nuevoEstadoPago);
+    if (!contenido) return null;
 
-    const contenido =
-      datosNotificacionPago(
-        nuevoEstadoPago
-      );
-
-
-    if (!contenido) {
-      return;
-    }
-
-
-    const clienteUid =
-      String(
-        pedido.clienteUid ||
-        ""
-      ).trim();
-
-
-    const pedidoNumero =
-      pedido.numero ||
-      pedido.id ||
-      pedidoEditandoId;
-
+    const clienteUid = String(pedido.clienteUid || "").trim();
+    const pedidoNumero = pedido.numero || pedido.id || pedidoEditandoId;
+    let notificacion = clienteUid ? "ERROR" : "SIN_UID";
 
     if (clienteUid) {
-
       try {
-
-        await db
-          .collection("notificaciones")
+        await db.collection("notificaciones")
           .doc(clienteUid)
           .collection("items")
           .add({
-            usuarioUid:
-              clienteUid,
-
-            tipo:
-              "estado_pago",
-
-            pedidoId:
-              pedidoEditandoId,
-
-            pedidoNumero:
-              pedidoNumero,
-
-            estado:
-              nuevoEstadoPago,
-
-            titulo:
-              contenido.titulo,
-
-            mensaje:
-              contenido.mensaje,
-
-            leida:
-              false,
-
-            creadoEn:
-              FieldValue.serverTimestamp(),
-
-            creadoPor:
-              usuarioActual.email ||
-              usuarioActual.uid
+            usuarioUid: clienteUid,
+            tipo: "estado_pago",
+            pedidoId: pedidoEditandoId,
+            pedidoNumero,
+            estado: nuevoEstadoPago,
+            titulo: contenido.titulo,
+            mensaje: contenido.mensaje,
+            leida: false,
+            creadoEn: FieldValue.serverTimestamp(),
+            creadoPor: usuarioActual.email || usuarioActual.uid
           });
-
+        notificacion = "ENVIADA";
       } catch (error) {
-
-        console.warn(
-          "Notificación de pago:",
-          error
-        );
+        console.warn("Notificación de pago:", error);
       }
     }
 
-
-    await enviarCorreoEstadoPedidoEmailJS(
-      pedido,
-      contenido,
-      "Pago · " +
-      nuevoEstadoPago
+    const correo = await enviarCorreoEstadoPedidoEmailJS(
+      pedido, contenido, "Pago · " + nuevoEstadoPago
     );
+
+    return {
+      tipo: "estado_pago",
+      valor: nuevoEstadoPago,
+      notificacion,
+      correo
+    };
   }
 
 
@@ -5330,7 +5225,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     if (!config) {
-      return false;
+      return "NO_CONFIGURADO";
     }
 
 
@@ -5352,7 +5247,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Pedido sin correo válido."
       );
 
-      return false;
+      return "SIN_CORREO";
     }
 
 
@@ -5442,7 +5337,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
-      return true;
+      return "ENVIADO";
 
     } catch (error) {
 
@@ -5452,6 +5347,78 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
 
+      return "ERROR";
+    }
+  }
+
+
+  function textoComunicacionEstado(value) {
+    const map = {
+      ENVIADA: "Enviada",
+      ENVIADO: "Enviado",
+      NO_CONFIGURADO: "EmailJS no configurado",
+      SIN_CORREO: "Cliente sin correo",
+      SIN_UID: "Cliente sin UID",
+      NO_APLICA: "No aplica",
+      ERROR: "Error"
+    };
+    return map[value] || "Sin registro";
+  }
+
+
+  function renderComunicacionPedido(pedido) {
+    const comunicacion = pedido?.comunicacion || {};
+    const candidates = [
+      comunicacion.estadoPedido,
+      comunicacion.estadoPago,
+      comunicacion.reenvio
+    ].filter(Boolean).sort((a,b)=>fechaMillis(b.actualizadoEn)-fechaMillis(a.actualizadoEn));
+    const latest = candidates[0] || null;
+
+    if (pedidoNotificacionEstado) {
+      pedidoNotificacionEstado.textContent = latest?.notificacion
+        ? textoComunicacionEstado(latest.notificacion)
+        : "Sin registro";
+    }
+
+    if (pedidoCorreoEstado) {
+      pedidoCorreoEstado.textContent = latest?.correo
+        ? textoComunicacionEstado(latest.correo)
+        : "Sin registro";
+    }
+
+    if (pedidoComunicacionUltima) {
+      pedidoComunicacionUltima.textContent = latest
+        ? `${String(latest.valor || latest.tipo || "Actualización")} · ${fechaLegible(latest.actualizadoEn)}`
+        : "-";
+    }
+  }
+
+
+  async function guardarResultadoComunicacionPedido(
+    pedidoId, estadoResult, pagoResult
+  ) {
+    if (!pedidoId || (!estadoResult && !pagoResult)) return true;
+
+    const payload = {};
+    if (estadoResult) {
+      payload["comunicacion.estadoPedido"] = {
+        ...estadoResult,
+        actualizadoEn: FieldValue.serverTimestamp()
+      };
+    }
+    if (pagoResult) {
+      payload["comunicacion.estadoPago"] = {
+        ...pagoResult,
+        actualizadoEn: FieldValue.serverTimestamp()
+      };
+    }
+
+    try {
+      await db.collection("pedidos").doc(pedidoId).update(payload);
+      return true;
+    } catch (error) {
+      console.warn("Guardar resultado de comunicación:", error);
       return false;
     }
   }
@@ -5514,11 +5481,12 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
 
-        await registrarActualizacionCliente(
-          resultado.pedidoAntes,
-          resultado.estadoAnterior,
-          nuevoEstado
-        );
+        const comunicacionEstado =
+          await registrarActualizacionCliente(
+            resultado.pedidoAntes,
+            resultado.estadoAnterior,
+            nuevoEstado
+          );
 
 
         const estadoPagoAnterior =
@@ -5532,11 +5500,20 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
 
-        await registrarActualizacionPagoCliente(
-          resultado.pedidoAntes,
-          estadoPagoAnterior,
-          nuevoEstadoPago
-        );
+        const comunicacionPago =
+          await registrarActualizacionPagoCliente(
+            resultado.pedidoAntes,
+            estadoPagoAnterior,
+            nuevoEstadoPago
+          );
+
+
+        const comunicacionGuardada =
+          await guardarResultadoComunicacionPedido(
+            pedidoEditandoId,
+            comunicacionEstado,
+            comunicacionPago
+          );
 
 
         const facturaPagoSincronizada =
@@ -5566,6 +5543,19 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           pedidoAntes.stockDescontado = resultado.stockDescontado;
           pedidoAntes.stockDevuelto = resultado.stockDevuelto;
+
+          pedidoAntes.comunicacion = { ...(pedidoAntes.comunicacion || {}) };
+          if (comunicacionEstado) {
+            pedidoAntes.comunicacion.estadoPedido = {
+              ...comunicacionEstado, actualizadoEn: new Date()
+            };
+          }
+          if (comunicacionPago) {
+            pedidoAntes.comunicacion.estadoPago = {
+              ...comunicacionPago, actualizadoEn: new Date()
+            };
+          }
+          renderComunicacionPedido(pedidoAntes);
         }
 
         mostrarMensajePedido(
@@ -5574,8 +5564,13 @@ document.addEventListener("DOMContentLoaded", function () {
             facturaPagoSincronizada
               ? ""
               : " El pedido se actualizó, pero no fue posible sincronizar el estado de pago con una factura existente."
+          ) +
+          (
+            comunicacionGuardada
+              ? ""
+              : " No fue posible guardar el registro técnico de comunicación."
           ),
-          facturaPagoSincronizada
+          facturaPagoSincronizada && comunicacionGuardada
         );
 
         pedidoEstadoPago.textContent =
@@ -5610,6 +5605,74 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   );
+
+
+  reenviarCorreoPedidoBtn
+    ?.addEventListener(
+      "click",
+      async function () {
+
+        if (!pedidoEditandoId || !usuarioActual) return;
+
+        const pedido = pedidosActuales.find(item => item.id === pedidoEditandoId);
+        if (!pedido) {
+          mostrarMensajePedido("El pedido ya no está disponible.", false);
+          return;
+        }
+
+        const estado = String(pedido.estado || "Pendiente");
+        const contenido = datosNotificacionEstado(estado) || {
+          titulo: "Pedido recibido",
+          mensaje: "Tu pedido está registrado en SIXTEEN y continúa pendiente de confirmación.",
+          asunto: "Actualización de tu pedido SIXTEEN"
+        };
+
+        reenviarCorreoPedidoBtn.disabled = true;
+        reenviarCorreoPedidoBtn.textContent = "ENVIANDO...";
+
+        try {
+          const correo = await enviarCorreoEstadoPedidoEmailJS(pedido, contenido, estado);
+
+          await db.collection("pedidos").doc(pedidoEditandoId).update({
+            "comunicacion.reenvio": {
+              tipo: "reenvio_correo",
+              valor: estado,
+              notificacion: "NO_APLICA",
+              correo,
+              actualizadoEn: FieldValue.serverTimestamp()
+            }
+          });
+
+          pedido.comunicacion = {
+            ...(pedido.comunicacion || {}),
+            reenvio: {
+              tipo: "reenvio_correo",
+              valor: estado,
+              notificacion: "NO_APLICA",
+              correo,
+              actualizadoEn: new Date()
+            }
+          };
+          renderComunicacionPedido(pedido);
+
+          const message = correo === "ENVIADO"
+            ? "Correo reenviado correctamente."
+            : correo === "SIN_CORREO"
+              ? "El cliente no tiene un correo válido."
+              : correo === "NO_CONFIGURADO"
+                ? "EmailJS no está configurado."
+                : "No fue posible reenviar el correo.";
+
+          mostrarMensajePedido(message, correo === "ENVIADO");
+        } catch (error) {
+          console.error("Reenviar correo del pedido:", error);
+          mostrarMensajePedido("No fue posible reenviar el correo.", false);
+        } finally {
+          reenviarCorreoPedidoBtn.disabled = false;
+          reenviarCorreoPedidoBtn.textContent = "REENVIAR CORREO DE ESTADO";
+        }
+      }
+    );
 
 
   async function actualizarPedidoConInventario(
