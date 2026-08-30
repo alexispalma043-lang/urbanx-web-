@@ -302,40 +302,12 @@ document.addEventListener(
     // Firestore reemplaza estas tarifas cuando existe config.
     // ======================================================
 
-    const tarifasEnvioFallback = {
+    // Las tarifas de envío se aceptan únicamente desde Firestore.
 
-      "Pichincha": 3.00,
-      "Guayas": 4.50,
-      "Azuay": 4.50,
-      "Tungurahua": 4.50,
-      "Manabí": 5.00,
-      "Loja": 5.00,
-      "Imbabura": 4.00,
-      "Cotopaxi": 4.00,
-      "Chimborazo": 4.50,
-      "El Oro": 5.00,
-      "Santo Domingo de los Tsáchilas": 4.50,
-      "Bolívar": 5.00,
-      "Cañar": 5.00,
-      "Carchi": 5.00,
-      "Esmeraldas": 5.50,
-      "Los Ríos": 5.00,
-      "Morona Santiago": 6.00,
-      "Napo": 6.00,
-      "Orellana": 6.00,
-      "Pastaza": 6.00,
-      "Santa Elena": 5.00,
-      "Sucumbíos": 6.00,
-      "Zamora Chinchipe": 6.00,
-      "Galápagos": 12.00
-
-    };
-
-
-    // Las tarifas base quedan solo como referencia visual/técnica.
-    // En producción el checkout exige una configuración remota válida
-    // antes de permitir registrar un pedido.
     let tarifasEnvio = {};
+
+
+    let enviosIdsPorProvincia = {};
 
 
     let enviosRemotos =
@@ -839,6 +811,8 @@ document.addEventListener(
         if (snapshot.empty) {
           enviosRemotos =
             null;
+          tarifasEnvio = {};
+          enviosIdsPorProvincia = {};
 
           configuracionEnvioMotivo =
             "No existen tarifas de envío publicadas.";
@@ -849,6 +823,7 @@ document.addEventListener(
 
         const configuracion = {};
         const tarifas = {};
+        const idsPorProvincia = {};
 
         snapshot.forEach(
           function (doc) {
@@ -867,6 +842,9 @@ document.addEventListener(
             }
 
             configuracion[provinciaNombre] = {
+              id:
+                doc.id,
+
               activo:
                 datos.activo === true,
 
@@ -876,6 +854,8 @@ document.addEventListener(
                   numero(datos.tarifa)
                 )
             };
+
+            idsPorProvincia[provinciaNombre] = doc.id;
 
             if (datos.activo === true) {
               tarifas[provinciaNombre] =
@@ -890,6 +870,8 @@ document.addEventListener(
         if (!Object.keys(configuracion).length) {
           enviosRemotos =
             null;
+          tarifasEnvio = {};
+          enviosIdsPorProvincia = {};
 
           configuracionEnvioMotivo =
             "Las tarifas de envío publicadas no son válidas.";
@@ -903,6 +885,9 @@ document.addEventListener(
 
         tarifasEnvio =
           tarifas;
+
+        enviosIdsPorProvincia =
+          idsPorProvincia;
 
         enviosConfiguracionLista =
           true;
@@ -926,6 +911,7 @@ document.addEventListener(
           null;
 
         tarifasEnvio = {};
+        enviosIdsPorProvincia = {};
 
         configuracionEnvioMotivo =
           "No pudimos verificar las tarifas de envío. Revisa tu conexión.";
@@ -1890,6 +1876,17 @@ document.addEventListener(
 
         mostrarToast(
           "La provincia seleccionada no tiene una tarifa de envío activa."
+        );
+
+        provincia.focus();
+        return false;
+      }
+
+
+      if (!enviosIdsPorProvincia[provincia.value]) {
+
+        mostrarToast(
+          "No pudimos verificar la configuración de envío de esta provincia. Vuelve a seleccionarla."
         );
 
         provincia.focus();
@@ -2898,6 +2895,10 @@ document.addEventListener(
 
           provincia:
             provincia.value,
+
+          envioId:
+            enviosIdsPorProvincia[provincia.value] ||
+            "",
 
           ciudad:
             ciudad.value.trim(),
