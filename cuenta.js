@@ -705,6 +705,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
         info.append(name, detail);
         row.append(info, quantity, amount);
+
+        const modelo3d = String(item.modelo3d || "").trim();
+        const codigo3d = String(item.codigo || item.id || "").trim();
+        let modelo3dValido = false;
+
+        if (item.urbanx3d === true && modelo3d && codigo3d) {
+          try {
+            const url3d = new URL(modelo3d);
+            modelo3dValido =
+              url3d.protocol === "https:"
+              && /\.glb$/i.test(url3d.pathname);
+          } catch (_) {
+            modelo3dValido = false;
+          }
+        }
+
+        if (modelo3dValido && order.id) {
+          const experienceLink = document.createElement("a");
+          experienceLink.className = "product-3d-link";
+          experienceLink.href =
+            "../urbanx-3d/index.html?pedido="
+            + encodeURIComponent(order.id)
+            + "&producto="
+            + encodeURIComponent(codigo3d);
+          experienceLink.textContent = "VER EN 3D";
+          experienceLink.setAttribute(
+            "aria-label",
+            "Abrir experiencia 3D de " + (item.nombre || codigo3d)
+          );
+          row.appendChild(experienceLink);
+        }
+
         modalProducts.appendChild(row);
       });
     }

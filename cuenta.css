@@ -2379,3 +2379,44 @@ body.is-authenticated .cuenta-main {
 
 /* PASO 20 · Facturación SIXTEEN */
 .comprobante-state.emitida{border-color:#8d7520;color:#8d7520}.comprobante-state.anulada{border-color:#777;color:#777;text-decoration:line-through}.comprobante-actions .primary{min-width:132px}
+
+/* =========================================================
+   PASO 23B · ACCESO A SIXTEEN EXPERIENCE 3D DESDE COMPRA
+========================================================= */
+
+.product-3d-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  padding:0 10px;
+  border:1px solid var(--gold-line);
+  background:#090806;
+  color:var(--gold-light);
+  text-decoration:none;
+  white-space:nowrap;
+  font-size:6px;
+  font-weight:1000;
+  letter-spacing:.8px;
+}
+
+.product-3d-link:hover{
+  border-color:var(--gold);
+  background:rgba(216,170,85,.08);
+}
+
+.product-3d-link:focus-visible{
+  outline:2px solid var(--gold-light);
+  outline-offset:3px;
+}
+
+@media(max-width:620px){
+  .product-row{
+    grid-template-columns:minmax(0,1fr) auto auto;
+  }
+
+  .product-3d-link{
+    grid-column:1 / -1;
+    width:100%;
+  }
+}

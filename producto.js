@@ -3494,8 +3494,22 @@ document.addEventListener(
     function cargarUrbanx3d() {
 
 
+      const modelo3dValido = (() => {
+        const valor = String(producto.modelo3d || "").trim();
+        if (!valor) return false;
+
+        try {
+          const url = new URL(valor);
+          return url.protocol === "https:" && /\.glb$/i.test(url.pathname);
+        } catch (_) {
+          return false;
+        }
+      })();
+
+
       if (
-        producto.urbanx3d
+        producto.urbanx3d === true
+        && modelo3dValido
       ) {
 
 

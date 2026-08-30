@@ -200,6 +200,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const pedidosAdminBody = document.getElementById("pedidosAdminBody");
   const inventarioAdminBody = document.getElementById("inventarioAdminBody");
   const sixteen3dAdminBody = document.getElementById("sixteen3dAdminBody");
+  const sixteen3dEstadoBadge = document.getElementById("sixteen3dEstadoBadge");
+  const sixteen3dKpiCompatibles = document.getElementById("sixteen3dKpiCompatibles");
+  const sixteen3dKpiListos = document.getElementById("sixteen3dKpiListos");
+  const sixteen3dKpiPendientes = document.getElementById("sixteen3dKpiPendientes");
+  const sixteen3dKpiInactivos = document.getElementById("sixteen3dKpiInactivos");
+  const sixteen3dBuscar = document.getElementById("sixteen3dBuscar");
+  const sixteen3dFiltroEstado = document.getElementById("sixteen3dFiltroEstado");
+  const limpiarFiltrosSixteen3dBtn = document.getElementById("limpiarFiltrosSixteen3dBtn");
+  const sixteen3dResultadoTexto = document.getElementById("sixteen3dResultadoTexto");
 
   // ========================================================
   // INVENTARIO AVANZADO · ELEMENTOS
@@ -2185,98 +2194,224 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // ========================================================
-  // SIXTEEN EXPERIENCE 3D
+  // PASO 23 · SIXTEEN EXPERIENCE 3D
   // Campo técnico urbanx3d se conserva por compatibilidad.
   // ========================================================
 
-  function renderSixteen3d(productos) {
+  function modeloGlbValido(valor) {
+    const texto = String(valor || "").trim();
 
+    if (!esUrlHttpsValida(texto)) {
+      return false;
+    }
+
+    try {
+      const url = new URL(texto);
+      return /\.glb$/i.test(url.pathname);
+    } catch (_) {
+      return false;
+    }
+  }
+
+
+  function estadoSixteen3dProducto(producto) {
+    if (producto?.urbanx3d !== true) {
+      return "no-compatible";
+    }
+
+    if (estadoCatalogoProducto(producto) !== "activo") {
+      return "inactivo";
+    }
+
+    return modeloGlbValido(producto?.modelo3d)
+      ? "listo"
+      : "pendiente";
+  }
+
+
+  function textoEstadoSixteen3d(estado) {
+    if (estado === "listo") return "LISTO";
+    if (estado === "inactivo") return "INACTIVO";
+    return "PENDIENTE";
+  }
+
+
+  function crearCeldaTexto3d(valor, strong = false) {
+    const td = document.createElement("td");
+    const nodo = strong
+      ? document.createElement("strong")
+      : document.createElement("span");
+
+    nodo.textContent = String(valor ?? "-");
+    td.appendChild(nodo);
+    return td;
+  }
+
+
+  function actualizarResumenSixteen3d(productos) {
+    const compatibles = productos.filter(
+      producto => producto?.urbanx3d === true
+    );
+
+    const estados = compatibles.map(estadoSixteen3dProducto);
+    const listos = estados.filter(item => item === "listo").length;
+    const pendientes = estados.filter(item => item === "pendiente").length;
+    const inactivos = estados.filter(item => item === "inactivo").length;
+
+    if (sixteen3dKpiCompatibles) sixteen3dKpiCompatibles.textContent = String(compatibles.length);
+    if (sixteen3dKpiListos) sixteen3dKpiListos.textContent = String(listos);
+    if (sixteen3dKpiPendientes) sixteen3dKpiPendientes.textContent = String(pendientes);
+    if (sixteen3dKpiInactivos) sixteen3dKpiInactivos.textContent = String(inactivos);
+
+    if (sixteen3dEstadoBadge) {
+      if (!compatibles.length) {
+        sixteen3dEstadoBadge.textContent = "SIN PRODUCTOS 3D";
+      } else if (pendientes > 0) {
+        sixteen3dEstadoBadge.textContent = `${pendientes} PENDIENTE${pendientes === 1 ? "" : "S"}`;
+      } else {
+        sixteen3dEstadoBadge.textContent = "CONFIGURACIÓN LISTA";
+      }
+    }
+  }
+
+
+  function renderSixteen3d(productos) {
     if (!sixteen3dAdminBody) {
       return;
     }
 
-    const compatibles =
-      productos.filter(
-        function (producto) {
-          return producto.urbanx3d === true;
+    actualizarResumenSixteen3d(productos);
+
+    const busqueda = normalizarTexto(sixteen3dBuscar?.value || "");
+    const filtro = String(sixteen3dFiltroEstado?.value || "").trim();
+
+    const compatibles = productos
+      .filter(producto => producto?.urbanx3d === true)
+      .filter(producto => {
+        const estado = estadoSixteen3dProducto(producto);
+        if (filtro && estado !== filtro) return false;
+
+        if (busqueda) {
+          const texto = normalizarTexto([
+            producto.codigo,
+            producto.nombre,
+            producto.categoria,
+            producto.modelo3d
+          ].filter(Boolean).join(" "));
+
+          if (!texto.includes(busqueda)) return false;
         }
-      );
+
+        return true;
+      });
+
+    sixteen3dAdminBody.replaceChildren();
 
     if (!compatibles.length) {
-      sixteen3dAdminBody.innerHTML = `
-        <tr>
-          <td colspan="4">
-            No hay productos SIXTEEN Experience 3D activos.
-          </td>
-        </tr>
-      `;
-      return;
+      const fila = document.createElement("tr");
+      const celda = document.createElement("td");
+      celda.colSpan = 6;
+      celda.textContent = productos.some(item => item?.urbanx3d === true)
+        ? "No hay productos 3D que coincidan con los filtros."
+        : "No hay productos SIXTEEN Experience 3D configurados.";
+      fila.appendChild(celda);
+      sixteen3dAdminBody.appendChild(fila);
+    } else {
+      compatibles.forEach(function (producto) {
+        const modelo = String(producto.modelo3d || "").trim();
+        const estado = estadoSixteen3dProducto(producto);
+        const fila = document.createElement("tr");
+
+        fila.appendChild(crearCeldaTexto3d(producto.codigo || "-"));
+        fila.appendChild(crearCeldaTexto3d(producto.nombre || "-", true));
+
+        const modeloTd = document.createElement("td");
+        if (modeloGlbValido(modelo)) {
+          const link = document.createElement("a");
+          link.className = "admin-inline-link";
+          link.href = modelo;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "ABRIR GLB";
+          modeloTd.appendChild(link);
+        } else {
+          const estadoModelo = document.createElement("span");
+          estadoModelo.textContent = modelo ? "URL GLB INVÁLIDA" : "SIN MODELO";
+          modeloTd.appendChild(estadoModelo);
+        }
+        fila.appendChild(modeloTd);
+
+        const catalogoTd = document.createElement("td");
+        const catalogoBadge = document.createElement("span");
+        const catalogoActivo = estadoCatalogoProducto(producto) === "activo";
+        catalogoBadge.className = "admin-table-status " + (catalogoActivo ? "activo" : "inactivo");
+        catalogoBadge.textContent = catalogoActivo ? "ACTIVO" : "INACTIVO";
+        catalogoTd.appendChild(catalogoBadge);
+        fila.appendChild(catalogoTd);
+
+        const experienciaTd = document.createElement("td");
+        const experienciaBadge = document.createElement("span");
+        experienciaBadge.className = "admin-table-status " + (estado === "listo" ? "activo" : "inactivo");
+        experienciaBadge.textContent = textoEstadoSixteen3d(estado);
+        experienciaTd.appendChild(experienciaBadge);
+        fila.appendChild(experienciaTd);
+
+        const accionesTd = document.createElement("td");
+        accionesTd.className = "admin-actions-cell sixteen3d-actions";
+
+        const editarBtn = document.createElement("button");
+        editarBtn.type = "button";
+        editarBtn.className = "admin-table-btn";
+        editarBtn.dataset.action3d = "editar";
+        editarBtn.dataset.id = producto.id || "";
+        editarBtn.textContent = "EDITAR";
+        accionesTd.appendChild(editarBtn);
+
+        if (producto.codigo) {
+          const ficha = document.createElement("a");
+          ficha.className = "admin-table-btn";
+          ficha.href = "../producto.html?id=" + encodeURIComponent(producto.codigo);
+          ficha.target = "_blank";
+          ficha.rel = "noopener noreferrer";
+          ficha.textContent = "FICHA";
+          accionesTd.appendChild(ficha);
+
+        }
+
+        fila.appendChild(accionesTd);
+        sixteen3dAdminBody.appendChild(fila);
+      });
     }
 
-    sixteen3dAdminBody.innerHTML = "";
-
-    compatibles.forEach(
-      function (producto) {
-
-        const modelo = String(
-          producto.modelo3d || ""
-        ).trim();
-
-        const fila =
-          document.createElement("tr");
-
-        fila.innerHTML = `
-          <td>
-            ${escapar(producto.codigo || "-")}
-          </td>
-
-          <td>
-            <strong>
-              ${escapar(producto.nombre || "-")}
-            </strong>
-          </td>
-
-          <td>
-            ${
-              modelo
-                ? `
-                  <a
-                    class="admin-inline-link"
-                    href="${escaparAtributo(modelo)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    VER MODELO
-                  </a>
-                `
-                : "Sin modelo"
-            }
-          </td>
-
-          <td>
-            <span
-              class="
-                admin-table-status
-                ${
-                  modelo
-                    ? "activo"
-                    : "inactivo"
-                }
-              "
-            >
-              ${
-                modelo
-                  ? "CONFIGURADO"
-                  : "PENDIENTE"
-              }
-            </span>
-          </td>
-        `;
-
-        sixteen3dAdminBody.appendChild(fila);
-      }
-    );
+    if (sixteen3dResultadoTexto) {
+      const total = productos.filter(item => item?.urbanx3d === true).length;
+      sixteen3dResultadoTexto.textContent = `Mostrando ${compatibles.length} de ${total} productos compatibles.`;
+    }
   }
+
+
+  sixteen3dBuscar?.addEventListener("input", function () {
+    renderSixteen3d(productosActuales);
+  });
+
+  sixteen3dFiltroEstado?.addEventListener("change", function () {
+    renderSixteen3d(productosActuales);
+  });
+
+  limpiarFiltrosSixteen3dBtn?.addEventListener("click", function () {
+    if (sixteen3dBuscar) sixteen3dBuscar.value = "";
+    if (sixteen3dFiltroEstado) sixteen3dFiltroEstado.value = "";
+    renderSixteen3d(productosActuales);
+  });
+
+  sixteen3dAdminBody?.addEventListener("click", function (event) {
+    const boton = event.target.closest("button[data-action3d]");
+    if (!boton) return;
+
+    if (boton.dataset.action3d === "editar" && boton.dataset.id) {
+      editarProducto(boton.dataset.id);
+    }
+  });
 
   // ========================================================
   // EVENTOS TABLA PRODUCTOS
@@ -2798,13 +2933,18 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (modelo3d && !/^https:\/\//i.test(modelo3d)) {
+    if (modelo3d && !esUrlHttpsValida(modelo3d)) {
       mostrarMensajeProducto("El modelo 3D debe usar una URL HTTPS válida.", false);
       return;
     }
 
-    if (estaMarcado("producto3d") && !modelo3d) {
-      mostrarMensajeProducto("Para activar SIXTEEN 3D debes registrar primero la URL del modelo .GLB.", false);
+    if (modelo3d && !modeloGlbValido(modelo3d)) {
+      mostrarMensajeProducto("El modelo 3D debe apuntar a un archivo .GLB válido por HTTPS.", false);
+      return;
+    }
+
+    if (estaMarcado("producto3d") && !modeloGlbValido(modelo3d)) {
+      mostrarMensajeProducto("Para activar SIXTEEN 3D debes registrar primero una URL HTTPS válida que termine en .GLB.", false);
       return;
     }
 

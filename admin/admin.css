@@ -7921,3 +7921,105 @@ td {
   }
 }
 
+
+
+/* =========================================
+   PASO 23 · SIXTEEN EXPERIENCE 3D
+========================================= */
+.sixteen3d-subtitle{
+  max-width:650px;
+  margin:7px 0 0;
+  color:#857b71;
+  font-size:8px;
+  line-height:1.65;
+}
+
+.sixteen3d-kpis{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:16px 0 12px;
+}
+
+.sixteen3d-kpis article{
+  padding:14px 12px;
+  border:1px solid rgba(216,170,85,.14);
+  background:#080808;
+}
+
+.sixteen3d-kpis span{
+  display:block;
+  color:#766d64;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.8px;
+}
+
+.sixteen3d-kpis strong{
+  display:block;
+  margin-top:7px;
+  color:#f0cf88;
+  font-size:20px;
+}
+
+.sixteen3d-filter-bar{
+  align-items:end;
+}
+
+.sixteen3d-info,
+.sixteen3d-note{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  margin:10px 0 12px;
+  padding:12px 14px;
+  border-left:3px solid #d8aa55;
+  background:#0b0906;
+  color:#847a70;
+  font-size:7px;
+  line-height:1.65;
+}
+
+.sixteen3d-info strong,
+.sixteen3d-note strong{
+  flex:0 0 auto;
+  color:#e5c273;
+  font-size:7px;
+  letter-spacing:.7px;
+}
+
+.sixteen3d-note p{
+  margin:0;
+}
+
+.sixteen3d-note code{
+  color:#e7c77f;
+}
+
+.sixteen3d-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+
+.sixteen3d-actions .admin-table-btn{
+  white-space:nowrap;
+}
+
+@media(max-width:900px){
+  .sixteen3d-kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:520px){
+  .sixteen3d-kpis{
+    grid-template-columns:1fr;
+  }
+
+  .sixteen3d-info,
+  .sixteen3d-note{
+    flex-direction:column;
+    gap:5px;
+  }
+}

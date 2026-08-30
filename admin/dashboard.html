@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=22000"
+    href="./admin.css?v=23000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -2991,45 +2991,104 @@
 
 
       <!-- ========================================
-           SIXTEEN EXPERIENCE 3D
+           PASO 23 · SIXTEEN EXPERIENCE 3D
       ========================================= -->
 
-      <section class="admin-card admin-section-anchor" id="sixteen3d">
+      <section class="admin-card admin-section-anchor sixteen3d-center" id="sixteen3d">
 
         <div class="admin-card-header">
-
           <div>
-            <p class="admin-eyebrow">DIGITAL EXPERIENCE</p>
+            <p class="admin-eyebrow">PASO 23 · DIGITAL EXPERIENCE</p>
             <h3>SIXTEEN Experience 3D</h3>
+            <p class="sixteen3d-subtitle">
+              Controla qué productos tienen experiencia 3D, valida su modelo GLB
+              y abre rápidamente la ficha pública o el visor externo.
+            </p>
           </div>
 
-          <span class="admin-status">
-            PRODUCTOS COMPATIBLES
+          <span class="admin-status" id="sixteen3dEstadoBadge">
+            REVISANDO CONFIGURACIÓN
           </span>
+        </div>
 
+        <div class="sixteen3d-kpis">
+          <article><span>COMPATIBLES</span><strong id="sixteen3dKpiCompatibles">0</strong></article>
+          <article><span>LISTOS</span><strong id="sixteen3dKpiListos">0</strong></article>
+          <article><span>PENDIENTES</span><strong id="sixteen3dKpiPendientes">0</strong></article>
+          <article><span>INACTIVOS</span><strong id="sixteen3dKpiInactivos">0</strong></article>
+        </div>
+
+        <div class="admin-filter-bar sixteen3d-filter-bar">
+          <label>
+            <span>BUSCAR</span>
+            <input
+              type="search"
+              id="sixteen3dBuscar"
+              placeholder="Código o producto..."
+              autocomplete="off"
+            >
+          </label>
+
+          <label>
+            <span>ESTADO 3D</span>
+            <select id="sixteen3dFiltroEstado">
+              <option value="">Todos</option>
+              <option value="listo">Listos</option>
+              <option value="pendiente">Pendientes</option>
+              <option value="inactivo">Inactivos</option>
+            </select>
+          </label>
+
+          <button
+            type="button"
+            class="admin-secondary-btn"
+            id="limpiarFiltrosSixteen3dBtn"
+          >
+            LIMPIAR
+          </button>
+        </div>
+
+        <p class="admin-results-text" id="sixteen3dResultadoTexto" aria-live="polite">
+          Cargando experiencias...
+        </p>
+
+        <div class="sixteen3d-info">
+          <strong>CONFIGURACIÓN ACTUAL</strong>
+          <span>
+            La tienda considera una experiencia lista cuando el producto está activo,
+            tiene SIXTEEN 3D habilitado y registra una URL HTTPS que termina en .glb.
+          </span>
         </div>
 
         <div class="admin-table-wrap">
-
           <table class="admin-table">
-
             <thead>
               <tr>
                 <th>CÓDIGO</th>
                 <th>PRODUCTO</th>
                 <th>MODELO 3D</th>
-                <th>ESTADO</th>
+                <th>CATÁLOGO</th>
+                <th>EXPERIENCIA</th>
+                <th>ACCIONES</th>
               </tr>
             </thead>
 
             <tbody id="sixteen3dAdminBody">
               <tr>
-                <td colspan="4">Cargando experiencias...</td>
+                <td colspan="6">Cargando experiencias...</td>
               </tr>
             </tbody>
-
           </table>
+        </div>
 
+        <div class="sixteen3d-note">
+          <strong>MÓDULO PRIVADO DE COMPRA</strong>
+          <p>
+            SIXTEEN Experience 3D se mantiene como módulo separado. El cliente accede
+            únicamente desde Confirmación o Mi Cuenta usando el ID de su pedido y el
+            producto comprado. Desde Administración puedes validar el archivo GLB con
+            <strong>ABRIR GLB</strong>; no se genera un acceso público por código de producto.
+          </p>
         </div>
 
       </section>
@@ -4631,7 +4690,7 @@
 <script src="../payment-config.js?v=18000"></script>
 
 
-<script src="./dashboard.js?v=17000"></script>
+<script src="./dashboard.js?v=23020"></script>
 
 <script src="./analitica.js?v=21010"></script>
 

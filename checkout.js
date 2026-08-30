@@ -1113,7 +1113,8 @@ document.addEventListener(
             color,
             talla,
             stock,
-            urbanx3d:producto.urbanx3d===true
+            urbanx3d:producto.urbanx3d===true,
+            modelo3d:String(producto.modelo3d||"").trim()
           });
         }
 
@@ -3045,7 +3046,13 @@ document.addEventListener(
 
                 urbanx3d:
                   item.urbanx3d ===
-                  true
+                  true,
+
+                modelo3d:
+                  String(
+                    item.modelo3d ||
+                    ""
+                  ).trim()
 
               };
 

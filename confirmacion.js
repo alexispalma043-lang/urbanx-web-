@@ -748,13 +748,24 @@
 
     const compatible =
       productos.find(
-        item =>
-          item
-          && item.urbanx3d === true
-          && (
-            item.codigo
-            || item.id
-          )
+        item => {
+          if (
+            !item
+            || item.urbanx3d !== true
+            || !(item.codigo || item.id)
+          ) {
+            return false;
+          }
+
+          const modelo = String(item.modelo3d || "").trim();
+
+          try {
+            const url = new URL(modelo);
+            return url.protocol === "https:" && /\.glb$/i.test(url.pathname);
+          } catch (_) {
+            return false;
+          }
+        }
       );
 
     if (
@@ -775,8 +786,23 @@
       compatible.codigo
       || compatible.id;
 
+    const pedido3dId =
+      String(
+        pedido.firestoreId
+        || ""
+      ).trim();
+
+    if (!pedido3dId) {
+      if (confirmacion3d) {
+        confirmacion3d.hidden = true;
+      }
+      return;
+    }
+
     abrirUrbanx3d.href =
-      "../urbanx-3d/index.html?producto="
+      "../urbanx-3d/index.html?pedido="
+      + encodeURIComponent(pedido3dId)
+      + "&producto="
       + encodeURIComponent(codigo);
 
     abrirUrbanx3d.addEventListener(
