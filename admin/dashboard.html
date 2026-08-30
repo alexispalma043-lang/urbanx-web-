@@ -1,4870 +1,2822 @@
 <!DOCTYPE html>
+
 <html lang="es">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Panel de Administración | SIXTEEN Urban Luxury</title>
-
-  <meta
-    name="robots"
-    content="noindex,nofollow,noarchive"
-  >
-
-  <meta name="theme-color" content="#050505">
-  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
-
-  <link
-    rel="stylesheet"
-    href="./admin.css?v=24000"
-  >
-
-  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  >
-
-  <meta
-    http-equiv="Permissions-Policy"
-    content="geolocation=(), microphone=(), camera=()"
-  >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Panel de Administración | SIXTEEN Urban Luxury</title>
+<meta content="noindex,nofollow,noarchive" name="robots"/>
+<meta content="#050505" name="theme-color"/>
+<link href="../assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="./admin.css?v=24000" rel="stylesheet"/>
+<!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
 </head>
-
-
 <body class="admin-body">
-
-
-<div
-  class="admin-access-state"
-  id="adminAccessState"
-  role="status"
-  aria-live="polite"
->
-  <div class="admin-access-card">
-    <span class="admin-access-mark" aria-hidden="true">XVI</span>
-    <p class="admin-mini">SECURE ACCESS</p>
-    <h2 id="adminAccessTitle">VERIFICANDO ACCESO</h2>
-    <p id="adminAccessMessage">Comprobando tu sesión y permisos administrativos...</p>
-    <button type="button" id="adminAccessRetry" class="admin-primary-btn" hidden>REINTENTAR</button>
-  </div>
+<div aria-live="polite" class="admin-access-state" id="adminAccessState" role="status">
+<div class="admin-access-card">
+<span aria-hidden="true" class="admin-access-mark">XVI</span>
+<p class="admin-mini">SECURE ACCESS</p>
+<h2 id="adminAccessTitle">VERIFICANDO ACCESO</h2>
+<p id="adminAccessMessage">Comprobando tu sesión y permisos administrativos...</p>
+<button class="admin-primary-btn" hidden="" id="adminAccessRetry" type="button">REINTENTAR</button>
 </div>
-
-
-<div
-  class="admin-shell"
-  id="adminShell"
-  style="visibility:hidden;"
->
-
-
-  <!-- ==========================================
+</div>
+<div class="admin-shell" id="adminShell" style="visibility:hidden;">
+<!-- ==========================================
        SIDEBAR
   =========================================== -->
-
-  <aside class="admin-sidebar">
-
-
-    <a class="admin-sidebar-logo sixteen-admin-brand" href="../index.html" aria-label="SIXTEEN Urban Luxury">
-      <img src="../assets/logo-sixteen.jpg" alt="SIXTEEN Urban Luxury">
-      <span class="sixteen-admin-brand-text">
-        <strong>SIXTEEN</strong>
-        <small>URBAN LUXURY</small>
-      </span>
-    </a>
-
-
-    <button
-      type="button"
-      class="admin-mobile-menu-btn"
-      id="adminMobileMenuBtn"
-      aria-expanded="false"
-      aria-controls="adminPrimaryNav"
-    >
-      <span>MENÚ ADMIN</span>
-      <strong aria-hidden="true">☰</strong>
-    </button>
-
-
-    <nav class="admin-nav" id="adminPrimaryNav" aria-label="Navegación administrativa">
-
-      <a
-        href="#inicio"
-        class="activo"
-        id="menuDashboard"
-        aria-current="page"
-      >
-        <span>●</span>
+<aside class="admin-sidebar">
+<a aria-label="SIXTEEN Urban Luxury" class="admin-sidebar-logo sixteen-admin-brand" href="../index.html">
+<img alt="SIXTEEN Urban Luxury" decoding="async" height="463" src="../assets/logo-sixteen.jpg" width="613"/>
+<span class="sixteen-admin-brand-text">
+<strong>SIXTEEN</strong>
+<small>URBAN LUXURY</small>
+</span>
+</a>
+<button aria-controls="adminPrimaryNav" aria-expanded="false" class="admin-mobile-menu-btn" id="adminMobileMenuBtn" type="button">
+<span>MENÚ ADMIN</span>
+<strong aria-hidden="true">☰</strong>
+</button>
+<nav aria-label="Navegación administrativa" class="admin-nav" id="adminPrimaryNav">
+<a aria-current="page" class="activo" href="#inicio" id="menuDashboard">
+<span>●</span>
         Dashboard
       </a>
-
-      <a
-        href="#reportes"
-        id="menuReportes"
-      >
-        <span>▥</span>
+<a href="#reportes" id="menuReportes">
+<span>▥</span>
         Reportes
       </a>
-
-      <a
-        href="#analitica"
-        id="menuAnalitica"
-      >
-        <span>◈</span>
+<a href="#analitica" id="menuAnalitica">
+<span>◈</span>
         Analítica
       </a>
-
-      <a
-        href="#backups"
-        id="menuBackups"
-      >
-        <span>⇩</span>
+<a href="#backups" id="menuBackups">
+<span>⇩</span>
         Backups
       </a>
-
-      <a
-        href="#comercial"
-        id="menuComercial"
-      >
-        <span>%</span>
+<a href="#comercial" id="menuComercial">
+<span>%</span>
         Cupones y envíos
       </a>
-
-      <a
-        href="#pagos"
-        id="menuPagos"
-      >
-        <span>$</span>
+<a href="#pagos" id="menuPagos">
+<span>$</span>
         Métodos de pago
       </a>
-
-      <a
-        href="#productos"
-        id="menuProductos"
-      >
-        <span>◆</span>
+<a href="#productos" id="menuProductos">
+<span>◆</span>
         Productos
       </a>
-
-      <a
-        href="#resenasAdmin"
-        id="menuResenas"
-      >
-        <span>★</span>
+<a href="#resenasAdmin" id="menuResenas">
+<span>★</span>
         Reseñas
-        <strong
-          class="admin-menu-count vacio"
-          id="resenasPendientesBadge"
-        >
+        <strong class="admin-menu-count vacio" id="resenasPendientesBadge">
           0
         </strong>
-      </a>
-
-      <a
-        href="#pedidos"
-        id="menuPedidos"
-      >
-        <span>▦</span>
+</a>
+<a href="#pedidos" id="menuPedidos">
+<span>▦</span>
         Pedidos
-        <strong
-          class="admin-menu-count"
-          id="pedidosPendientesBadge"
-        >
+        <strong class="admin-menu-count" id="pedidosPendientesBadge">
           0
         </strong>
-      </a>
-
-      <a
-        href="#facturacion"
-        id="menuFacturacion"
-      >
-        <span>▤</span>
+</a>
+<a href="#facturacion" id="menuFacturacion">
+<span>▤</span>
         Facturación
-        <strong
-          class="admin-menu-count vacio"
-          id="facturacionPendientesBadge"
-        >
+        <strong class="admin-menu-count vacio" id="facturacionPendientesBadge">
           0
         </strong>
-      </a>
-
-      <a
-        href="#clientes"
-        id="menuClientes"
-      >
-        <span>◎</span>
+</a>
+<a href="#clientes" id="menuClientes">
+<span>◎</span>
         Clientes
-        <strong
-          class="admin-menu-count vacio"
-          id="clientesBadge"
-        >
+        <strong class="admin-menu-count vacio" id="clientesBadge">
           0
         </strong>
-      </a>
-
-      <a
-        href="#inventario"
-        id="menuInventario"
-      >
-        <span>□</span>
+</a>
+<a href="#inventario" id="menuInventario">
+<span>□</span>
         Inventario
       </a>
-
-      <a
-        href="#sixteen3d"
-        id="menuUrbanx3d"
-      >
-        <span>X</span>
+<a href="#sixteen3d" id="menuUrbanx3d">
+<span>X</span>
         SIXTEEN 3D
       </a>
-
-    </nav>
-
-
-    <div class="admin-sidebar-footer">
-
-      <button
-        type="button"
-        id="cerrarSesionBtn"
-        class="admin-logout-btn"
-      >
+</nav>
+<div class="admin-sidebar-footer">
+<button class="admin-logout-btn" id="cerrarSesionBtn" type="button">
         CERRAR SESIÓN
       </button>
-
-    </div>
-
-
-  </aside>
-
-
-
-  <!-- ==========================================
+</div>
+</aside>
+<!-- ==========================================
        CONTENIDO
   =========================================== -->
-
-  <main
-    class="admin-main"
-    id="inicio"
-  >
-
-
-    <header class="admin-topbar">
-
-
-      <div>
-
-        <p class="admin-eyebrow">
+<main class="admin-main" id="inicio">
+<header class="admin-topbar">
+<div>
+<p class="admin-eyebrow">
           SIXTEEN MANAGEMENT
         </p>
-
-        <h1>
+<h1>
           Dashboard
         </h1>
-
-      </div>
-
-
-      <div
-        class="admin-live-status"
-        id="adminLiveStatus"
-        role="status"
-        aria-live="polite"
-      >
-        <span class="admin-live-dot" aria-hidden="true"></span>
-        <div>
-          <strong id="adminDataStatus">SINCRONIZANDO</strong>
-          <small id="adminLastUpdate">Esperando datos de Firestore...</small>
-        </div>
-      </div>
-
-
-      <div class="admin-user">
-
-
-        <div class="admin-user-text">
-
-          <strong id="adminEmail">
+</div>
+<div aria-live="polite" class="admin-live-status" id="adminLiveStatus" role="status">
+<span aria-hidden="true" class="admin-live-dot"></span>
+<div>
+<strong id="adminDataStatus">SINCRONIZANDO</strong>
+<small id="adminLastUpdate">Esperando datos de Firestore...</small>
+</div>
+</div>
+<div class="admin-user">
+<div class="admin-user-text">
+<strong id="adminEmail">
             Administrador
           </strong>
-
-          <span>
+<span>
             Administrador SIXTEEN
           </span>
-
-        </div>
-
-
-        <div
-          class="admin-avatar"
-          id="adminAvatar"
-        >
+</div>
+<div class="admin-avatar" id="adminAvatar">
           U
         </div>
-
-
-      </div>
-
-
-    </header>
-
-
-
-    <section class="admin-content">
-
-
-      <!-- ========================================
+</div>
+</header>
+<section class="admin-content">
+<!-- ========================================
            CABECERA
       ========================================= -->
-
-      <div class="admin-page-header">
-
-
-        <div>
-
-          <p class="admin-eyebrow">
+<div class="admin-page-header">
+<div>
+<p class="admin-eyebrow">
             PANEL GENERAL
           </p>
-
-          <h2>
+<h2>
             CONTROL SIXTEEN
           </h2>
-
-          <p class="admin-page-description">
+<p class="admin-page-description">
             Gestiona ventas, pedidos, clientes, inventario, productos y configuración operativa de SIXTEEN.
           </p>
-
-        </div>
-
-
-        <button
-          type="button"
-          id="nuevoProductoBtn"
-          class="admin-primary-btn"
-        >
+</div>
+<button class="admin-primary-btn" id="nuevoProductoBtn" type="button">
           + NUEVO PRODUCTO
         </button>
-
-
-      </div>
-
-
-
-      <!-- ========================================
+</div>
+<!-- ========================================
            KPIs
       ========================================= -->
-
-      <div class="admin-kpis">
-
-
-        <article class="admin-kpi">
-
-          <p>
+<div class="admin-kpis">
+<article class="admin-kpi">
+<p>
             PRODUCTOS
           </p>
-
-          <strong id="kpiProductos">
+<strong id="kpiProductos">
             0
           </strong>
-
-          <span>
+<span>
             Productos registrados
           </span>
-
-        </article>
-
-
-        <article class="admin-kpi">
-
-          <p>
+</article>
+<article class="admin-kpi">
+<p>
             PEDIDOS
           </p>
-
-          <strong id="kpiPedidos">
+<strong id="kpiPedidos">
             0
           </strong>
-
-          <span>
+<span>
             Pedidos registrados
           </span>
-
-        </article>
-
-
-        <article class="admin-kpi">
-
-          <p>
+</article>
+<article class="admin-kpi">
+<p>
             STOCK
           </p>
-
-          <strong id="kpiStock">
+<strong id="kpiStock">
             0
           </strong>
-
-          <span>
+<span>
             Unidades disponibles
           </span>
-
-        </article>
-
-
-        <article class="admin-kpi">
-
-          <p>
+</article>
+<article class="admin-kpi">
+<p>
             VENTAS
           </p>
-
-          <strong id="kpiVentas">
+<strong id="kpiVentas">
             $0.00
           </strong>
-
-          <span>
+<span>
             Ventas registradas
           </span>
-
-        </article>
-
-
-      </div>
-
-
-
-      <!-- ========================================
+</article>
+</div>
+<!-- ========================================
            DASHBOARD Y REPORTES
       ========================================= -->
-
-      <section
-        class="admin-card admin-section-anchor reportes-section"
-        id="reportes"
-      >
-
-        <div class="admin-card-header">
-
-          <div>
-            <p class="admin-eyebrow">
+<section class="admin-card admin-section-anchor reportes-section" id="reportes">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">
               BUSINESS INTELLIGENCE
             </p>
-
-            <h3>
+<h3>
               Dashboard y reportes
             </h3>
-          </div>
-
-          <div class="reportes-header-actions">
-
-            <select
-              id="reportePeriodoDias"
-              aria-label="Periodo del gráfico y de la exportación"
-            >
-              <option value="7">
+</div>
+<div class="reportes-header-actions">
+<select aria-label="Periodo del gráfico y de la exportación" id="reportePeriodoDias">
+<option value="7">
                 Últimos 7 días
               </option>
-
-              <option value="30" selected>
+<option selected="" value="30">
                 Últimos 30 días
               </option>
-
-              <option value="90">
+<option value="90">
                 Últimos 90 días
               </option>
-            </select>
-
-            <button
-              type="button"
-              class="admin-primary-btn"
-              id="exportarReporteBtn"
-            >
+</select>
+<button class="admin-primary-btn" id="exportarReporteBtn" type="button">
               EXPORTAR CSV
             </button>
-
-          </div>
-
-        </div>
-
-        <div class="reportes-kpis">
-
-          <article>
-            <span>VENTAS HOY</span>
-            <strong id="reporteVentaHoy">$0.00</strong>
-            <small id="reportePedidosHoy">0 pedidos</small>
-          </article>
-
-          <article>
-            <span>VENTAS SEMANA</span>
-            <strong id="reporteVentaSemana">$0.00</strong>
-            <small id="reportePedidosSemana">0 pedidos</small>
-          </article>
-
-          <article>
-            <span>VENTAS MES</span>
-            <strong id="reporteVentaMes">$0.00</strong>
-            <small id="reportePedidosMes">0 pedidos</small>
-          </article>
-
-          <article>
-            <span>TICKET PROMEDIO</span>
-            <strong id="reporteTicketPromedio">$0.00</strong>
-            <small id="reporteVentasValidas">0 compras válidas</small>
-          </article>
-
-          <article>
-            <span>UNIDADES VENDIDAS</span>
-            <strong id="reporteUnidadesVendidas">0</strong>
-            <small>Pedidos confirmados o completados</small>
-          </article>
-
-          <article>
-            <span>CLIENTES RECURRENTES</span>
-            <strong id="reporteClientesRecurrentes">0</strong>
-            <small id="reporteClientesTotal">0 clientes</small>
-          </article>
-
-        </div>
-
-        <div class="reportes-grid">
-
-          <article class="reporte-panel reporte-panel-evolucion">
-
-            <div class="reporte-panel-header">
-
-              <div>
-                <p class="admin-eyebrow">
+</div>
+</div>
+<div class="reportes-kpis">
+<article>
+<span>VENTAS HOY</span>
+<strong id="reporteVentaHoy">$0.00</strong>
+<small id="reportePedidosHoy">0 pedidos</small>
+</article>
+<article>
+<span>VENTAS SEMANA</span>
+<strong id="reporteVentaSemana">$0.00</strong>
+<small id="reportePedidosSemana">0 pedidos</small>
+</article>
+<article>
+<span>VENTAS MES</span>
+<strong id="reporteVentaMes">$0.00</strong>
+<small id="reportePedidosMes">0 pedidos</small>
+</article>
+<article>
+<span>TICKET PROMEDIO</span>
+<strong id="reporteTicketPromedio">$0.00</strong>
+<small id="reporteVentasValidas">0 compras válidas</small>
+</article>
+<article>
+<span>UNIDADES VENDIDAS</span>
+<strong id="reporteUnidadesVendidas">0</strong>
+<small>Pedidos confirmados o completados</small>
+</article>
+<article>
+<span>CLIENTES RECURRENTES</span>
+<strong id="reporteClientesRecurrentes">0</strong>
+<small id="reporteClientesTotal">0 clientes</small>
+</article>
+</div>
+<div class="reportes-grid">
+<article class="reporte-panel reporte-panel-evolucion">
+<div class="reporte-panel-header">
+<div>
+<p class="admin-eyebrow">
                   TENDENCIA
                 </p>
-
-                <h4>
+<h4>
                   Evolución de ventas
                 </h4>
-              </div>
-
-              <strong id="reportePeriodoTotal">
+</div>
+<strong id="reportePeriodoTotal">
                 $0.00
               </strong>
-
-            </div>
-
-            <div
-              class="ventas-chart"
-              id="ventasChart"
-              aria-label="Gráfico de evolución de ventas"
-            >
-              <p class="reportes-vacio">
+</div>
+<div aria-label="Gráfico de evolución de ventas" class="ventas-chart" id="ventasChart">
+<p class="reportes-vacio">
                 Sin datos de ventas.
               </p>
-            </div>
-
-          </article>
-
-          <article class="reporte-panel">
-
-            <div class="reporte-panel-header">
-
-              <div>
-                <p class="admin-eyebrow">
+</div>
+</article>
+<article class="reporte-panel">
+<div class="reporte-panel-header">
+<div>
+<p class="admin-eyebrow">
                   OPERACIÓN
                 </p>
-
-                <h4>
+<h4>
                   Pedidos por estado
                 </h4>
-              </div>
-
-            </div>
-
-            <div
-              class="estado-chart"
-              id="pedidosEstadoChart"
-            >
-              <p class="reportes-vacio">
+</div>
+</div>
+<div class="estado-chart" id="pedidosEstadoChart">
+<p class="reportes-vacio">
                 Sin pedidos.
               </p>
-            </div>
-
-          </article>
-
-          <article class="reporte-panel">
-
-            <div class="reporte-panel-header">
-
-              <div>
-                <p class="admin-eyebrow">
+</div>
+</article>
+<article class="reporte-panel">
+<div class="reporte-panel-header">
+<div>
+<p class="admin-eyebrow">
                   PRODUCTOS
                 </p>
-
-                <h4>
+<h4>
                   Más vendidos
                 </h4>
-              </div>
-
-            </div>
-
-            <div class="admin-table-wrap reporte-table-wrap">
-
-              <table class="admin-table reporte-ranking-table">
-
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>PRODUCTO</th>
-                    <th>UNIDADES</th>
-                    <th>VENTAS</th>
-                  </tr>
-                </thead>
-
-                <tbody id="topProductosBody">
-                  <tr>
-                    <td colspan="4">
+</div>
+</div>
+<div class="admin-table-wrap reporte-table-wrap">
+<table class="admin-table reporte-ranking-table">
+<thead>
+<tr>
+<th>#</th>
+<th>PRODUCTO</th>
+<th>UNIDADES</th>
+<th>VENTAS</th>
+</tr>
+</thead>
+<tbody id="topProductosBody">
+<tr>
+<td colspan="4">
                       Sin ventas registradas.
                     </td>
-                  </tr>
-                </tbody>
-
-              </table>
-
-            </div>
-
-          </article>
-
-          <article class="reporte-panel">
-
-            <div class="reporte-panel-header">
-
-              <div>
-                <p class="admin-eyebrow">
+</tr>
+</tbody>
+</table>
+</div>
+</article>
+<article class="reporte-panel">
+<div class="reporte-panel-header">
+<div>
+<p class="admin-eyebrow">
                   CLIENTES
                 </p>
-
-                <h4>
+<h4>
                   Mejores clientes
                 </h4>
-              </div>
-
-            </div>
-
-            <div class="admin-table-wrap reporte-table-wrap">
-
-              <table class="admin-table reporte-ranking-table">
-
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>CLIENTE</th>
-                    <th>COMPRAS</th>
-                    <th>TOTAL</th>
-                  </tr>
-                </thead>
-
-                <tbody id="topClientesBody">
-                  <tr>
-                    <td colspan="4">
+</div>
+</div>
+<div class="admin-table-wrap reporte-table-wrap">
+<table class="admin-table reporte-ranking-table">
+<thead>
+<tr>
+<th>#</th>
+<th>CLIENTE</th>
+<th>COMPRAS</th>
+<th>TOTAL</th>
+</tr>
+</thead>
+<tbody id="topClientesBody">
+<tr>
+<td colspan="4">
                       Sin clientes con compras válidas.
                     </td>
-                  </tr>
-                </tbody>
-
-              </table>
-
-            </div>
-
-          </article>
-
-          <article class="reporte-panel reporte-panel-pagos">
-
-            <div class="reporte-panel-header">
-
-              <div>
-                <p class="admin-eyebrow">
+</tr>
+</tbody>
+</table>
+</div>
+</article>
+<article class="reporte-panel reporte-panel-pagos">
+<div class="reporte-panel-header">
+<div>
+<p class="admin-eyebrow">
                   COBROS
                 </p>
-
-                <h4>
+<h4>
                   Ventas por método de pago
                 </h4>
-              </div>
-
-            </div>
-
-            <div
-              class="metodos-pago-chart"
-              id="metodosPagoChart"
-            >
-              <p class="reportes-vacio">
+</div>
+</div>
+<div class="metodos-pago-chart" id="metodosPagoChart">
+<p class="reportes-vacio">
                 Sin ventas registradas.
               </p>
-            </div>
-
-          </article>
-
-        </div>
-
-        <p class="reportes-nota">
+</div>
+</article>
+</div>
+<p class="reportes-nota">
           Los reportes de ventas incluyen únicamente pedidos en estado
           Confirmado, En preparación, Enviado o Entregado.
         </p>
-
-      </section>
-
-
-      <!-- ========================================
+</section>
+<!-- ========================================
            PASO 15 · ANALÍTICA COMERCIAL
       ========================================= -->
-
-      <section
-        class="admin-card admin-section-anchor analitica-section"
-        id="analitica"
-      >
-
-        <div class="admin-card-header analitica-main-header">
-
-          <div>
-
-            <p class="admin-eyebrow">
-              CUSTOMER & SALES INTELLIGENCE
+<section class="admin-card admin-section-anchor analitica-section" id="analitica">
+<div class="admin-card-header analitica-main-header">
+<div>
+<p class="admin-eyebrow">
+              CUSTOMER &amp; SALES INTELLIGENCE
             </p>
-
-            <h3>
+<h3>
               Analítica comercial
             </h3>
-
-            <p class="analitica-subtitle">
+<p class="analitica-subtitle">
               Comportamiento de compra calculado con los datos que SIXTEEN ya registra.
             </p>
-
-          </div>
-
-
-          <div class="analitica-header-actions">
-
-            <select
-              id="analiticaPeriodo"
-              aria-label="Periodo de analítica"
-            >
-              <option value="30">
+</div>
+<div class="analitica-header-actions">
+<select aria-label="Periodo de analítica" id="analiticaPeriodo">
+<option value="30">
                 Últimos 30 días
               </option>
-
-              <option value="90" selected>
+<option selected="" value="90">
                 Últimos 90 días
               </option>
-
-              <option value="180">
+<option value="180">
                 Últimos 180 días
               </option>
-
-              <option value="365">
+<option value="365">
                 Últimos 365 días
               </option>
-
-              <option value="all">
+<option value="all">
                 Todo el historial
               </option>
-            </select>
-
-
-            <button
-              type="button"
-              class="admin-primary-btn"
-              id="exportarAnaliticaBtn"
-              disabled
-              title="Se habilita cuando la analítica termine de calcularse"
-            >
+</select>
+<button class="admin-primary-btn" disabled="" id="exportarAnaliticaBtn" title="Se habilita cuando la analítica termine de calcularse" type="button">
               EXPORTAR CSV
             </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- KPIs -->
-
-        <div class="analitica-kpis">
-
-          <article>
-
-            <span>
+</div>
+</div>
+<!-- KPIs -->
+<div class="analitica-kpis">
+<article>
+<span>
               VENTAS NETAS DEL PERIODO
             </span>
-
-            <strong id="analiticaVentasPeriodo">
+<strong id="analiticaVentasPeriodo">
               $0.00
             </strong>
-
-            <small id="analiticaPeriodoTexto">
+<small id="analiticaPeriodoTexto">
               Últimos 90 días
             </small>
-
-          </article>
-
-
-          <article>
-
-            <span>
+</article>
+<article>
+<span>
               PEDIDOS VÁLIDOS
             </span>
-
-            <strong id="analiticaPedidosValidos">
+<strong id="analiticaPedidosValidos">
               0
             </strong>
-
-            <small>
+<small>
               Confirmados o completados
             </small>
-
-          </article>
-
-
-          <article>
-
-            <span>
+</article>
+<article>
+<span>
               TICKET PROMEDIO
             </span>
-
-            <strong id="analiticaTicketPromedio">
+<strong id="analiticaTicketPromedio">
               $0.00
             </strong>
-
-            <small>
+<small>
               Por compra válida
             </small>
-
-          </article>
-
-
-          <article>
-
-            <span>
+</article>
+<article>
+<span>
               TASA DE RECOMPRA
             </span>
-
-            <strong id="analiticaRecompra">
+<strong id="analiticaRecompra">
               0%
             </strong>
-
-            <small id="analiticaRecompraMeta">
+<small id="analiticaRecompraMeta">
               0 clientes recurrentes
             </small>
-
-          </article>
-
-
-          <article>
-
-            <span>
+</article>
+<article>
+<span>
               CANCELACIÓN
             </span>
-
-            <strong id="analiticaCancelacion">
+<strong id="analiticaCancelacion">
               0%
             </strong>
-
-            <small id="analiticaCancelacionMeta">
+<small id="analiticaCancelacionMeta">
               0 pedidos cancelados
             </small>
-
-          </article>
-
-
-          <article>
-
-            <span>
+</article>
+<article>
+<span>
               USO DE CUPONES
             </span>
-
-            <strong id="analiticaCuponUso">
+<strong id="analiticaCuponUso">
               0%
             </strong>
-
-            <small id="analiticaCuponMeta">
+<small id="analiticaCuponMeta">
               0 compras con cupón
             </small>
-
-          </article>
-
-        </div>
-
-
-        <!-- INSIGHTS -->
-
-        <div class="analitica-panel analitica-insights-panel">
-
-          <div class="analitica-panel-header">
-
-            <div>
-
-              <p class="admin-eyebrow">
+</article>
+</div>
+<!-- INSIGHTS -->
+<div class="analitica-panel analitica-insights-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                 AUTOMATIC INSIGHTS
               </p>
-
-              <h4>
+<h4>
                 Hallazgos del negocio
               </h4>
-
-            </div>
-
-            <span class="analitica-live-badge">
+</div>
+<span class="analitica-live-badge">
               DATOS EN VIVO
             </span>
-
-          </div>
-
-
-          <div
-            class="analitica-insights-grid"
-            id="analiticaInsights"
-          >
-
-            <article>
-              <span>ANALIZANDO</span>
-              <strong>Cargando información...</strong>
-            </article>
-
-          </div>
-
-        </div>
-
-
-        <!-- SEGMENTOS -->
-
-        <div class="analitica-grid analitica-grid-two">
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</div>
+<div class="analitica-insights-grid" id="analiticaInsights">
+<article>
+<span>ANALIZANDO</span>
+<strong>Cargando información...</strong>
+</article>
+</div>
+</div>
+<!-- SEGMENTOS -->
+<div class="analitica-grid analitica-grid-two">
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   CUSTOMER SEGMENTS
                 </p>
-
-                <h4>
+<h4>
                   Segmentación de clientes
                 </h4>
-
-              </div>
-
-              <small>
+</div>
+<small>
                 Historial total
               </small>
-
-            </div>
-
-
-            <div
-              class="analitica-segmentos"
-              id="analiticaSegmentos"
-            >
-            </div>
-
-          </article>
-
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</div>
+<div class="analitica-segmentos" id="analiticaSegmentos">
+</div>
+</article>
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   PURCHASE RHYTHM
                 </p>
-
-                <h4>
+<h4>
                   Días con más compras
                 </h4>
-
-              </div>
-
-            </div>
-
-
-            <div
-              class="analitica-bars"
-              id="analiticaDiasChart"
-            >
-            </div>
-
-          </article>
-
-        </div>
-
-
-        <!-- CATEGORÍAS / HORARIOS -->
-
-        <div class="analitica-grid analitica-grid-two">
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</div>
+</div>
+<div class="analitica-bars" id="analiticaDiasChart">
+</div>
+</article>
+</div>
+<!-- CATEGORÍAS / HORARIOS -->
+<div class="analitica-grid analitica-grid-two">
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   PRODUCT MIX
                 </p>
-
-                <h4>
+<h4>
                   Categorías por venta bruta de producto
                 </h4>
-
-              </div>
-
-            </div>
-
-
-            <div
-              class="analitica-bars"
-              id="analiticaCategoriasChart"
-            >
-            </div>
-
-          </article>
-
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</div>
+</div>
+<div class="analitica-bars" id="analiticaCategoriasChart">
+</div>
+</article>
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   SHOPPING TIME
                 </p>
-
-                <h4>
+<h4>
                   Horario de compra
                 </h4>
-
-              </div>
-
-            </div>
-
-
-            <div
-              class="analitica-bars"
-              id="analiticaHorasChart"
-            >
-            </div>
-
-          </article>
-
-        </div>
-
-
-        <!-- PREFERENCIAS -->
-
-        <div class="analitica-grid analitica-grid-two">
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</div>
+</div>
+<div class="analitica-bars" id="analiticaHorasChart">
+</div>
+</article>
+</div>
+<!-- PREFERENCIAS -->
+<div class="analitica-grid analitica-grid-two">
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   PRODUCT PREFERENCES
                 </p>
-
-                <h4>
+<h4>
                   Tallas más compradas
                 </h4>
-
-              </div>
-
-            </div>
-
-
-            <div
-              class="analitica-tags-ranking"
-              id="analiticaTallas"
-            >
-            </div>
-
-          </article>
-
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</div>
+</div>
+<div class="analitica-tags-ranking" id="analiticaTallas">
+</div>
+</article>
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   COLOR PREFERENCES
                 </p>
-
-                <h4>
+<h4>
                   Colores más comprados
                 </h4>
-
-              </div>
-
-            </div>
-
-
-            <div
-              class="analitica-tags-ranking"
-              id="analiticaColores"
-            >
-            </div>
-
-          </article>
-
-        </div>
-
-
-        <!-- GEO / CUPONES -->
-
-        <div class="analitica-grid analitica-grid-two">
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</div>
+</div>
+<div class="analitica-tags-ranking" id="analiticaColores">
+</div>
+</article>
+</div>
+<!-- GEO / CUPONES -->
+<div class="analitica-grid analitica-grid-two">
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   GEOGRAPHY
                 </p>
-
-                <h4>
+<h4>
                   Demanda por provincia
                 </h4>
-
-              </div>
-
-            </div>
-
-
-            <div class="admin-table-wrap">
-
-              <table class="admin-table analitica-table">
-
-                <thead>
-
-                  <tr>
-                    <th>#</th>
-                    <th>PROVINCIA</th>
-                    <th>PEDIDOS</th>
-                    <th>VENTAS</th>
-                  </tr>
-
-                </thead>
-
-                <tbody id="analiticaProvinciasBody">
-
-                  <tr>
-                    <td colspan="4">
+</div>
+</div>
+<div class="admin-table-wrap">
+<table class="admin-table analitica-table">
+<thead>
+<tr>
+<th>#</th>
+<th>PROVINCIA</th>
+<th>PEDIDOS</th>
+<th>VENTAS</th>
+</tr>
+</thead>
+<tbody id="analiticaProvinciasBody">
+<tr>
+<td colspan="4">
                       Sin datos.
                     </td>
-                  </tr>
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          </article>
-
-
-          <article class="analitica-panel">
-
-            <div class="analitica-panel-header">
-
-              <div>
-
-                <p class="admin-eyebrow">
+</tr>
+</tbody>
+</table>
+</div>
+</article>
+<article class="analitica-panel">
+<div class="analitica-panel-header">
+<div>
+<p class="admin-eyebrow">
                   PROMOTIONS
                 </p>
-
-                <h4>
+<h4>
                   Rendimiento de cupones
                 </h4>
-
-              </div>
-
-            </div>
-
-
-            <div class="admin-table-wrap">
-
-              <table class="admin-table analitica-table">
-
-                <thead>
-
-                  <tr>
-                    <th>CUPÓN</th>
-                    <th>USOS</th>
-                    <th>DESCUENTO</th>
-                    <th>VENTAS</th>
-                  </tr>
-
-                </thead>
-
-                <tbody id="analiticaCuponesBody">
-
-                  <tr>
-                    <td colspan="4">
+</div>
+</div>
+<div class="admin-table-wrap">
+<table class="admin-table analitica-table">
+<thead>
+<tr>
+<th>CUPÓN</th>
+<th>USOS</th>
+<th>DESCUENTO</th>
+<th>VENTAS</th>
+</tr>
+</thead>
+<tbody id="analiticaCuponesBody">
+<tr>
+<td colspan="4">
                       Sin uso de cupones.
                     </td>
-                  </tr>
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          </article>
-
-        </div>
-
-
-        <p class="analitica-nota">
+</tr>
+</tbody>
+</table>
+</div>
+</article>
+</div>
+<p class="analitica-nota">
           Esta analítica usa pedidos y clientes ya existentes. No instala
           rastreadores externos, no crea nuevas colecciones y no añade costos.
           Los periodos incluyen el día actual. La tasa de recompra considera si
           un comprador del periodo ya había comprado antes o repitió durante el
           mismo periodo. La segmentación de clientes usa el historial total.
         </p>
-
-      </section>
-
-
-
-      <!-- ========================================
+</section>
+<!-- ========================================
            CUPONES Y ENVÍOS
       ========================================= -->
-
-      <!-- ========================================
+<!-- ========================================
            PASO 22 · BACKUPS Y EXPORTACIONES
       ========================================= -->
-
-      <section
-        class="admin-card admin-section-anchor backup-center"
-        id="backups"
-      >
-
-        <div class="admin-card-header">
-          <div>
-            <p class="admin-eyebrow">PASO 22 · DATA SAFETY</p>
-            <h3>Backups y exportaciones</h3>
-            <p class="backup-subtitle">
+<section class="admin-card admin-section-anchor backup-center" id="backups">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">PASO 22 · DATA SAFETY</p>
+<h3>Backups y exportaciones</h3>
+<p class="backup-subtitle">
               Respalda los datos operativos de SIXTEEN directamente desde
               Firestore y genera exportaciones legibles para control administrativo.
             </p>
-          </div>
-
-          <span
-            class="admin-status backup-source-status"
-            id="backupSourceStatus"
-            title="El respaldo maestro consulta Firestore directamente"
-          >
+</div>
+<span class="admin-status backup-source-status" id="backupSourceStatus" title="El respaldo maestro consulta Firestore directamente">
             FIRESTORE SERVER
           </span>
-        </div>
-
-        <div class="backup-kpis">
-          <article><span>PRODUCTOS</span><strong id="backupKpiProductos">0</strong></article>
-          <article><span>PEDIDOS</span><strong id="backupKpiPedidos">0</strong></article>
-          <article><span>CLIENTES</span><strong id="backupKpiClientes">0</strong></article>
-          <article><span>KARDEX</span><strong id="backupKpiInventario">0</strong></article>
-          <article><span>CUPONES</span><strong id="backupKpiCupones">0</strong></article>
-          <article><span>ENVÍOS</span><strong id="backupKpiEnvios">0</strong></article>
-          <article><span>FACTURACIÓN</span><strong id="backupKpiFacturacion">0</strong></article>
-          <article><span>NEWSLETTER</span><strong id="backupKpiNewsletter">0</strong></article>
-        </div>
-
-        <div class="backup-main-actions">
-
-          <article class="backup-primary-card">
-            <p class="admin-eyebrow">RESPALDO MAESTRO</p>
-            <h4>Respaldo operativo JSON</h4>
-            <p>
+</div>
+<div class="backup-kpis">
+<article><span>PRODUCTOS</span><strong id="backupKpiProductos">0</strong></article>
+<article><span>PEDIDOS</span><strong id="backupKpiPedidos">0</strong></article>
+<article><span>CLIENTES</span><strong id="backupKpiClientes">0</strong></article>
+<article><span>KARDEX</span><strong id="backupKpiInventario">0</strong></article>
+<article><span>CUPONES</span><strong id="backupKpiCupones">0</strong></article>
+<article><span>ENVÍOS</span><strong id="backupKpiEnvios">0</strong></article>
+<article><span>FACTURACIÓN</span><strong id="backupKpiFacturacion">0</strong></article>
+<article><span>NEWSLETTER</span><strong id="backupKpiNewsletter">0</strong></article>
+</div>
+<div class="backup-main-actions">
+<article class="backup-primary-card">
+<p class="admin-eyebrow">RESPALDO MAESTRO</p>
+<h4>Respaldo operativo JSON</h4>
+<p>
               Consulta directamente el servidor y conserva catálogo, pedidos,
               Kardex, cupones, envíos, Facturación SIXTEEN, configuración de
               pagos, newsletter y SIXTEEN Experience.
             </p>
-
-            <button
-              type="button"
-              class="admin-primary-btn"
-              id="descargarBackupCompletoBtn"
-            >
+<button class="admin-primary-btn" id="descargarBackupCompletoBtn" type="button">
               DESCARGAR RESPALDO MAESTRO
             </button>
-
-            <small id="backupUltimaDescarga">
+<small id="backupUltimaDescarga">
               Todavía no se ha generado un respaldo.
             </small>
-          </article>
-
-          <article class="backup-primary-card">
-            <p class="admin-eyebrow">VERIFICACIÓN</p>
-            <h4>Validar un respaldo</h4>
-            <p>
+</article>
+<article class="backup-primary-card">
+<p class="admin-eyebrow">VERIFICACIÓN</p>
+<h4>Validar un respaldo</h4>
+<p>
               Comprueba formato, versión, conteos e integridad SHA-256 sin
               escribir ni restaurar datos en Firestore.
             </p>
-
-            <label class="backup-file-label">
-              <input
-                type="file"
-                id="validarBackupInput"
-                accept=".json,application/json"
-              >
-              <span>SELECCIONAR RESPALDO JSON</span>
-            </label>
-
-            <div
-              class="backup-validation"
-              id="backupValidacionResultado"
-              aria-live="polite"
-            >
+<label class="backup-file-label">
+<input accept=".json,application/json" id="validarBackupInput" type="file"/>
+<span>SELECCIONAR RESPALDO JSON</span>
+</label>
+<div aria-live="polite" class="backup-validation" id="backupValidacionResultado">
               Esperando archivo...
             </div>
-          </article>
-
-        </div>
-
-        <div class="backup-export-grid">
-          <article>
-            <span>PRODUCTOS</span>
-            <p>Catálogo, precios, estado, stock y variantes.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="productos">CSV PRODUCTOS</button>
-          </article>
-
-          <article>
-            <span>PEDIDOS</span>
-            <p>Cliente, entrega, pago, productos y totales.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="pedidos">CSV PEDIDOS</button>
-          </article>
-
-          <article>
-            <span>CLIENTES</span>
-            <p>CRM derivado desde el historial completo de pedidos.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="clientes">CSV CLIENTES</button>
-          </article>
-
-          <article>
-            <span>KARDEX</span>
-            <p>Movimientos, variantes, cantidades y trazabilidad.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="inventario">CSV KARDEX</button>
-          </article>
-
-          <article>
-            <span>CUPONES</span>
-            <p>Configuración, estado, descuento y contador de usos.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="cupones">CSV CUPONES</button>
-          </article>
-
-          <article>
-            <span>ENVÍOS</span>
-            <p>Provincias, tarifas, estado y configuración publicada.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="envios">CSV ENVÍOS</button>
-          </article>
-
-          <article>
-            <span>FACTURACIÓN</span>
-            <p>Facturas, notas de crédito y notas de débito SIXTEEN.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="facturacion">CSV FACTURACIÓN</button>
-          </article>
-
-          <article>
-            <span>NEWSLETTER</span>
-            <p>Suscripciones y consentimiento. Contiene datos personales.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="newsletter">CSV NEWSLETTER</button>
-          </article>
-
-          <article>
-            <span>CONFIGURACIÓN</span>
-            <p>Tienda, pagos públicos y configuración del Facturador SIXTEEN.</p>
-            <button type="button" class="admin-secondary-btn" id="exportarConfiguracionBtn">JSON CONFIGURACIÓN</button>
-          </article>
-        </div>
-
-        <div class="backup-notes">
-          <p><strong>Fuente:</strong> el respaldo maestro y los CSV consultan Firestore directamente; no dependen únicamente de lo que esté visible en el Dashboard.</p>
-          <p><strong>Privacidad:</strong> no se exportan cuentas privadas, favoritos, carritos ni notificaciones de clientes porque las reglas de seguridad no permiten lectura administrativa de esos datos.</p>
-          <p><strong>Archivos:</strong> se respaldan URLs y metadatos de imágenes/modelos; los binarios alojados en Cloudinary u otros servicios deben respaldarse en su proveedor.</p>
-          <p><strong>Seguridad:</strong> se excluyen campos con apariencia de contraseña, token, clave privada, certificado o secreto.</p>
-          <p><strong>Restauración:</strong> este módulo valida y exporta; no sobrescribe Firestore automáticamente para evitar restauraciones destructivas por accidente.</p>
-        </div>
-
-      </section>
-
-
-      <section
-        class="admin-card admin-section-anchor comercial-section"
-        id="comercial"
-      >
-
-        <div class="admin-card-header">
-
-          <div>
-            <p class="admin-eyebrow">
+</article>
+</div>
+<div class="backup-export-grid">
+<article>
+<span>PRODUCTOS</span>
+<p>Catálogo, precios, estado, stock y variantes.</p>
+<button class="admin-secondary-btn" data-backup-export="productos" type="button">CSV PRODUCTOS</button>
+</article>
+<article>
+<span>PEDIDOS</span>
+<p>Cliente, entrega, pago, productos y totales.</p>
+<button class="admin-secondary-btn" data-backup-export="pedidos" type="button">CSV PEDIDOS</button>
+</article>
+<article>
+<span>CLIENTES</span>
+<p>CRM derivado desde el historial completo de pedidos.</p>
+<button class="admin-secondary-btn" data-backup-export="clientes" type="button">CSV CLIENTES</button>
+</article>
+<article>
+<span>KARDEX</span>
+<p>Movimientos, variantes, cantidades y trazabilidad.</p>
+<button class="admin-secondary-btn" data-backup-export="inventario" type="button">CSV KARDEX</button>
+</article>
+<article>
+<span>CUPONES</span>
+<p>Configuración, estado, descuento y contador de usos.</p>
+<button class="admin-secondary-btn" data-backup-export="cupones" type="button">CSV CUPONES</button>
+</article>
+<article>
+<span>ENVÍOS</span>
+<p>Provincias, tarifas, estado y configuración publicada.</p>
+<button class="admin-secondary-btn" data-backup-export="envios" type="button">CSV ENVÍOS</button>
+</article>
+<article>
+<span>FACTURACIÓN</span>
+<p>Facturas, notas de crédito y notas de débito SIXTEEN.</p>
+<button class="admin-secondary-btn" data-backup-export="facturacion" type="button">CSV FACTURACIÓN</button>
+</article>
+<article>
+<span>NEWSLETTER</span>
+<p>Suscripciones y consentimiento. Contiene datos personales.</p>
+<button class="admin-secondary-btn" data-backup-export="newsletter" type="button">CSV NEWSLETTER</button>
+</article>
+<article>
+<span>CONFIGURACIÓN</span>
+<p>Tienda, pagos públicos y configuración del Facturador SIXTEEN.</p>
+<button class="admin-secondary-btn" id="exportarConfiguracionBtn" type="button">JSON CONFIGURACIÓN</button>
+</article>
+</div>
+<div class="backup-notes">
+<p><strong>Fuente:</strong> el respaldo maestro y los CSV consultan Firestore directamente; no dependen únicamente de lo que esté visible en el Dashboard.</p>
+<p><strong>Privacidad:</strong> no se exportan cuentas privadas, favoritos, carritos ni notificaciones de clientes porque las reglas de seguridad no permiten lectura administrativa de esos datos.</p>
+<p><strong>Archivos:</strong> se respaldan URLs y metadatos de imágenes/modelos; los binarios alojados en Cloudinary u otros servicios deben respaldarse en su proveedor.</p>
+<p><strong>Seguridad:</strong> se excluyen campos con apariencia de contraseña, token, clave privada, certificado o secreto.</p>
+<p><strong>Restauración:</strong> este módulo valida y exporta; no sobrescribe Firestore automáticamente para evitar restauraciones destructivas por accidente.</p>
+</div>
+</section>
+<section class="admin-card admin-section-anchor comercial-section" id="comercial">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">
               SALES CONFIGURATION
             </p>
-
-            <h3>
+<h3>
               Cupones y métodos de envío
             </h3>
-          </div>
-
-          <span class="admin-status">
+</div>
+<span class="admin-status">
             FIRESTORE
           </span>
-
-        </div>
-
-        <!-- ===================== CUPONES ===================== -->
-
-        <div class="comercial-bloque">
-
-          <div class="comercial-bloque-header">
-
-            <div>
-              <p class="admin-eyebrow">
+</div>
+<!-- ===================== CUPONES ===================== -->
+<div class="comercial-bloque">
+<div class="comercial-bloque-header">
+<div>
+<p class="admin-eyebrow">
                 DESCUENTOS
               </p>
-
-              <h4>
+<h4>
                 Cupones
               </h4>
-            </div>
-
-            <button
-              type="button"
-              class="admin-primary-btn"
-              id="nuevoCuponBtn"
-            >
+</div>
+<button class="admin-primary-btn" id="nuevoCuponBtn" type="button">
               + NUEVO CUPÓN
             </button>
-
-          </div>
-
-          <div class="comercial-kpis">
-
-            <article>
-              <span>TOTAL</span>
-              <strong id="cuponesKpiTotal">0</strong>
-              <small>Cupones creados</small>
-            </article>
-
-            <article>
-              <span>ACTIVOS</span>
-              <strong id="cuponesKpiActivos">0</strong>
-              <small>Disponibles en la tienda</small>
-            </article>
-
-            <article>
-              <span>USOS</span>
-              <strong id="cuponesKpiUsos">0</strong>
-              <small>Usos registrados</small>
-            </article>
-
-          </div>
-
-          <div class="comercial-toolbar">
-
-            <div>
-              <label for="cuponBuscar">
+</div>
+<div class="comercial-kpis">
+<article>
+<span>TOTAL</span>
+<strong id="cuponesKpiTotal">0</strong>
+<small>Cupones creados</small>
+</article>
+<article>
+<span>ACTIVOS</span>
+<strong id="cuponesKpiActivos">0</strong>
+<small>Disponibles en la tienda</small>
+</article>
+<article>
+<span>USOS</span>
+<strong id="cuponesKpiUsos">0</strong>
+<small>Usos registrados</small>
+</article>
+</div>
+<div class="comercial-toolbar">
+<div>
+<label for="cuponBuscar">
                 BUSCAR CUPÓN
               </label>
-
-              <input
-                type="search"
-                id="cuponBuscar"
-                placeholder="Código..."
-                autocomplete="off"
-              >
-            </div>
-
-            <div>
-              <label for="cuponFiltroEstado">
+<input autocomplete="off" id="cuponBuscar" placeholder="Código..." type="search"/>
+</div>
+<div>
+<label for="cuponFiltroEstado">
                 ESTADO
               </label>
-
-              <select id="cuponFiltroEstado">
-                <option value="">
+<select id="cuponFiltroEstado">
+<option value="">
                   Todos
                 </option>
-
-                <option value="activo">
+<option value="activo">
                   Activos
                 </option>
-
-                <option value="inactivo">
+<option value="inactivo">
                   Inactivos
                 </option>
-
-                <option value="programado">
+<option value="programado">
                   Programados
                 </option>
-
-                <option value="vencido">
+<option value="vencido">
                   Vencidos
                 </option>
-
-                <option value="agotado">
+<option value="agotado">
                   Agotados
                 </option>
-              </select>
-            </div>
-
-          </div>
-
-          <p
-            class="productos-resultado"
-            id="cuponesResultadoTexto"
-            aria-live="polite"
-          >
+</select>
+</div>
+</div>
+<p aria-live="polite" class="productos-resultado" id="cuponesResultadoTexto">
             Mostrando 0 cupones.
           </p>
-
-          <div class="admin-table-wrap">
-
-            <table class="admin-table cupones-table">
-
-              <thead>
-                <tr>
-                  <th>CÓDIGO</th>
-                  <th>DESCUENTO</th>
-                  <th>VIGENCIA</th>
-                  <th>USOS</th>
-                  <th>ESTADO</th>
-                  <th>ACCIÓN</th>
-                </tr>
-              </thead>
-
-              <tbody id="cuponesAdminBody">
-                <tr>
-                  <td colspan="6">
+<div class="admin-table-wrap">
+<table class="admin-table cupones-table">
+<thead>
+<tr>
+<th>CÓDIGO</th>
+<th>DESCUENTO</th>
+<th>VIGENCIA</th>
+<th>USOS</th>
+<th>ESTADO</th>
+<th>ACCIÓN</th>
+</tr>
+</thead>
+<tbody id="cuponesAdminBody">
+<tr>
+<td colspan="6">
                     Cargando cupones...
                   </td>
-                </tr>
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-        <!-- ====================== ENVÍOS ===================== -->
-
-        <div class="comercial-bloque comercial-envios">
-
-          <div class="comercial-bloque-header">
-
-            <div>
-              <p class="admin-eyebrow">
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- ====================== ENVÍOS ===================== -->
+<div class="comercial-bloque comercial-envios">
+<div class="comercial-bloque-header">
+<div>
+<p class="admin-eyebrow">
                 LOGÍSTICA
               </p>
-
-              <h4>
+<h4>
                 Tarifas de envío por provincia
               </h4>
-            </div>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="restaurarTarifasBtn"
-            >
+</div>
+<button class="admin-secondary-btn" id="restaurarTarifasBtn" type="button">
               RESTAURAR TARIFAS BASE
             </button>
-
-          </div>
-
-          <div class="comercial-kpis">
-
-            <article>
-              <span>PROVINCIAS</span>
-              <strong id="enviosKpiTotal">0</strong>
-              <small>Tarifas configuradas</small>
-            </article>
-
-            <article>
-              <span>ACTIVAS</span>
-              <strong id="enviosKpiActivos">0</strong>
-              <small>Disponibles en checkout</small>
-            </article>
-
-            <article>
-              <span>PROMEDIO</span>
-              <strong id="enviosKpiPromedio">$0.00</strong>
-              <small>Tarifa promedio activa</small>
-            </article>
-
-          </div>
-
-          <div class="comercial-toolbar">
-
-            <div>
-              <label for="envioBuscar">
+</div>
+<div class="comercial-kpis">
+<article>
+<span>PROVINCIAS</span>
+<strong id="enviosKpiTotal">0</strong>
+<small>Tarifas configuradas</small>
+</article>
+<article>
+<span>ACTIVAS</span>
+<strong id="enviosKpiActivos">0</strong>
+<small>Disponibles en checkout</small>
+</article>
+<article>
+<span>PROMEDIO</span>
+<strong id="enviosKpiPromedio">$0.00</strong>
+<small>Tarifa promedio activa</small>
+</article>
+</div>
+<div class="comercial-toolbar">
+<div>
+<label for="envioBuscar">
                 BUSCAR PROVINCIA
               </label>
-
-              <input
-                type="search"
-                id="envioBuscar"
-                placeholder="Pichincha..."
-                autocomplete="off"
-              >
-            </div>
-
-            <div>
-              <label for="envioFiltroEstado">
+<input autocomplete="off" id="envioBuscar" placeholder="Pichincha..." type="search"/>
+</div>
+<div>
+<label for="envioFiltroEstado">
                 ESTADO
               </label>
-
-              <select id="envioFiltroEstado">
-                <option value="">Todas</option>
-                <option value="activo">Activas</option>
-                <option value="inactivo">Inactivas</option>
-              </select>
-            </div>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="limpiarFiltrosEnviosBtn"
-            >
+<select id="envioFiltroEstado">
+<option value="">Todas</option>
+<option value="activo">Activas</option>
+<option value="inactivo">Inactivas</option>
+</select>
+</div>
+<button class="admin-secondary-btn" id="limpiarFiltrosEnviosBtn" type="button">
               LIMPIAR
             </button>
-
-          </div>
-
-          <p
-            class="productos-resultado"
-            id="enviosResultadoTexto"
-            aria-live="polite"
-          >
+</div>
+<p aria-live="polite" class="productos-resultado" id="enviosResultadoTexto">
             Mostrando 0 provincias.
           </p>
-
-          <div class="admin-table-wrap">
-
-            <table class="admin-table envios-table">
-
-              <thead>
-                <tr>
-                  <th>PROVINCIA</th>
-                  <th>TARIFA</th>
-                  <th>ESTADO</th>
-                  <th>ACTUALIZADO</th>
-                  <th>ACCIÓN</th>
-                </tr>
-              </thead>
-
-              <tbody id="enviosAdminBody">
-                <tr>
-                  <td colspan="5">
+<div class="admin-table-wrap">
+<table class="admin-table envios-table">
+<thead>
+<tr>
+<th>PROVINCIA</th>
+<th>TARIFA</th>
+<th>ESTADO</th>
+<th>ACTUALIZADO</th>
+<th>ACCIÓN</th>
+</tr>
+</thead>
+<tbody id="enviosAdminBody">
+<tr>
+<td colspan="5">
                     Cargando tarifas...
                   </td>
-                </tr>
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- ========================================
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- ========================================
            PRODUCTOS
       ========================================= -->
-
-      
-      <!-- ==================================================
+<!-- ==================================================
            PASO 18 · MÉTODOS DE PAGO
       =================================================== -->
-
-      <section
-        class="admin-section"
-        id="pagos"
-      >
-
-        <div class="admin-section-header pagos-header">
-
-          <div>
-            <p class="admin-eyebrow">
+<section class="admin-section" id="pagos">
+<div class="admin-section-header pagos-header">
+<div>
+<p class="admin-eyebrow">
               CHECKOUT · SIN ALMACENAR DATOS DE TARJETAS
             </p>
-
-            <h2>
+<h2>
               Métodos de pago
             </h2>
-
-            <p>
+<p>
               Configura qué opciones verá el cliente durante la compra.
               Transferencia, QR y contra entrega se verifican manualmente.
               Tarjeta usa un enlace HTTPS externo y no confirma el pago automáticamente.
             </p>
-          </div>
-
-          <div class="pagos-status-card" aria-live="polite">
-            <span>ESTADO DE MÉTODOS</span>
-            <strong id="pagosConfigEstado">Cargando...</strong>
-            <small id="pagosConfigRemoteEstado" data-state="CARGANDO">
+</div>
+<div aria-live="polite" class="pagos-status-card">
+<span>ESTADO DE MÉTODOS</span>
+<strong id="pagosConfigEstado">Cargando...</strong>
+<small data-state="CARGANDO" id="pagosConfigRemoteEstado">
               VERIFICANDO FIRESTORE
             </small>
-          </div>
-
-        </div>
-
-        <div class="pagos-security-note pagos-public-note">
-          <strong>DATOS PÚBLICOS:</strong>
+</div>
+</div>
+<div class="pagos-security-note pagos-public-note">
+<strong>DATOS PÚBLICOS:</strong>
           El Checkout puede leer esta configuración para mostrar instrucciones de cobro.
           Publica únicamente datos que puedan ver tus compradores. Nunca guardes aquí
           claves bancarias, contraseñas, tokens, CVV, números de tarjeta ni secretos de una pasarela.
         </div>
-
-        <form
-          id="pagosConfigForm"
-          class="pagos-config-form"
-        >
-
-          <article class="pago-admin-card">
-
-            <div class="pago-admin-card-head">
-              <div>
-                <span>01</span>
-                <h2>Transferencia bancaria</h2>
-                <em class="pago-method-state" id="pagoTransferenciaEstado">CARGANDO</em>
-              </div>
-
-              <label class="pago-switch">
-                <input
-                  type="checkbox"
-                  id="pagoTransferenciaActivo"
-                >
-                <span>ACTIVA</span>
-              </label>
-            </div>
-
-            <div class="pagos-grid">
-
-              <label>
+<form class="pagos-config-form" id="pagosConfigForm">
+<article class="pago-admin-card">
+<div class="pago-admin-card-head">
+<div>
+<span>01</span>
+<h2>Transferencia bancaria</h2>
+<em class="pago-method-state" id="pagoTransferenciaEstado">CARGANDO</em>
+</div>
+<label class="pago-switch">
+<input id="pagoTransferenciaActivo" type="checkbox"/>
+<span>ACTIVA</span>
+</label>
+</div>
+<div class="pagos-grid">
+<label>
                 BANCO
-                <input
-                  type="text"
-                  id="pagoBanco"
-                  maxlength="100"
-                  placeholder="Completar al final"
-                >
-              </label>
-
-              <label>
+                <input id="pagoBanco" maxlength="100" placeholder="Completar al final" type="text"/>
+</label>
+<label>
                 TIPO DE CUENTA
-                <input
-                  type="text"
-                  id="pagoTipoCuenta"
-                  maxlength="80"
-                  placeholder="Ahorros / corriente"
-                >
-              </label>
-
-              <label>
+                <input id="pagoTipoCuenta" maxlength="80" placeholder="Ahorros / corriente" type="text"/>
+</label>
+<label>
                 NÚMERO DE CUENTA
-                <input
-                  type="text"
-                  id="pagoNumeroCuenta"
-                  maxlength="60"
-                  placeholder="Completar al final"
-                >
-              </label>
-
-              <label>
+                <input id="pagoNumeroCuenta" maxlength="60" placeholder="Completar al final" type="text"/>
+</label>
+<label>
                 TITULAR
-                <input
-                  type="text"
-                  id="pagoTitular"
-                  maxlength="160"
-                  placeholder="Completar al final"
-                >
-              </label>
-
-              <label>
+                <input id="pagoTitular" maxlength="160" placeholder="Completar al final" type="text"/>
+</label>
+<label>
                 IDENTIFICACIÓN
-                <input
-                  type="text"
-                  id="pagoIdentificacion"
-                  maxlength="20"
-                  placeholder="Completar al final"
-                >
-              </label>
-
-              <label class="span-2">
+                <input id="pagoIdentificacion" maxlength="20" placeholder="Completar al final" type="text"/>
+</label>
+<label class="span-2">
                 INSTRUCCIONES
-                <textarea
-                  id="pagoTransferenciaNota"
-                  maxlength="500"
-                  rows="3"
-                ></textarea>
-              </label>
-
-            </div>
-
-          </article>
-
-
-          <article class="pago-admin-card">
-
-            <div class="pago-admin-card-head">
-              <div>
-                <span>02</span>
-                <h2>Pago QR</h2>
-                <em class="pago-method-state" id="pagoQrEstado">CARGANDO</em>
-              </div>
-
-              <label class="pago-switch">
-                <input
-                  type="checkbox"
-                  id="pagoQrActivo"
-                >
-                <span>ACTIVO</span>
-              </label>
-            </div>
-
-            <div class="pagos-grid">
-
-              <label>
+                <textarea id="pagoTransferenciaNota" maxlength="500" rows="3"></textarea>
+</label>
+</div>
+</article>
+<article class="pago-admin-card">
+<div class="pago-admin-card-head">
+<div>
+<span>02</span>
+<h2>Pago QR</h2>
+<em class="pago-method-state" id="pagoQrEstado">CARGANDO</em>
+</div>
+<label class="pago-switch">
+<input id="pagoQrActivo" type="checkbox"/>
+<span>ACTIVO</span>
+</label>
+</div>
+<div class="pagos-grid">
+<label>
                 NOMBRE
-                <input
-                  type="text"
-                  id="pagoQrNombre"
-                  maxlength="80"
-                  placeholder="Pago QR"
-                >
-              </label>
-
-              <label class="span-2">
+                <input id="pagoQrNombre" maxlength="80" placeholder="Pago QR" type="text"/>
+</label>
+<label class="span-2">
                 URL PÚBLICA DEL QR
-                <input
-                  type="url"
-                  id="pagoQrImagen"
-                  maxlength="500"
-                  placeholder="https://..."
-                >
-              </label>
-
-              <label class="span-2">
+                <input id="pagoQrImagen" maxlength="500" placeholder="https://..." type="url"/>
+</label>
+<label class="span-2">
                 INSTRUCCIONES
-                <textarea
-                  id="pagoQrNota"
-                  maxlength="500"
-                  rows="3"
-                ></textarea>
-              </label>
-
-            </div>
-
-          </article>
-
-
-          <article class="pago-admin-card">
-
-            <div class="pago-admin-card-head">
-              <div>
-                <span>03</span>
-                <h2>Tarjeta</h2>
-                <em class="pago-method-state" id="pagoTarjetaEstado">CARGANDO</em>
-              </div>
-
-              <label class="pago-switch">
-                <input
-                  type="checkbox"
-                  id="pagoTarjetaActivo"
-                >
-                <span>ACTIVA</span>
-              </label>
-            </div>
-
-            <div class="pagos-grid">
-
-              <label>
+                <textarea id="pagoQrNota" maxlength="500" rows="3"></textarea>
+</label>
+</div>
+</article>
+<article class="pago-admin-card">
+<div class="pago-admin-card-head">
+<div>
+<span>03</span>
+<h2>Tarjeta</h2>
+<em class="pago-method-state" id="pagoTarjetaEstado">CARGANDO</em>
+</div>
+<label class="pago-switch">
+<input id="pagoTarjetaActivo" type="checkbox"/>
+<span>ACTIVA</span>
+</label>
+</div>
+<div class="pagos-grid">
+<label>
                 PROVEEDOR / PASARELA
-                <input
-                  type="text"
-                  id="pagoTarjetaProveedor"
-                  maxlength="100"
-                  placeholder="Se elegirá después"
-                >
-              </label>
-
-              <label class="span-2">
+                <input id="pagoTarjetaProveedor" maxlength="100" placeholder="Se elegirá después" type="text"/>
+</label>
+<label class="span-2">
                 URL SEGURA DE PAGO
-                <input
-                  type="url"
-                  id="pagoTarjetaUrl"
-                  maxlength="500"
-                  placeholder="https://..."
-                >
-              </label>
-
-              <label class="span-2">
+                <input id="pagoTarjetaUrl" maxlength="500" placeholder="https://..." type="url"/>
+</label>
+<label class="span-2">
                 MENSAJE AL CLIENTE
-                <textarea
-                  id="pagoTarjetaNota"
-                  maxlength="500"
-                  rows="3"
-                ></textarea>
-              </label>
-
-            </div>
-
-            <div class="pagos-security-note">
-              <strong>SEGURIDAD:</strong>
+                <textarea id="pagoTarjetaNota" maxlength="500" rows="3"></textarea>
+</label>
+</div>
+<div class="pagos-security-note">
+<strong>SEGURIDAD:</strong>
               SIXTEEN no solicita, procesa ni almacena números de tarjeta,
               CVV ni claves. El enlace HTTPS se muestra al cliente después de
               registrar el pedido. Este modo no confirma el pago automáticamente;
               debes verificarlo y cambiar su estado a PAGADO desde Pedidos.
             </div>
-
-          </article>
-
-
-          <article class="pago-admin-card">
-
-            <div class="pago-admin-card-head">
-              <div>
-                <span>04</span>
-                <h2>Pago contra entrega</h2>
-                <em class="pago-method-state" id="pagoEfectivoEstado">CARGANDO</em>
-              </div>
-
-              <label class="pago-switch">
-                <input
-                  type="checkbox"
-                  id="pagoEfectivoActivo"
-                >
-                <span>ACTIVO</span>
-              </label>
-            </div>
-
-            <div class="pagos-grid">
-
-              <label class="span-2">
+</article>
+<article class="pago-admin-card">
+<div class="pago-admin-card-head">
+<div>
+<span>04</span>
+<h2>Pago contra entrega</h2>
+<em class="pago-method-state" id="pagoEfectivoEstado">CARGANDO</em>
+</div>
+<label class="pago-switch">
+<input id="pagoEfectivoActivo" type="checkbox"/>
+<span>ACTIVO</span>
+</label>
+</div>
+<div class="pagos-grid">
+<label class="span-2">
                 CONDICIONES
-                <textarea
-                  id="pagoEfectivoNota"
-                  maxlength="500"
-                  rows="3"
-                ></textarea>
-              </label>
-
-            </div>
-
-          </article>
-
-
-          <div
-            class="admin-form-message"
-            id="pagosConfigMensaje"
-            aria-live="polite"
-          ></div>
-
-          <div class="pagos-save-row">
-            <button
-              type="submit"
-              class="admin-primary-btn"
-              id="guardarPagosConfigBtn"
-              disabled
-            >
+                <textarea id="pagoEfectivoNota" maxlength="500" rows="3"></textarea>
+</label>
+</div>
+</article>
+<div aria-live="polite" class="admin-form-message" id="pagosConfigMensaje"></div>
+<div class="pagos-save-row">
+<button class="admin-primary-btn" disabled="" id="guardarPagosConfigBtn" type="submit">
               SIN CAMBIOS
             </button>
-          </div>
-
-        </form>
-
-      </section>
-
-
-<section
-        class="admin-card"
-        id="productos"
-      >
-
-
-        <div class="admin-card-header">
-
-
-          <div>
-
-            <p class="admin-eyebrow">
+</div>
+</form>
+</section>
+<section class="admin-card" id="productos">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">
               FIRESTORE
             </p>
-
-            <h3>
+<h3>
               Productos
             </h3>
-
-          </div>
-
-
-          <span class="admin-status" id="productosEstadoBadge">
+</div>
+<span class="admin-status" id="productosEstadoBadge">
             0 PRODUCTOS
           </span>
-
-
-        </div>
-
-        <div class="productos-toolbar">
-
-          <div>
-            <label for="productoBuscar">BUSCAR</label>
-            <input
-              id="productoBuscar"
-              type="search"
-              placeholder="Código o nombre..."
-              autocomplete="off"
-              maxlength="120"
-            >
-          </div>
-
-          <div>
-            <label for="productoFiltroCategoria">CATEGORÍA</label>
-            <select id="productoFiltroCategoria">
-              <option value="">Todas</option>
-              <option value="Camisetas">Camisetas</option>
-              <option value="Buzos y Gorras">Buzos y Gorras</option>
-              <option value="Accesorios">Accesorios</option>
-              <option value="Pantalones Baggy">Pantalones Baggy</option>
-              <option value="Zapatos">Zapatos</option>
-              <option value="Arte y Suministros">Arte y Suministros</option>
-              <option value="Calzado">Calzado</option>
-              <option value="Ropa">Ropa</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="productoFiltroEstado">ESTADO</label>
-            <select id="productoFiltroEstado">
-              <option value="">Todos</option>
-              <option value="Activo">Activos</option>
-              <option value="Inactivo">Inactivos / archivados</option>
-            </select>
-          </div>
-
-          <button
-            type="button"
-            class="admin-secondary-btn"
-            id="limpiarFiltrosProductosBtn"
-          >
+</div>
+<div class="productos-toolbar">
+<div>
+<label for="productoBuscar">BUSCAR</label>
+<input autocomplete="off" id="productoBuscar" maxlength="120" placeholder="Código o nombre..." type="search"/>
+</div>
+<div>
+<label for="productoFiltroCategoria">CATEGORÍA</label>
+<select id="productoFiltroCategoria">
+<option value="">Todas</option>
+<option value="Camisetas">Camisetas</option>
+<option value="Buzos y Gorras">Buzos y Gorras</option>
+<option value="Accesorios">Accesorios</option>
+<option value="Pantalones Baggy">Pantalones Baggy</option>
+<option value="Zapatos">Zapatos</option>
+<option value="Arte y Suministros">Arte y Suministros</option>
+<option value="Calzado">Calzado</option>
+<option value="Ropa">Ropa</option>
+</select>
+</div>
+<div>
+<label for="productoFiltroEstado">ESTADO</label>
+<select id="productoFiltroEstado">
+<option value="">Todos</option>
+<option value="Activo">Activos</option>
+<option value="Inactivo">Inactivos / archivados</option>
+</select>
+</div>
+<button class="admin-secondary-btn" id="limpiarFiltrosProductosBtn" type="button">
             LIMPIAR
           </button>
-
-        </div>
-
-        <p
-          class="productos-resultado"
-          id="productosResultadoTexto"
-          aria-live="polite"
-        >
+</div>
+<p aria-live="polite" class="productos-resultado" id="productosResultadoTexto">
           Mostrando 0 productos.
         </p>
-
-
-        <div class="admin-table-wrap">
-
-
-          <table class="admin-table">
-
-
-            <thead>
-
-              <tr>
-
-                <th>CÓDIGO</th>
-                <th>PRODUCTO</th>
-                <th>CATEGORÍA</th>
-                <th>PRECIO</th>
-                <th>STOCK</th>
-                <th>ESTADO</th>
-                <th>ACCIONES</th>
-
-              </tr>
-
-            </thead>
-
-
-            <tbody id="productosAdminBody">
-
-              <tr>
-
-                <td colspan="7">
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead>
+<tr>
+<th>CÓDIGO</th>
+<th>PRODUCTO</th>
+<th>CATEGORÍA</th>
+<th>PRECIO</th>
+<th>STOCK</th>
+<th>ESTADO</th>
+<th>ACCIONES</th>
+</tr>
+</thead>
+<tbody id="productosAdminBody">
+<tr>
+<td colspan="7">
                   Cargando productos...
                 </td>
-
-              </tr>
-
-            </tbody>
-
-
-          </table>
-
-
-        </div>
-
-
-      </section>
-
-
-
-
-      <!-- ========================================
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ========================================
            PEDIDOS
       ========================================= -->
-
-      <!-- ========================================
+<!-- ========================================
            PASO 16F1 · FACTURACIÓN ELECTRÓNICA
       ========================================= -->
-
-      
-      <!-- ========================================
+<!-- ========================================
            PASO 24 · RESEÑAS Y REPUTACIÓN
       ========================================= -->
-
-      <section
-        class="admin-card admin-section-anchor resenas-admin-center"
-        id="resenasAdmin"
-      >
-
-        <div class="admin-card-header">
-          <div>
-            <p class="admin-eyebrow">PASO 24 · REPUTACIÓN</p>
-            <h3>Reseñas de clientes</h3>
-            <p class="resenas-admin-subtitle">
+<section class="admin-card admin-section-anchor resenas-admin-center" id="resenasAdmin">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">PASO 24 · REPUTACIÓN</p>
+<h3>Reseñas de clientes</h3>
+<p class="resenas-admin-subtitle">
               Revisa las opiniones publicadas en las fichas de producto y elimina
               contenido inapropiado sin modificar la calificación del cliente.
             </p>
-          </div>
-
-          <div class="resenas-admin-header-actions">
-            <span
-              class="admin-status"
-              id="resenasAdminEstado"
-            >
+</div>
+<div class="resenas-admin-header-actions">
+<span class="admin-status" id="resenasAdminEstado">
               SINCRONIZANDO
             </span>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="actualizarResenasAdminBtn"
-            >
+<button class="admin-secondary-btn" id="actualizarResenasAdminBtn" type="button">
               ACTUALIZAR
             </button>
-          </div>
-        </div>
-
-        <div class="resenas-admin-kpis">
-          <article>
-            <span>RESEÑAS</span>
-            <strong id="resenasAdminKpiTotal">0</strong>
-          </article>
-
-          <article>
-            <span>PROMEDIO</span>
-            <strong id="resenasAdminKpiPromedio">0.0</strong>
-          </article>
-
-          <article>
-            <span>5 ESTRELLAS</span>
-            <strong id="resenasAdminKpiCinco">0</strong>
-          </article>
-
-          <article>
-            <span>1–2 ESTRELLAS</span>
-            <strong id="resenasAdminKpiBajas">0</strong>
-          </article>
-        </div>
-
-        <div class="admin-filters resenas-admin-filters">
-          <label>
+</div>
+</div>
+<div class="resenas-admin-kpis">
+<article>
+<span>RESEÑAS</span>
+<strong id="resenasAdminKpiTotal">0</strong>
+</article>
+<article>
+<span>PROMEDIO</span>
+<strong id="resenasAdminKpiPromedio">0.0</strong>
+</article>
+<article>
+<span>5 ESTRELLAS</span>
+<strong id="resenasAdminKpiCinco">0</strong>
+</article>
+<article>
+<span>1–2 ESTRELLAS</span>
+<strong id="resenasAdminKpiBajas">0</strong>
+</article>
+</div>
+<div class="admin-filters resenas-admin-filters">
+<label>
             BUSCAR
-            <input
-              id="resenasAdminBuscar"
-              type="search"
-              maxlength="120"
-              autocomplete="off"
-              placeholder="Producto, cliente o comentario..."
-            >
-          </label>
-
-          <label>
+            <input autocomplete="off" id="resenasAdminBuscar" maxlength="120" placeholder="Producto, cliente o comentario..." type="search"/>
+</label>
+<label>
             CALIFICACIÓN
             <select id="resenasAdminFiltroRating">
-              <option value="">Todas</option>
-              <option value="5">5 estrellas</option>
-              <option value="4">4 estrellas</option>
-              <option value="3">3 estrellas</option>
-              <option value="2">2 estrellas</option>
-              <option value="1">1 estrella</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todas</option>
+<option value="5">5 estrellas</option>
+<option value="4">4 estrellas</option>
+<option value="3">3 estrellas</option>
+<option value="2">2 estrellas</option>
+<option value="1">1 estrella</option>
+</select>
+</label>
+<label>
             CATÁLOGO
             <select id="resenasAdminFiltroCatalogo">
-              <option value="">Todos</option>
-              <option value="Activo">Producto activo</option>
-              <option value="Inactivo">Producto inactivo / archivado</option>
-            </select>
-          </label>
-
-          <button
-            type="button"
-            class="admin-secondary-btn"
-            id="limpiarFiltrosResenasBtn"
-          >
+<option value="">Todos</option>
+<option value="Activo">Producto activo</option>
+<option value="Inactivo">Producto inactivo / archivado</option>
+</select>
+</label>
+<button class="admin-secondary-btn" id="limpiarFiltrosResenasBtn" type="button">
             LIMPIAR
           </button>
-        </div>
-
-        <div
-          class="admin-results-text"
-          id="resenasAdminResultadoTexto"
-          aria-live="polite"
-        >
+</div>
+<div aria-live="polite" class="admin-results-text" id="resenasAdminResultadoTexto">
           Cargando reseñas...
         </div>
-
-        <div class="admin-table-wrapper">
-          <table class="admin-table resenas-admin-table">
-            <thead>
-              <tr>
-                <th>PRODUCTO</th>
-                <th>CLIENTE</th>
-                <th>CALIFICACIÓN</th>
-                <th>COMENTARIO</th>
-                <th>FECHA</th>
-                <th>ACCIONES</th>
-              </tr>
-            </thead>
-
-            <tbody id="resenasAdminBody">
-              <tr>
-                <td colspan="6">Cargando reseñas...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="resenas-admin-note">
-          <strong>MODERACIÓN</strong>
-          <p>
+<div class="admin-table-wrapper">
+<table class="admin-table resenas-admin-table">
+<thead>
+<tr>
+<th>PRODUCTO</th>
+<th>CLIENTE</th>
+<th>CALIFICACIÓN</th>
+<th>COMENTARIO</th>
+<th>FECHA</th>
+<th>ACCIONES</th>
+</tr>
+</thead>
+<tbody id="resenasAdminBody">
+<tr>
+<td colspan="6">Cargando reseñas...</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="resenas-admin-note">
+<strong>MODERACIÓN</strong>
+<p>
             SIXTEEN no modifica la opinión ni la puntuación escrita por el cliente.
             La acción administrativa disponible es eliminar una reseña cuando sea
             spam, ofensiva, fraudulenta o incumpla las normas de la tienda.
           </p>
-        </div>
-
-      </section>
-
-
-<section
-        class="admin-card admin-section-anchor facturacion-section"
-        id="facturacion"
-      >
-
-        <div class="admin-card-header">
-          <div>
-            <p class="admin-eyebrow">SIXTEEN · SISTEMA PROPIO</p>
-            <h3>Facturación SIXTEEN</h3>
-            <p class="facturacion-subtitle">
+</div>
+</section>
+<section class="admin-card admin-section-anchor facturacion-section" id="facturacion">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">SIXTEEN · SISTEMA PROPIO</p>
+<h3>Facturación SIXTEEN</h3>
+<p class="facturacion-subtitle">
               Facturador comercial propio: crea facturas desde pedidos o manualmente, calcula IVA,
               guarda numeración automática, genera PDF descargable, envía correos y conserva historial.
             </p>
-          </div>
-
-          <div class="facturacion-header-actions">
-            <span class="admin-status" id="facturacionAmbienteBadge">OPERATIVO</span>
-            <button type="button" class="admin-primary-btn" id="abrirFacturaManualBtn">+ FACTURA MANUAL</button>
-            <button type="button" class="admin-secondary-btn" id="abrirFacturacionConfigBtn">CONFIGURACIÓN</button>
-            <button type="button" class="admin-secondary-btn" id="abrirNotaCreditoBtn">+ NOTA DE CRÉDITO</button>
-            <button type="button" class="admin-secondary-btn" id="abrirNotaDebitoBtn">+ NOTA DE DÉBITO</button>
-          </div>
-        </div>
-
-        <div class="facturacion-internal-notice" role="note">
-          <strong>DOCUMENTO COMERCIAL INTERNO</strong>
-          <span>El facturador funciona de forma independiente dentro de SIXTEEN. Genera documentos comerciales reales del sistema, pero no comprobantes tributarios autorizados por el SRI.</span>
-        </div>
-
-        <div class="facturacion-kpis">
-          <article><span>DOCUMENTOS</span><strong id="facturacionKpiTotal">0</strong></article>
-          <article><span>FACTURAS EMITIDAS</span><strong id="facturacionKpiFacturas">0</strong></article>
-          <article><span>NOTAS DE CRÉDITO</span><strong id="facturacionKpiNotasCredito">0</strong></article>
-          <article><span>TOTAL FACTURADO</span><strong id="facturacionKpiTotalFacturado">$0.00</strong></article>
-        </div>
-
-        <div class="facturacion-workbench">
-          <article class="facturacion-generator">
-            <p class="admin-eyebrow">NUEVA FACTURA DESDE PEDIDO</p>
-            <h4>Generar factura SIXTEEN</h4>
-
-            <div class="facturacion-form-grid">
-              <label>
+</div>
+<div class="facturacion-header-actions">
+<span class="admin-status" id="facturacionAmbienteBadge">OPERATIVO</span>
+<button class="admin-primary-btn" id="abrirFacturaManualBtn" type="button">+ FACTURA MANUAL</button>
+<button class="admin-secondary-btn" id="abrirFacturacionConfigBtn" type="button">CONFIGURACIÓN</button>
+<button class="admin-secondary-btn" id="abrirNotaCreditoBtn" type="button">+ NOTA DE CRÉDITO</button>
+<button class="admin-secondary-btn" id="abrirNotaDebitoBtn" type="button">+ NOTA DE DÉBITO</button>
+</div>
+</div>
+<div class="facturacion-internal-notice" role="note">
+<strong>DOCUMENTO COMERCIAL INTERNO</strong>
+<span>El facturador funciona de forma independiente dentro de SIXTEEN. Genera documentos comerciales reales del sistema, pero no comprobantes tributarios autorizados por el SRI.</span>
+</div>
+<div class="facturacion-kpis">
+<article><span>DOCUMENTOS</span><strong id="facturacionKpiTotal">0</strong></article>
+<article><span>FACTURAS EMITIDAS</span><strong id="facturacionKpiFacturas">0</strong></article>
+<article><span>NOTAS DE CRÉDITO</span><strong id="facturacionKpiNotasCredito">0</strong></article>
+<article><span>TOTAL FACTURADO</span><strong id="facturacionKpiTotalFacturado">$0.00</strong></article>
+</div>
+<div class="facturacion-workbench">
+<article class="facturacion-generator">
+<p class="admin-eyebrow">NUEVA FACTURA DESDE PEDIDO</p>
+<h4>Generar factura SIXTEEN</h4>
+<div class="facturacion-form-grid">
+<label>
                 PEDIDO
                 <select id="facturacionPedidoSelect">
-                  <option value="">Selecciona un pedido</option>
-                </select>
-              </label>
-              <label>
+<option value="">Selecciona un pedido</option>
+</select>
+</label>
+<label>
                 FECHA EMISIÓN
-                <input type="date" id="facturacionFechaEmision">
-              </label>
-            </div>
-
-            <div class="facturacion-order-preview" id="facturacionPedidoPreview">
+                <input id="facturacionFechaEmision" type="date"/>
+</label>
+</div>
+<div class="facturacion-order-preview" id="facturacionPedidoPreview">
               Selecciona un pedido para revisar los datos que se usarán en la factura.
             </div>
-
-            <div class="facturacion-action-row">
-              <button type="button" class="admin-primary-btn" id="generarFacturaXmlBtn">GENERAR FACTURA</button>
-              <span class="facturacion-action-message" id="facturacionGenerarMensaje" aria-live="polite"></span>
-            </div>
-          </article>
-
-          <article class="facturacion-status-panel">
-            <p class="admin-eyebrow">FLUJO ACTIVO</p>
-            <h4>Sistema comercial propio</h4>
-            <ol class="facturacion-flow">
-              <li class="done">Factura desde pedido o manual</li>
-              <li class="done">Numeración automática</li>
-              <li class="done">Cálculo comercial e IVA</li>
-              <li class="done">PDF descargable / impresión</li>
-              <li class="done">Historial / Mi Cuenta</li>
-              <li class="done">Correo al cliente</li>
-            </ol>
-          </article>
-        </div>
-
-        <div class="facturacion-toolbar">
-          <div>
-            <label for="facturacionBuscar">BUSCAR</label>
-            <input type="search" id="facturacionBuscar" placeholder="Documento, pedido, cliente, identificación..." autocomplete="off">
-          </div>
-          <div>
-            <label for="facturacionFiltroTipo">TIPO</label>
-            <select id="facturacionFiltroTipo">
-              <option value="">Todos</option>
-              <option value="FACTURA">Factura</option>
-              <option value="NOTA_CREDITO">Nota de crédito</option>
-              <option value="NOTA_DEBITO">Nota de débito</option>
-            </select>
-          </div>
-          <div>
-            <label for="facturacionFiltroEstado">ESTADO</label>
-            <select id="facturacionFiltroEstado">
-              <option value="">Todos</option>
-              <option value="EMITIDA">Emitida</option>
-              <option value="ANULADA">Anulada</option>
-            </select>
-          </div>
-          <button type="button" class="admin-secondary-btn" id="exportarFacturacionCsvBtn">EXPORTAR CSV</button>
-        </div>
-
-        <div class="admin-table-wrap">
-          <table class="admin-table facturacion-table">
-            <thead>
-              <tr>
-                <th>DOCUMENTO</th><th>FECHA</th><th>CLIENTE</th><th>PEDIDO / REFERENCIA</th>
-                <th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th>
-              </tr>
-            </thead>
-            <tbody id="facturacionBody"><tr><td colspan="7">Cargando documentos...</td></tr></tbody>
-          </table>
-        </div>
-
-        <div class="facturacion-doc-types">
-          <span>FACTURA SIXTEEN · ACTIVA</span>
-          <span>NOTA DE CRÉDITO INTERNA · ACTIVA</span>
-          <span>NOTA DE DÉBITO INTERNA · ACTIVA</span>
-          <span>PDF / IMPRESIÓN · ACTIVO</span>
-          <span>EMAIL / MI CUENTA · ACTIVO</span>
-        </div>
-
-
-
-        <div class="admin-modal" id="facturacionManualModal" hidden>
-          <div class="admin-modal-panel facturacion-config-modal facturacion-manual-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionManualTitulo" tabindex="-1">
-            <div class="admin-modal-header">
-              <div><p class="admin-eyebrow">FACTURACIÓN SIXTEEN</p><h3 id="facturacionManualTitulo">Nueva factura manual</h3></div>
-              <button type="button" class="admin-modal-close" id="cerrarFacturaManualBtn" aria-label="Cerrar">×</button>
-            </div>
-            <form id="facturacionManualForm" novalidate>
-              <div class="facturacion-config-grid">
-                <label>NOMBRES / RAZÓN SOCIAL *<input id="facturaManualClienteNombre" maxlength="160" required autocomplete="name"></label>
-                <label>IDENTIFICACIÓN<input id="facturaManualClienteId" maxlength="30" autocomplete="off"></label>
-                <label>CORREO<input id="facturaManualClienteEmail" type="email" maxlength="160" autocomplete="email"></label>
-                <label>TELÉFONO<input id="facturaManualClienteTelefono" maxlength="30" autocomplete="tel"></label>
-                <label class="span-2">DIRECCIÓN<input id="facturaManualClienteDireccion" maxlength="250" autocomplete="street-address"></label>
-                <label>CIUDAD<input id="facturaManualClienteCiudad" maxlength="100"></label>
-                <label>PROVINCIA<input id="facturaManualClienteProvincia" maxlength="100"></label>
-                <label>FECHA EMISIÓN *<input id="facturaManualFecha" type="date" required></label>
-                <label>FECHA VENCIMIENTO<input id="facturaManualVencimiento" type="date"></label>
-                <label>MÉTODO DE PAGO<select id="facturaManualPagoMetodo"><option value="">Sin especificar</option><option value="efectivo">Efectivo</option><option value="transferencia">Transferencia</option><option value="qr">Pago QR</option><option value="tarjeta">Tarjeta</option><option value="credito">Crédito</option></select></label>
-                <label>ESTADO DEL PAGO<select id="facturaManualPagoEstado"><option value="Pendiente">Pendiente</option><option value="Por verificar">Por verificar</option><option value="Pagado">Pagado</option><option value="Vencido">Vencido</option></select></label>
-              </div>
-
-              <div class="facturacion-manual-items-head">
-                <div><p class="admin-eyebrow">DETALLE</p><h4>Productos / servicios</h4></div>
-                <button type="button" class="admin-secondary-btn" id="agregarFacturaManualItemBtn">+ AGREGAR LÍNEA</button>
-              </div>
-              <div class="facturacion-manual-items" id="facturaManualItems"></div>
-
-              <div class="facturacion-manual-bottom">
-                <div class="facturacion-config-grid">
-                  <label>DESCUENTO $<input id="facturaManualDescuento" type="number" min="0" step="0.01" value="0"></label>
-                  <label>ENVÍO / OTROS $<input id="facturaManualEnvio" type="number" min="0" step="0.01" value="0"></label>
-                  <label class="span-2">NOTAS / CONDICIONES<textarea id="facturaManualNotas" maxlength="600" rows="3"></textarea></label>
-                </div>
-                <div class="facturacion-manual-totals" aria-live="polite">
-                  <div><span>Base imponible</span><strong id="facturaManualBase">$0.00</strong></div>
-                  <div><span>IVA</span><strong id="facturaManualIva">$0.00</strong></div>
-                  <div><span>Descuento</span><strong id="facturaManualDescuentoTotal">$0.00</strong></div>
-                  <div><span>Envío / otros</span><strong id="facturaManualEnvioTotal">$0.00</strong></div>
-                  <div class="grand"><span>TOTAL</span><strong id="facturaManualTotal">$0.00</strong></div>
-                </div>
-              </div>
-              <div class="admin-form-message" id="facturaManualMensaje" aria-live="polite"></div>
-              <div class="admin-modal-actions">
-                <button type="button" class="admin-secondary-btn" id="cancelarFacturaManualBtn">CANCELAR</button>
-                <button type="submit" class="admin-primary-btn" id="guardarFacturaManualBtn">EMITIR FACTURA</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="admin-modal" id="facturacionConfigModal" hidden>
-          <div class="admin-modal-panel facturacion-config-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionConfigTitulo" tabindex="-1">
-            <div class="admin-modal-header">
-              <div><p class="admin-eyebrow">CONFIGURACIÓN DEL FACTURADOR</p><h3 id="facturacionConfigTitulo">Datos de emisión</h3></div>
-              <button type="button" class="admin-modal-close" id="cerrarFacturacionConfigBtn" aria-label="Cerrar">×</button>
-            </div>
-            <form id="facturacionConfigForm" novalidate>
-              <div class="facturacion-config-grid">
-                <label>NOMBRE COMERCIAL *<input id="facturacionConfigNombre" maxlength="160" required></label>
-                <label>RAZÓN SOCIAL / TITULAR<input id="facturacionConfigRazonSocial" maxlength="160"></label>
-                <label>IDENTIFICACIÓN / RUC<input id="facturacionConfigIdentificacion" maxlength="30"></label>
-                <label>CORREO<input id="facturacionConfigEmail" type="email" maxlength="160"></label>
-                <label>TELÉFONO<input id="facturacionConfigTelefono" maxlength="30"></label>
-                <label>CIUDAD<input id="facturacionConfigCiudad" maxlength="100"></label>
-                <label class="span-2">DIRECCIÓN<input id="facturacionConfigDireccion" maxlength="250"></label>
-                <label>PAÍS<input id="facturacionConfigPais" maxlength="80" value="Ecuador"></label>
-                <label>IVA PREDETERMINADO<select id="facturacionConfigIva"><option value="15">15%</option><option value="5">5%</option><option value="0">0%</option></select></label>
-                <label>DÍAS DE VENCIMIENTO<input id="facturacionConfigDiasVencimiento" type="number" min="0" max="365" step="1" value="0"></label>
-                <label>PREFIJO FACTURA<input id="facturacionConfigPrefijoFactura" maxlength="20" value="SIX-FAC"></label>
-                <label>PREFIJO NOTA CRÉDITO<input id="facturacionConfigPrefijoNC" maxlength="20" value="SIX-NC"></label>
-                <label>PREFIJO NOTA DÉBITO<input id="facturacionConfigPrefijoND" maxlength="20" value="SIX-ND"></label>
-                <label class="span-2">CONDICIONES / PIE DEL DOCUMENTO<textarea id="facturacionConfigTerminos" maxlength="600" rows="3" placeholder="Gracias por tu compra."></textarea></label>
-              </div>
-              <div class="facturacion-config-info">Estos datos se copian dentro de cada factura al momento de emitirla para conservar el historial aunque después cambies la configuración.</div>
-              <div class="admin-form-message" id="facturacionConfigMensaje" aria-live="polite"></div>
-              <div class="admin-modal-actions">
-                <button type="button" class="admin-secondary-btn" id="cancelarFacturacionConfigBtn">CANCELAR</button>
-                <button type="submit" class="admin-primary-btn" id="guardarFacturacionConfigBtn">GUARDAR CONFIGURACIÓN</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="admin-modal" id="facturacionDetalleModal" hidden>
-          <div class="admin-modal-panel facturacion-config-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionDetalleTitulo" tabindex="-1">
-            <div class="admin-modal-header">
-              <div><p class="admin-eyebrow">DOCUMENTO EMITIDO</p><h3 id="facturacionDetalleTitulo">Detalle</h3></div>
-              <button type="button" class="admin-modal-close" id="cerrarFacturacionDetalleBtn" aria-label="Cerrar">×</button>
-            </div>
-            <div id="facturacionDetalleContenido" class="facturacion-detalle-contenido"></div>
-            <div class="admin-modal-actions"><button type="button" class="admin-secondary-btn" id="cerrarFacturacionDetalleAccionBtn">CERRAR</button></div>
-          </div>
-        </div>
-
-        <div class="admin-modal" id="facturacionNotaModal" hidden>
-          <div class="admin-modal-panel facturacion-config-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionNotaTitulo" tabindex="-1">
-            <div class="admin-modal-header">
-              <div><p class="admin-eyebrow">AJUSTE COMERCIAL INTERNO</p><h3 id="facturacionNotaTitulo">Nueva nota</h3></div>
-              <button type="button" class="admin-modal-close" id="cerrarFacturacionNotaBtn" aria-label="Cerrar">×</button>
-            </div>
-            <form id="facturacionNotaForm" novalidate>
-              <div class="facturacion-config-grid">
-                <label class="span-2">FACTURA DE REFERENCIA
-                  <select id="facturacionNotaFactura" required><option value="">Selecciona una factura</option></select>
-                </label>
-                <label>VALOR
-                  <input id="facturacionNotaValor" type="number" min="0.01" step="0.01" required>
-                </label>
-                <label class="span-2">MOTIVO
-                  <textarea id="facturacionNotaMotivo" maxlength="300" rows="4" required></textarea>
-                </label>
-              </div>
-              <div class="facturacion-config-info" id="facturacionNotaInfo">La nota quedará vinculada a la factura seleccionada y no modifica automáticamente el pedido.</div>
-              <div class="admin-form-message" id="facturacionNotaMensaje" aria-live="polite"></div>
-              <div class="admin-modal-actions">
-                <button type="button" class="admin-secondary-btn" id="cancelarFacturacionNotaBtn">CANCELAR</button>
-                <button type="submit" class="admin-primary-btn" id="guardarFacturacionNotaBtn">GENERAR NOTA</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-      </section>
-
-
-      <section class="admin-card admin-section-anchor" id="pedidos">
-
-        <div class="admin-card-header">
-
-          <div>
-            <p class="admin-eyebrow">FIRESTORE · PEDIDOS</p>
-            <h3>Pedidos</h3>
-          </div>
-
-          <span class="admin-status" id="pedidosEstadoConexion">
+<div class="facturacion-action-row">
+<button class="admin-primary-btn" id="generarFacturaXmlBtn" type="button">GENERAR FACTURA</button>
+<span aria-live="polite" class="facturacion-action-message" id="facturacionGenerarMensaje"></span>
+</div>
+</article>
+<article class="facturacion-status-panel">
+<p class="admin-eyebrow">FLUJO ACTIVO</p>
+<h4>Sistema comercial propio</h4>
+<ol class="facturacion-flow">
+<li class="done">Factura desde pedido o manual</li>
+<li class="done">Numeración automática</li>
+<li class="done">Cálculo comercial e IVA</li>
+<li class="done">PDF descargable / impresión</li>
+<li class="done">Historial / Mi Cuenta</li>
+<li class="done">Correo al cliente</li>
+</ol>
+</article>
+</div>
+<div class="facturacion-toolbar">
+<div>
+<label for="facturacionBuscar">BUSCAR</label>
+<input autocomplete="off" id="facturacionBuscar" placeholder="Documento, pedido, cliente, identificación..." type="search"/>
+</div>
+<div>
+<label for="facturacionFiltroTipo">TIPO</label>
+<select id="facturacionFiltroTipo">
+<option value="">Todos</option>
+<option value="FACTURA">Factura</option>
+<option value="NOTA_CREDITO">Nota de crédito</option>
+<option value="NOTA_DEBITO">Nota de débito</option>
+</select>
+</div>
+<div>
+<label for="facturacionFiltroEstado">ESTADO</label>
+<select id="facturacionFiltroEstado">
+<option value="">Todos</option>
+<option value="EMITIDA">Emitida</option>
+<option value="ANULADA">Anulada</option>
+</select>
+</div>
+<button class="admin-secondary-btn" id="exportarFacturacionCsvBtn" type="button">EXPORTAR CSV</button>
+</div>
+<div class="admin-table-wrap">
+<table class="admin-table facturacion-table">
+<thead>
+<tr>
+<th>DOCUMENTO</th><th>FECHA</th><th>CLIENTE</th><th>PEDIDO / REFERENCIA</th>
+<th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th>
+</tr>
+</thead>
+<tbody id="facturacionBody"><tr><td colspan="7">Cargando documentos...</td></tr></tbody>
+</table>
+</div>
+<div class="facturacion-doc-types">
+<span>FACTURA SIXTEEN · ACTIVA</span>
+<span>NOTA DE CRÉDITO INTERNA · ACTIVA</span>
+<span>NOTA DE DÉBITO INTERNA · ACTIVA</span>
+<span>PDF / IMPRESIÓN · ACTIVO</span>
+<span>EMAIL / MI CUENTA · ACTIVO</span>
+</div>
+<div class="admin-modal" hidden="" id="facturacionManualModal">
+<div aria-labelledby="facturacionManualTitulo" aria-modal="true" class="admin-modal-panel facturacion-config-modal facturacion-manual-modal" role="dialog" tabindex="-1">
+<div class="admin-modal-header">
+<div><p class="admin-eyebrow">FACTURACIÓN SIXTEEN</p><h3 id="facturacionManualTitulo">Nueva factura manual</h3></div>
+<button aria-label="Cerrar" class="admin-modal-close" id="cerrarFacturaManualBtn" type="button">×</button>
+</div>
+<form id="facturacionManualForm" novalidate="">
+<div class="facturacion-config-grid">
+<label>NOMBRES / RAZÓN SOCIAL *<input autocomplete="name" id="facturaManualClienteNombre" maxlength="160" required=""/></label>
+<label>IDENTIFICACIÓN<input autocomplete="off" id="facturaManualClienteId" maxlength="30"/></label>
+<label>CORREO<input autocomplete="email" id="facturaManualClienteEmail" maxlength="160" type="email"/></label>
+<label>TELÉFONO<input autocomplete="tel" id="facturaManualClienteTelefono" maxlength="30"/></label>
+<label class="span-2">DIRECCIÓN<input autocomplete="street-address" id="facturaManualClienteDireccion" maxlength="250"/></label>
+<label>CIUDAD<input id="facturaManualClienteCiudad" maxlength="100"/></label>
+<label>PROVINCIA<input id="facturaManualClienteProvincia" maxlength="100"/></label>
+<label>FECHA EMISIÓN *<input id="facturaManualFecha" required="" type="date"/></label>
+<label>FECHA VENCIMIENTO<input id="facturaManualVencimiento" type="date"/></label>
+<label>MÉTODO DE PAGO<select id="facturaManualPagoMetodo"><option value="">Sin especificar</option><option value="efectivo">Efectivo</option><option value="transferencia">Transferencia</option><option value="qr">Pago QR</option><option value="tarjeta">Tarjeta</option><option value="credito">Crédito</option></select></label>
+<label>ESTADO DEL PAGO<select id="facturaManualPagoEstado"><option value="Pendiente">Pendiente</option><option value="Por verificar">Por verificar</option><option value="Pagado">Pagado</option><option value="Vencido">Vencido</option></select></label>
+</div>
+<div class="facturacion-manual-items-head">
+<div><p class="admin-eyebrow">DETALLE</p><h4>Productos / servicios</h4></div>
+<button class="admin-secondary-btn" id="agregarFacturaManualItemBtn" type="button">+ AGREGAR LÍNEA</button>
+</div>
+<div class="facturacion-manual-items" id="facturaManualItems"></div>
+<div class="facturacion-manual-bottom">
+<div class="facturacion-config-grid">
+<label>DESCUENTO $<input id="facturaManualDescuento" min="0" step="0.01" type="number" value="0"/></label>
+<label>ENVÍO / OTROS $<input id="facturaManualEnvio" min="0" step="0.01" type="number" value="0"/></label>
+<label class="span-2">NOTAS / CONDICIONES<textarea id="facturaManualNotas" maxlength="600" rows="3"></textarea></label>
+</div>
+<div aria-live="polite" class="facturacion-manual-totals">
+<div><span>Base imponible</span><strong id="facturaManualBase">$0.00</strong></div>
+<div><span>IVA</span><strong id="facturaManualIva">$0.00</strong></div>
+<div><span>Descuento</span><strong id="facturaManualDescuentoTotal">$0.00</strong></div>
+<div><span>Envío / otros</span><strong id="facturaManualEnvioTotal">$0.00</strong></div>
+<div class="grand"><span>TOTAL</span><strong id="facturaManualTotal">$0.00</strong></div>
+</div>
+</div>
+<div aria-live="polite" class="admin-form-message" id="facturaManualMensaje"></div>
+<div class="admin-modal-actions">
+<button class="admin-secondary-btn" id="cancelarFacturaManualBtn" type="button">CANCELAR</button>
+<button class="admin-primary-btn" id="guardarFacturaManualBtn" type="submit">EMITIR FACTURA</button>
+</div>
+</form>
+</div>
+</div>
+<div class="admin-modal" hidden="" id="facturacionConfigModal">
+<div aria-labelledby="facturacionConfigTitulo" aria-modal="true" class="admin-modal-panel facturacion-config-modal" role="dialog" tabindex="-1">
+<div class="admin-modal-header">
+<div><p class="admin-eyebrow">CONFIGURACIÓN DEL FACTURADOR</p><h3 id="facturacionConfigTitulo">Datos de emisión</h3></div>
+<button aria-label="Cerrar" class="admin-modal-close" id="cerrarFacturacionConfigBtn" type="button">×</button>
+</div>
+<form id="facturacionConfigForm" novalidate="">
+<div class="facturacion-config-grid">
+<label>NOMBRE COMERCIAL *<input id="facturacionConfigNombre" maxlength="160" required=""/></label>
+<label>RAZÓN SOCIAL / TITULAR<input id="facturacionConfigRazonSocial" maxlength="160"/></label>
+<label>IDENTIFICACIÓN / RUC<input id="facturacionConfigIdentificacion" maxlength="30"/></label>
+<label>CORREO<input id="facturacionConfigEmail" maxlength="160" type="email"/></label>
+<label>TELÉFONO<input id="facturacionConfigTelefono" maxlength="30"/></label>
+<label>CIUDAD<input id="facturacionConfigCiudad" maxlength="100"/></label>
+<label class="span-2">DIRECCIÓN<input id="facturacionConfigDireccion" maxlength="250"/></label>
+<label>PAÍS<input id="facturacionConfigPais" maxlength="80" value="Ecuador"/></label>
+<label>IVA PREDETERMINADO<select id="facturacionConfigIva"><option value="15">15%</option><option value="5">5%</option><option value="0">0%</option></select></label>
+<label>DÍAS DE VENCIMIENTO<input id="facturacionConfigDiasVencimiento" max="365" min="0" step="1" type="number" value="0"/></label>
+<label>PREFIJO FACTURA<input id="facturacionConfigPrefijoFactura" maxlength="20" value="SIX-FAC"/></label>
+<label>PREFIJO NOTA CRÉDITO<input id="facturacionConfigPrefijoNC" maxlength="20" value="SIX-NC"/></label>
+<label>PREFIJO NOTA DÉBITO<input id="facturacionConfigPrefijoND" maxlength="20" value="SIX-ND"/></label>
+<label class="span-2">CONDICIONES / PIE DEL DOCUMENTO<textarea id="facturacionConfigTerminos" maxlength="600" placeholder="Gracias por tu compra." rows="3"></textarea></label>
+</div>
+<div class="facturacion-config-info">Estos datos se copian dentro de cada factura al momento de emitirla para conservar el historial aunque después cambies la configuración.</div>
+<div aria-live="polite" class="admin-form-message" id="facturacionConfigMensaje"></div>
+<div class="admin-modal-actions">
+<button class="admin-secondary-btn" id="cancelarFacturacionConfigBtn" type="button">CANCELAR</button>
+<button class="admin-primary-btn" id="guardarFacturacionConfigBtn" type="submit">GUARDAR CONFIGURACIÓN</button>
+</div>
+</form>
+</div>
+</div>
+<div class="admin-modal" hidden="" id="facturacionDetalleModal">
+<div aria-labelledby="facturacionDetalleTitulo" aria-modal="true" class="admin-modal-panel facturacion-config-modal" role="dialog" tabindex="-1">
+<div class="admin-modal-header">
+<div><p class="admin-eyebrow">DOCUMENTO EMITIDO</p><h3 id="facturacionDetalleTitulo">Detalle</h3></div>
+<button aria-label="Cerrar" class="admin-modal-close" id="cerrarFacturacionDetalleBtn" type="button">×</button>
+</div>
+<div class="facturacion-detalle-contenido" id="facturacionDetalleContenido"></div>
+<div class="admin-modal-actions"><button class="admin-secondary-btn" id="cerrarFacturacionDetalleAccionBtn" type="button">CERRAR</button></div>
+</div>
+</div>
+<div class="admin-modal" hidden="" id="facturacionNotaModal">
+<div aria-labelledby="facturacionNotaTitulo" aria-modal="true" class="admin-modal-panel facturacion-config-modal" role="dialog" tabindex="-1">
+<div class="admin-modal-header">
+<div><p class="admin-eyebrow">AJUSTE COMERCIAL INTERNO</p><h3 id="facturacionNotaTitulo">Nueva nota</h3></div>
+<button aria-label="Cerrar" class="admin-modal-close" id="cerrarFacturacionNotaBtn" type="button">×</button>
+</div>
+<form id="facturacionNotaForm" novalidate="">
+<div class="facturacion-config-grid">
+<label class="span-2">FACTURA DE REFERENCIA
+                  <select id="facturacionNotaFactura" required=""><option value="">Selecciona una factura</option></select>
+</label>
+<label>VALOR
+                  <input id="facturacionNotaValor" min="0.01" required="" step="0.01" type="number"/>
+</label>
+<label class="span-2">MOTIVO
+                  <textarea id="facturacionNotaMotivo" maxlength="300" required="" rows="4"></textarea>
+</label>
+</div>
+<div class="facturacion-config-info" id="facturacionNotaInfo">La nota quedará vinculada a la factura seleccionada y no modifica automáticamente el pedido.</div>
+<div aria-live="polite" class="admin-form-message" id="facturacionNotaMensaje"></div>
+<div class="admin-modal-actions">
+<button class="admin-secondary-btn" id="cancelarFacturacionNotaBtn" type="button">CANCELAR</button>
+<button class="admin-primary-btn" id="guardarFacturacionNotaBtn" type="submit">GENERAR NOTA</button>
+</div>
+</form>
+</div>
+</div>
+</section>
+<section class="admin-card admin-section-anchor" id="pedidos">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">FIRESTORE · PEDIDOS</p>
+<h3>Pedidos</h3>
+</div>
+<span class="admin-status" id="pedidosEstadoConexion">
             ACTIVO
           </span>
-
-        </div>
-
-        <div class="pedidos-toolbar">
-
-          <div class="pedidos-resumen">
-
-            <article>
-              <span>TOTAL</span>
-              <strong id="pedidosConteoTotal">0</strong>
-            </article>
-
-            <article>
-              <span>PENDIENTES</span>
-              <strong id="pedidosConteoPendientes">0</strong>
-            </article>
-
-            <article>
-              <span>EN PROCESO</span>
-              <strong id="pedidosConteoProceso">0</strong>
-            </article>
-
-            <article>
-              <span>ENTREGADOS</span>
-              <strong id="pedidosConteoEntregados">0</strong>
-            </article>
-
-            <article>
-              <span>CANCELADOS</span>
-              <strong id="pedidosConteoCancelados">0</strong>
-            </article>
-
-          </div>
-
-          <div class="pedidos-filtros">
-
-            <div class="pedidos-busqueda">
-              <label for="pedidoBuscar">
+</div>
+<div class="pedidos-toolbar">
+<div class="pedidos-resumen">
+<article>
+<span>TOTAL</span>
+<strong id="pedidosConteoTotal">0</strong>
+</article>
+<article>
+<span>PENDIENTES</span>
+<strong id="pedidosConteoPendientes">0</strong>
+</article>
+<article>
+<span>EN PROCESO</span>
+<strong id="pedidosConteoProceso">0</strong>
+</article>
+<article>
+<span>ENTREGADOS</span>
+<strong id="pedidosConteoEntregados">0</strong>
+</article>
+<article>
+<span>CANCELADOS</span>
+<strong id="pedidosConteoCancelados">0</strong>
+</article>
+</div>
+<div class="pedidos-filtros">
+<div class="pedidos-busqueda">
+<label for="pedidoBuscar">
                 BUSCAR
               </label>
-              <input
-                type="search"
-                id="pedidoBuscar"
-                placeholder="Pedido, cliente, correo, cédula..."
-                autocomplete="off"
-              >
-            </div>
-
-            <div>
-              <label for="pedidoFiltroEstado">
+<input autocomplete="off" id="pedidoBuscar" placeholder="Pedido, cliente, correo, cédula..." type="search"/>
+</div>
+<div>
+<label for="pedidoFiltroEstado">
                 ESTADO
               </label>
-              <select id="pedidoFiltroEstado">
-                <option value="">Todos</option>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Confirmado">Confirmado</option>
-                <option value="En preparación">En preparación</option>
-                <option value="Enviado">Enviado</option>
-                <option value="Entregado">Entregado</option>
-                <option value="Cancelado">Cancelado</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="pedidoFiltroPago">
+<select id="pedidoFiltroEstado">
+<option value="">Todos</option>
+<option value="Pendiente">Pendiente</option>
+<option value="Confirmado">Confirmado</option>
+<option value="En preparación">En preparación</option>
+<option value="Enviado">Enviado</option>
+<option value="Entregado">Entregado</option>
+<option value="Cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<label for="pedidoFiltroPago">
                 MÉTODO DE PAGO
               </label>
-              <select id="pedidoFiltroPago">
-                <option value="">Todos</option>
-                <option value="transferencia">Transferencia bancaria</option>
-                <option value="qr">Pago QR</option>
-                <option value="tarjeta">Tarjeta crédito / débito</option>
-                <option value="efectivo">Pago contra entrega</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="pedidoFiltroEstadoPago">
+<select id="pedidoFiltroPago">
+<option value="">Todos</option>
+<option value="transferencia">Transferencia bancaria</option>
+<option value="qr">Pago QR</option>
+<option value="tarjeta">Tarjeta crédito / débito</option>
+<option value="efectivo">Pago contra entrega</option>
+</select>
+</div>
+<div>
+<label for="pedidoFiltroEstadoPago">
                 ESTADO DE PAGO
               </label>
-              <select id="pedidoFiltroEstadoPago">
-                <option value="">Todos</option>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Pendiente de pasarela">Pendiente de pasarela</option>
-                <option value="Pendiente contra entrega">Pendiente contra entrega</option>
-                <option value="Por verificar">Por verificar</option>
-                <option value="Pagado">Pagado</option>
-                <option value="Reembolsado">Reembolsado</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="pedidoFechaDesde">
+<select id="pedidoFiltroEstadoPago">
+<option value="">Todos</option>
+<option value="Pendiente">Pendiente</option>
+<option value="Pendiente de pasarela">Pendiente de pasarela</option>
+<option value="Pendiente contra entrega">Pendiente contra entrega</option>
+<option value="Por verificar">Por verificar</option>
+<option value="Pagado">Pagado</option>
+<option value="Reembolsado">Reembolsado</option>
+</select>
+</div>
+<div>
+<label for="pedidoFechaDesde">
                 DESDE
               </label>
-              <input
-                type="date"
-                id="pedidoFechaDesde"
-              >
-            </div>
-
-            <div>
-              <label for="pedidoFechaHasta">
+<input id="pedidoFechaDesde" type="date"/>
+</div>
+<div>
+<label for="pedidoFechaHasta">
                 HASTA
               </label>
-              <input
-                type="date"
-                id="pedidoFechaHasta"
-              >
-            </div>
-
-            <button
-              type="button"
-              class="admin-secondary-btn pedidos-limpiar-btn"
-              id="limpiarFiltrosPedidosBtn"
-            >
+<input id="pedidoFechaHasta" type="date"/>
+</div>
+<button class="admin-secondary-btn pedidos-limpiar-btn" id="limpiarFiltrosPedidosBtn" type="button">
               LIMPIAR
             </button>
-
-            <button
-              type="button"
-              class="admin-primary-btn pedidos-exportar-btn"
-              id="exportarPedidosBtn"
-            >
+<button class="admin-primary-btn pedidos-exportar-btn" id="exportarPedidosBtn" type="button">
               EXPORTAR CSV
             </button>
-
-          </div>
-
-          <p
-            class="pedidos-filtro-aviso"
-            id="pedidosFiltroAviso"
-            aria-live="polite"
-          ></p>
-
-          <p
-            class="pedidos-resultado"
-            id="pedidosResultadoTexto"
-          >
+</div>
+<p aria-live="polite" class="pedidos-filtro-aviso" id="pedidosFiltroAviso"></p>
+<p class="pedidos-resultado" id="pedidosResultadoTexto">
             Mostrando 0 pedidos.
           </p>
-
-        </div>
-
-        <div class="admin-table-wrap">
-
-          <table class="admin-table admin-orders-table">
-
-            <thead>
-              <tr>
-                <th>PEDIDO</th>
-                <th>CLIENTE</th>
-                <th>FECHA</th>
-                <th>TOTAL</th>
-                <th>PAGO</th>
-                <th>ESTADO</th>
-                <th>INVENTARIO</th>
-                <th>ACCIÓN</th>
-              </tr>
-            </thead>
-
-            <tbody id="pedidosAdminBody">
-              <tr>
-                <td colspan="8">Cargando pedidos...</td>
-              </tr>
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </section>
-
-
-      <!-- ========================================
+</div>
+<div class="admin-table-wrap">
+<table class="admin-table admin-orders-table">
+<thead>
+<tr>
+<th>PEDIDO</th>
+<th>CLIENTE</th>
+<th>FECHA</th>
+<th>TOTAL</th>
+<th>PAGO</th>
+<th>ESTADO</th>
+<th>INVENTARIO</th>
+<th>ACCIÓN</th>
+</tr>
+</thead>
+<tbody id="pedidosAdminBody">
+<tr>
+<td colspan="8">Cargando pedidos...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ========================================
            CLIENTES
       ========================================= -->
-
-      <section class="admin-card admin-section-anchor" id="clientes">
-
-        <div class="admin-card-header">
-
-          <div>
-            <p class="admin-eyebrow">SIXTEEN CRM</p>
-            <h3>Clientes</h3>
-          </div>
-
-          <button
-            type="button"
-            class="admin-primary-btn"
-            id="exportarClientesBtn"
-          >
+<section class="admin-card admin-section-anchor" id="clientes">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">SIXTEEN CRM</p>
+<h3>Clientes</h3>
+</div>
+<button class="admin-primary-btn" id="exportarClientesBtn" type="button">
             EXPORTAR CSV
           </button>
-
-        </div>
-
-        <div class="clientes-resumen">
-
-          <article>
-            <span>CLIENTES</span>
-            <strong id="clientesKpiTotal">0</strong>
-            <small>Compradores registrados por pedidos</small>
-          </article>
-
-          <article>
-            <span>RECURRENTES</span>
-            <strong id="clientesKpiRecurrentes">0</strong>
-            <small>Más de un pedido no cancelado</small>
-          </article>
-
-          <article>
-            <span>VENTAS</span>
-            <strong id="clientesKpiVentas">$0.00</strong>
-            <small>Pedidos confirmados o completados</small>
-          </article>
-
-          <article>
-            <span>TICKET PROMEDIO</span>
-            <strong id="clientesKpiTicket">$0.00</strong>
-            <small>Promedio de compras válidas</small>
-          </article>
-
-        </div>
-
-        <div class="clientes-toolbar">
-
-          <div class="clientes-busqueda">
-
-            <label for="clienteBuscar">
+</div>
+<div class="clientes-resumen">
+<article>
+<span>CLIENTES</span>
+<strong id="clientesKpiTotal">0</strong>
+<small>Compradores registrados por pedidos</small>
+</article>
+<article>
+<span>RECURRENTES</span>
+<strong id="clientesKpiRecurrentes">0</strong>
+<small>Más de un pedido no cancelado</small>
+</article>
+<article>
+<span>VENTAS</span>
+<strong id="clientesKpiVentas">$0.00</strong>
+<small>Pedidos confirmados o completados</small>
+</article>
+<article>
+<span>TICKET PROMEDIO</span>
+<strong id="clientesKpiTicket">$0.00</strong>
+<small>Promedio de compras válidas</small>
+</article>
+</div>
+<div class="clientes-toolbar">
+<div class="clientes-busqueda">
+<label for="clienteBuscar">
               BUSCAR
             </label>
-
-            <input
-              type="search"
-              id="clienteBuscar"
-              placeholder="Nombre, cédula, correo o teléfono..."
-              autocomplete="off"
-            >
-
-          </div>
-
-          <div>
-
-            <label for="clienteFiltroTipo">
+<input autocomplete="off" id="clienteBuscar" placeholder="Nombre, cédula, correo o teléfono..." type="search"/>
+</div>
+<div>
+<label for="clienteFiltroTipo">
               TIPO
             </label>
-
-            <select id="clienteFiltroTipo">
-
-              <option value="">
+<select id="clienteFiltroTipo">
+<option value="">
                 Todos
               </option>
-
-              <option value="nuevo">
+<option value="nuevo">
                 Un pedido
               </option>
-
-              <option value="recurrente">
+<option value="recurrente">
                 Recurrentes
               </option>
-
-              <option value="con_compra">
+<option value="con_compra">
                 Con compra válida
               </option>
-
-              <option value="sin_compra">
+<option value="sin_compra">
                 Sin compra válida
               </option>
-
-            </select>
-
-          </div>
-
-          <div>
-
-            <label for="clienteOrden">
+</select>
+</div>
+<div>
+<label for="clienteOrden">
               ORDENAR
             </label>
-
-            <select id="clienteOrden">
-
-              <option value="reciente">
+<select id="clienteOrden">
+<option value="reciente">
                 Última compra
               </option>
-
-              <option value="total">
+<option value="total">
                 Mayor compra
               </option>
-
-              <option value="pedidos">
+<option value="pedidos">
                 Más pedidos
               </option>
-
-              <option value="nombre">
+<option value="nombre">
                 Nombre A-Z
               </option>
-
-            </select>
-
-          </div>
-
-          <button
-            type="button"
-            class="admin-secondary-btn"
-            id="limpiarFiltrosClientesBtn"
-          >
+</select>
+</div>
+<button class="admin-secondary-btn" id="limpiarFiltrosClientesBtn" type="button">
             LIMPIAR
           </button>
-
-        </div>
-
-        <p
-          class="clientes-resultado"
-          id="clientesResultadoTexto"
-          aria-live="polite"
-        >
+</div>
+<p aria-live="polite" class="clientes-resultado" id="clientesResultadoTexto">
           Mostrando 0 clientes.
         </p>
-
-        <div class="admin-table-wrap">
-
-          <table class="admin-table clientes-table">
-
-            <thead>
-
-              <tr>
-                <th>CLIENTE</th>
-                <th>IDENTIFICACIÓN</th>
-                <th>CONTACTO</th>
-                <th>PEDIDOS</th>
-                <th>TOTAL COMPRADO</th>
-                <th>ÚLTIMA COMPRA</th>
-                <th>ACCIÓN</th>
-              </tr>
-
-            </thead>
-
-            <tbody id="clientesAdminBody">
-
-              <tr>
-                <td colspan="7">
+<div class="admin-table-wrap">
+<table class="admin-table clientes-table">
+<thead>
+<tr>
+<th>CLIENTE</th>
+<th>IDENTIFICACIÓN</th>
+<th>CONTACTO</th>
+<th>PEDIDOS</th>
+<th>TOTAL COMPRADO</th>
+<th>ÚLTIMA COMPRA</th>
+<th>ACCIÓN</th>
+</tr>
+</thead>
+<tbody id="clientesAdminBody">
+<tr>
+<td colspan="7">
                   Cargando clientes...
                 </td>
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </section>
-
-
-      <!-- ========================================
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ========================================
            INVENTARIO
       ========================================= -->
-
-      <section class="admin-card admin-section-anchor" id="inventario">
-
-        <div class="admin-card-header">
-
-          <div>
-            <p class="admin-eyebrow">CONTROL DE STOCK</p>
-            <h3>Inventario avanzado</h3>
-          </div>
-
-          <div class="inventario-header-actions">
-            <span class="admin-status">EN TIEMPO REAL</span>
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="exportarStockBtn"
-            >
+<section class="admin-card admin-section-anchor" id="inventario">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">CONTROL DE STOCK</p>
+<h3>Inventario avanzado</h3>
+</div>
+<div class="inventario-header-actions">
+<span class="admin-status">EN TIEMPO REAL</span>
+<button class="admin-secondary-btn" id="exportarStockBtn" type="button">
               EXPORTAR STOCK CSV
             </button>
-          </div>
-
-        </div>
-
-        <div class="inventario-resumen">
-
-          <article>
-            <span>UNIDADES</span>
-            <strong id="inventarioKpiUnidades">0</strong>
-            <small>Stock físico total</small>
-          </article>
-
-          <article>
-            <span>STOCK BAJO</span>
-            <strong id="inventarioKpiBajo">0</strong>
-            <small>Productos por reponer</small>
-          </article>
-
-          <article>
-            <span>AGOTADOS</span>
-            <strong id="inventarioKpiAgotados">0</strong>
-            <small>Sin unidades</small>
-          </article>
-
-          <article>
-            <span>VALOR STOCK</span>
-            <strong id="inventarioKpiValor">$0.00</strong>
-            <small>Valor de venta estimado</small>
-          </article>
-
-        </div>
-
-        <div class="inventario-toolbar">
-
-          <div class="inventario-busqueda">
-            <label for="inventarioBuscar">BUSCAR</label>
-            <input
-              type="search"
-              id="inventarioBuscar"
-              placeholder="Código, producto, color o talla..."
-              autocomplete="off"
-            >
-          </div>
-
-          <div>
-            <label for="inventarioFiltroCategoria">CATEGORÍA</label>
-            <select id="inventarioFiltroCategoria">
-              <option value="">Todas</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="inventarioFiltroEstado">STOCK</label>
-            <select id="inventarioFiltroEstado">
-              <option value="">Todos</option>
-              <option value="disponible">Disponible</option>
-              <option value="bajo">Stock bajo</option>
-              <option value="agotado">Agotado</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="inventarioFiltroCatalogo">CATÁLOGO</label>
-            <select id="inventarioFiltroCatalogo">
-              <option value="">Todos</option>
-              <option value="activo">Activo</option>
-              <option value="inactivo">Inactivo / archivado</option>
-            </select>
-          </div>
-
-          <button
-            type="button"
-            class="admin-secondary-btn"
-            id="limpiarFiltrosInventarioBtn"
-          >
+</div>
+</div>
+<div class="inventario-resumen">
+<article>
+<span>UNIDADES</span>
+<strong id="inventarioKpiUnidades">0</strong>
+<small>Stock físico total</small>
+</article>
+<article>
+<span>STOCK BAJO</span>
+<strong id="inventarioKpiBajo">0</strong>
+<small>Productos por reponer</small>
+</article>
+<article>
+<span>AGOTADOS</span>
+<strong id="inventarioKpiAgotados">0</strong>
+<small>Sin unidades</small>
+</article>
+<article>
+<span>VALOR STOCK</span>
+<strong id="inventarioKpiValor">$0.00</strong>
+<small>Valor de venta estimado</small>
+</article>
+</div>
+<div class="inventario-toolbar">
+<div class="inventario-busqueda">
+<label for="inventarioBuscar">BUSCAR</label>
+<input autocomplete="off" id="inventarioBuscar" placeholder="Código, producto, color o talla..." type="search"/>
+</div>
+<div>
+<label for="inventarioFiltroCategoria">CATEGORÍA</label>
+<select id="inventarioFiltroCategoria">
+<option value="">Todas</option>
+</select>
+</div>
+<div>
+<label for="inventarioFiltroEstado">STOCK</label>
+<select id="inventarioFiltroEstado">
+<option value="">Todos</option>
+<option value="disponible">Disponible</option>
+<option value="bajo">Stock bajo</option>
+<option value="agotado">Agotado</option>
+</select>
+</div>
+<div>
+<label for="inventarioFiltroCatalogo">CATÁLOGO</label>
+<select id="inventarioFiltroCatalogo">
+<option value="">Todos</option>
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo / archivado</option>
+</select>
+</div>
+<button class="admin-secondary-btn" id="limpiarFiltrosInventarioBtn" type="button">
             LIMPIAR
           </button>
-
-        </div>
-
-        <p
-          class="inventario-resultado"
-          id="inventarioResultadoTexto"
-          aria-live="polite"
-        >
+</div>
+<p aria-live="polite" class="inventario-resultado" id="inventarioResultadoTexto">
           Mostrando 0 productos.
         </p>
-
-        <div class="admin-table-wrap">
-
-          <table class="admin-table inventario-table">
-
-            <thead>
-              <tr>
-                <th>CÓDIGO</th>
-                <th>PRODUCTO</th>
-                <th>CATEGORÍA</th>
-                <th>STOCK</th>
-                <th>VARIANTES</th>
-                <th>MÍNIMO</th>
-                <th>ESTADO</th>
-                <th>CATÁLOGO</th>
-                <th>ACCIÓN</th>
-              </tr>
-            </thead>
-
-            <tbody id="inventarioAdminBody">
-              <tr>
-                <td colspan="9">Cargando inventario...</td>
-              </tr>
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </section>
-
-
-      <!-- ========================================
+<div class="admin-table-wrap">
+<table class="admin-table inventario-table">
+<thead>
+<tr>
+<th>CÓDIGO</th>
+<th>PRODUCTO</th>
+<th>CATEGORÍA</th>
+<th>STOCK</th>
+<th>VARIANTES</th>
+<th>MÍNIMO</th>
+<th>ESTADO</th>
+<th>CATÁLOGO</th>
+<th>ACCIÓN</th>
+</tr>
+</thead>
+<tbody id="inventarioAdminBody">
+<tr>
+<td colspan="9">Cargando inventario...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ========================================
            MOVIMIENTOS DE INVENTARIO
       ========================================= -->
-
-      <section class="admin-card admin-section-anchor" id="movimientosInventario">
-
-        <div class="admin-card-header">
-
-          <div>
-            <p class="admin-eyebrow">KARDEX / HISTORIAL</p>
-            <h3>Movimientos de inventario</h3>
-          </div>
-
-          <button
-            type="button"
-            class="admin-primary-btn"
-            id="exportarInventarioBtn"
-          >
+<section class="admin-card admin-section-anchor" id="movimientosInventario">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">KARDEX / HISTORIAL</p>
+<h3>Movimientos de inventario</h3>
+</div>
+<button class="admin-primary-btn" id="exportarInventarioBtn" type="button">
             EXPORTAR KARDEX CSV
           </button>
-
-        </div>
-
-        <div class="movimientos-toolbar">
-
-          <div class="movimientos-busqueda">
-            <label for="movimientoBuscar">BUSCAR</label>
-            <input
-              type="search"
-              id="movimientoBuscar"
-              placeholder="Producto, código, pedido o motivo..."
-              autocomplete="off"
-            >
-          </div>
-
-          <div>
-            <label for="movimientoFiltroTipo">TIPO</label>
-            <select id="movimientoFiltroTipo">
-              <option value="">Todos</option>
-              <option value="SALIDA_VENTA">Salida por venta</option>
-              <option value="ENTRADA_CANCELACION">Entrada por cancelación</option>
-              <option value="ENTRADA_REVERSO_PEDIDO">Entrada por reverso a Pendiente</option>
-              <option value="AJUSTE_ENTRADA">Ajuste de entrada</option>
-              <option value="AJUSTE_SALIDA">Ajuste de salida</option>
-              <option value="AJUSTE_EXACTO">Ajuste exacto</option>
-              <option value="AJUSTE_MINIMO">Cambio de stock mínimo</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="movimientoFechaDesde">DESDE</label>
-            <input type="date" id="movimientoFechaDesde">
-          </div>
-
-          <div>
-            <label for="movimientoFechaHasta">HASTA</label>
-            <input type="date" id="movimientoFechaHasta">
-          </div>
-
-          <button
-            type="button"
-            class="admin-secondary-btn"
-            id="limpiarFiltrosMovimientosBtn"
-          >
+</div>
+<div class="movimientos-toolbar">
+<div class="movimientos-busqueda">
+<label for="movimientoBuscar">BUSCAR</label>
+<input autocomplete="off" id="movimientoBuscar" placeholder="Producto, código, pedido o motivo..." type="search"/>
+</div>
+<div>
+<label for="movimientoFiltroTipo">TIPO</label>
+<select id="movimientoFiltroTipo">
+<option value="">Todos</option>
+<option value="SALIDA_VENTA">Salida por venta</option>
+<option value="ENTRADA_CANCELACION">Entrada por cancelación</option>
+<option value="ENTRADA_REVERSO_PEDIDO">Entrada por reverso a Pendiente</option>
+<option value="AJUSTE_ENTRADA">Ajuste de entrada</option>
+<option value="AJUSTE_SALIDA">Ajuste de salida</option>
+<option value="AJUSTE_EXACTO">Ajuste exacto</option>
+<option value="AJUSTE_MINIMO">Cambio de stock mínimo</option>
+</select>
+</div>
+<div>
+<label for="movimientoFechaDesde">DESDE</label>
+<input id="movimientoFechaDesde" type="date"/>
+</div>
+<div>
+<label for="movimientoFechaHasta">HASTA</label>
+<input id="movimientoFechaHasta" type="date"/>
+</div>
+<button class="admin-secondary-btn" id="limpiarFiltrosMovimientosBtn" type="button">
             LIMPIAR
           </button>
-
-        </div>
-
-        <p
-          class="pedidos-filtro-aviso"
-          id="movimientosFiltroAviso"
-          aria-live="polite"
-        ></p>
-
-        <p
-          class="inventario-resultado"
-          id="movimientosResultadoTexto"
-          aria-live="polite"
-        >
+</div>
+<p aria-live="polite" class="pedidos-filtro-aviso" id="movimientosFiltroAviso"></p>
+<p aria-live="polite" class="inventario-resultado" id="movimientosResultadoTexto">
           Mostrando 0 movimientos.
         </p>
-
-        <div class="admin-table-wrap">
-
-          <table class="admin-table movimientos-table">
-
-            <thead>
-              <tr>
-                <th>FECHA</th>
-                <th>TIPO</th>
-                <th>PRODUCTO</th>
-                <th>CANTIDAD</th>
-                <th>ANTERIOR</th>
-                <th>NUEVO</th>
-                <th>ORIGEN</th>
-                <th>USUARIO</th>
-              </tr>
-            </thead>
-
-            <tbody id="movimientosInventarioBody">
-              <tr>
-                <td colspan="8">Cargando movimientos...</td>
-              </tr>
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </section>
-
-
-      <!-- ========================================
+<div class="admin-table-wrap">
+<table class="admin-table movimientos-table">
+<thead>
+<tr>
+<th>FECHA</th>
+<th>TIPO</th>
+<th>PRODUCTO</th>
+<th>CANTIDAD</th>
+<th>ANTERIOR</th>
+<th>NUEVO</th>
+<th>ORIGEN</th>
+<th>USUARIO</th>
+</tr>
+</thead>
+<tbody id="movimientosInventarioBody">
+<tr>
+<td colspan="8">Cargando movimientos...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ========================================
            PASO 23 · SIXTEEN EXPERIENCE 3D
       ========================================= -->
-
-      <section class="admin-card admin-section-anchor sixteen3d-center" id="sixteen3d">
-
-        <div class="admin-card-header">
-          <div>
-            <p class="admin-eyebrow">PASO 23 · DIGITAL EXPERIENCE</p>
-            <h3>SIXTEEN Experience 3D</h3>
-            <p class="sixteen3d-subtitle">
+<section class="admin-card admin-section-anchor sixteen3d-center" id="sixteen3d">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">PASO 23 · DIGITAL EXPERIENCE</p>
+<h3>SIXTEEN Experience 3D</h3>
+<p class="sixteen3d-subtitle">
               Controla qué productos tienen experiencia 3D, valida su modelo GLB
               y abre rápidamente la ficha pública o el visor externo.
             </p>
-          </div>
-
-          <span class="admin-status" id="sixteen3dEstadoBadge">
+</div>
+<span class="admin-status" id="sixteen3dEstadoBadge">
             REVISANDO CONFIGURACIÓN
           </span>
-        </div>
-
-        <div class="sixteen3d-kpis">
-          <article><span>COMPATIBLES</span><strong id="sixteen3dKpiCompatibles">0</strong></article>
-          <article><span>LISTOS</span><strong id="sixteen3dKpiListos">0</strong></article>
-          <article><span>PENDIENTES</span><strong id="sixteen3dKpiPendientes">0</strong></article>
-          <article><span>INACTIVOS</span><strong id="sixteen3dKpiInactivos">0</strong></article>
-        </div>
-
-        <div class="admin-filter-bar sixteen3d-filter-bar">
-          <label>
-            <span>BUSCAR</span>
-            <input
-              type="search"
-              id="sixteen3dBuscar"
-              placeholder="Código o producto..."
-              autocomplete="off"
-            >
-          </label>
-
-          <label>
-            <span>ESTADO 3D</span>
-            <select id="sixteen3dFiltroEstado">
-              <option value="">Todos</option>
-              <option value="listo">Listos</option>
-              <option value="pendiente">Pendientes</option>
-              <option value="inactivo">Inactivos</option>
-            </select>
-          </label>
-
-          <button
-            type="button"
-            class="admin-secondary-btn"
-            id="limpiarFiltrosSixteen3dBtn"
-          >
+</div>
+<div class="sixteen3d-kpis">
+<article><span>COMPATIBLES</span><strong id="sixteen3dKpiCompatibles">0</strong></article>
+<article><span>LISTOS</span><strong id="sixteen3dKpiListos">0</strong></article>
+<article><span>PENDIENTES</span><strong id="sixteen3dKpiPendientes">0</strong></article>
+<article><span>INACTIVOS</span><strong id="sixteen3dKpiInactivos">0</strong></article>
+</div>
+<div class="admin-filter-bar sixteen3d-filter-bar">
+<label>
+<span>BUSCAR</span>
+<input autocomplete="off" id="sixteen3dBuscar" placeholder="Código o producto..." type="search"/>
+</label>
+<label>
+<span>ESTADO 3D</span>
+<select id="sixteen3dFiltroEstado">
+<option value="">Todos</option>
+<option value="listo">Listos</option>
+<option value="pendiente">Pendientes</option>
+<option value="inactivo">Inactivos</option>
+</select>
+</label>
+<button class="admin-secondary-btn" id="limpiarFiltrosSixteen3dBtn" type="button">
             LIMPIAR
           </button>
-        </div>
-
-        <p class="admin-results-text" id="sixteen3dResultadoTexto" aria-live="polite">
+</div>
+<p aria-live="polite" class="admin-results-text" id="sixteen3dResultadoTexto">
           Cargando experiencias...
         </p>
-
-        <div class="sixteen3d-info">
-          <strong>CONFIGURACIÓN ACTUAL</strong>
-          <span>
+<div class="sixteen3d-info">
+<strong>CONFIGURACIÓN ACTUAL</strong>
+<span>
             La tienda considera una experiencia lista cuando el producto está activo,
             tiene SIXTEEN 3D habilitado y registra una URL HTTPS que termina en .glb.
           </span>
-        </div>
-
-        <div class="admin-table-wrap">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>CÓDIGO</th>
-                <th>PRODUCTO</th>
-                <th>MODELO 3D</th>
-                <th>CATÁLOGO</th>
-                <th>EXPERIENCIA</th>
-                <th>ACCIONES</th>
-              </tr>
-            </thead>
-
-            <tbody id="sixteen3dAdminBody">
-              <tr>
-                <td colspan="6">Cargando experiencias...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="sixteen3d-note">
-          <strong>MÓDULO PRIVADO DE COMPRA</strong>
-          <p>
+</div>
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead>
+<tr>
+<th>CÓDIGO</th>
+<th>PRODUCTO</th>
+<th>MODELO 3D</th>
+<th>CATÁLOGO</th>
+<th>EXPERIENCIA</th>
+<th>ACCIONES</th>
+</tr>
+</thead>
+<tbody id="sixteen3dAdminBody">
+<tr>
+<td colspan="6">Cargando experiencias...</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sixteen3d-note">
+<strong>MÓDULO PRIVADO DE COMPRA</strong>
+<p>
             SIXTEEN Experience 3D se mantiene como módulo separado. El cliente accede
             únicamente desde Confirmación o Mi Cuenta usando el ID de su pedido y el
             producto comprado. Desde Administración puedes validar el archivo GLB con
             <strong>ABRIR GLB</strong>; no se genera un acceso público por código de producto.
           </p>
-        </div>
-
-      </section>
-
-
-      <!-- ========================================
+</div>
+</section>
+<!-- ========================================
            SISTEMA
       ========================================= -->
-
-      <section class="admin-card admin-system-card">
-
-
-        <div class="admin-card-header">
-
-          <h3>
+<section class="admin-card admin-system-card">
+<div class="admin-card-header">
+<h3>
             Sistema SIXTEEN
           </h3>
-
-          <span class="admin-status">
+<span class="admin-status">
             ONLINE
           </span>
-
-        </div>
-
-
-        <div class="admin-system-grid">
-
-
-          <div>
-
-            <span>
+</div>
+<div class="admin-system-grid">
+<div>
+<span>
               AUTENTICACIÓN
             </span>
-
-            <strong>
+<strong>
               Firebase Auth
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               BASE DE DATOS
             </span>
-
-            <strong>
+<strong>
               Cloud Firestore
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               IMÁGENES
             </span>
-
-            <strong>
+<strong>
               Cloudinary
             </strong>
-
-          </div>
-
-
-        </div>
-
-
-      </section>
-
-
-    </section>
-
-
-  </main>
-
-
 </div>
-
-
-
+</div>
+</section>
+</section>
+</main>
+</div>
 <!-- ======================================================
      MODAL PRODUCTO
 ====================================================== -->
-
-<div
-  class="producto-modal"
-  id="productoAdminModal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="productoModalTitulo"
-  aria-hidden="true"
->
-
-
-  <div class="producto-modal-card" tabindex="-1">
-
-
-    <div class="producto-modal-header">
-
-
-      <div>
-
-        <p class="admin-eyebrow">
+<div aria-hidden="true" aria-labelledby="productoModalTitulo" aria-modal="true" class="producto-modal" id="productoAdminModal" role="dialog">
+<div class="producto-modal-card" tabindex="-1">
+<div class="producto-modal-header">
+<div>
+<p class="admin-eyebrow">
           SIXTEEN PRODUCT MANAGEMENT
         </p>
-
-        <h2 id="productoModalTitulo">
+<h2 id="productoModalTitulo">
           Nuevo producto
         </h2>
-
-      </div>
-
-
-      <button
-        type="button"
-        class="producto-modal-close"
-        id="cerrarProductoModal"
-        aria-label="Cerrar"
-      >
+</div>
+<button aria-label="Cerrar" class="producto-modal-close" id="cerrarProductoModal" type="button">
         ✕
       </button>
-
-
-    </div>
-
-
-
-    <form id="productoAdminForm">
-
-
-      <div class="admin-form-grid">
-
-
-        <!-- CÓDIGO -->
-
-        <div class="admin-field">
-
-          <label for="productoCodigo">
+</div>
+<form id="productoAdminForm">
+<div class="admin-form-grid">
+<!-- CÓDIGO -->
+<div class="admin-field">
+<label for="productoCodigo">
             CÓDIGO *
           </label>
-
-          <input
-            id="productoCodigo"
-            type="text"
-            placeholder="COD-001"
-            maxlength="40"
-            autocomplete="off"
-            required
-          >
-
-        </div>
-
-
-
-        <!-- NOMBRE -->
-
-        <div class="admin-field">
-
-          <label for="productoNombre">
+<input autocomplete="off" id="productoCodigo" maxlength="40" placeholder="COD-001" required="" type="text"/>
+</div>
+<!-- NOMBRE -->
+<div class="admin-field">
+<label for="productoNombre">
             NOMBRE *
           </label>
-
-          <input
-            id="productoNombre"
-            type="text"
-            placeholder="SIXTEEN Signature Piece"
-            maxlength="120"
-            autocomplete="off"
-            required
-          >
-
-        </div>
-
-
-
-        <!-- CATEGORÍA -->
-
-        <div class="admin-field">
-
-          <label for="productoCategoria">
+<input autocomplete="off" id="productoNombre" maxlength="120" placeholder="SIXTEEN Signature Piece" required="" type="text"/>
+</div>
+<!-- CATEGORÍA -->
+<div class="admin-field">
+<label for="productoCategoria">
             CATEGORÍA *
           </label>
-
-          <select
-            id="productoCategoria"
-            required
-          >
-            <option value="">Seleccionar</option>
-            <option value="Camisetas">Camisetas</option>
-            <option value="Buzos y Gorras">Buzos y Gorras</option>
-            <option value="Accesorios">Accesorios</option>
-            <option value="Pantalones Baggy">Pantalones Baggy</option>
-            <option value="Zapatos">Zapatos</option>
-            <option value="Arte y Suministros">Arte y Suministros</option>
-            <!-- Categorías anteriores: se conservan para editar productos existentes -->
-            <option value="Calzado">Calzado</option>
-            <option value="Ropa">Ropa</option>
-          </select>
-
-        </div>
-
-
-
-        <!-- PRECIO -->
-
-        <div class="admin-field">
-
-          <label for="productoPrecio">
+<select id="productoCategoria" required="">
+<option value="">Seleccionar</option>
+<option value="Camisetas">Camisetas</option>
+<option value="Buzos y Gorras">Buzos y Gorras</option>
+<option value="Accesorios">Accesorios</option>
+<option value="Pantalones Baggy">Pantalones Baggy</option>
+<option value="Zapatos">Zapatos</option>
+<option value="Arte y Suministros">Arte y Suministros</option>
+<!-- Categorías anteriores: se conservan para editar productos existentes -->
+<option value="Calzado">Calzado</option>
+<option value="Ropa">Ropa</option>
+</select>
+</div>
+<!-- PRECIO -->
+<div class="admin-field">
+<label for="productoPrecio">
             PRECIO *
           </label>
-
-          <input
-            id="productoPrecio"
-            type="number"
-            min="0"
-            max="999999.99"
-            step="0.01"
-            required
-          >
-
-        </div>
-
-
-
-        <!-- PRECIO ANTERIOR -->
-
-        <div class="admin-field">
-
-          <label for="productoPrecioAnterior">
+<input id="productoPrecio" max="999999.99" min="0" required="" step="0.01" type="number"/>
+</div>
+<!-- PRECIO ANTERIOR -->
+<div class="admin-field">
+<label for="productoPrecioAnterior">
             PRECIO ANTERIOR
           </label>
-
-          <input
-            id="productoPrecioAnterior"
-            type="number"
-            min="0"
-            max="999999.99"
-            step="0.01"
-          >
-
-        </div>
-
-
-
-        <!-- IVA / FACTURACIÓN -->
-
-        <div class="admin-field">
-
-          <label for="productoIvaTarifa">
+<input id="productoPrecioAnterior" max="999999.99" min="0" step="0.01" type="number"/>
+</div>
+<!-- IVA / FACTURACIÓN -->
+<div class="admin-field">
+<label for="productoIvaTarifa">
             IVA FACTURACIÓN
           </label>
-
-          <select id="productoIvaTarifa">
-            <option value="15" selected>15%</option>
-            <option value="5">5%</option>
-            <option value="0">0%</option>
-          </select>
-
-        </div>
-
-
-
-        <!-- STOCK -->
-
-        <div class="admin-field">
-
-          <label for="productoStock">
+<select id="productoIvaTarifa">
+<option selected="" value="15">15%</option>
+<option value="5">5%</option>
+<option value="0">0%</option>
+</select>
+</div>
+<!-- STOCK -->
+<div class="admin-field">
+<label for="productoStock">
             STOCK *
           </label>
-
-          <input
-            id="productoStock"
-            type="number"
-            min="0"
-            max="999999"
-            step="1"
-            value="0"
-            required
-          >
-
-        </div>
-
-
-
-        <!-- COLOR -->
-
-        <div class="admin-field">
-
-          <label for="productoColor">
+<input id="productoStock" max="999999" min="0" required="" step="1" type="number" value="0"/>
+</div>
+<!-- COLOR -->
+<div class="admin-field">
+<label for="productoColor">
             COLOR / COLORES
           </label>
-
-          <input
-            id="productoColor"
-            type="text"
-            placeholder="Negro / Dorado"
-            maxlength="160"
-            autocomplete="off"
-          >
-
-        </div>
-
-
-
-        <!-- TALLAS -->
-
-        <div class="admin-field">
-
-          <label for="productoTallas">
+<input autocomplete="off" id="productoColor" maxlength="160" placeholder="Negro / Dorado" type="text"/>
+</div>
+<!-- TALLAS -->
+<div class="admin-field">
+<label for="productoTallas">
             TALLAS
           </label>
-
-          <input
-            id="productoTallas"
-            type="text"
-            placeholder="38, 39, 40, 41, 42"
-            maxlength="250"
-            autocomplete="off"
-          >
-
-        </div>
-
-        <div class="admin-field admin-field-full producto-variantes-editor">
-
-          <div class="producto-variantes-header">
-
-            <div>
-              <label class="producto-variante-switch">
-                <input type="checkbox" id="productoUsaVariantes">
-                <span>CONTROLAR STOCK POR COLOR Y TALLA</span>
-              </label>
-
-              <small>
+<input autocomplete="off" id="productoTallas" maxlength="250" placeholder="38, 39, 40, 41, 42" type="text"/>
+</div>
+<div class="admin-field admin-field-full producto-variantes-editor">
+<div class="producto-variantes-header">
+<div>
+<label class="producto-variante-switch">
+<input id="productoUsaVariantes" type="checkbox"/>
+<span>CONTROLAR STOCK POR COLOR Y TALLA</span>
+</label>
+<small>
                 El stock total se calculará automáticamente sumando las variantes.
               </small>
-            </div>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="agregarVarianteProductoBtn"
-              disabled
-            >
+</div>
+<button class="admin-secondary-btn" disabled="" id="agregarVarianteProductoBtn" type="button">
               + AGREGAR VARIANTE
             </button>
-
-          </div>
-
-          <div
-            class="producto-variantes-resumen"
-            id="productoVariantesResumen"
-            hidden
-          >
-            <span>STOCK TOTAL <strong id="productoVariantesStockTotal">0</strong></span>
-            <span>VARIANTES <strong id="productoVariantesConteo">0</strong></span>
-          </div>
-
-          <div
-            class="producto-variantes-lista"
-            id="productoVariantesLista"
-            hidden
-          ></div>
-
-          <p
-            class="producto-variantes-ayuda"
-            id="productoVariantesAyuda"
-            hidden
-          >
+</div>
+<div class="producto-variantes-resumen" hidden="" id="productoVariantesResumen">
+<span>STOCK TOTAL <strong id="productoVariantesStockTotal">0</strong></span>
+<span>VARIANTES <strong id="productoVariantesConteo">0</strong></span>
+</div>
+<div class="producto-variantes-lista" hidden="" id="productoVariantesLista"></div>
+<p class="producto-variantes-ayuda" hidden="" id="productoVariantesAyuda">
             Ejemplo: Negro / M / 3 unidades. La talla puede quedar vacía
             si el producto solo cambia de color.
           </p>
-
-        </div>
-
-
-
-        <!-- ESTADO -->
-
-        <div class="admin-field">
-
-          <label for="productoEstado">
+</div>
+<!-- ESTADO -->
+<div class="admin-field">
+<label for="productoEstado">
             ESTADO
           </label>
-
-          <select id="productoEstado">
-
-            <option value="Activo">
+<select id="productoEstado">
+<option value="Activo">
               Activo
             </option>
-
-            <option value="Inactivo">
+<option value="Inactivo">
               Inactivo
             </option>
-
-          </select>
-
-        </div>
-
-
-
-        <!-- MODELO 3D -->
-
-        <div class="admin-field">
-
-          <label for="productoModelo3d">
+</select>
+</div>
+<!-- MODELO 3D -->
+<div class="admin-field">
+<label for="productoModelo3d">
             MODELO 3D (.GLB)
           </label>
-
-          <input
-            id="productoModelo3d"
-            type="url"
-            placeholder="https://..."
-            maxlength="500"
-            inputmode="url"
-          >
-
-        </div>
-
-
-
-        <!-- =====================================
+<input id="productoModelo3d" inputmode="url" maxlength="500" placeholder="https://..." type="url"/>
+</div>
+<!-- =====================================
              IMAGEN CLOUDINARY
         ====================================== -->
-
-        <div class="admin-field admin-field-full">
-
-
-          <label>
+<div class="admin-field admin-field-full">
+<label>
             FOTOS DEL PRODUCTO
           </label>
-
-          <small class="producto-fotos-ayuda">
+<small class="producto-fotos-ayuda">
             Puedes cargar hasta 6 fotos. La primera será la imagen principal. Al seleccionar nuevas fotos reemplazas el grupo actual.
           </small>
-
-
-          <div class="admin-upload-box">
-
-
-            <div
-              class="admin-image-preview-wrap"
-              id="productoImagenPreviewWrap"
-            >
-
-
-              <img
-                id="productoImagenPreview"
-                alt="Vista previa del producto"
-              >
-
-
-              <div
-                class="admin-image-placeholder"
-                id="productoImagenPlaceholder"
-              >
-
-                <strong>
+<div class="admin-upload-box">
+<div class="admin-image-preview-wrap" id="productoImagenPreviewWrap">
+<img alt="Vista previa del producto" id="productoImagenPreview"/>
+<div class="admin-image-placeholder" id="productoImagenPlaceholder">
+<strong>
                   UX
                 </strong>
-
-                <span>
+<span>
                   Sin fotografía
                 </span>
-
-              </div>
-
-
-            </div>
-
-
-
-            <div class="admin-upload-controls">
-
-
-              <input
-                type="file"
-                id="productoImagenArchivo"
-                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                multiple
-                hidden
-              >
-
-
-              <button
-                type="button"
-                class="admin-upload-select-btn"
-                id="seleccionarImagenBtn"
-              >
+</div>
+</div>
+<div class="admin-upload-controls">
+<input accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden="" id="productoImagenArchivo" multiple="" type="file"/>
+<button class="admin-upload-select-btn" id="seleccionarImagenBtn" type="button">
                 SELECCIONAR FOTOS
               </button>
-
-
-              <button
-                type="button"
-                class="admin-upload-remove-btn"
-                id="quitarImagenBtn"
-                style="display:none;"
-              >
+<button class="admin-upload-remove-btn" id="quitarImagenBtn" style="display:none;" type="button">
                 QUITAR FOTOS
               </button>
-
-
-              <p id="productoImagenNombre">
+<p id="productoImagenNombre">
                 JPG, JPEG, PNG o WEBP · máximo 5 MB por foto
               </p>
-
-              <div
-                class="producto-imagenes-galeria"
-                id="productoImagenesGaleria"
-                aria-live="polite"
-              ></div>
-
-
-            </div>
-
-
-          </div>
-
-
-          <input
-            type="hidden"
-            id="productoImagenActual"
-          >
-
-
-          <input
-            type="hidden"
-            id="productoImagenPublicId"
-          >
-
-
-        </div>
-
-
-
-        <!-- DESCRIPCIÓN -->
-
-        <div class="admin-field admin-field-full">
-
-          <label for="productoDescripcion">
+<div aria-live="polite" class="producto-imagenes-galeria" id="productoImagenesGaleria"></div>
+</div>
+</div>
+<input id="productoImagenActual" type="hidden"/>
+<input id="productoImagenPublicId" type="hidden"/>
+</div>
+<!-- DESCRIPCIÓN -->
+<div class="admin-field admin-field-full">
+<label for="productoDescripcion">
             DESCRIPCIÓN
           </label>
-
-          <textarea
-            id="productoDescripcion"
-            placeholder="Descripción completa..."
-            maxlength="1500"
-          ></textarea>
-
-        </div>
-
-
-
-        <!-- MATERIALES -->
-
-        <div class="admin-field admin-field-full">
-
-          <label for="productoMateriales">
+<textarea id="productoDescripcion" maxlength="1500" placeholder="Descripción completa..."></textarea>
+</div>
+<!-- MATERIALES -->
+<div class="admin-field admin-field-full">
+<label for="productoMateriales">
             MATERIALES
           </label>
-
-          <textarea
-            id="productoMateriales"
-            placeholder="Materiales y composición..."
-            maxlength="800"
-          ></textarea>
-
-        </div>
-
-
-
-        <!-- DETALLES -->
-
-        <div class="admin-field admin-field-full">
-
-          <label for="productoDetalles">
+<textarea id="productoMateriales" maxlength="800" placeholder="Materiales y composición..."></textarea>
+</div>
+<!-- DETALLES -->
+<div class="admin-field admin-field-full">
+<label for="productoDetalles">
             DETALLES
           </label>
-
-          <textarea
-            id="productoDetalles"
-            placeholder="Detalle 1; Detalle 2; Detalle 3"
-            maxlength="1500"
-          ></textarea>
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- OPCIONES -->
-
-      <div class="producto-options">
-
-
-        <label>
-
-          <input
-            type="checkbox"
-            id="productoDestacado"
-          >
+<textarea id="productoDetalles" maxlength="1500" placeholder="Detalle 1; Detalle 2; Detalle 3"></textarea>
+</div>
+</div>
+<!-- OPCIONES -->
+<div class="producto-options">
+<label>
+<input id="productoDestacado" type="checkbox"/>
 
           Destacado
 
         </label>
-
-
-        <label>
-
-          <input
-            type="checkbox"
-            id="productoNuevo"
-          >
+<label>
+<input id="productoNuevo" type="checkbox"/>
 
           Nuevo
 
         </label>
-
-
-        <label>
-
-          <input
-            type="checkbox"
-            id="producto3d"
-          >
+<label>
+<input id="producto3d" type="checkbox"/>
 
           SIXTEEN 3D
 
         </label>
-
-
-      </div>
-
-
-
-      <!-- MENSAJE -->
-
-      <p
-        id="productoAdminMensaje"
-        class="producto-mensaje"
-      >
-      </p>
-
-
-
-      <!-- BOTONES -->
-
-      <div class="producto-modal-actions">
-
-
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarProductoBtn"
-        >
+</div>
+<!-- MENSAJE -->
+<p class="producto-mensaje" id="productoAdminMensaje">
+</p>
+<!-- BOTONES -->
+<div class="producto-modal-actions">
+<button class="admin-secondary-btn" id="cancelarProductoBtn" type="button">
           CANCELAR
         </button>
-
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="guardarProductoBtn"
-        >
+<button class="admin-primary-btn" id="guardarProductoBtn" type="submit">
           GUARDAR PRODUCTO
         </button>
-
-
-      </div>
-
-
-    </form>
-
-
-  </div>
-
-
 </div>
-
-
-
-
+</form>
+</div>
+</div>
 <!-- ======================================================
      MODAL CUPÓN
 ====================================================== -->
-
-<div
-  class="comercial-modal"
-  id="cuponModal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="cuponModalTitulo"
-  aria-hidden="true"
->
-
-  <div class="comercial-modal-card" tabindex="-1">
-
-    <div class="pedido-modal-header">
-
-      <div>
-        <p class="admin-eyebrow">
+<div aria-hidden="true" aria-labelledby="cuponModalTitulo" aria-modal="true" class="comercial-modal" id="cuponModal" role="dialog">
+<div class="comercial-modal-card" tabindex="-1">
+<div class="pedido-modal-header">
+<div>
+<p class="admin-eyebrow">
           SIXTEEN PROMOTIONS
         </p>
-
-        <h2 id="cuponModalTitulo">
+<h2 id="cuponModalTitulo">
           Nuevo cupón
         </h2>
-      </div>
-
-      <button
-        type="button"
-        class="producto-modal-close"
-        id="cerrarCuponModal"
-        aria-label="Cerrar"
-      >
+</div>
+<button aria-label="Cerrar" class="producto-modal-close" id="cerrarCuponModal" type="button">
         ✕
       </button>
-
-    </div>
-
-    <form id="cuponForm">
-
-      <div class="admin-form-grid comercial-form-grid">
-
-        <div class="admin-field">
-
-          <label for="cuponCodigo">
+</div>
+<form id="cuponForm">
+<div class="admin-form-grid comercial-form-grid">
+<div class="admin-field">
+<label for="cuponCodigo">
             CÓDIGO *
           </label>
-
-          <input
-            type="text"
-            id="cuponCodigo"
-            maxlength="30"
-            placeholder="SIXTEEN15"
-            autocomplete="off"
-            required
-          >
-
-        </div>
-
-        <div class="admin-field">
-
-          <label for="cuponPorcentaje">
+<input autocomplete="off" id="cuponCodigo" maxlength="30" placeholder="SIXTEEN15" required="" type="text"/>
+</div>
+<div class="admin-field">
+<label for="cuponPorcentaje">
             DESCUENTO % *
           </label>
-
-          <input
-            type="number"
-            id="cuponPorcentaje"
-            min="1"
-            max="100"
-            step="1"
-            value="10"
-            required
-          >
-
-        </div>
-
-        <div class="admin-field">
-
-          <label for="cuponFechaInicio">
+<input id="cuponPorcentaje" max="100" min="1" required="" step="1" type="number" value="10"/>
+</div>
+<div class="admin-field">
+<label for="cuponFechaInicio">
             FECHA INICIO
           </label>
-
-          <input
-            type="date"
-            id="cuponFechaInicio"
-          >
-
-        </div>
-
-        <div class="admin-field">
-
-          <label for="cuponFechaFin">
+<input id="cuponFechaInicio" type="date"/>
+</div>
+<div class="admin-field">
+<label for="cuponFechaFin">
             FECHA FIN
           </label>
-
-          <input
-            type="date"
-            id="cuponFechaFin"
-          >
-
-        </div>
-
-        <div class="admin-field">
-
-          <label for="cuponLimiteUsos">
+<input id="cuponFechaFin" type="date"/>
+</div>
+<div class="admin-field">
+<label for="cuponLimiteUsos">
             LÍMITE DE USOS
           </label>
-
-          <input
-            type="number"
-            id="cuponLimiteUsos"
-            min="0"
-            step="1"
-            value="0"
-          >
-
-          <small>
+<input id="cuponLimiteUsos" min="0" step="1" type="number" value="0"/>
+<small>
             0 = sin límite
           </small>
-
-        </div>
-
-        <div class="admin-field comercial-check-field">
-
-          <label>
+</div>
+<div class="admin-field comercial-check-field">
+<label>
             DISPONIBILIDAD
           </label>
-
-          <label class="admin-check-line">
-            <input
-              type="checkbox"
-              id="cuponActivo"
-              checked
-            >
-            <span>
+<label class="admin-check-line">
+<input checked="" id="cuponActivo" type="checkbox"/>
+<span>
               Cupón activo
             </span>
-          </label>
-
-        </div>
-
-      </div>
-
-      <p
-        class="producto-mensaje"
-        id="cuponMensaje"
-        aria-live="polite"
-      ></p>
-
-      <div class="producto-modal-actions">
-
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarCuponBtn"
-        >
+</label>
+</div>
+</div>
+<p aria-live="polite" class="producto-mensaje" id="cuponMensaje"></p>
+<div class="producto-modal-actions">
+<button class="admin-secondary-btn" id="cancelarCuponBtn" type="button">
           CANCELAR
         </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="guardarCuponBtn"
-        >
+<button class="admin-primary-btn" id="guardarCuponBtn" type="submit">
           GUARDAR CUPÓN
         </button>
-
-      </div>
-
-    </form>
-
-  </div>
-
 </div>
-
-
+</form>
+</div>
+</div>
 <!-- ======================================================
      MODAL TARIFA DE ENVÍO
 ====================================================== -->
-
-<div
-  class="comercial-modal"
-  id="envioModal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="envioModalTitulo"
-  aria-hidden="true"
->
-
-  <div class="comercial-modal-card comercial-modal-card-small" tabindex="-1">
-
-    <div class="pedido-modal-header">
-
-      <div>
-        <p class="admin-eyebrow">
+<div aria-hidden="true" aria-labelledby="envioModalTitulo" aria-modal="true" class="comercial-modal" id="envioModal" role="dialog">
+<div class="comercial-modal-card comercial-modal-card-small" tabindex="-1">
+<div class="pedido-modal-header">
+<div>
+<p class="admin-eyebrow">
           SIXTEEN SHIPPING
         </p>
-
-        <h2 id="envioModalTitulo">
+<h2 id="envioModalTitulo">
           Editar tarifa
         </h2>
-      </div>
-
-      <button
-        type="button"
-        class="producto-modal-close"
-        id="cerrarEnvioModal"
-        aria-label="Cerrar"
-      >
+</div>
+<button aria-label="Cerrar" class="producto-modal-close" id="cerrarEnvioModal" type="button">
         ✕
       </button>
-
-    </div>
-
-    <form id="envioForm">
-
-      <div class="admin-form-grid comercial-form-grid">
-
-        <div class="admin-field admin-field-full">
-
-          <label>
+</div>
+<form id="envioForm">
+<div class="admin-form-grid comercial-form-grid">
+<div class="admin-field admin-field-full">
+<label>
             PROVINCIA
           </label>
-
-          <strong
-            class="comercial-provincia-modal"
-            id="envioModalProvincia"
-          >
+<strong class="comercial-provincia-modal" id="envioModalProvincia">
             -
           </strong>
-
-        </div>
-
-        <div class="admin-field">
-
-          <label for="envioTarifa">
+</div>
+<div class="admin-field">
+<label for="envioTarifa">
             TARIFA USD *
           </label>
-
-          <input
-            type="number"
-            id="envioTarifa"
-            min="0"
-            step="0.01"
-            value="0"
-            required
-          >
-
-        </div>
-
-        <div class="admin-field comercial-check-field">
-
-          <label>
+<input id="envioTarifa" min="0" required="" step="0.01" type="number" value="0"/>
+</div>
+<div class="admin-field comercial-check-field">
+<label>
             DISPONIBILIDAD
           </label>
-
-          <label class="admin-check-line">
-            <input
-              type="checkbox"
-              id="envioActivo"
-              checked
-            >
-            <span>
+<label class="admin-check-line">
+<input checked="" id="envioActivo" type="checkbox"/>
+<span>
               Provincia activa
             </span>
-          </label>
-
-        </div>
-
-      </div>
-
-      <p
-        class="producto-mensaje"
-        id="envioMensaje"
-        aria-live="polite"
-      ></p>
-
-      <div class="producto-modal-actions">
-
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarEnvioBtn"
-        >
+</label>
+</div>
+</div>
+<p aria-live="polite" class="producto-mensaje" id="envioMensaje"></p>
+<div class="producto-modal-actions">
+<button class="admin-secondary-btn" id="cancelarEnvioBtn" type="button">
           CANCELAR
         </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="guardarEnvioBtn"
-        >
+<button class="admin-primary-btn" id="guardarEnvioBtn" type="submit">
           GUARDAR TARIFA
         </button>
-
-      </div>
-
-    </form>
-
-  </div>
-
 </div>
-
-
+</form>
+</div>
+</div>
 <!-- ======================================================
      MODAL CLIENTE
 ====================================================== -->
-
-<div
-  class="cliente-modal"
-  id="clienteAdminModal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="clienteModalNombre"
-  aria-hidden="true"
->
-
-  <div class="cliente-modal-card" tabindex="-1">
-
-    <div class="pedido-modal-header">
-
-      <div>
-        <p class="admin-eyebrow">SIXTEEN CUSTOMER PROFILE</p>
-        <h2 id="clienteModalNombre">
+<div aria-hidden="true" aria-labelledby="clienteModalNombre" aria-modal="true" class="cliente-modal" id="clienteAdminModal" role="dialog">
+<div class="cliente-modal-card" tabindex="-1">
+<div class="pedido-modal-header">
+<div>
+<p class="admin-eyebrow">SIXTEEN CUSTOMER PROFILE</p>
+<h2 id="clienteModalNombre">
           Cliente
         </h2>
-      </div>
-
-      <button
-        type="button"
-        class="producto-modal-close"
-        id="cerrarClienteModal"
-        aria-label="Cerrar"
-      >
+</div>
+<button aria-label="Cerrar" class="producto-modal-close" id="cerrarClienteModal" type="button">
         ✕
       </button>
-
-    </div>
-
-    <div class="cliente-modal-stats">
-
-      <article>
-        <span>PEDIDOS</span>
-        <strong id="clienteModalPedidos">0</strong>
-      </article>
-
-      <article>
-        <span>COMPRAS VÁLIDAS</span>
-        <strong id="clienteModalComprasValidas">0</strong>
-      </article>
-
-      <article>
-        <span>TOTAL COMPRADO</span>
-        <strong id="clienteModalTotal">$0.00</strong>
-      </article>
-
-      <article>
-        <span>TICKET PROMEDIO</span>
-        <strong id="clienteModalTicket">$0.00</strong>
-      </article>
-
-    </div>
-
-    <div class="cliente-info-grid">
-
-      <article class="cliente-info-card">
-
-        <p class="admin-eyebrow">
+</div>
+<div class="cliente-modal-stats">
+<article>
+<span>PEDIDOS</span>
+<strong id="clienteModalPedidos">0</strong>
+</article>
+<article>
+<span>COMPRAS VÁLIDAS</span>
+<strong id="clienteModalComprasValidas">0</strong>
+</article>
+<article>
+<span>TOTAL COMPRADO</span>
+<strong id="clienteModalTotal">$0.00</strong>
+</article>
+<article>
+<span>TICKET PROMEDIO</span>
+<strong id="clienteModalTicket">$0.00</strong>
+</article>
+</div>
+<div class="cliente-info-grid">
+<article class="cliente-info-card">
+<p class="admin-eyebrow">
           DATOS
         </p>
-
-        <p>
-          <strong>Identificación:</strong>
-          <span id="clienteModalIdentificacion">-</span>
-        </p>
-
-        <p>
-          <strong>Correo:</strong>
-          <span id="clienteModalEmail">-</span>
-        </p>
-
-        <p>
-          <strong>Teléfono:</strong>
-          <span id="clienteModalTelefono">-</span>
-        </p>
-
-      </article>
-
-      <article class="cliente-info-card">
-
-        <p class="admin-eyebrow">
+<p>
+<strong>Identificación:</strong>
+<span id="clienteModalIdentificacion">-</span>
+</p>
+<p>
+<strong>Correo:</strong>
+<span id="clienteModalEmail">-</span>
+</p>
+<p>
+<strong>Teléfono:</strong>
+<span id="clienteModalTelefono">-</span>
+</p>
+</article>
+<article class="cliente-info-card">
+<p class="admin-eyebrow">
           ÚLTIMA DIRECCIÓN
         </p>
-
-        <p>
-          <strong>Provincia:</strong>
-          <span id="clienteModalProvincia">-</span>
-        </p>
-
-        <p>
-          <strong>Ciudad:</strong>
-          <span id="clienteModalCiudad">-</span>
-        </p>
-
-        <p>
-          <strong>Dirección:</strong>
-          <span id="clienteModalDireccion">-</span>
-        </p>
-
-      </article>
-
-      <article class="cliente-info-card">
-
-        <p class="admin-eyebrow">
+<p>
+<strong>Provincia:</strong>
+<span id="clienteModalProvincia">-</span>
+</p>
+<p>
+<strong>Ciudad:</strong>
+<span id="clienteModalCiudad">-</span>
+</p>
+<p>
+<strong>Dirección:</strong>
+<span id="clienteModalDireccion">-</span>
+</p>
+</article>
+<article class="cliente-info-card">
+<p class="admin-eyebrow">
           ACTIVIDAD
         </p>
-
-        <p>
-          <strong>Tipo de cliente:</strong>
-          <span id="clienteModalTipo">-</span>
-        </p>
-
-        <p>
-          <strong>Último pedido:</strong>
-          <span id="clienteModalUltimoPedido">-</span>
-        </p>
-
-        <p>
-          <strong>Última compra válida:</strong>
-          <span id="clienteModalUltimaCompra">-</span>
-        </p>
-
-        <p>
-          <strong>Estado del último pedido:</strong>
-          <span id="clienteModalEstado">-</span>
-        </p>
-
-      </article>
-
-    </div>
-
-    <section class="cliente-historial">
-
-      <div class="admin-card-header">
-
-        <div>
-          <p class="admin-eyebrow">
+<p>
+<strong>Tipo de cliente:</strong>
+<span id="clienteModalTipo">-</span>
+</p>
+<p>
+<strong>Último pedido:</strong>
+<span id="clienteModalUltimoPedido">-</span>
+</p>
+<p>
+<strong>Última compra válida:</strong>
+<span id="clienteModalUltimaCompra">-</span>
+</p>
+<p>
+<strong>Estado del último pedido:</strong>
+<span id="clienteModalEstado">-</span>
+</p>
+</article>
+</div>
+<section class="cliente-historial">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">
             HISTORIAL
           </p>
-
-          <h3>
+<h3>
             Pedidos del cliente
           </h3>
-        </div>
-
-      </div>
-
-      <div class="admin-table-wrap">
-
-        <table class="admin-table">
-
-          <thead>
-
-            <tr>
-              <th>PEDIDO</th>
-              <th>FECHA</th>
-              <th>ESTADO</th>
-              <th>PAGO</th>
-              <th>ESTADO PAGO</th>
-              <th>TOTAL</th>
-              <th>ACCIÓN</th>
-            </tr>
-
-          </thead>
-
-          <tbody id="clienteHistorialBody">
-
-            <tr>
-              <td colspan="7">
+</div>
+</div>
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead>
+<tr>
+<th>PEDIDO</th>
+<th>FECHA</th>
+<th>ESTADO</th>
+<th>PAGO</th>
+<th>ESTADO PAGO</th>
+<th>TOTAL</th>
+<th>ACCIÓN</th>
+</tr>
+</thead>
+<tbody id="clienteHistorialBody">
+<tr>
+<td colspan="7">
                 Sin pedidos.
               </td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-  </div>
-
+</tr>
+</tbody>
+</table>
 </div>
-
-
+</section>
+</div>
+</div>
 <!-- ======================================================
      MODAL AJUSTE DE INVENTARIO
 ====================================================== -->
-
-<div
-  class="inventario-modal"
-  id="inventarioAjusteModal"
-  aria-hidden="true"
->
-
-  <div
-    class="inventario-modal-card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="inventarioModalTitulo"
-    tabindex="-1"
-  >
-
-    <div class="pedido-modal-header">
-
-      <div>
-        <p class="admin-eyebrow">SIXTEEN INVENTORY MANAGEMENT</p>
-        <h2 id="inventarioModalTitulo">Ajustar inventario</h2>
-      </div>
-
-      <button
-        type="button"
-        class="producto-modal-close"
-        id="cerrarInventarioModal"
-        aria-label="Cerrar"
-      >
+<div aria-hidden="true" class="inventario-modal" id="inventarioAjusteModal">
+<div aria-labelledby="inventarioModalTitulo" aria-modal="true" class="inventario-modal-card" role="dialog" tabindex="-1">
+<div class="pedido-modal-header">
+<div>
+<p class="admin-eyebrow">SIXTEEN INVENTORY MANAGEMENT</p>
+<h2 id="inventarioModalTitulo">Ajustar inventario</h2>
+</div>
+<button aria-label="Cerrar" class="producto-modal-close" id="cerrarInventarioModal" type="button">
         ✕
       </button>
-
-    </div>
-
-    <div class="inventario-modal-producto">
-
-      <div>
-        <span>PRODUCTO</span>
-        <strong id="inventarioModalProducto">-</strong>
-      </div>
-
-      <div>
-        <span id="inventarioModalStockLabel">STOCK ACTUAL</span>
-        <strong id="inventarioModalStock">0</strong>
-      </div>
-
-      <div>
-        <span>STOCK TOTAL PRODUCTO</span>
-        <strong id="inventarioModalStockTotal">0</strong>
-      </div>
-
-      <div>
-        <span>STOCK MÍNIMO TOTAL</span>
-        <strong id="inventarioModalMinimoActual">5</strong>
-      </div>
-
-    </div>
-
-    <form id="inventarioAjusteForm">
-
-      <div class="admin-form-grid inventario-ajuste-grid">
-
-        <div class="admin-field" id="inventarioVarianteField" hidden>
-          <label for="inventarioVariante">VARIANTE</label>
-          <select id="inventarioVariante"></select>
-        </div>
-
-        <div class="admin-field">
-
-          <label for="inventarioOperacion">
+</div>
+<div class="inventario-modal-producto">
+<div>
+<span>PRODUCTO</span>
+<strong id="inventarioModalProducto">-</strong>
+</div>
+<div>
+<span id="inventarioModalStockLabel">STOCK ACTUAL</span>
+<strong id="inventarioModalStock">0</strong>
+</div>
+<div>
+<span>STOCK TOTAL PRODUCTO</span>
+<strong id="inventarioModalStockTotal">0</strong>
+</div>
+<div>
+<span>STOCK MÍNIMO TOTAL</span>
+<strong id="inventarioModalMinimoActual">5</strong>
+</div>
+</div>
+<form id="inventarioAjusteForm">
+<div class="admin-form-grid inventario-ajuste-grid">
+<div class="admin-field" hidden="" id="inventarioVarianteField">
+<label for="inventarioVariante">VARIANTE</label>
+<select id="inventarioVariante"></select>
+</div>
+<div class="admin-field">
+<label for="inventarioOperacion">
             OPERACIÓN
           </label>
-
-          <select
-            id="inventarioOperacion"
-            required
-          >
-            <option value="entrada">
+<select id="inventarioOperacion" required="">
+<option value="entrada">
               Entrada de stock
             </option>
-
-            <option value="salida">
+<option value="salida">
               Salida de stock
             </option>
-
-            <option value="exacto">
+<option value="exacto">
               Establecer stock exacto
             </option>
-          </select>
-
-        </div>
-
-        <div class="admin-field">
-
-          <label for="inventarioCantidad">
+</select>
+</div>
+<div class="admin-field">
+<label for="inventarioCantidad">
             CANTIDAD / NUEVO STOCK
           </label>
-
-          <input
-            type="number"
-            id="inventarioCantidad"
-            min="0"
-            step="1"
-            value="1"
-            required
-          >
-
-        </div>
-
-        <div class="admin-field">
-
-          <label for="inventarioStockMinimo">
+<input id="inventarioCantidad" min="0" required="" step="1" type="number" value="1"/>
+</div>
+<div class="admin-field">
+<label for="inventarioStockMinimo">
             STOCK MÍNIMO TOTAL DEL PRODUCTO
           </label>
-
-          <input
-            type="number"
-            id="inventarioStockMinimo"
-            min="0"
-            step="1"
-            value="5"
-            required
-          >
-
-        </div>
-
-        <div class="admin-field admin-field-full">
-
-          <label for="inventarioMotivo">
+<input id="inventarioStockMinimo" min="0" required="" step="1" type="number" value="5"/>
+</div>
+<div class="admin-field admin-field-full">
+<label for="inventarioMotivo">
             MOTIVO *
           </label>
-
-          <textarea
-            id="inventarioMotivo"
-            placeholder="Ej.: Reposición de proveedor, producto dañado, corrección de conteo..."
-            maxlength="300"
-            required
-          ></textarea>
-
-        </div>
-
-      </div>
-
-      <p
-        class="producto-mensaje"
-        id="inventarioAjusteMensaje"
-        aria-live="polite"
-      ></p>
-
-      <div class="producto-modal-actions">
-
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarInventarioAjusteBtn"
-        >
+<textarea id="inventarioMotivo" maxlength="300" placeholder="Ej.: Reposición de proveedor, producto dañado, corrección de conteo..." required=""></textarea>
+</div>
+</div>
+<p aria-live="polite" class="producto-mensaje" id="inventarioAjusteMensaje"></p>
+<div class="producto-modal-actions">
+<button class="admin-secondary-btn" id="cancelarInventarioAjusteBtn" type="button">
           CANCELAR
         </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="guardarInventarioAjusteBtn"
-        >
+<button class="admin-primary-btn" id="guardarInventarioAjusteBtn" type="submit">
           GUARDAR AJUSTE
         </button>
-
-      </div>
-
-    </form>
-
-  </div>
-
 </div>
-
-
+</form>
+</div>
+</div>
 <!-- ======================================================
      MODAL PEDIDO
 ====================================================== -->
-
-<div
-  class="pedido-modal"
-  id="pedidoAdminModal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="pedidoModalNumero"
-  aria-hidden="true"
->
-
-  <div class="pedido-modal-card" tabindex="-1">
-
-    <div class="pedido-modal-header">
-
-      <div>
-        <p class="admin-eyebrow">SIXTEEN ORDER MANAGEMENT</p>
-        <h2 id="pedidoModalNumero">Pedido</h2>
-      </div>
-
-      <button
-        type="button"
-        class="producto-modal-close"
-        id="cerrarPedidoModal"
-        aria-label="Cerrar"
-      >
+<div aria-hidden="true" aria-labelledby="pedidoModalNumero" aria-modal="true" class="pedido-modal" id="pedidoAdminModal" role="dialog">
+<div class="pedido-modal-card" tabindex="-1">
+<div class="pedido-modal-header">
+<div>
+<p class="admin-eyebrow">SIXTEEN ORDER MANAGEMENT</p>
+<h2 id="pedidoModalNumero">Pedido</h2>
+</div>
+<button aria-label="Cerrar" class="producto-modal-close" id="cerrarPedidoModal" type="button">
         ✕
       </button>
-
-    </div>
-
-    <div class="pedido-estado-control">
-
-      <div class="admin-field">
-        <label for="pedidoEstadoSelect">ESTADO DEL PEDIDO</label>
-        <select id="pedidoEstadoSelect">
-          <option value="Pendiente">Pendiente</option>
-          <option value="Confirmado">Confirmado</option>
-          <option value="En preparación">En preparación</option>
-          <option value="Enviado">Enviado</option>
-          <option value="Entregado">Entregado</option>
-          <option value="Cancelado">Cancelado</option>
-        </select>
-      </div>
-
-      <div class="admin-field">
-        <label for="pedidoEstadoPagoSelect">ESTADO DEL PAGO</label>
-        <select id="pedidoEstadoPagoSelect">
-          <option value="Pendiente">Pendiente</option>
-          <option value="Pendiente de pasarela">Pendiente de pasarela</option>
-          <option value="Pendiente contra entrega">Pendiente contra entrega</option>
-          <option value="Por verificar">Por verificar</option>
-          <option value="Pagado">Pagado</option>
-          <option value="Reembolsado">Reembolsado</option>
-        </select>
-      </div>
-
-      <button
-        type="button"
-        class="admin-primary-btn"
-        id="guardarEstadoPedidoBtn"
-        disabled
-      >
+</div>
+<div class="pedido-estado-control">
+<div class="admin-field">
+<label for="pedidoEstadoSelect">ESTADO DEL PEDIDO</label>
+<select id="pedidoEstadoSelect">
+<option value="Pendiente">Pendiente</option>
+<option value="Confirmado">Confirmado</option>
+<option value="En preparación">En preparación</option>
+<option value="Enviado">Enviado</option>
+<option value="Entregado">Entregado</option>
+<option value="Cancelado">Cancelado</option>
+</select>
+</div>
+<div class="admin-field">
+<label for="pedidoEstadoPagoSelect">ESTADO DEL PAGO</label>
+<select id="pedidoEstadoPagoSelect">
+<option value="Pendiente">Pendiente</option>
+<option value="Pendiente de pasarela">Pendiente de pasarela</option>
+<option value="Pendiente contra entrega">Pendiente contra entrega</option>
+<option value="Por verificar">Por verificar</option>
+<option value="Pagado">Pagado</option>
+<option value="Reembolsado">Reembolsado</option>
+</select>
+</div>
+<button class="admin-primary-btn" disabled="" id="guardarEstadoPedidoBtn" type="button">
         SIN CAMBIOS
       </button>
-
-    </div>
-
-    <p
-      class="pedido-stock-aviso"
-      id="pedidoStockAviso"
-      aria-live="polite"
-    ></p>
-
-    <p
-      id="pedidoAdminMensaje"
-      class="producto-mensaje"
-      aria-live="polite"
-    ></p>
-
-    <div class="pedido-info-grid">
-
-      <article class="pedido-info-card">
-        <p class="admin-eyebrow">CLIENTE</p>
-        <h3 id="pedidoClienteNombre">-</h3>
-        <p><strong>Identificación:</strong> <span id="pedidoClienteIdentificacion">-</span></p>
-        <p><strong>Correo:</strong> <span id="pedidoClienteEmail">-</span></p>
-        <p><strong>Teléfono:</strong> <span id="pedidoClienteTelefono">-</span></p>
-      </article>
-
-      <article class="pedido-info-card">
-        <p class="admin-eyebrow">ENTREGA</p>
-        <h3 id="pedidoEntregaCiudad">-</h3>
-        <p><strong>Método:</strong> <span id="pedidoEntregaMetodo">-</span></p>
-        <p><strong>Provincia:</strong> <span id="pedidoEntregaProvincia">-</span></p>
-        <p><strong>Dirección:</strong> <span id="pedidoEntregaDireccion">-</span></p>
-        <p><strong>Referencia:</strong> <span id="pedidoEntregaReferencia">-</span></p>
-      </article>
-
-      <article class="pedido-info-card">
-        <p class="admin-eyebrow">PAGO</p>
-        <h3 id="pedidoMetodoPago">-</h3>
-        <p><strong>Estado:</strong> <span id="pedidoEstadoPago">-</span></p>
-        <p><strong>Fecha:</strong> <span id="pedidoFecha">-</span></p>
-        <p><strong>Cupón:</strong> <span id="pedidoCupon">-</span></p>
-        <p>
-          <strong>Inventario:</strong>
-          <span
-            id="pedidoEstadoInventario"
-            class="pedido-inventario-texto"
-          >
+</div>
+<p aria-live="polite" class="pedido-stock-aviso" id="pedidoStockAviso"></p>
+<p aria-live="polite" class="producto-mensaje" id="pedidoAdminMensaje"></p>
+<div class="pedido-info-grid">
+<article class="pedido-info-card">
+<p class="admin-eyebrow">CLIENTE</p>
+<h3 id="pedidoClienteNombre">-</h3>
+<p><strong>Identificación:</strong> <span id="pedidoClienteIdentificacion">-</span></p>
+<p><strong>Correo:</strong> <span id="pedidoClienteEmail">-</span></p>
+<p><strong>Teléfono:</strong> <span id="pedidoClienteTelefono">-</span></p>
+</article>
+<article class="pedido-info-card">
+<p class="admin-eyebrow">ENTREGA</p>
+<h3 id="pedidoEntregaCiudad">-</h3>
+<p><strong>Método:</strong> <span id="pedidoEntregaMetodo">-</span></p>
+<p><strong>Provincia:</strong> <span id="pedidoEntregaProvincia">-</span></p>
+<p><strong>Dirección:</strong> <span id="pedidoEntregaDireccion">-</span></p>
+<p><strong>Referencia:</strong> <span id="pedidoEntregaReferencia">-</span></p>
+</article>
+<article class="pedido-info-card">
+<p class="admin-eyebrow">PAGO</p>
+<h3 id="pedidoMetodoPago">-</h3>
+<p><strong>Estado:</strong> <span id="pedidoEstadoPago">-</span></p>
+<p><strong>Fecha:</strong> <span id="pedidoFecha">-</span></p>
+<p><strong>Cupón:</strong> <span id="pedidoCupon">-</span></p>
+<p>
+<strong>Inventario:</strong>
+<span class="pedido-inventario-texto" id="pedidoEstadoInventario">
             Pendiente
           </span>
-        </p>
-      </article>
-
-    </div>
-
-    <section class="pedido-productos-box">
-
-      <div class="admin-card-header">
-        <div>
-          <p class="admin-eyebrow">PRODUCTOS</p>
-          <h3>Detalle del pedido</h3>
-        </div>
-      </div>
-
-      <div
-        class="pedido-productos-lista"
-        id="pedidoProductosLista"
-      ></div>
-
-    </section>
-
-    <div class="pedido-totales">
-
-      <div>
-        <span>Subtotal</span>
-        <strong id="pedidoSubtotal">$0.00</strong>
-      </div>
-
-      <div>
-        <span>Descuento</span>
-        <strong id="pedidoDescuento">$0.00</strong>
-      </div>
-
-      <div>
-        <span>Envío</span>
-        <strong id="pedidoEnvio">$0.00</strong>
-      </div>
-
-      <div class="pedido-total-final">
-        <span>TOTAL</span>
-        <strong id="pedidoTotal">$0.00</strong>
-      </div>
-
-    </div>
-
-  </div>
-
+</p>
+</article>
 </div>
-
-
+<section class="pedido-productos-box">
+<div class="admin-card-header">
+<div>
+<p class="admin-eyebrow">PRODUCTOS</p>
+<h3>Detalle del pedido</h3>
+</div>
+</div>
+<div class="pedido-productos-lista" id="pedidoProductosLista"></div>
+</section>
+<div class="pedido-totales">
+<div>
+<span>Subtotal</span>
+<strong id="pedidoSubtotal">$0.00</strong>
+</div>
+<div>
+<span>Descuento</span>
+<strong id="pedidoDescuento">$0.00</strong>
+</div>
+<div>
+<span>Envío</span>
+<strong id="pedidoEnvio">$0.00</strong>
+</div>
+<div class="pedido-total-final">
+<span>TOTAL</span>
+<strong id="pedidoTotal">$0.00</strong>
+</div>
+</div>
+</div>
+</div>
 <!-- ======================================================
      CONFIGURACIÓN SRI · SOLO DATOS NO SECRETOS
 ====================================================== -->
-
-
-
-
-
 <!-- ============================================
      PASO 16F4C · COMPROBANTE DE RETENCIÓN ATS
 ============================================= -->
-
-
-
-
 <!-- ============================================
      PASO 16F4B · GUÍA DE REMISIÓN
 ============================================= -->
-
-
-
-
 <!-- ============================================
      PASO 16F4A · NOTA DE DÉBITO
 ============================================= -->
-
-
-
-
 <!-- ============================================
      PASO 16F3A · NOTA DE CRÉDITO
 ============================================= -->
-
-
-
-
-
-
-
 <!-- ======================================================
      FIREBASE
 ====================================================== -->
-
 <script src="../compat.js?v=3200"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
-
-
 <!-- ======================================================
      EMAILJS FREE
 ====================================================== -->
-
-<script
-  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
-></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="./emailjs-config.js?v=2310"></script>
-
-
 <!-- ======================================================
      SIXTEEN ADMIN
 ====================================================== -->
-
 <script src="../variant-utils.js?v=2900"></script>
-
 <script src="../store-config.js?v=3000"></script>
-
 <script src="../payment-config.js?v=18000"></script>
-
-
 <script src="./dashboard.js?v=24000"></script>
-
 <script src="./resenas-admin.js?v=24000"></script>
-
 <script src="./analitica.js?v=21010"></script>
-
 <script src="./backup.js?v=22000"></script>
-
 <script src="./pagos-admin.js?v=18000"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="../factura-sixteen.js?v=21002"></script>
-
 <script src="./comprobante-email.js?v=21000"></script>
-
 <script src="./facturacion.js?v=21001"></script>
-
-
 </body>
-
 </html>
