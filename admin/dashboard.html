@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=21000"
+    href="./admin.css?v=22000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -1231,7 +1231,7 @@
       ========================================= -->
 
       <!-- ========================================
-           PASO 16E · BACKUPS Y EXPORTACIONES
+           PASO 22 · BACKUPS Y EXPORTACIONES
       ========================================= -->
 
       <section
@@ -1241,34 +1241,43 @@
 
         <div class="admin-card-header">
           <div>
-            <p class="admin-eyebrow">PASO 16E · DATA SAFETY</p>
+            <p class="admin-eyebrow">PASO 22 · DATA SAFETY</p>
             <h3>Backups y exportaciones</h3>
             <p class="backup-subtitle">
-              Descarga copias locales de productos, pedidos, clientes,
-              inventario, cupones y envíos.
+              Respalda los datos operativos de SIXTEEN directamente desde
+              Firestore y genera exportaciones legibles para control administrativo.
             </p>
           </div>
 
-          <span class="admin-status">SIN COSTO</span>
+          <span
+            class="admin-status backup-source-status"
+            id="backupSourceStatus"
+            title="El respaldo maestro consulta Firestore directamente"
+          >
+            FIRESTORE SERVER
+          </span>
         </div>
 
         <div class="backup-kpis">
           <article><span>PRODUCTOS</span><strong id="backupKpiProductos">0</strong></article>
           <article><span>PEDIDOS</span><strong id="backupKpiPedidos">0</strong></article>
           <article><span>CLIENTES</span><strong id="backupKpiClientes">0</strong></article>
-          <article><span>INVENTARIO</span><strong id="backupKpiInventario">0</strong></article>
+          <article><span>KARDEX</span><strong id="backupKpiInventario">0</strong></article>
           <article><span>CUPONES</span><strong id="backupKpiCupones">0</strong></article>
           <article><span>ENVÍOS</span><strong id="backupKpiEnvios">0</strong></article>
+          <article><span>FACTURACIÓN</span><strong id="backupKpiFacturacion">0</strong></article>
+          <article><span>NEWSLETTER</span><strong id="backupKpiNewsletter">0</strong></article>
         </div>
 
         <div class="backup-main-actions">
 
           <article class="backup-primary-card">
             <p class="admin-eyebrow">RESPALDO MAESTRO</p>
-            <h4>Copia completa JSON</h4>
+            <h4>Respaldo operativo JSON</h4>
             <p>
-              Incluye todos los datos cargados por el Admin, configuración
-              pública de tienda, conteos y verificación SHA-256.
+              Consulta directamente el servidor y conserva catálogo, pedidos,
+              Kardex, cupones, envíos, Facturación SIXTEEN, configuración de
+              pagos, newsletter y SIXTEEN Experience.
             </p>
 
             <button
@@ -1276,11 +1285,11 @@
               class="admin-primary-btn"
               id="descargarBackupCompletoBtn"
             >
-              DESCARGAR RESPALDO COMPLETO
+              DESCARGAR RESPALDO MAESTRO
             </button>
 
             <small id="backupUltimaDescarga">
-              Todavía no se ha generado un respaldo en esta sesión.
+              Todavía no se ha generado un respaldo.
             </small>
           </article>
 
@@ -1288,8 +1297,8 @@
             <p class="admin-eyebrow">VERIFICACIÓN</p>
             <h4>Validar un respaldo</h4>
             <p>
-              Comprueba un JSON creado por SIXTEEN sin escribir ni restaurar
-              información en Firestore.
+              Comprueba formato, versión, conteos e integridad SHA-256 sin
+              escribir ni restaurar datos en Firestore.
             </p>
 
             <label class="backup-file-label">
@@ -1315,51 +1324,65 @@
         <div class="backup-export-grid">
           <article>
             <span>PRODUCTOS</span>
-            <p>Catálogo, stock y variantes.</p>
+            <p>Catálogo, precios, estado, stock y variantes.</p>
             <button type="button" class="admin-secondary-btn" data-backup-export="productos">CSV PRODUCTOS</button>
           </article>
 
           <article>
             <span>PEDIDOS</span>
-            <p>Cliente, entrega, pago y productos.</p>
+            <p>Cliente, entrega, pago, productos y totales.</p>
             <button type="button" class="admin-secondary-btn" data-backup-export="pedidos">CSV PEDIDOS</button>
           </article>
 
           <article>
             <span>CLIENTES</span>
-            <p>Resumen de clientes derivado de pedidos.</p>
+            <p>CRM derivado desde el historial completo de pedidos.</p>
             <button type="button" class="admin-secondary-btn" data-backup-export="clientes">CSV CLIENTES</button>
           </article>
 
           <article>
             <span>KARDEX</span>
-            <p>Movimientos de inventario y variantes.</p>
-            <button type="button" class="admin-secondary-btn" data-backup-export="inventario">CSV INVENTARIO</button>
+            <p>Movimientos, variantes, cantidades y trazabilidad.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="inventario">CSV KARDEX</button>
           </article>
 
           <article>
             <span>CUPONES</span>
-            <p>Configuración y usos.</p>
+            <p>Configuración, estado, descuento y contador de usos.</p>
             <button type="button" class="admin-secondary-btn" data-backup-export="cupones">CSV CUPONES</button>
           </article>
 
           <article>
             <span>ENVÍOS</span>
-            <p>Tarifas y zonas.</p>
+            <p>Provincias, tarifas, estado y configuración publicada.</p>
             <button type="button" class="admin-secondary-btn" data-backup-export="envios">CSV ENVÍOS</button>
           </article>
 
           <article>
+            <span>FACTURACIÓN</span>
+            <p>Facturas, notas de crédito y notas de débito SIXTEEN.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="facturacion">CSV FACTURACIÓN</button>
+          </article>
+
+          <article>
+            <span>NEWSLETTER</span>
+            <p>Suscripciones y consentimiento. Contiene datos personales.</p>
+            <button type="button" class="admin-secondary-btn" data-backup-export="newsletter">CSV NEWSLETTER</button>
+          </article>
+
+          <article>
             <span>CONFIGURACIÓN</span>
-            <p>Datos públicos de tienda y soporte.</p>
+            <p>Tienda, pagos públicos y configuración del Facturador SIXTEEN.</p>
             <button type="button" class="admin-secondary-btn" id="exportarConfiguracionBtn">JSON CONFIGURACIÓN</button>
           </article>
         </div>
 
         <div class="backup-notes">
-          <p><strong>Clientes:</strong> se construyen a partir de los pedidos; no existe una colección independiente clientes.</p>
-          <p><strong>Seguridad:</strong> no se incluyen contraseñas, firma electrónica ni claves privadas.</p>
-          <p><strong>Restauración:</strong> esta fase valida y exporta; no sobrescribe Firestore.</p>
+          <p><strong>Fuente:</strong> el respaldo maestro y los CSV consultan Firestore directamente; no dependen únicamente de lo que esté visible en el Dashboard.</p>
+          <p><strong>Privacidad:</strong> no se exportan cuentas privadas, favoritos, carritos ni notificaciones de clientes porque las reglas de seguridad no permiten lectura administrativa de esos datos.</p>
+          <p><strong>Archivos:</strong> se respaldan URLs y metadatos de imágenes/modelos; los binarios alojados en Cloudinary u otros servicios deben respaldarse en su proveedor.</p>
+          <p><strong>Seguridad:</strong> se excluyen campos con apariencia de contraseña, token, clave privada, certificado o secreto.</p>
+          <p><strong>Restauración:</strong> este módulo valida y exporta; no sobrescribe Firestore automáticamente para evitar restauraciones destructivas por accidente.</p>
         </div>
 
       </section>
@@ -4612,7 +4635,7 @@
 
 <script src="./analitica.js?v=21010"></script>
 
-<script src="./backup.js?v=3100"></script>
+<script src="./backup.js?v=22000"></script>
 
 <script src="./pagos-admin.js?v=18000"></script>
 

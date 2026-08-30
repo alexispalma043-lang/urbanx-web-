@@ -7709,3 +7709,215 @@ td {
 @media(max-width:1100px){.facturacion-line-item{grid-template-columns:repeat(3,minmax(0,1fr))}.facturacion-line-item .facturacion-line-description{grid-column:span 2}.facturacion-line-remove{align-self:end}}
 @media(max-width:760px){.facturacion-manual-bottom,.facturacion-detail-grid{grid-template-columns:1fr}.facturacion-line-item{grid-template-columns:1fr 1fr}.facturacion-line-item .facturacion-line-description{grid-column:span 2}.facturacion-line-total{justify-content:flex-start}.facturacion-manual-items-head{align-items:flex-start;flex-direction:column}.facturacion-manual-items-head .admin-secondary-btn{width:100%}}
 @media(max-width:480px){.facturacion-line-item{grid-template-columns:1fr}.facturacion-line-item .facturacion-line-description{grid-column:auto}.facturacion-line-remove{width:100%}}
+
+
+/* =========================================
+   PASO 22 · BACKUPS Y EXPORTACIONES
+========================================= */
+
+.backup-subtitle{
+  max-width:680px;
+  margin:8px 0 0;
+  color:#8d8378;
+  font-size:8px;
+  line-height:1.7;
+}
+
+.backup-source-status{
+  background:#0b0b0b;
+  border:1px solid rgba(216,170,85,.28);
+  color:#e7c77f;
+}
+
+.backup-kpis{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:16px 0;
+}
+
+.backup-kpis article{
+  padding:14px 12px;
+  border:1px solid rgba(216,170,85,.14);
+  background:#080808;
+}
+
+.backup-kpis span{
+  display:block;
+  color:#736a61;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.8px;
+}
+
+.backup-kpis strong{
+  display:block;
+  margin-top:7px;
+  color:#f0d08c;
+  font-size:19px;
+}
+
+.backup-main-actions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.backup-primary-card{
+  padding:20px;
+  border:1px solid rgba(216,170,85,.18);
+  background:
+    linear-gradient(135deg,rgba(216,170,85,.04),transparent 50%),
+    #080808;
+}
+
+.backup-primary-card h4{
+  margin:5px 0 10px;
+  color:#eee7df;
+  font-size:17px;
+}
+
+.backup-primary-card p{
+  color:#887f76;
+  font-size:8px;
+  line-height:1.7;
+}
+
+.backup-primary-card small{
+  display:block;
+  margin-top:10px;
+  color:#777067;
+  font-size:7px;
+  line-height:1.5;
+}
+
+.backup-file-label{
+  display:inline-flex;
+  margin-top:9px;
+  cursor:pointer;
+}
+
+.backup-file-label input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.backup-file-label span{
+  display:inline-flex;
+  padding:11px 13px;
+  border:1px solid rgba(216,170,85,.25);
+  color:#e7c77f;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.7px;
+}
+
+.backup-file-label:focus-within span{
+  outline:2px solid rgba(231,199,127,.62);
+  outline-offset:3px;
+}
+
+.backup-validation{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid rgba(216,170,85,.12);
+  background:#070707;
+  color:#8c837a;
+  font-size:7px;
+  line-height:1.65;
+  white-space:pre-line;
+}
+
+.backup-validation.ok{
+  border-color:rgba(74,164,108,.32);
+  color:#87c99d;
+}
+
+.backup-validation.error{
+  border-color:rgba(201,71,60,.35);
+  color:#d9857d;
+}
+
+.backup-export-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:12px;
+}
+
+.backup-export-grid article{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-height:150px;
+  padding:15px;
+  border:1px solid rgba(216,170,85,.12);
+  background:#080808;
+}
+
+.backup-export-grid article>span{
+  color:#e6c378;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.9px;
+}
+
+.backup-export-grid p{
+  flex:1;
+  margin:9px 0 12px;
+  color:#7d746b;
+  font-size:7px;
+  line-height:1.6;
+}
+
+.backup-export-grid button{
+  width:100%;
+}
+
+.backup-notes{
+  display:grid;
+  gap:6px;
+  margin-top:12px;
+  padding:14px;
+  border-left:3px solid #d8aa55;
+  background:#0b0906;
+}
+
+.backup-notes p{
+  margin:0;
+  color:#8b8176;
+  font-size:7px;
+  line-height:1.65;
+}
+
+@media(max-width:1180px){
+  .backup-kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .backup-export-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:760px){
+  .backup-main-actions{
+    grid-template-columns:1fr;
+  }
+
+  .backup-kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .backup-export-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:480px){
+  .backup-kpis{
+    grid-template-columns:1fr;
+  }
+}
+
