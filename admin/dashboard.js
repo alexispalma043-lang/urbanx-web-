@@ -208,7 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const inventarioBuscar = document.getElementById("inventarioBuscar");
   const inventarioFiltroCategoria = document.getElementById("inventarioFiltroCategoria");
   const inventarioFiltroEstado = document.getElementById("inventarioFiltroEstado");
+  const inventarioFiltroCatalogo = document.getElementById("inventarioFiltroCatalogo");
   const limpiarFiltrosInventarioBtn = document.getElementById("limpiarFiltrosInventarioBtn");
+  const exportarStockBtn = document.getElementById("exportarStockBtn");
   const inventarioResultadoTexto = document.getElementById("inventarioResultadoTexto");
 
   const movimientosInventarioBody = document.getElementById("movimientosInventarioBody");
@@ -219,6 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const limpiarFiltrosMovimientosBtn = document.getElementById("limpiarFiltrosMovimientosBtn");
   const exportarInventarioBtn = document.getElementById("exportarInventarioBtn");
   const movimientosResultadoTexto = document.getElementById("movimientosResultadoTexto");
+  const movimientosFiltroAviso = document.getElementById("movimientosFiltroAviso");
 
   const inventarioAjusteModal = document.getElementById("inventarioAjusteModal");
   const cerrarInventarioModal = document.getElementById("cerrarInventarioModal");
@@ -226,6 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const inventarioAjusteForm = document.getElementById("inventarioAjusteForm");
   const inventarioModalProducto = document.getElementById("inventarioModalProducto");
   const inventarioModalStock = document.getElementById("inventarioModalStock");
+  const inventarioModalStockLabel = document.getElementById("inventarioModalStockLabel");
+  const inventarioModalStockTotal = document.getElementById("inventarioModalStockTotal");
   const inventarioModalMinimoActual = document.getElementById("inventarioModalMinimoActual");
   const inventarioOperacion = document.getElementById("inventarioOperacion");
   const inventarioCantidad = document.getElementById("inventarioCantidad");
@@ -403,6 +408,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let pedidoEstadoPagoOriginal = "";
   let focoAntesPedidoModal = null;
   let productoAjusteInventarioId = null;
+  let focoAntesInventarioModal = null;
 
   let imagenArchivoSeleccionado = null;
   let imagenPreviewObjectUrl = null;
@@ -849,7 +855,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (inventarioAdminBody) {
               inventarioAdminBody.innerHTML = `
                 <tr>
-                  <td colspan="7">
+                  <td colspan="9">
                     No fue posible cargar el inventario.
                   </td>
                 </tr>
@@ -1047,80 +1053,98 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ========================================================
-  // INVENTARIO AVANZADO
+  // INVENTARIO AVANZADO · PASO 16
   // ========================================================
+
+  function stockTotalInventarioProducto(producto) {
+    if (window.SIXTEEN_VARIANTS) {
+      return Math.max(
+        0,
+        Math.floor(
+          window.SIXTEEN_VARIANTS.totalStock(producto)
+        )
+      );
+    }
+
+    return Math.max(
+      0,
+      Math.floor(numero(producto?.stock))
+    );
+  }
+
+
+  function variantesInventarioProducto(producto) {
+    if (!window.SIXTEEN_VARIANTS) {
+      return [];
+    }
+
+    return window.SIXTEEN_VARIANTS.variants(producto);
+  }
+
+
+  function estadoCatalogoProducto(producto) {
+    const estado = normalizarTexto(producto?.estado || "Activo");
+    return estado === "activo" && producto?.archivado !== true
+      ? "activo"
+      : "inactivo";
+  }
+
 
   function aplicarFiltrosInventario() {
 
-    const busqueda =
-      normalizarTexto(
-        inventarioBuscar?.value || ""
-      );
+    const busqueda = normalizarTexto(inventarioBuscar?.value || "");
+    const categoria = String(inventarioFiltroCategoria?.value || "").trim();
+    const estado = String(inventarioFiltroEstado?.value || "").trim();
+    const catalogo = String(inventarioFiltroCatalogo?.value || "").trim();
 
-    const categoria =
-      String(
-        inventarioFiltroCategoria?.value || ""
-      ).trim();
+    productosInventarioFiltrados = productosActuales.filter(function (producto) {
+      if (categoria && String(producto.categoria || "").trim() !== categoria) {
+        return false;
+      }
 
-    const estado =
-      String(
-        inventarioFiltroEstado?.value || ""
-      ).trim();
+      const estadoProducto = estadoInventarioProducto(producto);
+      if (estado && estadoProducto !== estado) {
+        return false;
+      }
 
-    productosInventarioFiltrados =
-      productosActuales.filter(
-        function (producto) {
+      if (catalogo && estadoCatalogoProducto(producto) !== catalogo) {
+        return false;
+      }
 
-          if (
-            categoria &&
-            producto.categoria !== categoria
-          ) {
-            return false;
-          }
+      if (busqueda) {
+        const variantes = variantesInventarioProducto(producto);
+        const texto = normalizarTexto(
+          [
+            producto.codigo,
+            producto.nombre,
+            producto.categoria,
+            producto.color,
+            Array.isArray(producto.tallas) ? producto.tallas.join(" ") : producto.tallas,
+            ...variantes.flatMap(function (variante) {
+              return [variante.color, variante.talla, variante.id];
+            })
+          ]
+            .filter(Boolean)
+            .join(" ")
+        );
 
-          const estadoProducto =
-            estadoInventarioProducto(
-              producto
-            );
-
-          if (
-            estado &&
-            estadoProducto !== estado
-          ) {
-            return false;
-          }
-
-          if (busqueda) {
-
-            const texto =
-              normalizarTexto(
-                [
-                  producto.codigo,
-                  producto.nombre,
-                  producto.categoria
-                ]
-                  .filter(Boolean)
-                  .join(" ")
-              );
-
-            if (
-              !texto.includes(
-                busqueda
-              )
-            ) {
-              return false;
-            }
-          }
-
-          return true;
+        if (!texto.includes(busqueda)) {
+          return false;
         }
-      );
+      }
 
-    renderInventario(
-      productosInventarioFiltrados
-    );
+      return true;
+    });
 
+    renderInventario(productosInventarioFiltrados);
     actualizarTextoInventario();
+  }
+
+
+  function crearCeldaInventario(texto = "") {
+    const celda = document.createElement("td");
+    celda.textContent = String(texto ?? "");
+    return celda;
   }
 
 
@@ -1130,212 +1154,144 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    inventarioAdminBody.replaceChildren();
+
     if (!productos.length) {
-
-      inventarioAdminBody.innerHTML = `
-        <tr>
-          <td colspan="7">
-            No existen productos que coincidan con los filtros.
-          </td>
-        </tr>
-      `;
-
+      const fila = document.createElement("tr");
+      const celda = crearCeldaInventario("No existen productos que coincidan con los filtros.");
+      celda.colSpan = 9;
+      fila.appendChild(celda);
+      inventarioAdminBody.appendChild(fila);
       return;
     }
 
-    inventarioAdminBody.innerHTML =
-      "";
-
     [...productos]
-      .sort(
-        function (a, b) {
+      .sort(function (a, b) {
+        return stockTotalInventarioProducto(a) - stockTotalInventarioProducto(b);
+      })
+      .forEach(function (producto) {
+        const stock = stockTotalInventarioProducto(producto);
+        const variantes = variantesInventarioProducto(producto);
+        const minimo = obtenerStockMinimo(producto);
+        const estado = estadoInventarioProducto(producto);
+        const catalogo = estadoCatalogoProducto(producto);
 
-          return numero(a.stock) -
-            numero(b.stock);
+        const fila = document.createElement("tr");
+
+        const codigoTd = document.createElement("td");
+        const codigoStrong = document.createElement("strong");
+        codigoStrong.className = "admin-code";
+        codigoStrong.textContent = producto.codigo || "-";
+        codigoTd.appendChild(codigoStrong);
+        fila.appendChild(codigoTd);
+
+        const productoTd = document.createElement("td");
+        const productoWrap = document.createElement("div");
+        productoWrap.className = "admin-product-cell";
+
+        if (producto.imagen && esUrlHttpsValida(producto.imagen)) {
+          const img = document.createElement("img");
+          img.src = producto.imagen;
+          img.alt = producto.nombre || "Producto";
+          img.loading = "lazy";
+          img.addEventListener("error", function () {
+            const fallback = document.createElement("span");
+            fallback.className = "admin-product-fallback";
+            fallback.textContent = "XVI";
+            img.replaceWith(fallback);
+          }, { once: true });
+          productoWrap.appendChild(img);
+        } else {
+          const fallback = document.createElement("span");
+          fallback.className = "admin-product-fallback";
+          fallback.textContent = "XVI";
+          productoWrap.appendChild(fallback);
         }
-      )
-      .forEach(
-        function (producto) {
 
-          const stock =
-            Math.max(
-              0,
-              Math.floor(
-                numero(
-                  producto.stock
-                )
-              )
-            );
+        const nombreStrong = document.createElement("strong");
+        nombreStrong.textContent = producto.nombre || "-";
+        productoWrap.appendChild(nombreStrong);
+        productoTd.appendChild(productoWrap);
+        fila.appendChild(productoTd);
 
-          const minimo =
-            obtenerStockMinimo(
-              producto
-            );
+        fila.appendChild(crearCeldaInventario(producto.categoria || "-"));
 
-          const estado =
-            estadoInventarioProducto(
-              producto
-            );
+        const stockTd = document.createElement("td");
+        const stockStrong = document.createElement("strong");
+        stockStrong.className = "inventario-stock-numero";
+        stockStrong.textContent = String(stock);
+        stockTd.appendChild(stockStrong);
+        fila.appendChild(stockTd);
 
-          const textoEstado =
-            textoEstadoStock(
-              estado
-            );
-
-          const fila =
-            document.createElement(
-              "tr"
-            );
-
-          fila.innerHTML = `
-            <td>
-              <strong class="admin-code">
-                ${escapar(producto.codigo || "-")}
-              </strong>
-            </td>
-
-            <td>
-              <div class="admin-product-cell">
-
-                ${
-                  producto.imagen
-                    ? `
-                      <img
-                        src="${escaparAtributo(producto.imagen)}"
-                        alt="${escaparAtributo(producto.nombre || "Producto")}"
-                      >
-                    `
-                    : `
-                      <span class="admin-product-fallback">
-                        XVI
-                      </span>
-                    `
-                }
-
-                <strong>
-                  ${escapar(producto.nombre || "-")}
-                </strong>
-
-              </div>
-            </td>
-
-            <td>
-              ${escapar(producto.categoria || "-")}
-            </td>
-
-            <td>
-              <strong class="inventario-stock-numero">
-                ${stock}
-              </strong>
-            </td>
-
-            <td>
-              ${minimo}
-            </td>
-
-            <td>
-              <span
-                class="
-                  inventario-estado-badge
-                  ${estado}
-                "
-              >
-                ${textoEstado}
-              </span>
-            </td>
-
-            <td>
-              <button
-                type="button"
-                class="admin-view-btn"
-                data-inventario-ajuste="${producto.id}"
-              >
-                AJUSTAR
-              </button>
-            </td>
-          `;
-
-          inventarioAdminBody.appendChild(
-            fila
-          );
+        const variantesTd = document.createElement("td");
+        if (variantes.length) {
+          const strong = document.createElement("strong");
+          strong.textContent = String(variantes.length);
+          const small = document.createElement("small");
+          small.className = "admin-table-secondary";
+          small.textContent = variantes.length === 1 ? "variante" : "variantes";
+          variantesTd.append(strong, small);
+        } else {
+          variantesTd.textContent = "Sin variantes";
         }
-      );
+        fila.appendChild(variantesTd);
+
+        fila.appendChild(crearCeldaInventario(minimo));
+
+        const estadoTd = document.createElement("td");
+        const estadoBadge = document.createElement("span");
+        estadoBadge.className = `inventario-estado-badge ${estado}`;
+        estadoBadge.textContent = textoEstadoStock(estado);
+        estadoTd.appendChild(estadoBadge);
+        fila.appendChild(estadoTd);
+
+        const catalogoTd = document.createElement("td");
+        const catalogoBadge = document.createElement("span");
+        catalogoBadge.className = `admin-table-status ${catalogo === "activo" ? "activo" : "inactivo"}`;
+        catalogoBadge.textContent = catalogo === "activo" ? "ACTIVO" : "INACTIVO";
+        catalogoTd.appendChild(catalogoBadge);
+        fila.appendChild(catalogoTd);
+
+        const accionTd = document.createElement("td");
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "admin-view-btn";
+        boton.dataset.inventarioAjuste = producto.id;
+        boton.textContent = "AJUSTAR";
+        boton.setAttribute("aria-label", `Ajustar inventario de ${producto.nombre || producto.codigo || "producto"}`);
+        accionTd.appendChild(boton);
+        fila.appendChild(accionTd);
+
+        inventarioAdminBody.appendChild(fila);
+      });
   }
 
 
   function actualizarResumenInventario() {
 
-    const unidades =
-      productosActuales.reduce(
-        function (total, producto) {
+    const unidades = productosActuales.reduce(function (total, producto) {
+      return total + stockTotalInventarioProducto(producto);
+    }, 0);
 
-          return total +
-            Math.max(
-              0,
-              numero(
-                producto.stock
-              )
-            );
-        },
-        0
+    const bajos = productosActuales.filter(function (producto) {
+      return estadoInventarioProducto(producto) === "bajo";
+    }).length;
+
+    const agotados = productosActuales.filter(function (producto) {
+      return estadoInventarioProducto(producto) === "agotado";
+    }).length;
+
+    const valor = productosActuales.reduce(function (total, producto) {
+      return total + (
+        stockTotalInventarioProducto(producto) *
+        Math.max(0, numero(producto.precio))
       );
+    }, 0);
 
-    const bajos =
-      productosActuales.filter(
-        function (producto) {
-          return estadoInventarioProducto(producto) === "bajo";
-        }
-      ).length;
-
-    const agotados =
-      productosActuales.filter(
-        function (producto) {
-          return estadoInventarioProducto(producto) === "agotado";
-        }
-      ).length;
-
-    const valor =
-      productosActuales.reduce(
-        function (total, producto) {
-
-          return total +
-            (
-              Math.max(
-                0,
-                numero(
-                  producto.stock
-                )
-              ) *
-              Math.max(
-                0,
-                numero(
-                  producto.precio
-                )
-              )
-            );
-        },
-        0
-      );
-
-    if (inventarioKpiUnidades) {
-      inventarioKpiUnidades.textContent =
-        Math.floor(unidades);
-    }
-
-    if (inventarioKpiBajo) {
-      inventarioKpiBajo.textContent =
-        bajos;
-    }
-
-    if (inventarioKpiAgotados) {
-      inventarioKpiAgotados.textContent =
-        agotados;
-    }
-
-    if (inventarioKpiValor) {
-      inventarioKpiValor.textContent =
-        dinero(valor);
-    }
+    if (inventarioKpiUnidades) inventarioKpiUnidades.textContent = Math.floor(unidades);
+    if (inventarioKpiBajo) inventarioKpiBajo.textContent = bajos;
+    if (inventarioKpiAgotados) inventarioKpiAgotados.textContent = agotados;
+    if (inventarioKpiValor) inventarioKpiValor.textContent = dinero(valor);
   }
 
 
@@ -1345,59 +1301,34 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const valorActual =
-      inventarioFiltroCategoria.value;
-
-    const categorias =
-      Array.from(
-        new Set(
-          productosActuales
-            .map(
-              function (producto) {
-                return String(
-                  producto.categoria || ""
-                ).trim();
-              }
-            )
-            .filter(Boolean)
-        )
+    const valorActual = inventarioFiltroCategoria.value;
+    const categorias = Array.from(
+      new Set(
+        productosActuales
+          .map(function (producto) {
+            return String(producto.categoria || "").trim();
+          })
+          .filter(Boolean)
       )
-        .sort(
-          function (a, b) {
-            return a.localeCompare(
-              b,
-              "es"
-            );
-          }
-        );
+    ).sort(function (a, b) {
+      return a.localeCompare(b, "es");
+    });
 
-    inventarioFiltroCategoria.innerHTML =
-      '<option value="">Todas</option>';
+    inventarioFiltroCategoria.replaceChildren();
+    const todas = document.createElement("option");
+    todas.value = "";
+    todas.textContent = "Todas";
+    inventarioFiltroCategoria.appendChild(todas);
 
-    categorias.forEach(
-      function (categoria) {
+    categorias.forEach(function (categoria) {
+      const option = document.createElement("option");
+      option.value = categoria;
+      option.textContent = categoria;
+      inventarioFiltroCategoria.appendChild(option);
+    });
 
-        const option =
-          document.createElement(
-            "option"
-          );
-
-        option.value = categoria;
-        option.textContent = categoria;
-
-        inventarioFiltroCategoria.appendChild(
-          option
-        );
-      }
-    );
-
-    if (
-      categorias.includes(
-        valorActual
-      )
-    ) {
-      inventarioFiltroCategoria.value =
-        valorActual;
+    if (categorias.includes(valorActual)) {
+      inventarioFiltroCategoria.value = valorActual;
     }
   }
 
@@ -1408,41 +1339,25 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const visibles =
-      productosInventarioFiltrados.length;
-
-    const total =
-      productosActuales.length;
+    const visibles = productosInventarioFiltrados.length;
+    const total = productosActuales.length;
 
     if (visibles === total) {
-
-      inventarioResultadoTexto.textContent =
-        total === 1
-          ? "Mostrando 1 producto."
-          : `Mostrando ${total} productos.`;
-
+      inventarioResultadoTexto.textContent = total === 1
+        ? "Mostrando 1 producto."
+        : `Mostrando ${total} productos.`;
       return;
     }
 
-    inventarioResultadoTexto.textContent =
-      `Mostrando ${visibles} de ${total} productos.`;
+    inventarioResultadoTexto.textContent = `Mostrando ${visibles} de ${total} productos.`;
   }
 
 
   function limpiarFiltrosInventario() {
-
-    if (inventarioBuscar) {
-      inventarioBuscar.value = "";
-    }
-
-    if (inventarioFiltroCategoria) {
-      inventarioFiltroCategoria.value = "";
-    }
-
-    if (inventarioFiltroEstado) {
-      inventarioFiltroEstado.value = "";
-    }
-
+    if (inventarioBuscar) inventarioBuscar.value = "";
+    if (inventarioFiltroCategoria) inventarioFiltroCategoria.value = "";
+    if (inventarioFiltroEstado) inventarioFiltroEstado.value = "";
+    if (inventarioFiltroCatalogo) inventarioFiltroCatalogo.value = "";
     aplicarFiltrosInventario();
   }
 
@@ -1450,113 +1365,140 @@ document.addEventListener("DOMContentLoaded", function () {
   [
     inventarioBuscar,
     inventarioFiltroCategoria,
-    inventarioFiltroEstado
+    inventarioFiltroEstado,
+    inventarioFiltroCatalogo
   ]
     .filter(Boolean)
-    .forEach(
-      function (elemento) {
-
-        const evento =
-          elemento === inventarioBuscar
-            ? "input"
-            : "change";
-
-        elemento.addEventListener(
-          evento,
-          aplicarFiltrosInventario
-        );
-      }
-    );
+    .forEach(function (elemento) {
+      const evento = elemento === inventarioBuscar ? "input" : "change";
+      elemento.addEventListener(evento, aplicarFiltrosInventario);
+    });
 
 
-  limpiarFiltrosInventarioBtn
-    ?.addEventListener(
-      "click",
-      limpiarFiltrosInventario
-    );
+  limpiarFiltrosInventarioBtn?.addEventListener("click", limpiarFiltrosInventario);
 
 
-  inventarioAdminBody
-    ?.addEventListener(
-      "click",
-      function (event) {
-
-        const boton =
-          event.target.closest(
-            "button[data-inventario-ajuste]"
-          );
-
-        if (!boton) {
-          return;
-        }
-
-        abrirAjusteInventario(
-          boton.dataset.inventarioAjuste
-        );
-      }
-    );
+  inventarioAdminBody?.addEventListener("click", function (event) {
+    const boton = event.target.closest("button[data-inventario-ajuste]");
+    if (!boton) return;
+    abrirAjusteInventario(boton.dataset.inventarioAjuste);
+  });
 
 
   function obtenerStockMinimo(producto) {
-
-    const valor =
-      Number(
-        producto.stockMinimo
-      );
-
+    const valor = Number(producto.stockMinimo);
     return Number.isFinite(valor)
-      ? Math.max(
-          0,
-          Math.floor(valor)
-        )
+      ? Math.max(0, Math.floor(valor))
       : 5;
   }
 
 
   function estadoInventarioProducto(producto) {
+    const stock = stockTotalInventarioProducto(producto);
+    const minimo = obtenerStockMinimo(producto);
 
-    const stock =
-      Math.max(
-        0,
-        Math.floor(
-          numero(
-            producto.stock
-          )
-        )
-      );
-
-    const minimo =
-      obtenerStockMinimo(
-        producto
-      );
-
-    if (stock <= 0) {
-      return "agotado";
-    }
-
-    if (stock <= minimo) {
-      return "bajo";
-    }
-
+    if (stock <= 0) return "agotado";
+    if (stock <= minimo) return "bajo";
     return "disponible";
   }
 
 
   function textoEstadoStock(estado) {
-
     const textos = {
       disponible: "Disponible",
       bajo: "Stock bajo",
       agotado: "Agotado"
     };
 
-    return textos[estado] ||
-      "Disponible";
+    return textos[estado] || "Disponible";
   }
 
 
+  function exportarStockCSV() {
+    const productos = productosInventarioFiltrados.length || filtrosInventarioActivos()
+      ? productosInventarioFiltrados
+      : productosActuales;
+
+    if (!productos.length) {
+      alert("No hay productos de inventario para exportar.");
+      return;
+    }
+
+    const filas = [[
+      "Codigo",
+      "Producto",
+      "Categoria",
+      "Catalogo",
+      "Estado stock",
+      "Stock minimo",
+      "Variante ID",
+      "Color",
+      "Talla",
+      "Stock variante",
+      "Stock total producto",
+      "Precio venta",
+      "Valor venta estimado"
+    ]];
+
+    productos.forEach(function (producto) {
+      const variantes = variantesInventarioProducto(producto);
+      const total = stockTotalInventarioProducto(producto);
+      const precio = Math.max(0, numero(producto.precio));
+      const comunes = [
+        producto.codigo || "",
+        producto.nombre || "",
+        producto.categoria || "",
+        estadoCatalogoProducto(producto) === "activo" ? "Activo" : "Inactivo / archivado",
+        textoEstadoStock(estadoInventarioProducto(producto)),
+        obtenerStockMinimo(producto)
+      ];
+
+      if (variantes.length) {
+        variantes.forEach(function (variante) {
+          filas.push([
+            ...comunes,
+            variante.id || "",
+            variante.color || "",
+            variante.talla || "",
+            variante.stock,
+            total,
+            precio.toFixed(2),
+            (total * precio).toFixed(2)
+          ]);
+        });
+      } else {
+        filas.push([
+          ...comunes,
+          "",
+          producto.color || "",
+          "",
+          total,
+          total,
+          precio.toFixed(2),
+          (total * precio).toFixed(2)
+        ]);
+      }
+    });
+
+    descargarCSV(filas, "sixteen-stock-" + fechaArchivo() + ".csv");
+  }
+
+
+  function filtrosInventarioActivos() {
+    return Boolean(
+      String(inventarioBuscar?.value || "").trim() ||
+      inventarioFiltroCategoria?.value ||
+      inventarioFiltroEstado?.value ||
+      inventarioFiltroCatalogo?.value
+    );
+  }
+
+
+  exportarStockBtn?.addEventListener("click", exportarStockCSV);
+
+
   // ========================================================
-  // HISTORIAL DE MOVIMIENTOS
+  // HISTORIAL DE MOVIMIENTOS / KARDEX
   // ========================================================
 
   function escucharMovimientosInventario() {
@@ -1565,165 +1507,115 @@ document.addEventListener("DOMContentLoaded", function () {
       unsubscribeInventario();
     }
 
-    unsubscribeInventario =
-      db
-        .collection("inventario")
-        .onSnapshot(
-          function (snapshot) {
+    unsubscribeInventario = db
+      .collection("inventario")
+      .onSnapshot(
+        function (snapshot) {
+          const movimientos = [];
 
-            const movimientos = [];
+          snapshot.forEach(function (doc) {
+            movimientos.push({ id: doc.id, ...doc.data() });
+          });
 
-            snapshot.forEach(
-              function (doc) {
+          movimientos.sort(function (a, b) {
+            return fechaMillis(b.creadoEn) - fechaMillis(a.creadoEn);
+          });
 
-                movimientos.push({
-                  id: doc.id,
-                  ...doc.data()
-                });
-              }
-            );
+          movimientosInventarioActuales = movimientos;
+          marcarFuenteDatos("inventario", "ok");
+          aplicarFiltrosMovimientos();
+          emitirActualizacionBackup();
+        },
+        function (error) {
+          marcarFuenteDatos("inventario", "error");
+          console.error("Firestore inventario:", error);
 
-            movimientos.sort(
-              function (a, b) {
-
-                return fechaMillis(
-                  b.creadoEn
-                ) -
-                fechaMillis(
-                  a.creadoEn
-                );
-              }
-            );
-
-            movimientosInventarioActuales =
-              movimientos;
-
-            marcarFuenteDatos("inventario", "ok");
-            aplicarFiltrosMovimientos();
-            emitirActualizacionBackup();
-          },
-
-          function (error) {
-
-            marcarFuenteDatos("inventario", "error");
-
-            console.error(
-              "Firestore inventario:",
-              error
-            );
-
-            if (movimientosInventarioBody) {
-
-              movimientosInventarioBody.innerHTML = `
-                <tr>
-                  <td colspan="8">
-                    No fue posible cargar los movimientos.
-                  </td>
-                </tr>
-              `;
-            }
+          if (movimientosInventarioBody) {
+            movimientosInventarioBody.replaceChildren();
+            const fila = document.createElement("tr");
+            const celda = crearCeldaInventario("No fue posible cargar los movimientos.");
+            celda.colSpan = 8;
+            fila.appendChild(celda);
+            movimientosInventarioBody.appendChild(fila);
           }
-        );
+        }
+      );
   }
 
 
   function aplicarFiltrosMovimientos() {
 
-    const busqueda =
-      normalizarTexto(
-        movimientoBuscar?.value ||
-        ""
-      );
+    const busqueda = normalizarTexto(movimientoBuscar?.value || "");
+    const tipo = String(movimientoFiltroTipo?.value || "").trim();
+    const desde = crearFechaFiltro(movimientoFechaDesde?.value, false);
+    const hasta = crearFechaFiltro(movimientoFechaHasta?.value, true);
+    const rangoInvalido = Boolean(desde && hasta && desde > hasta);
 
-    const tipo =
-      String(
-        movimientoFiltroTipo?.value ||
-        ""
-      ).trim();
+    if (movimientoFechaDesde) {
+      movimientoFechaDesde.setAttribute("aria-invalid", rangoInvalido ? "true" : "false");
+    }
 
-    const desde =
-      crearFechaFiltro(
-        movimientoFechaDesde?.value,
-        false
-      );
+    if (movimientoFechaHasta) {
+      movimientoFechaHasta.setAttribute("aria-invalid", rangoInvalido ? "true" : "false");
+    }
 
-    const hasta =
-      crearFechaFiltro(
-        movimientoFechaHasta?.value,
-        true
-      );
+    if (movimientosFiltroAviso) {
+      movimientosFiltroAviso.textContent = rangoInvalido
+        ? "La fecha DESDE no puede ser posterior a HASTA."
+        : "";
+    }
 
-    movimientosInventarioFiltrados =
-      movimientosInventarioActuales.filter(
-        function (movimiento) {
+    if (rangoInvalido) {
+      movimientosInventarioFiltrados = [];
+      renderMovimientosInventario([]);
+      actualizarTextoMovimientos();
+      return;
+    }
 
-          if (
-            tipo &&
-            movimiento.tipo !== tipo
-          ) {
-            return false;
-          }
+    movimientosInventarioFiltrados = movimientosInventarioActuales.filter(function (movimiento) {
+      if (tipo && movimiento.tipo !== tipo) {
+        return false;
+      }
 
-          const fecha =
-            fechaComoDate(
-              movimiento.creadoEn
-            );
+      const fecha = fechaComoDate(movimiento.creadoEn);
+      if (desde && (!fecha || fecha < desde)) return false;
+      if (hasta && (!fecha || fecha > hasta)) return false;
 
-          if (
-            desde &&
-            (
-              !fecha ||
-              fecha < desde
-            )
-          ) {
-            return false;
-          }
+      if (busqueda) {
+        const texto = normalizarTexto(
+          [
+            movimiento.codigo,
+            movimiento.nombre,
+            movimiento.pedidoNumero,
+            movimiento.motivo,
+            movimiento.usuarioEmail,
+            movimiento.tipo,
+            movimiento.origen,
+            movimiento.varianteId,
+            movimiento.color,
+            movimiento.talla
+          ]
+            .filter(Boolean)
+            .join(" ")
+        );
 
-          if (
-            hasta &&
-            (
-              !fecha ||
-              fecha > hasta
-            )
-          ) {
-            return false;
-          }
-
-          if (busqueda) {
-
-            const texto =
-              normalizarTexto(
-                [
-                  movimiento.codigo,
-                  movimiento.nombre,
-                  movimiento.pedidoNumero,
-                  movimiento.motivo,
-                  movimiento.usuarioEmail,
-                  movimiento.tipo,
-                  movimiento.origen
-                ]
-                  .filter(Boolean)
-                  .join(" ")
-              );
-
-            if (
-              !texto.includes(
-                busqueda
-              )
-            ) {
-              return false;
-            }
-          }
-
-          return true;
+        if (!texto.includes(busqueda)) {
+          return false;
         }
-      );
+      }
 
-    renderMovimientosInventario(
-      movimientosInventarioFiltrados
-    );
+      return true;
+    });
 
+    renderMovimientosInventario(movimientosInventarioFiltrados);
     actualizarTextoMovimientos();
+  }
+
+
+  function variacionMovimiento(movimiento) {
+    const anterior = numero(movimiento.stockAnterior);
+    const nuevo = numero(movimiento.stockNuevo);
+    return nuevo - anterior;
   }
 
 
@@ -1733,219 +1625,131 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    movimientosInventarioBody.replaceChildren();
+
     if (!movimientos.length) {
-
-      movimientosInventarioBody.innerHTML = `
-        <tr>
-          <td colspan="8">
-            No existen movimientos que coincidan con los filtros.
-          </td>
-        </tr>
-      `;
-
+      const fila = document.createElement("tr");
+      const celda = crearCeldaInventario("No existen movimientos que coincidan con los filtros.");
+      celda.colSpan = 8;
+      fila.appendChild(celda);
+      movimientosInventarioBody.appendChild(fila);
       return;
     }
 
-    movimientosInventarioBody.innerHTML =
-      "";
+    movimientos.forEach(function (movimiento) {
+      const fila = document.createElement("tr");
 
-    movimientos.forEach(
-      function (movimiento) {
+      fila.appendChild(crearCeldaInventario(fechaLegible(movimiento.creadoEn)));
 
-        const fila =
-          document.createElement(
-            "tr"
-          );
+      const tipoTd = document.createElement("td");
+      const tipoBadge = document.createElement("span");
+      tipoBadge.className = `movimiento-tipo-badge ${claseMovimientoInventario(movimiento.tipo)}`;
+      tipoBadge.textContent = textoMovimientoInventario(movimiento.tipo);
+      tipoTd.appendChild(tipoBadge);
+      fila.appendChild(tipoTd);
 
-        fila.innerHTML = `
-          <td>
-            ${escapar(
-              fechaLegible(
-                movimiento.creadoEn
-              )
-            )}
-          </td>
+      const productoTd = document.createElement("td");
+      const nombre = document.createElement("strong");
+      nombre.textContent = movimiento.nombre || movimiento.codigo || "-";
+      productoTd.appendChild(nombre);
 
-          <td>
-            <span
-              class="
-                movimiento-tipo-badge
-                ${claseMovimientoInventario(
-                  movimiento.tipo
-                )}
-              "
-            >
-              ${escapar(
-                textoMovimientoInventario(
-                  movimiento.tipo
-                )
-              )}
-            </span>
-          </td>
+      const codigo = document.createElement("small");
+      codigo.className = "admin-table-secondary";
+      codigo.textContent = movimiento.codigo || "";
+      productoTd.appendChild(codigo);
 
-          <td>
-            <strong>
-              ${escapar(
-                movimiento.nombre ||
-                movimiento.codigo ||
-                "-"
-              )}
-            </strong>
-
-            <small class="admin-table-secondary">
-              ${escapar(
-                movimiento.codigo ||
-                ""
-              )}
-            </small>
-          </td>
-
-          <td>
-            <strong>
-              ${Math.max(
-                0,
-                numero(
-                  movimiento.cantidad
-                )
-              )}
-            </strong>
-          </td>
-
-          <td>
-            ${numero(
-              movimiento.stockAnterior
-            )}
-          </td>
-
-          <td>
-            <strong>
-              ${numero(
-                movimiento.stockNuevo
-              )}
-            </strong>
-          </td>
-
-          <td>
-            ${
-              movimiento.pedidoNumero
-                ? `
-                  <span>
-                    ${escapar(
-                      movimiento.pedidoNumero
-                    )}
-                  </span>
-                `
-                : `
-                  <span>
-                    ${escapar(
-                      movimiento.motivo ||
-                      movimiento.origen ||
-                      "Manual"
-                    )}
-                  </span>
-                `
-            }
-          </td>
-
-          <td>
-            ${escapar(
-              movimiento.usuarioEmail ||
-              "Administrador"
-            )}
-          </td>
-        `;
-
-        movimientosInventarioBody.appendChild(
-          fila
-        );
+      if (movimiento.color || movimiento.talla) {
+        const variante = document.createElement("small");
+        variante.className = "admin-table-secondary movimiento-variante";
+        variante.textContent = [movimiento.color, movimiento.talla]
+          .filter(Boolean)
+          .join(" / ");
+        productoTd.appendChild(variante);
       }
-    );
+      fila.appendChild(productoTd);
+
+      const variacion = variacionMovimiento(movimiento);
+      const cantidadTd = document.createElement("td");
+      const cantidadStrong = document.createElement("strong");
+      cantidadStrong.className = `movimiento-cantidad ${variacion > 0 ? "entrada" : variacion < 0 ? "salida" : "neutra"}`;
+      cantidadStrong.textContent = variacion > 0 ? `+${variacion}` : String(variacion);
+      cantidadTd.appendChild(cantidadStrong);
+      fila.appendChild(cantidadTd);
+
+      fila.appendChild(crearCeldaInventario(numero(movimiento.stockAnterior)));
+
+      const nuevoTd = document.createElement("td");
+      const nuevoStrong = document.createElement("strong");
+      nuevoStrong.textContent = String(numero(movimiento.stockNuevo));
+      nuevoTd.appendChild(nuevoStrong);
+      fila.appendChild(nuevoTd);
+
+      const origenTd = document.createElement("td");
+      origenTd.textContent = movimiento.pedidoNumero || movimiento.motivo || movimiento.origen || "Manual";
+      fila.appendChild(origenTd);
+
+      fila.appendChild(crearCeldaInventario(movimiento.usuarioEmail || "Administrador"));
+
+      movimientosInventarioBody.appendChild(fila);
+    });
   }
 
 
   function textoMovimientoInventario(tipo) {
-
     const textos = {
       SALIDA_VENTA: "Salida venta",
       ENTRADA_CANCELACION: "Devolución por cancelación",
       ENTRADA_REVERSO_PEDIDO: "Reverso a Pendiente",
       AJUSTE_ENTRADA: "Entrada manual",
       AJUSTE_SALIDA: "Salida manual",
-      AJUSTE_EXACTO: "Ajuste exacto"
+      AJUSTE_EXACTO: "Ajuste exacto",
+      AJUSTE_MINIMO: "Mínimo actualizado"
     };
 
-    return textos[tipo] ||
-      tipo ||
-      "Movimiento";
+    return textos[tipo] || tipo || "Movimiento";
   }
 
 
   function claseMovimientoInventario(tipo) {
-
-    if (
-      tipo === "SALIDA_VENTA" ||
-      tipo === "AJUSTE_SALIDA"
-    ) {
-      return "salida";
-    }
-
+    if (tipo === "SALIDA_VENTA" || tipo === "AJUSTE_SALIDA") return "salida";
     if (
       tipo === "ENTRADA_CANCELACION" ||
       tipo === "ENTRADA_REVERSO_PEDIDO" ||
       tipo === "AJUSTE_ENTRADA"
-    ) {
-      return "entrada";
-    }
-
+    ) return "entrada";
     return "ajuste";
   }
 
 
   function actualizarTextoMovimientos() {
+    if (!movimientosResultadoTexto) return;
 
-    if (!movimientosResultadoTexto) {
-      return;
-    }
-
-    const visibles =
-      movimientosInventarioFiltrados.length;
-
-    const total =
-      movimientosInventarioActuales.length;
+    const visibles = movimientosInventarioFiltrados.length;
+    const total = movimientosInventarioActuales.length;
 
     if (visibles === total) {
-
-      movimientosResultadoTexto.textContent =
-        total === 1
-          ? "Mostrando 1 movimiento."
-          : `Mostrando ${total} movimientos.`;
-
+      movimientosResultadoTexto.textContent = total === 1
+        ? "Mostrando 1 movimiento."
+        : `Mostrando ${total} movimientos.`;
       return;
     }
 
-    movimientosResultadoTexto.textContent =
-      `Mostrando ${visibles} de ${total} movimientos.`;
+    movimientosResultadoTexto.textContent = `Mostrando ${visibles} de ${total} movimientos.`;
   }
 
 
   function limpiarFiltrosMovimientos() {
-
-    if (movimientoBuscar) {
-      movimientoBuscar.value = "";
-    }
-
-    if (movimientoFiltroTipo) {
-      movimientoFiltroTipo.value = "";
-    }
-
+    if (movimientoBuscar) movimientoBuscar.value = "";
+    if (movimientoFiltroTipo) movimientoFiltroTipo.value = "";
     if (movimientoFechaDesde) {
       movimientoFechaDesde.value = "";
+      movimientoFechaDesde.setAttribute("aria-invalid", "false");
     }
-
     if (movimientoFechaHasta) {
       movimientoFechaHasta.value = "";
+      movimientoFechaHasta.setAttribute("aria-invalid", "false");
     }
-
+    if (movimientosFiltroAviso) movimientosFiltroAviso.textContent = "";
     aplicarFiltrosMovimientos();
   }
 
@@ -1957,159 +1761,101 @@ document.addEventListener("DOMContentLoaded", function () {
     movimientoFechaHasta
   ]
     .filter(Boolean)
-    .forEach(
-      function (elemento) {
-
-        const evento =
-          elemento === movimientoBuscar
-            ? "input"
-            : "change";
-
-        elemento.addEventListener(
-          evento,
-          aplicarFiltrosMovimientos
-        );
-      }
-    );
+    .forEach(function (elemento) {
+      const evento = elemento === movimientoBuscar ? "input" : "change";
+      elemento.addEventListener(evento, aplicarFiltrosMovimientos);
+    });
 
 
-  limpiarFiltrosMovimientosBtn
-    ?.addEventListener(
-      "click",
-      limpiarFiltrosMovimientos
-    );
+  limpiarFiltrosMovimientosBtn?.addEventListener("click", limpiarFiltrosMovimientos);
+  exportarInventarioBtn?.addEventListener("click", exportarMovimientosCSV);
 
 
-  exportarInventarioBtn
-    ?.addEventListener(
-      "click",
-      exportarMovimientosCSV
-    );
+  function descargarCSV(filas, nombreArchivo) {
+    const contenido = filas
+      .map(function (fila) {
+        return fila.map(escaparCSV).join(",");
+      })
+      .join("\r\n");
+
+    const blob = new Blob(["\uFEFF" + contenido], {
+      type: "text/csv;charset=utf-8;"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const enlace = document.createElement("a");
+    enlace.href = url;
+    enlace.download = nombreArchivo;
+    document.body.appendChild(enlace);
+    enlace.click();
+    enlace.remove();
+    URL.revokeObjectURL(url);
+  }
 
 
   function exportarMovimientosCSV() {
-
-    const movimientos =
-      movimientosInventarioFiltrados.length ||
-      filtrosMovimientosActivos()
-        ? movimientosInventarioFiltrados
-        : movimientosInventarioActuales;
+    const movimientos = movimientosInventarioFiltrados.length || filtrosMovimientosActivos()
+      ? movimientosInventarioFiltrados
+      : movimientosInventarioActuales;
 
     if (!movimientos.length) {
-
-      alert(
-        "No hay movimientos para exportar."
-      );
-
+      alert("No hay movimientos para exportar.");
       return;
     }
 
-    const filas = [
-      [
-        "Fecha",
-        "Tipo",
-        "Codigo",
-        "Producto",
-        "Cantidad",
-        "Stock anterior",
-        "Stock nuevo",
-        "Pedido",
-        "Motivo",
-        "Usuario"
-      ]
-    ];
+    const filas = [[
+      "Fecha",
+      "Tipo",
+      "Codigo",
+      "Producto",
+      "Variante ID",
+      "Color",
+      "Talla",
+      "Variacion",
+      "Cantidad registrada",
+      "Stock anterior",
+      "Stock nuevo",
+      "Stock total anterior",
+      "Stock total nuevo",
+      "Stock minimo anterior",
+      "Stock minimo nuevo",
+      "Pedido",
+      "Motivo",
+      "Origen",
+      "Usuario"
+    ]];
 
-    movimientos.forEach(
-      function (movimiento) {
+    movimientos.forEach(function (movimiento) {
+      filas.push([
+        fechaLegible(movimiento.creadoEn),
+        textoMovimientoInventario(movimiento.tipo),
+        movimiento.codigo || "",
+        movimiento.nombre || "",
+        movimiento.varianteId || "",
+        movimiento.color || "",
+        movimiento.talla || "",
+        variacionMovimiento(movimiento),
+        numero(movimiento.cantidad),
+        numero(movimiento.stockAnterior),
+        numero(movimiento.stockNuevo),
+        numero(movimiento.stockProductoAnterior),
+        numero(movimiento.stockProductoNuevo),
+        numero(movimiento.stockMinimoAnterior),
+        numero(movimiento.stockMinimoNuevo ?? movimiento.stockMinimo),
+        movimiento.pedidoNumero || "",
+        movimiento.motivo || "",
+        movimiento.origen || "",
+        movimiento.usuarioEmail || ""
+      ]);
+    });
 
-        filas.push([
-          fechaLegible(
-            movimiento.creadoEn
-          ),
-          textoMovimientoInventario(
-            movimiento.tipo
-          ),
-          movimiento.codigo || "",
-          movimiento.nombre || "",
-          numero(
-            movimiento.cantidad
-          ),
-          numero(
-            movimiento.stockAnterior
-          ),
-          numero(
-            movimiento.stockNuevo
-          ),
-          movimiento.pedidoNumero || "",
-          movimiento.motivo || "",
-          movimiento.usuarioEmail || ""
-        ]);
-      }
-    );
-
-    const contenido =
-      filas
-        .map(
-          function (fila) {
-
-            return fila
-              .map(
-                escaparCSV
-              )
-              .join(",");
-          }
-        )
-        .join("\r\n");
-
-    const blob =
-      new Blob(
-        [
-          "\uFEFF" +
-          contenido
-        ],
-        {
-          type:
-            "text/csv;charset=utf-8;"
-        }
-      );
-
-    const url =
-      URL.createObjectURL(
-        blob
-      );
-
-    const enlace =
-      document.createElement(
-        "a"
-      );
-
-    enlace.href = url;
-
-    enlace.download =
-      "sixteen-inventario-" +
-      fechaArchivo() +
-      ".csv";
-
-    document.body.appendChild(
-      enlace
-    );
-
-    enlace.click();
-    enlace.remove();
-
-    URL.revokeObjectURL(
-      url
-    );
+    descargarCSV(filas, "sixteen-kardex-" + fechaArchivo() + ".csv");
   }
 
 
   function filtrosMovimientosActivos() {
-
     return Boolean(
-      String(
-        movimientoBuscar?.value ||
-        ""
-      ).trim() ||
+      String(movimientoBuscar?.value || "").trim() ||
       movimientoFiltroTipo?.value ||
       movimientoFechaDesde?.value ||
       movimientoFechaHasta?.value
@@ -2123,310 +1869,308 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function abrirAjusteInventario(productoId) {
 
-    const producto =
-      productosActuales.find(
-        function (item) {
-          return item.id ===
-            productoId;
-        }
-      );
+    const producto = productosActuales.find(function (item) {
+      return item.id === productoId;
+    });
 
     if (!producto) {
-
-      alert(
-        "El producto ya no está disponible."
-      );
-
+      alert("El producto ya no está disponible.");
       return;
     }
 
-    productoAjusteInventarioId =
-      productoId;
+    productoAjusteInventarioId = productoId;
+    focoAntesInventarioModal = document.activeElement;
 
     if (inventarioModalProducto) {
       inventarioModalProducto.textContent =
-        (
-          producto.codigo
-            ? producto.codigo +
-              " · "
-            : ""
-        ) +
-        (
-          producto.nombre ||
-          "Producto"
-        );
+        (producto.codigo ? producto.codigo + " · " : "") +
+        (producto.nombre || "Producto");
     }
 
-    const stock =
-      Math.max(
-        0,
-        Math.floor(
-          numero(
-            producto.stock
-          )
-        )
-      );
+    const stockTotal = stockTotalInventarioProducto(producto);
+    const minimo = obtenerStockMinimo(producto);
 
-    const minimo =
-      obtenerStockMinimo(
-        producto
-      );
+    if (inventarioModalStock) inventarioModalStock.textContent = String(stockTotal);
+    if (inventarioModalStockTotal) inventarioModalStockTotal.textContent = String(stockTotal);
+    if (inventarioModalStockLabel) inventarioModalStockLabel.textContent = "STOCK ACTUAL";
+    if (inventarioModalMinimoActual) inventarioModalMinimoActual.textContent = String(minimo);
+    if (inventarioOperacion) inventarioOperacion.value = "entrada";
+    if (inventarioCantidad) inventarioCantidad.value = "1";
+    if (inventarioStockMinimo) inventarioStockMinimo.value = String(minimo);
+    if (inventarioMotivo) inventarioMotivo.value = "";
 
-    if (inventarioModalStock) {
-      inventarioModalStock.textContent =
-        stock;
-    }
-
-    if (inventarioModalMinimoActual) {
-      inventarioModalMinimoActual.textContent =
-        minimo;
-    }
-
-    if (inventarioOperacion) {
-      inventarioOperacion.value =
-        "entrada";
-    }
-
-    if (inventarioCantidad) {
-      inventarioCantidad.value =
-        "1";
-    }
-
-    if (inventarioStockMinimo) {
-      inventarioStockMinimo.value =
-        String(minimo);
-    }
-
-    if (inventarioMotivo) {
-      inventarioMotivo.value =
-        "";
-    }
-
-    const variantesProducto =
-      window.SIXTEEN_VARIANTS.variants(producto);
+    const variantesProducto = variantesInventarioProducto(producto);
 
     if (inventarioVarianteField && inventarioVariante) {
-      inventarioVariante.innerHTML = "";
+      inventarioVariante.replaceChildren();
       inventarioVarianteField.hidden = variantesProducto.length === 0;
 
       if (variantesProducto.length) {
-        variantesProducto.forEach(variante=>{
-          const option=document.createElement("option");
-          option.value=variante.id;
-          option.textContent=(variante.color||"Sin color")+" / "+(variante.talla||"Única")+" · "+variante.stock+" uds";
+        variantesProducto.forEach(function (variante) {
+          const option = document.createElement("option");
+          option.value = variante.id;
+          option.textContent =
+            (variante.color || "Sin color") + " / " +
+            (variante.talla || "Única") + " · " +
+            variante.stock + " uds";
           inventarioVariante.appendChild(option);
         });
 
-        const refrescar=()=>{
-          const v=variantesProducto.find(x=>x.id===inventarioVariante.value);
-          if(v&&inventarioModalStock)inventarioModalStock.textContent=String(v.stock);
+        const refrescar = function () {
+          const variante = variantesProducto.find(function (item) {
+            return item.id === inventarioVariante.value;
+          });
+          if (variante && inventarioModalStock) {
+            inventarioModalStock.textContent = String(variante.stock);
+          }
+          if (inventarioModalStockLabel) {
+            inventarioModalStockLabel.textContent = "STOCK DE VARIANTE";
+          }
         };
 
-        inventarioVariante.onchange=refrescar;
+        inventarioVariante.onchange = refrescar;
         refrescar();
       } else {
-        inventarioVariante.onchange=null;
+        inventarioVariante.onchange = null;
       }
     }
 
     mostrarMensajeInventario("");
-
-    inventarioAjusteModal.classList.add(
-      "activo"
-    );
-
-    inventarioAjusteModal.setAttribute(
-      "aria-hidden",
-      "false"
-    );
-
+    inventarioAjusteModal.classList.add("activo");
+    inventarioAjusteModal.setAttribute("aria-hidden", "false");
     actualizarBloqueoBody();
+
+    window.requestAnimationFrame(function () {
+      const primerControl = !inventarioVarianteField?.hidden
+        ? inventarioVariante
+        : inventarioOperacion;
+      (primerControl || inventarioAjusteModal.querySelector(".inventario-modal-card"))?.focus();
+    });
   }
 
 
   function cerrarAjusteInventario() {
+    if (!inventarioAjusteModal) return;
 
-    if (!inventarioAjusteModal) {
-      return;
-    }
-
-    inventarioAjusteModal.classList.remove(
-      "activo"
-    );
-
-    inventarioAjusteModal.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-    productoAjusteInventarioId =
-      null;
-
+    inventarioAjusteModal.classList.remove("activo");
+    inventarioAjusteModal.setAttribute("aria-hidden", "true");
+    productoAjusteInventarioId = null;
+    if (inventarioVariante) inventarioVariante.onchange = null;
     actualizarBloqueoBody();
+
+    if (focoAntesInventarioModal && typeof focoAntesInventarioModal.focus === "function") {
+      focoAntesInventarioModal.focus();
+    }
+    focoAntesInventarioModal = null;
   }
 
 
-  cerrarInventarioModal
-    ?.addEventListener(
-      "click",
-      cerrarAjusteInventario
-    );
+  cerrarInventarioModal?.addEventListener("click", cerrarAjusteInventario);
+  cancelarInventarioAjusteBtn?.addEventListener("click", cerrarAjusteInventario);
 
 
-  cancelarInventarioAjusteBtn
-    ?.addEventListener(
-      "click",
-      cerrarAjusteInventario
-    );
+  inventarioAjusteModal?.addEventListener("click", function (event) {
+    if (event.target === inventarioAjusteModal) {
+      cerrarAjusteInventario();
+    }
+  });
 
 
-  inventarioAjusteModal
-    ?.addEventListener(
-      "click",
-      function (event) {
+  inventarioAjusteModal?.addEventListener("keydown", function (event) {
+    if (event.key !== "Tab") return;
 
-        if (
-          event.target ===
-          inventarioAjusteModal
-        ) {
-          cerrarAjusteInventario();
-        }
-      }
-    );
+    const focusables = Array.from(
+      inventarioAjusteModal.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter(function (elemento) {
+      return !elemento.hidden && elemento.offsetParent !== null;
+    });
+
+    if (!focusables.length) {
+      event.preventDefault();
+      inventarioAjusteModal.querySelector(".inventario-modal-card")?.focus();
+      return;
+    }
+
+    const primero = focusables[0];
+    const ultimo = focusables[focusables.length - 1];
+
+    if (event.shiftKey && document.activeElement === primero) {
+      event.preventDefault();
+      ultimo.focus();
+    } else if (!event.shiftKey && document.activeElement === ultimo) {
+      event.preventDefault();
+      primero.focus();
+    }
+  });
 
 
-  inventarioAjusteForm
-    ?.addEventListener(
-      "submit",
-      guardarAjusteInventario
-    );
+  inventarioAjusteForm?.addEventListener("submit", guardarAjusteInventario);
 
 
   async function guardarAjusteInventario(event) {
     event.preventDefault();
 
-    if(!productoAjusteInventarioId||!usuarioActual)return;
+    if (!productoAjusteInventarioId || !usuarioActual) return;
 
-    const operacion=String(inventarioOperacion?.value||"");
-    const cantidad=Math.max(0,Math.floor(numero(inventarioCantidad?.value)));
-    const stockMinimo=Math.max(0,Math.floor(numero(inventarioStockMinimo?.value)));
-    const motivo=String(inventarioMotivo?.value||"").trim();
+    const operacion = String(inventarioOperacion?.value || "");
+    const cantidad = Math.max(0, Math.floor(numero(inventarioCantidad?.value)));
+    const stockMinimo = Math.max(0, Math.floor(numero(inventarioStockMinimo?.value)));
+    const motivo = String(inventarioMotivo?.value || "").trim();
 
-    if(!motivo){
-      mostrarMensajeInventario("Escribe el motivo del ajuste.",false);
+    if (!motivo) {
+      mostrarMensajeInventario("Escribe el motivo del ajuste.", false);
       inventarioMotivo?.focus();
       return;
     }
 
-    if(operacion!=="exacto"&&cantidad<=0){
-      mostrarMensajeInventario("La cantidad debe ser mayor a 0.",false);
+    if (motivo.length > 300) {
+      mostrarMensajeInventario("El motivo no puede superar 300 caracteres.", false);
+      inventarioMotivo?.focus();
       return;
     }
 
-    guardarInventarioAjusteBtn.disabled=true;
-    guardarInventarioAjusteBtn.textContent="GUARDANDO...";
-    mostrarMensajeInventario("Actualizando inventario...",true);
+    if (operacion !== "exacto" && cantidad <= 0) {
+      mostrarMensajeInventario("La cantidad debe ser mayor a 0.", false);
+      inventarioCantidad?.focus();
+      return;
+    }
 
-    try{
-      const productoRef=db.collection("productos").doc(productoAjusteInventarioId);
+    guardarInventarioAjusteBtn.disabled = true;
+    guardarInventarioAjusteBtn.textContent = "GUARDANDO...";
+    mostrarMensajeInventario("Actualizando inventario...", true);
 
-      await db.runTransaction(async transaction=>{
-        const snap=await transaction.get(productoRef);
-        if(!snap.exists)throw new Error("El producto ya no existe.");
+    try {
+      const productoRef = db.collection("productos").doc(productoAjusteInventarioId);
 
-        const producto=snap.data()||{};
-        const variantes=window.SIXTEEN_VARIANTS.variants(producto).map(v=>({...v}));
-        const usaVariantes=variantes.length>0;
+      await db.runTransaction(async function (transaction) {
+        const snap = await transaction.get(productoRef);
+        if (!snap.exists) throw new Error("El producto ya no existe.");
 
-        let varianteId="",color="",talla="";
-        let stockAnterior=usaVariantes?0:Math.max(0,Math.floor(numero(producto.stock)));
-        const stockProductoAnterior=window.SIXTEEN_VARIANTS.totalStock(producto);
+        const producto = snap.data() || {};
+        const variantes = variantesInventarioProducto(producto).map(function (variante) {
+          return { ...variante };
+        });
+        const usaVariantes = variantes.length > 0;
 
-        if(usaVariantes){
-          varianteId=String(inventarioVariante?.value||"");
-          const idx=variantes.findIndex(v=>v.id===varianteId);
-          if(idx<0)throw new Error("Selecciona una variante válida.");
-          color=variantes[idx].color;
-          talla=variantes[idx].talla;
-          stockAnterior=variantes[idx].stock;
+        let varianteId = "";
+        let color = "";
+        let talla = "";
+        let stockAnterior = usaVariantes
+          ? 0
+          : Math.max(0, Math.floor(numero(producto.stock)));
+        const stockProductoAnterior = stockTotalInventarioProducto(producto);
+        const stockMinimoAnterior = obtenerStockMinimo(producto);
+
+        if (usaVariantes) {
+          varianteId = String(inventarioVariante?.value || "");
+          const idx = variantes.findIndex(function (variante) {
+            return variante.id === varianteId;
+          });
+          if (idx < 0) throw new Error("Selecciona una variante válida.");
+          color = variantes[idx].color;
+          talla = variantes[idx].talla;
+          stockAnterior = variantes[idx].stock;
         }
 
-        let stockNuevo=stockAnterior;
-        if(operacion==="entrada")stockNuevo=stockAnterior+cantidad;
-        if(operacion==="salida"){
-          if(cantidad>stockAnterior)throw new Error("No puedes retirar "+cantidad+" unidades. Stock actual: "+stockAnterior+".");
-          stockNuevo=stockAnterior-cantidad;
+        let stockNuevo = stockAnterior;
+        if (operacion === "entrada") stockNuevo = stockAnterior + cantidad;
+        if (operacion === "salida") {
+          if (cantidad > stockAnterior) {
+            throw new Error(`No puedes retirar ${cantidad} unidades. Stock actual: ${stockAnterior}.`);
+          }
+          stockNuevo = stockAnterior - cantidad;
         }
-        if(operacion==="exacto")stockNuevo=cantidad;
+        if (operacion === "exacto") stockNuevo = cantidad;
 
-        let stockProductoNuevo=stockNuevo;
-        const cambios={stockMinimo,actualizadoEn:FieldValue.serverTimestamp()};
-
-        if(usaVariantes){
-          const idx=variantes.findIndex(v=>v.id===varianteId);
-          variantes[idx].stock=stockNuevo;
-          stockProductoNuevo=variantes.reduce((s,v)=>s+Math.max(0,Math.floor(numero(v.stock))),0);
-          cambios.variantes=variantes;
-          cambios.usaVariantes=true;
-          cambios.stock=stockProductoNuevo;
-        }else{
-          cambios.stock=stockNuevo;
+        if (
+          operacion === "exacto" &&
+          stockNuevo === stockAnterior &&
+          stockMinimo === stockMinimoAnterior
+        ) {
+          throw new Error("No hay cambios que guardar en el inventario.");
         }
 
-        transaction.update(productoRef,cambios);
+        let stockProductoNuevo = stockNuevo;
+        const cambios = {
+          stockMinimo,
+          actualizadoEn: FieldValue.serverTimestamp()
+        };
 
-        const mov=db.collection("inventario").doc();
-        transaction.set(mov,{
-          tipo:operacion==="entrada"?"AJUSTE_ENTRADA":operacion==="salida"?"AJUSTE_SALIDA":"AJUSTE_EXACTO",
-          origen:"manual",
-          productoId:productoAjusteInventarioId,
-          codigo:producto.codigo||"",
-          nombre:producto.nombre||"",
+        if (usaVariantes) {
+          const idx = variantes.findIndex(function (variante) {
+            return variante.id === varianteId;
+          });
+          variantes[idx].stock = stockNuevo;
+          stockProductoNuevo = variantes.reduce(function (suma, variante) {
+            return suma + Math.max(0, Math.floor(numero(variante.stock)));
+          }, 0);
+          cambios.variantes = variantes;
+          cambios.usaVariantes = true;
+          cambios.stock = stockProductoNuevo;
+        } else {
+          cambios.stock = stockNuevo;
+        }
+
+        transaction.update(productoRef, cambios);
+
+        const soloCambioMinimo = stockNuevo === stockAnterior && stockMinimo !== stockMinimoAnterior;
+        const tipoMovimiento = soloCambioMinimo
+          ? "AJUSTE_MINIMO"
+          : operacion === "entrada"
+            ? "AJUSTE_ENTRADA"
+            : operacion === "salida"
+              ? "AJUSTE_SALIDA"
+              : "AJUSTE_EXACTO";
+
+        const mov = db.collection("inventario").doc();
+        transaction.set(mov, {
+          tipo: tipoMovimiento,
+          origen: "manual",
+          productoId: productoAjusteInventarioId,
+          codigo: producto.codigo || "",
+          nombre: producto.nombre || "",
           varianteId,
           color,
           talla,
-          cantidad:operacion==="exacto"?Math.abs(stockNuevo-stockAnterior):cantidad,
+          cantidad: operacion === "exacto"
+            ? Math.abs(stockNuevo - stockAnterior)
+            : cantidad,
           stockAnterior,
           stockNuevo,
           stockProductoAnterior,
           stockProductoNuevo,
-          stockMinimo,
+          stockMinimoAnterior,
+          stockMinimoNuevo: stockMinimo,
           motivo,
-          usuarioUid:usuarioActual.uid,
-          usuarioEmail:usuarioActual.email||"",
-          creadoEn:FieldValue.serverTimestamp()
+          usuarioUid: usuarioActual.uid,
+          usuarioEmail: usuarioActual.email || "",
+          creadoEn: FieldValue.serverTimestamp()
         });
       });
 
-      mostrarMensajeInventario("Inventario actualizado correctamente.",true);
-      setTimeout(cerrarAjusteInventario,650);
+      mostrarMensajeInventario("Inventario actualizado correctamente.", true);
+      setTimeout(cerrarAjusteInventario, 650);
 
-    }catch(error){
-      console.error("Ajuste inventario:",error);
-      mostrarMensajeInventario(error.message||"No fue posible actualizar el inventario.",false);
-    }finally{
-      guardarInventarioAjusteBtn.disabled=false;
-      guardarInventarioAjusteBtn.textContent="GUARDAR AJUSTE";
+    } catch (error) {
+      console.error("Ajuste inventario:", error);
+      mostrarMensajeInventario(error.message || "No fue posible actualizar el inventario.", false);
+    } finally {
+      guardarInventarioAjusteBtn.disabled = false;
+      guardarInventarioAjusteBtn.textContent = "GUARDAR AJUSTE";
     }
   }
 
 
   function mostrarMensajeInventario(texto, correcto = false) {
+    if (!inventarioAjusteMensaje) return;
 
-    if (!inventarioAjusteMensaje) {
-      return;
-    }
-
-    inventarioAjusteMensaje.textContent =
-      texto || "";
-
-    inventarioAjusteMensaje.className =
-      "producto-mensaje";
+    inventarioAjusteMensaje.textContent = texto || "";
+    inventarioAjusteMensaje.className = "producto-mensaje";
 
     if (correcto) {
-      inventarioAjusteMensaje.classList.add(
-        "correcto"
-      );
+      inventarioAjusteMensaje.classList.add("correcto");
     }
   }
 

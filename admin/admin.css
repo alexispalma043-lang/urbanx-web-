@@ -7396,3 +7396,85 @@ td {
 .clientes-resultado[aria-live="polite"] {
   min-height: 1.4em;
 }
+
+
+/* =========================================================
+   SIXTEEN · PASO 16
+   INVENTARIO / KARDEX · CORRECCIONES PRE-FINAL
+========================================================= */
+
+.inventario-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inventario-toolbar {
+  grid-template-columns:
+    minmax(230px, 1.6fr)
+    minmax(145px, .85fr)
+    minmax(135px, .75fr)
+    minmax(150px, .85fr)
+    auto;
+}
+
+.inventario-table td:nth-child(5) small,
+.movimientos-table .movimiento-variante {
+  display: block;
+  margin-top: 4px;
+}
+
+.movimiento-cantidad {
+  font-weight: 900;
+}
+
+.movimiento-cantidad.entrada {
+  color: var(--gold-light);
+}
+
+.movimiento-cantidad.salida {
+  color: #df7469;
+}
+
+.movimiento-cantidad.neutra {
+  color: #aaa39a;
+}
+
+.movimientos-toolbar input[aria-invalid="true"] {
+  border-color: rgba(221,118,108,.75);
+  box-shadow: 0 0 0 2px rgba(221,118,108,.08);
+}
+
+.inventario-modal-producto {
+  grid-template-columns: 1.45fr .7fr .75fr .75fr;
+}
+
+@media (max-width: 1200px) {
+  .inventario-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .inventario-busqueda {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 820px) {
+  .inventario-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 650px) {
+  .inventario-toolbar,
+  .inventario-modal-producto {
+    grid-template-columns: 1fr;
+  }
+
+  .inventario-busqueda {
+    grid-column: auto;
+  }
+}

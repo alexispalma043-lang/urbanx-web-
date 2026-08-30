@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=15000"
+    href="./admin.css?v=16000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -2855,9 +2855,16 @@
             <h3>Inventario avanzado</h3>
           </div>
 
-          <span class="admin-status">
-            EN TIEMPO REAL
-          </span>
+          <div class="inventario-header-actions">
+            <span class="admin-status">EN TIEMPO REAL</span>
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="exportarStockBtn"
+            >
+              EXPORTAR STOCK CSV
+            </button>
+          </div>
 
         </div>
 
@@ -2866,7 +2873,7 @@
           <article>
             <span>UNIDADES</span>
             <strong id="inventarioKpiUnidades">0</strong>
-            <small>Stock disponible</small>
+            <small>Stock físico total</small>
           </article>
 
           <article>
@@ -2884,7 +2891,7 @@
           <article>
             <span>VALOR STOCK</span>
             <strong id="inventarioKpiValor">$0.00</strong>
-            <small>Precio × unidades</small>
+            <small>Valor de venta estimado</small>
           </article>
 
         </div>
@@ -2896,7 +2903,7 @@
             <input
               type="search"
               id="inventarioBuscar"
-              placeholder="Código o producto..."
+              placeholder="Código, producto, color o talla..."
               autocomplete="off"
             >
           </div>
@@ -2909,12 +2916,21 @@
           </div>
 
           <div>
-            <label for="inventarioFiltroEstado">ESTADO</label>
+            <label for="inventarioFiltroEstado">STOCK</label>
             <select id="inventarioFiltroEstado">
               <option value="">Todos</option>
               <option value="disponible">Disponible</option>
               <option value="bajo">Stock bajo</option>
               <option value="agotado">Agotado</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="inventarioFiltroCatalogo">CATÁLOGO</label>
+            <select id="inventarioFiltroCatalogo">
+              <option value="">Todos</option>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo / archivado</option>
             </select>
           </div>
 
@@ -2931,6 +2947,7 @@
         <p
           class="inventario-resultado"
           id="inventarioResultadoTexto"
+          aria-live="polite"
         >
           Mostrando 0 productos.
         </p>
@@ -2945,15 +2962,17 @@
                 <th>PRODUCTO</th>
                 <th>CATEGORÍA</th>
                 <th>STOCK</th>
+                <th>VARIANTES</th>
                 <th>MÍNIMO</th>
                 <th>ESTADO</th>
+                <th>CATÁLOGO</th>
                 <th>ACCIÓN</th>
               </tr>
             </thead>
 
             <tbody id="inventarioAdminBody">
               <tr>
-                <td colspan="7">Cargando inventario...</td>
+                <td colspan="9">Cargando inventario...</td>
               </tr>
             </tbody>
 
@@ -2982,7 +3001,7 @@
             class="admin-primary-btn"
             id="exportarInventarioBtn"
           >
-            EXPORTAR CSV
+            EXPORTAR KARDEX CSV
           </button>
 
         </div>
@@ -3009,6 +3028,7 @@
               <option value="AJUSTE_ENTRADA">Ajuste de entrada</option>
               <option value="AJUSTE_SALIDA">Ajuste de salida</option>
               <option value="AJUSTE_EXACTO">Ajuste exacto</option>
+              <option value="AJUSTE_MINIMO">Cambio de stock mínimo</option>
             </select>
           </div>
 
@@ -3033,8 +3053,15 @@
         </div>
 
         <p
+          class="pedidos-filtro-aviso"
+          id="movimientosFiltroAviso"
+          aria-live="polite"
+        ></p>
+
+        <p
           class="inventario-resultado"
           id="movimientosResultadoTexto"
+          aria-live="polite"
         >
           Mostrando 0 movimientos.
         </p>
@@ -4297,13 +4324,19 @@
   aria-hidden="true"
 >
 
-  <div class="inventario-modal-card">
+  <div
+    class="inventario-modal-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="inventarioModalTitulo"
+    tabindex="-1"
+  >
 
     <div class="pedido-modal-header">
 
       <div>
         <p class="admin-eyebrow">SIXTEEN INVENTORY MANAGEMENT</p>
-        <h2>Ajustar inventario</h2>
+        <h2 id="inventarioModalTitulo">Ajustar inventario</h2>
       </div>
 
       <button
@@ -4325,12 +4358,17 @@
       </div>
 
       <div>
-        <span>STOCK ACTUAL</span>
+        <span id="inventarioModalStockLabel">STOCK ACTUAL</span>
         <strong id="inventarioModalStock">0</strong>
       </div>
 
       <div>
-        <span>STOCK MÍNIMO</span>
+        <span>STOCK TOTAL PRODUCTO</span>
+        <strong id="inventarioModalStockTotal">0</strong>
+      </div>
+
+      <div>
+        <span>STOCK MÍNIMO TOTAL</span>
         <strong id="inventarioModalMinimoActual">5</strong>
       </div>
 
@@ -4390,7 +4428,7 @@
         <div class="admin-field">
 
           <label for="inventarioStockMinimo">
-            STOCK MÍNIMO
+            STOCK MÍNIMO TOTAL DEL PRODUCTO
           </label>
 
           <input
@@ -4413,6 +4451,7 @@
           <textarea
             id="inventarioMotivo"
             placeholder="Ej.: Reposición de proveedor, producto dañado, corrección de conteo..."
+            maxlength="300"
             required
           ></textarea>
 
@@ -5688,7 +5727,7 @@
 
 <script src="../sri-core.js?v=3800"></script>
 
-<script src="./dashboard.js?v=15000"></script>
+<script src="./dashboard.js?v=16000"></script>
 
 <script src="./analitica.js?v=2800"></script>
 
