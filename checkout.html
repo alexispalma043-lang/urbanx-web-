@@ -1,909 +1,427 @@
 <!DOCTYPE html>
+
 <html lang="es">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Finalizar compra | SIXTEEN Urban Luxury</title>
-
-  <meta
-    name="description"
-    content="Finaliza tu compra SIXTEEN Urban Luxury."
-  >
-
-  <link
-    rel="stylesheet"
-    href="./styles.css?v=18000"
-  >
-
-  <meta name="robots" content="noindex,nofollow,noarchive">
-
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="//firestore.googleapis.com">
-  <link rel="dns-prefetch" href="//res.cloudinary.com">
-
-  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  >
-
-  <meta
-    http-equiv="Permissions-Policy"
-    content="geolocation=(), microphone=(), camera=()"
-  >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finalizar compra | SIXTEEN Urban Luxury</title>
+<meta content="Finaliza tu compra SIXTEEN Urban Luxury." name="description"/>
+<link href="./styles.css?v=18000" rel="stylesheet"/>
+<meta content="noindex,nofollow,noarchive" name="robots"/>
+<link href="./manifest.webmanifest" rel="manifest"/>
+<link href="./assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="./assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="SIXTEEN" name="apple-mobile-web-app-title"/>
+<link crossorigin="" href="https://www.gstatic.com" rel="preconnect"/>
+<link crossorigin="" href="https://firestore.googleapis.com" rel="preconnect"/>
+<link href="//firestore.googleapis.com" rel="dns-prefetch"/>
+<link crossorigin="" href="https://res.cloudinary.com" rel="preconnect"/>
+<link href="//res.cloudinary.com" rel="dns-prefetch"/>
+<!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
 </head>
-
-
 <body>
-
-
 <!-- =====================================
      BARRA SUPERIOR
 ===================================== -->
-
 <div class="top-bar">
-
-  <p>
+<p>
     SIXTEEN · COMPRA SEGURA
   </p>
-
 </div>
-
-
-
 <!-- =====================================
      HEADER
 ===================================== -->
-
 <header class="checkout-header">
-
-
-  <a
-    href="./index.html"
-    class="sixteen-brand"
-    aria-label="SIXTEEN Urban Luxury"
-  >
-    <img
-      src="./assets/logo-sixteen.jpg"
-      alt="Logotipo SIXTEEN Urban Luxury"
-      class="sixteen-brand-logo"
-    >
-    <div class="sixteen-brand-name">
-      <strong>SIXTEEN</strong>
-      <span>URBAN LUXURY</span>
-    </div>
-  </a>
-
-
-  <div class="checkout-seguro">
+<a aria-label="SIXTEEN Urban Luxury" class="sixteen-brand" href="./index.html">
+<img alt="Logotipo SIXTEEN Urban Luxury" class="sixteen-brand-logo" decoding="async" height="463" src="./assets/logo-sixteen.jpg" width="613"/>
+<div class="sixteen-brand-name">
+<strong>SIXTEEN</strong>
+<span>URBAN LUXURY</span>
+</div>
+</a>
+<div class="checkout-seguro">
     🔒 CHECKOUT SEGURO
   </div>
-
-
 </header>
-
-
-
 <!-- =====================================
      TÍTULO
 ===================================== -->
-
 <section class="checkout-titulo">
-
-
-  <p class="section-mini">
+<p class="section-mini">
     SIXTEEN STORE
   </p>
-
-
-  <h1>
+<h1>
 
     FINALIZAR
 
     <span>
       COMPRA
     </span>
-
-  </h1>
-
-
+</h1>
 </section>
-
-
-
 <!-- =====================================
      CHECKOUT
 ===================================== -->
-
 <main class="checkout-layout">
-
-
-  <!-- =================================
+<!-- =================================
        FORMULARIO
   ================================= -->
-
-  <section class="checkout-formulario">
-
-
-    <form id="checkoutForm">
-
-
-      <!-- =============================
+<section class="checkout-formulario">
+<form id="checkoutForm">
+<!-- =============================
            CONTACTO
       ============================= -->
-
-      <div class="checkout-seccion">
-
-
-        <div class="checkout-numero">
+<div class="checkout-seccion">
+<div class="checkout-numero">
           01
         </div>
-
-
-        <div class="checkout-contenido">
-
-
-          <h2>
+<div class="checkout-contenido">
+<h2>
             Información de contacto
           </h2>
-
-
-          <div class="campo">
-
-            <label for="email">
+<div class="campo">
+<label for="email">
               CORREO ELECTRÓNICO
             </label>
-
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="correo@ejemplo.com"
-              autocomplete="email"
-              maxlength="160"
-              required
-            >
-
-          </div>
-
-
-          <div class="campo">
-
-            <label for="telefono">
+<input autocomplete="email" id="email" maxlength="160" name="email" placeholder="correo@ejemplo.com" required="" type="email"/>
+</div>
+<div class="campo">
+<label for="telefono">
               TELÉFONO
             </label>
-
-            <input
-              type="tel"
-              id="telefono"
-              name="telefono"
-              inputmode="numeric"
-              placeholder="0999999999"
-              autocomplete="tel"
-              maxlength="10"
-              required
-            >
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- =============================
+<input autocomplete="tel" id="telefono" inputmode="numeric" maxlength="10" name="telefono" placeholder="0999999999" required="" type="tel"/>
+</div>
+</div>
+</div>
+<!-- =============================
            CLIENTE
       ============================= -->
-
-      <div class="checkout-seccion">
-
-
-        <div class="checkout-numero">
+<div class="checkout-seccion">
+<div class="checkout-numero">
           02
         </div>
-
-
-        <div class="checkout-contenido">
-
-
-          <h2>
+<div class="checkout-contenido">
+<h2>
             Datos del cliente
           </h2>
-
-
-          <div class="campos-dobles">
-
-
-            <div class="campo">
-
-              <label for="nombres">
+<div class="campos-dobles">
+<div class="campo">
+<label for="nombres">
                 NOMBRES
               </label>
-
-              <input
-                type="text"
-                id="nombres"
-                name="nombres"
-                autocomplete="given-name"
-                maxlength="100"
-                required
-              >
-
-            </div>
-
-
-            <div class="campo">
-
-              <label for="apellidos">
+<input autocomplete="given-name" id="nombres" maxlength="100" name="nombres" required="" type="text"/>
+</div>
+<div class="campo">
+<label for="apellidos">
                 APELLIDOS
               </label>
-
-              <input
-                type="text"
-                id="apellidos"
-                name="apellidos"
-                autocomplete="family-name"
-                maxlength="100"
-                required
-              >
-
-            </div>
-
-
-          </div>
-
-
-          <div class="campo">
-
-            <label for="identificacion">
+<input autocomplete="family-name" id="apellidos" maxlength="100" name="apellidos" required="" type="text"/>
+</div>
+</div>
+<div class="campo">
+<label for="identificacion">
               CÉDULA / IDENTIFICACIÓN
             </label>
-
-            <input
-              type="text"
-              id="identificacion"
-              name="identificacion"
-              inputmode="numeric"
-              maxlength="13"
-              required
-            >
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- =============================
+<input id="identificacion" inputmode="numeric" maxlength="13" name="identificacion" required="" type="text"/>
+</div>
+</div>
+</div>
+<!-- =============================
            DIRECCIÓN
       ============================= -->
-
-      <div class="checkout-seccion">
-
-
-        <div class="checkout-numero">
+<div class="checkout-seccion">
+<div class="checkout-numero">
           03
         </div>
-
-
-        <div class="checkout-contenido">
-
-
-          <h2>
+<div class="checkout-contenido">
+<h2>
             Dirección de entrega
           </h2>
-
-
-          <div class="campos-dobles">
-
-
-            <div class="campo">
-
-              <label for="provincia">
+<div class="campos-dobles">
+<div class="campo">
+<label for="provincia">
                 PROVINCIA
               </label>
-
-              <select
-                id="provincia"
-                name="provincia"
-                required
-              >
-
-                <option value="">
+<select id="provincia" name="provincia" required="">
+<option value="">
                   Selecciona
                 </option>
-
-                <option value="Azuay">
+<option value="Azuay">
                   Azuay
                 </option>
-
-                <option value="Bolívar">
+<option value="Bolívar">
                   Bolívar
                 </option>
-
-                <option value="Cañar">
+<option value="Cañar">
                   Cañar
                 </option>
-
-                <option value="Carchi">
+<option value="Carchi">
                   Carchi
                 </option>
-
-                <option value="Chimborazo">
+<option value="Chimborazo">
                   Chimborazo
                 </option>
-
-                <option value="Cotopaxi">
+<option value="Cotopaxi">
                   Cotopaxi
                 </option>
-
-                <option value="El Oro">
+<option value="El Oro">
                   El Oro
                 </option>
-
-                <option value="Esmeraldas">
+<option value="Esmeraldas">
                   Esmeraldas
                 </option>
-
-                <option value="Galápagos">
+<option value="Galápagos">
                   Galápagos
                 </option>
-
-                <option value="Guayas">
+<option value="Guayas">
                   Guayas
                 </option>
-
-                <option value="Imbabura">
+<option value="Imbabura">
                   Imbabura
                 </option>
-
-                <option value="Loja">
+<option value="Loja">
                   Loja
                 </option>
-
-                <option value="Los Ríos">
+<option value="Los Ríos">
                   Los Ríos
                 </option>
-
-                <option value="Manabí">
+<option value="Manabí">
                   Manabí
                 </option>
-
-                <option value="Morona Santiago">
+<option value="Morona Santiago">
                   Morona Santiago
                 </option>
-
-                <option value="Napo">
+<option value="Napo">
                   Napo
                 </option>
-
-                <option value="Orellana">
+<option value="Orellana">
                   Orellana
                 </option>
-
-                <option value="Pastaza">
+<option value="Pastaza">
                   Pastaza
                 </option>
-
-                <option value="Pichincha">
+<option value="Pichincha">
                   Pichincha
                 </option>
-
-                <option value="Santa Elena">
+<option value="Santa Elena">
                   Santa Elena
                 </option>
-
-                <option value="Santo Domingo de los Tsáchilas">
+<option value="Santo Domingo de los Tsáchilas">
                   Santo Domingo de los Tsáchilas
                 </option>
-
-                <option value="Sucumbíos">
+<option value="Sucumbíos">
                   Sucumbíos
                 </option>
-
-                <option value="Tungurahua">
+<option value="Tungurahua">
                   Tungurahua
                 </option>
-
-                <option value="Zamora Chinchipe">
+<option value="Zamora Chinchipe">
                   Zamora Chinchipe
                 </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="campo">
-
-              <label for="ciudad">
+</select>
+</div>
+<div class="campo">
+<label for="ciudad">
                 CIUDAD
               </label>
-
-              <input
-                type="text"
-                id="ciudad"
-                name="ciudad"
-                autocomplete="address-level2"
-                maxlength="100"
-                required
-              >
-
-            </div>
-
-
-          </div>
-
-
-          <div class="campo">
-
-            <label for="direccion">
+<input autocomplete="address-level2" id="ciudad" maxlength="100" name="ciudad" required="" type="text"/>
+</div>
+</div>
+<div class="campo">
+<label for="direccion">
               DIRECCIÓN
             </label>
-
-            <input
-              type="text"
-              id="direccion"
-              name="direccion"
-              placeholder="Calle principal y secundaria"
-              autocomplete="street-address"
-              maxlength="250"
-              required
-            >
-
-          </div>
-
-
-          <div class="campo">
-
-            <label for="referencia">
+<input autocomplete="street-address" id="direccion" maxlength="250" name="direccion" placeholder="Calle principal y secundaria" required="" type="text"/>
+</div>
+<div class="campo">
+<label for="referencia">
               REFERENCIA
             </label>
-
-            <textarea
-              id="referencia"
-              name="referencia"
-              rows="3"
-              maxlength="300"
-              placeholder="Casa, edificio, color, punto de referencia..."
-            ></textarea>
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- =============================
+<textarea id="referencia" maxlength="300" name="referencia" placeholder="Casa, edificio, color, punto de referencia..." rows="3"></textarea>
+</div>
+</div>
+</div>
+<!-- =============================
            ENTREGA
       ============================= -->
-
-      <div class="checkout-seccion">
-
-
-        <div class="checkout-numero">
+<div class="checkout-seccion">
+<div class="checkout-numero">
           04
         </div>
-
-
-        <div class="checkout-contenido">
-
-
-          <h2>
+<div class="checkout-contenido">
+<h2>
             Método de entrega
           </h2>
-
-
-          <label class="opcion-checkout">
-
-
-            <input
-              type="radio"
-              name="envio"
-              value="domicilio"
-              checked
-            >
-
-
-            <span class="opcion-checkout-info">
-
-              <strong>
+<label class="opcion-checkout">
+<input checked="" name="envio" type="radio" value="domicilio"/>
+<span class="opcion-checkout-info">
+<strong>
                 Envío a domicilio
               </strong>
-
-              <small>
+<small>
                 El costo dependerá de tu ubicación.
               </small>
-
-            </span>
-
-
-            <strong id="costoEnvioOpcion">
+</span>
+<strong id="costoEnvioOpcion">
               Por calcular
             </strong>
-
-
-          </label>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- =============================
+</label>
+</div>
+</div>
+<!-- =============================
            PAGO · PASO 18
       ============================= -->
-
-      <div class="checkout-seccion">
-
-
-        <div class="checkout-numero">
+<div class="checkout-seccion">
+<div class="checkout-numero">
           05
         </div>
-
-
-        <div class="checkout-contenido">
-
-
-          <h2>
+<div class="checkout-contenido">
+<h2>
             Método de pago
           </h2>
-
-
-          <label
-            class="opcion-checkout"
-            id="pagoOpcionTransferencia"
-          >
-
-
-            <input
-              type="radio"
-              name="pago"
-              value="transferencia"
-              checked
-            >
-
-
-            <span class="opcion-checkout-info">
-
-              <strong>
+<label class="opcion-checkout" id="pagoOpcionTransferencia">
+<input checked="" name="pago" type="radio" value="transferencia"/>
+<span class="opcion-checkout-info">
+<strong>
                 Transferencia bancaria
               </strong>
-
-              <small>
+<small>
                 El pago será verificado antes de confirmar el pedido.
               </small>
-
-            </span>
-
-
-          </label>
-
-
-
-          <label
-            class="opcion-checkout"
-            id="pagoOpcionQr"
-          >
-
-
-            <input
-              type="radio"
-              name="pago"
-              value="qr"
-            >
-
-
-            <span class="opcion-checkout-info">
-
-              <strong id="pagoQrNombreCheckout">
+</span>
+</label>
+<label class="opcion-checkout" id="pagoOpcionQr">
+<input name="pago" type="radio" value="qr"/>
+<span class="opcion-checkout-info">
+<strong id="pagoQrNombreCheckout">
                 Pago QR
               </strong>
-
-              <small>
+<small>
                 Escanea el código configurado por SIXTEEN.
               </small>
-
-            </span>
-
-
-          </label>
-
-
-
-          <label
-            class="opcion-checkout"
-            id="pagoOpcionTarjeta"
-          >
-
-
-            <input
-              type="radio"
-              name="pago"
-              value="tarjeta"
-            >
-
-
-            <span class="opcion-checkout-info">
-
-              <strong>
+</span>
+</label>
+<label class="opcion-checkout" id="pagoOpcionTarjeta">
+<input name="pago" type="radio" value="tarjeta"/>
+<span class="opcion-checkout-info">
+<strong>
                 Tarjeta de crédito / débito
               </strong>
-
-              <small>
+<small>
                 El enlace seguro se habilita después de registrar el pedido.
               </small>
-
-            </span>
-
-
-          </label>
-
-
-
-          <label
-            class="opcion-checkout"
-            id="pagoOpcionEfectivo"
-          >
-
-
-            <input
-              type="radio"
-              name="pago"
-              value="efectivo"
-            >
-
-
-            <span class="opcion-checkout-info">
-
-              <strong>
+</span>
+</label>
+<label class="opcion-checkout" id="pagoOpcionEfectivo">
+<input name="pago" type="radio" value="efectivo"/>
+<span class="opcion-checkout-info">
+<strong>
                 Pago contra entrega
               </strong>
-
-              <small>
+<small>
                 Sujeto a confirmación de disponibilidad de entrega.
               </small>
-
-            </span>
-
-
-          </label>
-
-
-          <div
-            class="checkout-payment-info"
-            id="checkoutPaymentInfo"
-            aria-live="polite"
-          >
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- =============================
+</span>
+</label>
+<div aria-live="polite" class="checkout-payment-info" id="checkoutPaymentInfo">
+</div>
+</div>
+</div>
+<!-- =============================
            ACEPTACIÓN
       ============================= -->
-
-      <div class="checkout-aceptacion">
-
-
-        <label>
-
-          <input
-            type="checkbox"
-            id="aceptarTerminos"
-            required
-          >
-
-          <span>
+<div class="checkout-aceptacion">
+<label>
+<input id="aceptarTerminos" required="" type="checkbox"/>
+<span>
             Acepto los
-            <a href="./politicas.html#terminos" target="_blank" rel="noopener noreferrer">
+            <a href="./politicas.html#terminos" rel="noopener noreferrer" target="_blank">
               términos y condiciones
             </a>
             y la
-            <a href="./politicas.html#privacidad" target="_blank" rel="noopener noreferrer">
+            <a href="./politicas.html#privacidad" rel="noopener noreferrer" target="_blank">
               política de privacidad
             </a>
             de SIXTEEN.
           </span>
-
-        </label>
-
-
-      </div>
-
-
-    </form>
-
-
-  </section>
-
-
-
-  <!-- =================================
+</label>
+</div>
+</form>
+</section>
+<!-- =================================
        RESUMEN
   ================================= -->
-
-  <aside class="checkout-resumen">
-
-
-    <p class="section-mini">
+<aside class="checkout-resumen">
+<p class="section-mini">
       TU PEDIDO
     </p>
-
-
-    <h2>
+<h2>
       Resumen
     </h2>
-
-
-    <p
-      id="estadoCheckout"
-      class="checkout-status"
-      aria-live="polite"
-    >
+<p aria-live="polite" class="checkout-status" id="estadoCheckout">
       Verificando productos...
     </p>
-
-    <p
-      id="checkoutConfigStatus"
-      class="checkout-config-status"
-      aria-live="polite"
-    ></p>
-
-
-
-    <div
-      class="checkout-productos"
-      id="checkoutProductos"
-    >
-
-      <p class="checkout-cargando">
+<p aria-live="polite" class="checkout-config-status" id="checkoutConfigStatus"></p>
+<div class="checkout-productos" id="checkoutProductos">
+<p class="checkout-cargando">
         Cargando pedido...
       </p>
-
-    </div>
-
-
-
-    <!-- SUBTOTAL -->
-
-    <div class="checkout-linea">
-
-      <span>
+</div>
+<!-- SUBTOTAL -->
+<div class="checkout-linea">
+<span>
         Subtotal
       </span>
-
-      <strong id="checkoutSubtotal">
+<strong id="checkoutSubtotal">
         $0.00
       </strong>
-
-    </div>
-
-
-
-    <!-- DESCUENTO -->
-
-    <div class="checkout-linea">
-
-      <span>
+</div>
+<!-- DESCUENTO -->
+<div class="checkout-linea">
+<span>
         Descuento
       </span>
-
-      <strong id="checkoutDescuento">
+<strong id="checkoutDescuento">
         $0.00
       </strong>
-
-    </div>
-
-
-
-    <!-- ENVÍO -->
-
-    <div class="checkout-linea">
-
-      <span>
+</div>
+<!-- ENVÍO -->
+<div class="checkout-linea">
+<span>
         Envío
       </span>
-
-      <strong id="checkoutEnvio">
+<strong id="checkoutEnvio">
         Por calcular
       </strong>
-
-    </div>
-
-
-
-    <!-- TOTAL -->
-
-    <div class="checkout-total">
-
-      <span>
+</div>
+<!-- TOTAL -->
+<div class="checkout-total">
+<span>
         TOTAL
       </span>
-
-      <strong id="checkoutTotal">
+<strong id="checkoutTotal">
         $0.00
       </strong>
-
-    </div>
-
-
-
-    <!-- VALIDACIÓN -->
-
-    <p
-      id="mensajeCheckout"
-      class="checkout-error"
-      aria-live="assertive"
-    ></p>
-
-
-
-    <!-- BOTÓN -->
-
-    <button
-      type="submit"
-      form="checkoutForm"
-      class="finalizar-pedido-btn"
-      id="finalizarPedidoBtn"
-      disabled
-    >
+</div>
+<!-- VALIDACIÓN -->
+<p aria-live="assertive" class="checkout-error" id="mensajeCheckout"></p>
+<!-- BOTÓN -->
+<button class="finalizar-pedido-btn" disabled="" form="checkoutForm" id="finalizarPedidoBtn" type="submit">
       REALIZAR PEDIDO
     </button>
-
-
-    <a
-      href="./carrito.html"
-      class="volver-carrito"
-    >
+<a class="volver-carrito" href="./carrito.html">
       ← Volver al carrito
     </a>
-
-
-
-    <div class="checkout-proteccion">
-
-      <span>
+<div class="checkout-proteccion">
+<span>
         🔒
       </span>
-
-      <p>
-
-        <strong>
+<p>
+<strong>
           Compra segura
         </strong>
 
@@ -912,176 +430,102 @@
         se verifican nuevamente antes de registrar el pedido.
 
       </p>
-
-    </div>
-
-
-  </aside>
-
-
+</div>
+</aside>
 </main>
-
-
-
 <!-- =====================================
      FOOTER
 ===================================== -->
-
 <footer class="footer">
-
-  <div class="footer-principal">
-
-    <div class="footer-marca">
-
-      <img
-        src="./assets/logo-sixteen.jpg"
-        alt="SIXTEEN Urban Luxury"
-        class="sixteen-footer-logo"
-      >
-
-      <div class="footer-logo">
+<div class="footer-principal">
+<div class="footer-marca">
+<img alt="SIXTEEN Urban Luxury" class="sixteen-footer-logo" decoding="async" height="463" loading="lazy" src="./assets/logo-sixteen.jpg" width="613"/>
+<div class="footer-logo">
         SIXTEEN
       </div>
-
-      <p>
-        Urban Luxury.<br>
-        Street Culture.<br>
-        Art.<br>
+<p>
+        Urban Luxury.<br/>
+        Street Culture.<br/>
+        Art.<br/>
         Identity.
       </p>
-
-    </div>
-
-    <div class="footer-columna">
-
-      <h4>
+</div>
+<div class="footer-columna">
+<h4>
         COMPRAR
       </h4>
-
-      <a href="./index.html#productos">
+<a href="./index.html#productos">
         Productos
       </a>
-
-      <a href="./index.html#categorias">
+<a href="./index.html#categorias">
         Categorías
       </a>
-
-      <a href="./carrito.html">
+<a href="./carrito.html">
         Carrito
       </a>
-
-    </div>
-
-    <div class="footer-columna">
-
-      <h4>
+</div>
+<div class="footer-columna">
+<h4>
         AYUDA
       </h4>
-
-      <a href="./politicas.html#envios">Envíos</a>
-
-      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
-
-      <a href="./soporte.html">Contacto</a>
-
-    </div>
-
-    <div class="footer-columna">
-
-      <h4>
+<a href="./politicas.html#envios">Envíos</a>
+<a href="./politicas.html#cambios">Cambios y devoluciones</a>
+<a href="./soporte.html">Contacto</a>
+</div>
+<div class="footer-columna">
+<h4>
         SIXTEEN
       </h4>
-
-      <a href="./index.html#sixteen">
+<a href="./index.html#sixteen">
         Nosotros
       </a>
-
-      <a href="./cuenta.html#misPedidos">
+<a href="./cuenta.html#misPedidos">
         Mi SIXTEEN Experience 3D
       </a>
-
-    </div>
-
-  </div>
-
-  <div class="footer-bottom">
-
-    <div class="footer-derechos">
-
-      <p>
+</div>
+</div>
+<div class="footer-bottom">
+<div class="footer-derechos">
+<p>
         © 2026 SIXTEEN Urban Luxury.
         Todos los derechos reservados.
       </p>
-
-      <p>
+<p>
         Producto, diseño e identidad SIXTEEN
         protegidos por sus respectivos derechos
         de propiedad intelectual.
       </p>
-
-    </div>
-
-    <div class="footer-lex">
-
-      <p>
+</div>
+<div class="footer-lex">
+<p>
         © 2026 LEX
       </p>
-
-      <span>
+<span>
         Diseño y desarrollo de la plataforma web.
         Todos los derechos reservados.
       </span>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
 </footer>
-
-
-
 <!-- =====================================
      NOTIFICACIÓN
 ===================================== -->
-
-<div
-  class="toast"
-  id="toastCheckout"
-  aria-live="polite"
->
+<div aria-live="polite" class="toast" id="toastCheckout">
 </div>
-
-
-
 <!-- =====================================
      FIREBASE
 ===================================== -->
-
 <script src="./compat.js?v=3200"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
-
-
-
 <!-- =====================================
      CHECKOUT
 ===================================== -->
-
 <script src="./variant-utils.js?v=2900"></script>
-
 <script src="./cart-sync.js?v=21000"></script>
-
 <script src="./payment-config.js?v=18000"></script>
-
 <script src="./checkout.js?v=23000"></script>
-
-
-<script src="./pwa.js?v=2700"></script>
-
+<script src="./pwa.js?v=25000"></script>
 </body>
-
 </html>

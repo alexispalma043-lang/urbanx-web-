@@ -1,183 +1,144 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comparar productos | SIXTEEN</title>
-  <meta name="description" content="Compara hasta tres productos SIXTEEN Urban Luxury antes de elegir.">
-  <meta name="theme-color" content="#050505">
-  <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-
-  <link rel="stylesheet" href="./comparar.css?v=8000">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="//firestore.googleapis.com">
-  <link rel="dns-prefetch" href="//res.cloudinary.com">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comparar productos | SIXTEEN</title>
+<meta content="Compara hasta tres productos SIXTEEN Urban Luxury antes de elegir." name="description"/>
+<meta content="#050505" name="theme-color"/>
+<meta content="noindex,nofollow,noarchive" name="robots"/>
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
+<link href="./comparar.css?v=8000" rel="stylesheet"/>
+<link href="./manifest.webmanifest" rel="manifest"/>
+<link href="./assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="./assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="SIXTEEN" name="apple-mobile-web-app-title"/>
+<link crossorigin="" href="https://www.gstatic.com" rel="preconnect"/>
+<link crossorigin="" href="https://firestore.googleapis.com" rel="preconnect"/>
+<link href="//firestore.googleapis.com" rel="dns-prefetch"/>
+<link crossorigin="" href="https://res.cloudinary.com" rel="preconnect"/>
+<link href="//res.cloudinary.com" rel="dns-prefetch"/>
 </head>
 <body>
-
 <div class="compare-topbar">
   SIXTEEN / URBAN LUXURY / PRODUCT COMPARISON
 </div>
-
 <header class="compare-header" id="compareHeader">
-  <a href="./index.html" class="compare-brand" aria-label="Ir al inicio de SIXTEEN">
-    <img src="./assets/logo-sixteen.jpg" alt="SIXTEEN Urban Luxury">
-    <div>
-      <strong>SIXTEEN</strong>
-      <span>URBAN LUXURY</span>
-    </div>
-  </a>
-
-  <button
-    type="button"
-    class="compare-menu-btn"
-    id="compareMenuBtn"
-    aria-label="Abrir menú"
-    aria-controls="compareNav"
-    aria-expanded="false"
-  >
-    <span></span><span></span><span></span>
-  </button>
-
-  <nav id="compareNav" aria-label="Navegación principal">
-    <a href="./index.html#productos">TIENDA</a>
-    <a href="./carrito.html">CARRITO</a>
-    <a href="./cuenta.html">MI CUENTA</a>
-  </nav>
-</header>
-
-<main class="compare-main">
-  <section class="compare-hero">
-    <p class="eyebrow">COMPARE / DECIDE / WEAR</p>
-    <h1>COMPARA TU SELECCIÓN</h1>
-    <p>Revisa las diferencias entre tus productos SIXTEEN antes de elegir.</p>
-  </section>
-
-  <section
-    class="compare-loading"
-    id="compareLoading"
-    aria-live="polite"
-    aria-busy="true"
-  >
-    <span aria-hidden="true"></span>
-    <p>CARGANDO PRODUCTOS...</p>
-  </section>
-
-  <section class="compare-empty" id="compareEmpty" hidden>
-    <div class="compare-empty-mark" aria-hidden="true">XVI</div>
-    <h2>Tu comparador está vacío</h2>
-    <p>Agrega hasta tres productos desde la tienda usando el botón COMPARAR.</p>
-    <a href="./index.html#productos">EXPLORAR PRODUCTOS</a>
-  </section>
-
-  <section class="compare-error" id="compareError" hidden aria-live="assertive">
-    <div class="compare-empty-mark" aria-hidden="true">!</div>
-    <h2>No fue posible cargar el comparador</h2>
-    <p>Comprueba tu conexión e inténtalo nuevamente.</p>
-    <button type="button" id="compareRetryBtn">REINTENTAR</button>
-  </section>
-
-  <section class="compare-shell" id="compareShell" hidden>
-    <div class="compare-toolbar">
-      <div>
-        <p class="eyebrow">SELECTED ITEMS</p>
-        <h2 id="compareCountTitle">Productos seleccionados</h2>
-        <small id="compareLimitText">Hasta 3 productos</small>
-      </div>
-
-      <div class="compare-toolbar-actions">
-        <a href="./index.html#productos">+ AGREGAR PRODUCTO</a>
-        <button type="button" id="compareClearBtn">LIMPIAR TODO</button>
-      </div>
-    </div>
-
-    <div class="compare-product-grid" id="compareProductGrid"></div>
-
-    <div class="compare-table-wrap" tabindex="0" aria-label="Tabla comparativa desplazable">
-      <table class="compare-table">
-        <caption class="sr-only">Comparación de características de los productos seleccionados</caption>
-        <thead id="compareTableHead"></thead>
-        <tbody id="compareTableBody"></tbody>
-      </table>
-    </div>
-
-    <div class="compare-note" id="compareNote" aria-live="polite"></div>
-  </section>
-</main>
-
-<footer class="compare-footer">
-  <div class="compare-footer-grid">
-    <div class="compare-footer-brand">
-      <img src="./assets/logo-sixteen.jpg" alt="SIXTEEN Urban Luxury">
-      <strong>SIXTEEN</strong>
-      <p>Urban Luxury · Street Culture · Art · Identity.</p>
-    </div>
-
-    <div>
-      <h3>COMPRAR</h3>
-      <a href="./index.html#productos">Productos</a>
-      <a href="./index.html#categorias">Categorías</a>
-      <a href="./carrito.html">Carrito</a>
-    </div>
-
-    <div>
-      <h3>AYUDA</h3>
-      <a href="./politicas.html#envios">Envíos</a>
-      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
-      <a href="./soporte.html#faq">Preguntas frecuentes</a>
-      <a href="./soporte.html">Contacto</a>
-    </div>
-
-    <div>
-      <h3>SIXTEEN</h3>
-      <a href="./index.html#sixteen">Nosotros</a>
-      <a href="./politicas.html#terminos">Términos y condiciones</a>
-      <a href="./politicas.html#privacidad">Política de privacidad</a>
-      <a href="./cuenta.html#misPedidos">Mi SIXTEEN Experience 3D</a>
-    </div>
-  </div>
-
-  <div class="compare-footer-bottom">
-    <p>© 2026 SIXTEEN Urban Luxury. Todos los derechos reservados.</p>
-    <p>© 2026 LEX · Diseño y desarrollo de la plataforma web.</p>
-  </div>
-</footer>
-
-<div class="compare-toast" id="compareToast" aria-live="polite"></div>
-
-<div
-  class="compare-modal"
-  id="compareClearModal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="compareClearTitle"
-  hidden
->
-  <div class="compare-modal-backdrop" data-close-clear-modal></div>
-  <div class="compare-modal-card" role="document">
-    <p class="eyebrow">COMPARADOR</p>
-    <h2 id="compareClearTitle">¿Limpiar toda la comparación?</h2>
-    <p>Se eliminarán de esta lista todos los productos seleccionados.</p>
-    <div class="compare-modal-actions">
-      <button type="button" id="compareClearCancel">CANCELAR</button>
-      <button type="button" id="compareClearConfirm">SÍ, LIMPIAR</button>
-    </div>
-  </div>
+<a aria-label="Ir al inicio de SIXTEEN" class="compare-brand" href="./index.html">
+<img alt="SIXTEEN Urban Luxury" decoding="async" height="463" src="./assets/logo-sixteen.jpg" width="613"/>
+<div>
+<strong>SIXTEEN</strong>
+<span>URBAN LUXURY</span>
 </div>
-
+</a>
+<button aria-controls="compareNav" aria-expanded="false" aria-label="Abrir menú" class="compare-menu-btn" id="compareMenuBtn" type="button">
+<span></span><span></span><span></span>
+</button>
+<nav aria-label="Navegación principal" id="compareNav">
+<a href="./index.html#productos">TIENDA</a>
+<a href="./carrito.html">CARRITO</a>
+<a href="./cuenta.html">MI CUENTA</a>
+</nav>
+</header>
+<main class="compare-main">
+<section class="compare-hero">
+<p class="eyebrow">COMPARE / DECIDE / WEAR</p>
+<h1>COMPARA TU SELECCIÓN</h1>
+<p>Revisa las diferencias entre tus productos SIXTEEN antes de elegir.</p>
+</section>
+<section aria-busy="true" aria-live="polite" class="compare-loading" id="compareLoading">
+<span aria-hidden="true"></span>
+<p>CARGANDO PRODUCTOS...</p>
+</section>
+<section class="compare-empty" hidden="" id="compareEmpty">
+<div aria-hidden="true" class="compare-empty-mark">XVI</div>
+<h2>Tu comparador está vacío</h2>
+<p>Agrega hasta tres productos desde la tienda usando el botón COMPARAR.</p>
+<a href="./index.html#productos">EXPLORAR PRODUCTOS</a>
+</section>
+<section aria-live="assertive" class="compare-error" hidden="" id="compareError">
+<div aria-hidden="true" class="compare-empty-mark">!</div>
+<h2>No fue posible cargar el comparador</h2>
+<p>Comprueba tu conexión e inténtalo nuevamente.</p>
+<button id="compareRetryBtn" type="button">REINTENTAR</button>
+</section>
+<section class="compare-shell" hidden="" id="compareShell">
+<div class="compare-toolbar">
+<div>
+<p class="eyebrow">SELECTED ITEMS</p>
+<h2 id="compareCountTitle">Productos seleccionados</h2>
+<small id="compareLimitText">Hasta 3 productos</small>
+</div>
+<div class="compare-toolbar-actions">
+<a href="./index.html#productos">+ AGREGAR PRODUCTO</a>
+<button id="compareClearBtn" type="button">LIMPIAR TODO</button>
+</div>
+</div>
+<div class="compare-product-grid" id="compareProductGrid"></div>
+<div aria-label="Tabla comparativa desplazable" class="compare-table-wrap" tabindex="0">
+<table class="compare-table">
+<caption class="sr-only">Comparación de características de los productos seleccionados</caption>
+<thead id="compareTableHead"></thead>
+<tbody id="compareTableBody"></tbody>
+</table>
+</div>
+<div aria-live="polite" class="compare-note" id="compareNote"></div>
+</section>
+</main>
+<footer class="compare-footer">
+<div class="compare-footer-grid">
+<div class="compare-footer-brand">
+<img alt="SIXTEEN Urban Luxury" decoding="async" height="463" src="./assets/logo-sixteen.jpg" width="613"/>
+<strong>SIXTEEN</strong>
+<p>Urban Luxury · Street Culture · Art · Identity.</p>
+</div>
+<div>
+<h3>COMPRAR</h3>
+<a href="./index.html#productos">Productos</a>
+<a href="./index.html#categorias">Categorías</a>
+<a href="./carrito.html">Carrito</a>
+</div>
+<div>
+<h3>AYUDA</h3>
+<a href="./politicas.html#envios">Envíos</a>
+<a href="./politicas.html#cambios">Cambios y devoluciones</a>
+<a href="./soporte.html#faq">Preguntas frecuentes</a>
+<a href="./soporte.html">Contacto</a>
+</div>
+<div>
+<h3>SIXTEEN</h3>
+<a href="./index.html#sixteen">Nosotros</a>
+<a href="./politicas.html#terminos">Términos y condiciones</a>
+<a href="./politicas.html#privacidad">Política de privacidad</a>
+<a href="./cuenta.html#misPedidos">Mi SIXTEEN Experience 3D</a>
+</div>
+</div>
+<div class="compare-footer-bottom">
+<p>© 2026 SIXTEEN Urban Luxury. Todos los derechos reservados.</p>
+<p>© 2026 LEX · Diseño y desarrollo de la plataforma web.</p>
+</div>
+</footer>
+<div aria-live="polite" class="compare-toast" id="compareToast"></div>
+<div aria-labelledby="compareClearTitle" aria-modal="true" class="compare-modal" hidden="" id="compareClearModal" role="dialog">
+<div class="compare-modal-backdrop" data-close-clear-modal=""></div>
+<div class="compare-modal-card" role="document">
+<p class="eyebrow">COMPARADOR</p>
+<h2 id="compareClearTitle">¿Limpiar toda la comparación?</h2>
+<p>Se eliminarán de esta lista todos los productos seleccionados.</p>
+<div class="compare-modal-actions">
+<button id="compareClearCancel" type="button">CANCELAR</button>
+<button id="compareClearConfirm" type="button">SÍ, LIMPIAR</button>
+</div>
+</div>
+</div>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script src="./variant-utils.js?v=8000"></script>
 <script src="./comparar.js?v=8000"></script>
-<script src="./pwa.js?v=2700"></script>
-
+<script src="./pwa.js?v=25000"></script>
 </body>
 </html>

@@ -1,507 +1,288 @@
 <!DOCTYPE html>
+
 <html lang="es">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Seguimiento de pedido | SIXTEEN</title>
-
-  <meta
-    name="theme-color"
-    content="#050505"
-  >
-
-  <link
-    rel="stylesheet"
-    href="./seguimiento.css?v=6000"
-  >
-
-  <meta name="robots" content="noindex,nofollow,noarchive">
-
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="//firestore.googleapis.com">
-  <link rel="dns-prefetch" href="//res.cloudinary.com">
-
-  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  >
-
-  <meta
-    http-equiv="Permissions-Policy"
-    content="geolocation=(), microphone=(), camera=()"
-  >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Seguimiento de pedido | SIXTEEN</title>
+<meta content="#050505" name="theme-color"/>
+<link href="./seguimiento.css?v=6000" rel="stylesheet"/>
+<meta content="noindex,nofollow,noarchive" name="robots"/>
+<link href="./manifest.webmanifest" rel="manifest"/>
+<link href="./assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="./assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="SIXTEEN" name="apple-mobile-web-app-title"/>
+<link crossorigin="" href="https://www.gstatic.com" rel="preconnect"/>
+<link crossorigin="" href="https://firestore.googleapis.com" rel="preconnect"/>
+<link href="//firestore.googleapis.com" rel="dns-prefetch"/>
+<link crossorigin="" href="https://res.cloudinary.com" rel="preconnect"/>
+<link href="//res.cloudinary.com" rel="dns-prefetch"/>
+<!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
 </head>
-
-
 <body>
-
-
 <div class="track-topbar">
   SIXTEEN / URBAN LUXURY / ORDER TRACKING
 </div>
-
-
 <header class="track-header">
-
-  <a
-    href="./index.html"
-    class="track-brand"
-  >
-
-    <img
-      src="./assets/logo-sixteen.jpg"
-      alt="SIXTEEN Urban Luxury"
-    >
-
-    <div>
-      <strong>SIXTEEN</strong>
-      <span>URBAN LUXURY</span>
-    </div>
-
-  </a>
-
-
-  <nav>
-    <a href="./index.html">TIENDA</a>
-    <a href="./cuenta.html">MI CUENTA</a>
-  </nav>
-
+<a class="track-brand" href="./index.html">
+<img alt="SIXTEEN Urban Luxury" decoding="async" height="463" src="./assets/logo-sixteen.jpg" width="613"/>
+<div>
+<strong>SIXTEEN</strong>
+<span>URBAN LUXURY</span>
+</div>
+</a>
+<nav>
+<a href="./index.html">TIENDA</a>
+<a href="./cuenta.html">MI CUENTA</a>
+</nav>
 </header>
-
-
 <main class="track-main">
-
-
-  <section class="track-hero">
-
-    <p class="eyebrow">
+<section class="track-hero">
+<p class="eyebrow">
       ORDER TRACKING
     </p>
-
-    <h1>
+<h1>
       SIGUE TU PEDIDO
     </h1>
-
-    <p>
+<p>
       Consulta en tiempo real el estado de tus compras SIXTEEN.
     </p>
-
-  </section>
-
-
-  <section
-    class="track-loading"
-    id="trackLoading"
-    role="status"
-    aria-live="polite"
-  >
-
-    <span></span>
-
-    <p>
+</section>
+<section aria-live="polite" class="track-loading" id="trackLoading" role="status">
+<span></span>
+<p>
       CARGANDO PEDIDOS...
     </p>
-
-  </section>
-
-
-  <section
-    class="track-login"
-    id="trackLogin"
-    hidden
-  >
-
-    <div class="track-login-icon">
+</section>
+<section class="track-login" hidden="" id="trackLogin">
+<div class="track-login-icon">
       S
     </div>
-
-    <h2>
+<h2>
       Inicia sesión para continuar
     </h2>
-
-    <p>
+<p>
       Por seguridad, el seguimiento solo muestra pedidos vinculados a tu sesión.
     </p>
-
-    <a href="./cuenta.html">
+<a href="./cuenta.html">
       IR A MI CUENTA
     </a>
-
-  </section>
-
-
-  <section
-    class="track-error"
-    id="trackError"
-    role="alert"
-    hidden
-  >
-
-    <div class="track-error-icon">!</div>
-
-    <h2>No pudimos cargar tus pedidos</h2>
-
-    <p>
+</section>
+<section class="track-error" hidden="" id="trackError" role="alert">
+<div class="track-error-icon">!</div>
+<h2>No pudimos cargar tus pedidos</h2>
+<p>
       Revisa tu conexión e inténtalo nuevamente. Tus pedidos no se modificaron.
     </p>
-
-    <button type="button" id="trackRetryBtn">
+<button id="trackRetryBtn" type="button">
       REINTENTAR
     </button>
-
-  </section>
-
-
-  <section
-    class="track-shell"
-    id="trackShell"
-    hidden
-  >
-
-    <div class="track-selector-card" id="trackSelectorCard">
-
-      <div>
-
-        <p class="eyebrow">
+</section>
+<section class="track-shell" hidden="" id="trackShell">
+<div class="track-selector-card" id="trackSelectorCard">
+<div>
+<p class="eyebrow">
           YOUR ORDERS
         </p>
-
-        <h2>
+<h2>
           Selecciona un pedido
         </h2>
-
-      </div>
-
-
-      <div class="track-selector-control">
-
-        <label for="trackOrderSelect" class="sr-only">
+</div>
+<div class="track-selector-control">
+<label class="sr-only" for="trackOrderSelect">
           Selecciona un pedido
         </label>
-
-        <select id="trackOrderSelect" aria-label="Selecciona un pedido">
-          <option value="">
+<select aria-label="Selecciona un pedido" id="trackOrderSelect">
+<option value="">
             Selecciona
           </option>
-        </select>
-
-        <small id="trackRealtimeStatus" aria-live="polite">
+</select>
+<small aria-live="polite" id="trackRealtimeStatus">
           ACTUALIZACIÓN AUTOMÁTICA
         </small>
-
-      </div>
-
-    </div>
-
-
-    <section
-      class="track-order-card"
-      id="trackOrderCard"
-      hidden
-    >
-
-
-      <div class="track-order-head">
-
-        <div>
-
-          <p class="eyebrow">
+</div>
+</div>
+<section class="track-order-card" hidden="" id="trackOrderCard">
+<div class="track-order-head">
+<div>
+<p class="eyebrow">
             CURRENT ORDER
           </p>
-
-          <h2 id="trackOrderNumber">
+<h2 id="trackOrderNumber">
             Pedido
           </h2>
-
-          <p id="trackOrderDate">
+<p id="trackOrderDate">
             -
           </p>
-
-        </div>
-
-
-        <div class="track-status-box">
-
-          <span>
+</div>
+<div class="track-status-box">
+<span>
             ESTADO ACTUAL
           </span>
-
-          <strong id="trackCurrentStatus" aria-live="polite">
+<strong aria-live="polite" id="trackCurrentStatus">
             Pendiente
           </strong>
-
-        </div>
-
-      </div>
-
-
-      <div class="track-progress">
-
-        <article
-          class="track-step"
-          data-track-step="Pendiente"
-        >
-          <span>01</span>
-          <strong>Pedido recibido</strong>
-          <small>Registrado en SIXTEEN</small>
-        </article>
-
-        <div class="track-line"></div>
-
-        <article
-          class="track-step"
-          data-track-step="Confirmado"
-        >
-          <span>02</span>
-          <strong>Confirmado</strong>
-          <small>Pedido validado</small>
-        </article>
-
-        <div class="track-line"></div>
-
-        <article
-          class="track-step"
-          data-track-step="En preparación"
-        >
-          <span>03</span>
-          <strong>Preparación</strong>
-          <small>Alistando productos</small>
-        </article>
-
-        <div class="track-line"></div>
-
-        <article
-          class="track-step"
-          data-track-step="Enviado"
-        >
-          <span>04</span>
-          <strong>Enviado</strong>
-          <small>Pedido en camino</small>
-        </article>
-
-        <div class="track-line"></div>
-
-        <article
-          class="track-step"
-          data-track-step="Entregado"
-        >
-          <span>05</span>
-          <strong>Entregado</strong>
-          <small>Compra completada</small>
-        </article>
-
-      </div>
-
-
-      <div
-        class="track-cancelled"
-        id="trackCancelled"
-        hidden
-      >
-        <strong>
+</div>
+</div>
+<div class="track-progress">
+<article class="track-step" data-track-step="Pendiente">
+<span>01</span>
+<strong>Pedido recibido</strong>
+<small>Registrado en SIXTEEN</small>
+</article>
+<div class="track-line"></div>
+<article class="track-step" data-track-step="Confirmado">
+<span>02</span>
+<strong>Confirmado</strong>
+<small>Pedido validado</small>
+</article>
+<div class="track-line"></div>
+<article class="track-step" data-track-step="En preparación">
+<span>03</span>
+<strong>Preparación</strong>
+<small>Alistando productos</small>
+</article>
+<div class="track-line"></div>
+<article class="track-step" data-track-step="Enviado">
+<span>04</span>
+<strong>Enviado</strong>
+<small>Pedido en camino</small>
+</article>
+<div class="track-line"></div>
+<article class="track-step" data-track-step="Entregado">
+<span>05</span>
+<strong>Entregado</strong>
+<small>Compra completada</small>
+</article>
+</div>
+<div class="track-cancelled" hidden="" id="trackCancelled">
+<strong>
           PEDIDO CANCELADO
         </strong>
-
-        <span>
+<span>
           Este pedido fue marcado como cancelado.
         </span>
-      </div>
-
-
-      <div class="track-info-grid">
-
-        <article>
-          <span>TOTAL</span>
-          <strong id="trackTotal">$0.00</strong>
-        </article>
-
-        <article>
-          <span>MÉTODO DE PAGO</span>
-          <strong id="trackPayment">-</strong>
-        </article>
-
-        <article>
-          <span>ESTADO DEL PAGO</span>
-          <strong id="trackPaymentStatus">-</strong>
-        </article>
-
-        <article>
-          <span>ENTREGA</span>
-          <strong id="trackDeliveryMethod">-</strong>
-        </article>
-
-        <article>
-          <span>PROVINCIA</span>
-          <strong id="trackProvince">-</strong>
-        </article>
-
-        <article>
-          <span>CIUDAD</span>
-          <strong id="trackCity">-</strong>
-        </article>
-
-      </div>
-
-
-      <div class="track-address">
-
-        <p class="eyebrow">
+</div>
+<div class="track-info-grid">
+<article>
+<span>TOTAL</span>
+<strong id="trackTotal">$0.00</strong>
+</article>
+<article>
+<span>MÉTODO DE PAGO</span>
+<strong id="trackPayment">-</strong>
+</article>
+<article>
+<span>ESTADO DEL PAGO</span>
+<strong id="trackPaymentStatus">-</strong>
+</article>
+<article>
+<span>ENTREGA</span>
+<strong id="trackDeliveryMethod">-</strong>
+</article>
+<article>
+<span>PROVINCIA</span>
+<strong id="trackProvince">-</strong>
+</article>
+<article>
+<span>CIUDAD</span>
+<strong id="trackCity">-</strong>
+</article>
+</div>
+<div class="track-address">
+<p class="eyebrow">
           DELIVERY
         </p>
-
-        <h3>
+<h3>
           Dirección de entrega
         </h3>
-
-        <p id="trackAddress">
+<p id="trackAddress">
           -
         </p>
-
-      </div>
-
-
-      <div class="track-products">
-
-        <div class="track-products-head">
-
-          <div>
-            <p class="eyebrow">
+</div>
+<div class="track-products">
+<div class="track-products-head">
+<div>
+<p class="eyebrow">
               PRODUCTS
             </p>
-
-            <h3>
+<h3>
               Productos del pedido
             </h3>
-          </div>
-
-          <span id="trackProductsCount">
+</div>
+<span id="trackProductsCount">
             0 PRODUCTOS
           </span>
-
-        </div>
-
-        <div id="trackProductsList"></div>
-
-      </div>
-
-
-      <div class="track-actions">
-
-        <a href="./cuenta.html">
+</div>
+<div id="trackProductsList"></div>
+</div>
+<div class="track-actions">
+<a href="./cuenta.html">
           VER MI CUENTA
         </a>
-
-        <a href="./index.html">
+<a href="./index.html">
           SEGUIR COMPRANDO
         </a>
-
-      </div>
-
-    </section>
-
-
-    <section
-      class="track-empty"
-      id="trackEmpty"
-      hidden
-    >
-
-      <span>
+</div>
+</section>
+<section class="track-empty" hidden="" id="trackEmpty">
+<span>
         XVI
       </span>
-
-      <h2>
+<h2>
         No encontramos pedidos
       </h2>
-
-      <p>
+<p>
         Cuando realices una compra, aparecerá aquí para que puedas seguirla.
       </p>
-
-      <a href="./index.html">
+<a href="./index.html">
         EXPLORAR PRODUCTOS
       </a>
-
-    </section>
-
-  </section>
-
+</section>
+</section>
 </main>
-
-
 <footer class="track-footer">
-
-  <div class="track-footer-grid">
-
-    <div class="track-footer-brand">
-      <img src="./assets/logo-sixteen.jpg" alt="SIXTEEN Urban Luxury">
-      <strong>SIXTEEN</strong>
-      <p>Urban Luxury · Street Culture · Art · Identity.</p>
-    </div>
-
-    <div>
-      <h3>COMPRAR</h3>
-      <a href="./index.html#productos">Productos</a>
-      <a href="./index.html#categorias">Categorías</a>
-      <a href="./carrito.html">Carrito</a>
-    </div>
-
-    <div>
-      <h3>AYUDA</h3>
-      <a href="./politicas.html#envios">Envíos</a>
-      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
-      <a href="./soporte.html#faq">Preguntas frecuentes</a>
-      <a href="./soporte.html">Contacto</a>
-    </div>
-
-    <div>
-      <h3>SIXTEEN</h3>
-      <a href="./index.html#sixteen">Nosotros</a>
-      <a href="./politicas.html#terminos">Términos y condiciones</a>
-      <a href="./politicas.html#privacidad">Política de privacidad</a>
-      <a href="./cuenta.html#misPedidos">Mi SIXTEEN Experience 3D</a>
-    </div>
-
-  </div>
-
-  <div class="track-footer-bottom">
-    <p>© 2026 SIXTEEN Urban Luxury. Todos los derechos reservados.</p>
-    <p>© 2026 LEX · Diseño y desarrollo de la plataforma web.</p>
-  </div>
-
+<div class="track-footer-grid">
+<div class="track-footer-brand">
+<img alt="SIXTEEN Urban Luxury" decoding="async" height="463" src="./assets/logo-sixteen.jpg" width="613"/>
+<strong>SIXTEEN</strong>
+<p>Urban Luxury · Street Culture · Art · Identity.</p>
+</div>
+<div>
+<h3>COMPRAR</h3>
+<a href="./index.html#productos">Productos</a>
+<a href="./index.html#categorias">Categorías</a>
+<a href="./carrito.html">Carrito</a>
+</div>
+<div>
+<h3>AYUDA</h3>
+<a href="./politicas.html#envios">Envíos</a>
+<a href="./politicas.html#cambios">Cambios y devoluciones</a>
+<a href="./soporte.html#faq">Preguntas frecuentes</a>
+<a href="./soporte.html">Contacto</a>
+</div>
+<div>
+<h3>SIXTEEN</h3>
+<a href="./index.html#sixteen">Nosotros</a>
+<a href="./politicas.html#terminos">Términos y condiciones</a>
+<a href="./politicas.html#privacidad">Política de privacidad</a>
+<a href="./cuenta.html#misPedidos">Mi SIXTEEN Experience 3D</a>
+</div>
+</div>
+<div class="track-footer-bottom">
+<p>© 2026 SIXTEEN Urban Luxury. Todos los derechos reservados.</p>
+<p>© 2026 LEX · Diseño y desarrollo de la plataforma web.</p>
+</div>
 </footer>
-
-
-<div
-  class="track-toast"
-  id="trackToast"
-></div>
-
-
+<div class="track-toast" id="trackToast"></div>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
-
 <script src="./seguimiento.js?v=6000"></script>
-
-
-<script src="./pwa.js?v=2700"></script>
-
+<script src="./pwa.js?v=25000"></script>
 </body>
-
 </html>

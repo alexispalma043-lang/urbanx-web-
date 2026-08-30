@@ -39,5 +39,8 @@
       "name": "Carrito",
       "url": "./carrito.html"
     }
-  ]
+  ],
+  "id": "./",
+  "orientation": "any",
+  "prefer_related_applications": false
 }

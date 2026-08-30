@@ -1,139 +1,78 @@
 <!DOCTYPE html>
+
 <html lang="es">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Pedido confirmado | SIXTEEN Urban Luxury</title>
-
-  <meta
-    name="description"
-    content="Confirmación de pedido SIXTEEN Urban Luxury."
-  >
-
-  <link
-    rel="stylesheet"
-    href="./styles.css?v=18000"
-  >
-
-  <meta name="robots" content="noindex,nofollow,noarchive">
-
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SIXTEEN">
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="//firestore.googleapis.com">
-  <link rel="dns-prefetch" href="//res.cloudinary.com">
-
-  <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  >
-
-  <meta
-    http-equiv="Permissions-Policy"
-    content="geolocation=(), microphone=(), camera=()"
-  >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pedido confirmado | SIXTEEN Urban Luxury</title>
+<meta content="Confirmación de pedido SIXTEEN Urban Luxury." name="description"/>
+<link href="./styles.css?v=18000" rel="stylesheet"/>
+<meta content="noindex,nofollow,noarchive" name="robots"/>
+<link href="./manifest.webmanifest" rel="manifest"/>
+<link href="./assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="./assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="SIXTEEN" name="apple-mobile-web-app-title"/>
+<link crossorigin="" href="https://www.gstatic.com" rel="preconnect"/>
+<link crossorigin="" href="https://firestore.googleapis.com" rel="preconnect"/>
+<link href="//firestore.googleapis.com" rel="dns-prefetch"/>
+<link crossorigin="" href="https://res.cloudinary.com" rel="preconnect"/>
+<link href="//res.cloudinary.com" rel="dns-prefetch"/>
+<!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
 </head>
-
-
 <body>
-
-
 <!-- =====================================
      BARRA SUPERIOR
 ===================================== -->
-
 <div class="top-bar">
-
-  <p>
+<p>
     SIXTEEN · PEDIDO CONFIRMADO
   </p>
-
 </div>
-
-
-
 <!-- =====================================
      HEADER
 ===================================== -->
-
 <header class="checkout-header">
-
-  <a
-    href="index.html"
-    class="sixteen-brand"
-    aria-label="SIXTEEN Urban Luxury"
-  >
-    <img
-      src="./assets/logo-sixteen.jpg"
-      alt="Logotipo SIXTEEN Urban Luxury"
-      class="sixteen-brand-logo"
-    >
-    <div class="sixteen-brand-name">
-      <strong>SIXTEEN</strong>
-      <span>URBAN LUXURY</span>
-    </div>
-  </a>
-
-
-  <div class="checkout-seguro">
+<a aria-label="SIXTEEN Urban Luxury" class="sixteen-brand" href="index.html">
+<img alt="Logotipo SIXTEEN Urban Luxury" class="sixteen-brand-logo" decoding="async" height="463" src="./assets/logo-sixteen.jpg" width="613"/>
+<div class="sixteen-brand-name">
+<strong>SIXTEEN</strong>
+<span>URBAN LUXURY</span>
+</div>
+</a>
+<div class="checkout-seguro">
 
     ✓ COMPRA REGISTRADA
 
   </div>
-
 </header>
-
-
-
 <!-- =====================================
      CONFIRMACIÓN PRINCIPAL
 ===================================== -->
-
 <main class="confirmacion-page">
-
-
-  <section class="confirmacion-hero">
-
-
-    <div class="confirmacion-check">
+<section class="confirmacion-hero">
+<div class="confirmacion-check">
 
       ✓
 
     </div>
-
-
-    <p class="section-mini">
+<p class="section-mini">
 
       SIXTEEN STORE
 
     </p>
-
-
-    <h1>
+<h1>
 
       PEDIDO
 
       <span>
         CONFIRMADO
       </span>
-
-    </h1>
-
-
-    <p class="confirmacion-mensaje" id="confirmacionMensaje">
+</h1>
+<p class="confirmacion-mensaje" id="confirmacionMensaje">
 
       Gracias por comprar en SIXTEEN.
 
@@ -141,665 +80,368 @@
       y ahora podrás consultar todos sus detalles.
 
     </p>
-
-
-    <div class="numero-pedido-box">
-
-
-      <span>
+<div class="numero-pedido-box">
+<span>
 
         NÚMERO DE PEDIDO
 
       </span>
-
-
-      <strong id="numeroPedido" aria-live="polite">
+<strong aria-live="polite" id="numeroPedido">
 
         Verificando...
 
       </strong>
-
-      <small class="confirmacion-verificacion" id="confirmacionVerificacion" aria-live="polite">
+<small aria-live="polite" class="confirmacion-verificacion" id="confirmacionVerificacion">
         Verificando pedido...
       </small>
-
-
-    </div>
-
-
-  </section>
-
-
-
-  <!-- =================================
+</div>
+</section>
+<!-- =================================
        INFORMACIÓN DEL PEDIDO
   ================================= -->
-
-  <section class="confirmacion-contenido" id="confirmacionContenido">
-
-
-    <!-- COLUMNA IZQUIERDA -->
-
-    <div class="confirmacion-detalles" id="confirmacionDetalles">
-
-
-      <!-- CLIENTE -->
-
-      <div class="confirmacion-bloque">
-
-
-        <div class="confirmacion-bloque-header">
-
-
-          <span>
+<section class="confirmacion-contenido" id="confirmacionContenido">
+<!-- COLUMNA IZQUIERDA -->
+<div class="confirmacion-detalles" id="confirmacionDetalles">
+<!-- CLIENTE -->
+<div class="confirmacion-bloque">
+<div class="confirmacion-bloque-header">
+<span>
             01
           </span>
-
-
-          <h2>
+<h2>
             Cliente
           </h2>
-
-
-        </div>
-
-
-        <div class="confirmacion-datos">
-
-
-          <div>
-
-            <span>
+</div>
+<div class="confirmacion-datos">
+<div>
+<span>
               Nombre
             </span>
-
-            <strong id="confirmacionNombre">
+<strong id="confirmacionNombre">
               -
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Correo
             </span>
-
-            <strong id="confirmacionEmail">
+<strong id="confirmacionEmail">
               -
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Teléfono
             </span>
-
-            <strong id="confirmacionTelefono">
+<strong id="confirmacionTelefono">
               -
             </strong>
-
-          </div>
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Fecha del pedido
             </span>
-
-            <strong id="confirmacionFecha">
+<strong id="confirmacionFecha">
               -
             </strong>
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- ENTREGA -->
-
-      <div class="confirmacion-bloque">
-
-
-        <div class="confirmacion-bloque-header">
-
-
-          <span>
+</div>
+</div>
+</div>
+<!-- ENTREGA -->
+<div class="confirmacion-bloque">
+<div class="confirmacion-bloque-header">
+<span>
             02
           </span>
-
-
-          <h2>
+<h2>
             Entrega
           </h2>
-
-
-        </div>
-
-
-        <div class="confirmacion-datos">
-
-
-          <div>
-
-            <span>
+</div>
+<div class="confirmacion-datos">
+<div>
+<span>
               Método de entrega
             </span>
-
-            <strong id="confirmacionMetodoEntrega">
+<strong id="confirmacionMetodoEntrega">
               -
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Provincia
             </span>
-
-            <strong id="confirmacionProvincia">
+<strong id="confirmacionProvincia">
               -
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Ciudad
             </span>
-
-            <strong id="confirmacionCiudad">
+<strong id="confirmacionCiudad">
               -
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Dirección
             </span>
-
-            <strong id="confirmacionDireccion">
+<strong id="confirmacionDireccion">
               -
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Referencia
             </span>
-
-            <strong id="confirmacionReferencia">
+<strong id="confirmacionReferencia">
               -
             </strong>
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- PAGO -->
-
-      <div class="confirmacion-bloque">
-
-
-        <div class="confirmacion-bloque-header">
-
-
-          <span>
+</div>
+</div>
+</div>
+<!-- PAGO -->
+<div class="confirmacion-bloque">
+<div class="confirmacion-bloque-header">
+<span>
             03
           </span>
-
-
-          <h2>
+<h2>
             Pago
           </h2>
-
-
-        </div>
-
-
-        <div class="confirmacion-datos">
-
-
-          <div>
-
-            <span>
+</div>
+<div class="confirmacion-datos">
+<div>
+<span>
               Método
             </span>
-
-            <strong id="confirmacionPago">
+<strong id="confirmacionPago">
               -
             </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>
+</div>
+<div>
+<span>
               Estado
             </span>
-
-            <strong id="confirmacionEstado">
+<strong id="confirmacionEstado">
               Pendiente
             </strong>
-
-          </div>
-
-
-        </div>
-
-
-        <div
-          class="checkout-payment-info"
-          id="confirmacionPagoInstrucciones"
-          aria-live="polite"
-        ></div>
-
-
-      </div>
-
-
-    </div>
-
-
-
-    <!-- =================================
+</div>
+</div>
+<div aria-live="polite" class="checkout-payment-info" id="confirmacionPagoInstrucciones"></div>
+</div>
+</div>
+<!-- =================================
          RESUMEN PEDIDO
     ================================= -->
-
-    <aside class="confirmacion-resumen">
-
-
-      <p class="section-mini">
+<aside class="confirmacion-resumen">
+<p class="section-mini">
 
         TU PEDIDO
 
       </p>
-
-
-      <h2>
+<h2>
 
         Resumen
 
       </h2>
-
-
-      <div
-        class="confirmacion-productos"
-        id="confirmacionProductos"
-      >
-
-        <p>
+<div class="confirmacion-productos" id="confirmacionProductos">
+<p>
           Cargando productos...
         </p>
-
-      </div>
-
-
-
-      <div class="checkout-linea">
-
-
-        <span>
+</div>
+<div class="checkout-linea">
+<span>
           Subtotal
         </span>
-
-
-        <strong id="confirmacionSubtotal">
+<strong id="confirmacionSubtotal">
 
           $0.00
 
         </strong>
-
-
-      </div>
-
-
-
-      <div class="checkout-linea">
-
-
-        <span>
+</div>
+<div class="checkout-linea">
+<span>
           Descuento
         </span>
-
-
-        <strong id="confirmacionDescuento">
+<strong id="confirmacionDescuento">
 
           $0.00
 
         </strong>
-
-
-      </div>
-
-
-
-      <div class="checkout-linea confirmacion-cupon-linea" id="confirmacionCuponLinea" hidden>
-
-        <span>
+</div>
+<div class="checkout-linea confirmacion-cupon-linea" hidden="" id="confirmacionCuponLinea">
+<span>
           Cupón
         </span>
-
-        <strong id="confirmacionCupon">
+<strong id="confirmacionCupon">
           -
         </strong>
-
-      </div>
-
-
-      <div class="checkout-linea">
-
-
-        <span>
+</div>
+<div class="checkout-linea">
+<span>
           Envío
         </span>
-
-
-        <strong id="confirmacionEnvio">
+<strong id="confirmacionEnvio">
 
           $0.00
 
         </strong>
-
-
-      </div>
-
-
-
-      <div class="checkout-total">
-
-
-        <span>
+</div>
+<div class="checkout-total">
+<span>
 
           TOTAL
 
         </span>
-
-
-        <strong id="confirmacionTotal">
+<strong id="confirmacionTotal">
 
           $0.00
 
         </strong>
-
-
-      </div>
-
-
-      <a
-        href="./seguimiento.html"
-        class="seguir-pedido-btn"
-        id="seguirPedidoBtn"
-      >
+</div>
+<a class="seguir-pedido-btn" href="./seguimiento.html" id="seguirPedidoBtn">
 
         SEGUIR MI PEDIDO
 
       </a>
-
-
-      <a
-        href="index.html"
-        class="volver-tienda-btn"
-      >
+<a class="volver-tienda-btn" href="index.html">
 
         VOLVER A LA TIENDA
 
       </a>
-
-
-    </aside>
-
-
-  </section>
-
-
-
-  <!-- =================================
+</aside>
+</section>
+<!-- =================================
        URBANX 3D
   ================================= -->
-
-  <section class="confirmacion-3d" id="confirmacion3d">
-
-
-    <div class="confirmacion-3d-texto">
-
-
-      <p class="section-mini">
+<section class="confirmacion-3d" id="confirmacion3d">
+<div class="confirmacion-3d-texto">
+<p class="section-mini">
 
         SIXTEEN EXPERIENCE
 
       </p>
-
-
-      <h2>
+<h2>
 
         TU COMPRA
 
         <span>
           CONTINÚA EN 3D.
         </span>
-
-      </h2>
-
-
-      <p>
+</h2>
+<p>
 
         Los productos SIXTEEN compatibles podrán
         tener acceso a una experiencia digital
         exclusiva después de la compra.
 
       </p>
-
-
-      <a
-        href="./cuenta.html#misPedidos"
-        class="btn-principal"
-        id="abrirUrbanx3d"
-      >
+<a class="btn-principal" href="./cuenta.html#misPedidos" id="abrirUrbanx3d">
 
         EXPLORAR SIXTEEN 3D
 
       </a>
-
-
-    </div>
-
-
-    <div class="confirmacion-3d-x">
+</div>
+<div class="confirmacion-3d-x">
 
       XVI
 
     </div>
-
-
-  </section>
-
-
+</section>
 </main>
-
-
-
 <!-- =====================================
      FOOTER
 ===================================== -->
-
 <footer class="footer">
-
-  <div class="footer-principal">
-
-    <div class="footer-marca">
-
-      <img
-        src="./assets/logo-sixteen.jpg"
-        alt="SIXTEEN Urban Luxury"
-        class="sixteen-footer-logo"
-      >
-
-      <div class="footer-logo">
+<div class="footer-principal">
+<div class="footer-marca">
+<img alt="SIXTEEN Urban Luxury" class="sixteen-footer-logo" decoding="async" height="463" loading="lazy" src="./assets/logo-sixteen.jpg" width="613"/>
+<div class="footer-logo">
         SIXTEEN
       </div>
-
-      <p>
-        Urban Luxury.<br>
-        Street Culture.<br>
-        Art.<br>
+<p>
+        Urban Luxury.<br/>
+        Street Culture.<br/>
+        Art.<br/>
         Identity.
       </p>
-
-    </div>
-
-    <div class="footer-columna">
-
-      <h4>
+</div>
+<div class="footer-columna">
+<h4>
         COMPRAR
       </h4>
-
-      <a href="./index.html#productos">
+<a href="./index.html#productos">
         Productos
       </a>
-
-      <a href="./index.html#categorias">
+<a href="./index.html#categorias">
         Categorías
       </a>
-
-      <a href="./carrito.html">
+<a href="./carrito.html">
         Carrito
       </a>
-
-    </div>
-
-    <div class="footer-columna">
-
-      <h4>
+</div>
+<div class="footer-columna">
+<h4>
         AYUDA
       </h4>
-
-      <a href="./politicas.html#envios">Envíos</a>
-
-      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
-
-      <a href="./soporte.html#faq">Preguntas frecuentes</a>
-
-      <a href="./soporte.html">Contacto</a>
-
-    </div>
-
-    <div class="footer-columna">
-
-      <h4>
+<a href="./politicas.html#envios">Envíos</a>
+<a href="./politicas.html#cambios">Cambios y devoluciones</a>
+<a href="./soporte.html#faq">Preguntas frecuentes</a>
+<a href="./soporte.html">Contacto</a>
+</div>
+<div class="footer-columna">
+<h4>
         SIXTEEN
       </h4>
-
-      <a href="./index.html#sixteen">
+<a href="./index.html#sixteen">
         Nosotros
       </a>
-
-      <a href="./politicas.html#terminos">
+<a href="./politicas.html#terminos">
         Términos y condiciones
       </a>
-
-      <a href="./politicas.html#privacidad">
+<a href="./politicas.html#privacidad">
         Política de privacidad
       </a>
-
-      <a href="./cuenta.html#misPedidos">
+<a href="./cuenta.html#misPedidos">
         Mi SIXTEEN Experience 3D
       </a>
-
-    </div>
-
-  </div>
-
-  <div class="footer-bottom">
-
-    <div class="footer-derechos">
-
-      <p>
+</div>
+</div>
+<div class="footer-bottom">
+<div class="footer-derechos">
+<p>
         © 2026 SIXTEEN Urban Luxury.
         Todos los derechos reservados.
       </p>
-
-      <p>
+<p>
         Producto, diseño e identidad SIXTEEN
         protegidos por sus respectivos derechos
         de propiedad intelectual.
       </p>
-
-    </div>
-
-    <div class="footer-lex">
-
-      <p>
+</div>
+<div class="footer-lex">
+<p>
         © 2026 LEX
       </p>
-
-      <span>
+<span>
         Diseño y desarrollo de la plataforma web.
         Todos los derechos reservados.
       </span>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
 </footer>
-
-
-
 <!-- =====================================
      ERROR / NOTIFICACIÓN
 ===================================== -->
-
-<div
-  class="toast"
-  id="toastConfirmacion"
-  aria-live="polite"
->
+<div aria-live="polite" class="toast" id="toastConfirmacion">
 </div>
-
-
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
-
 <script src="./compat.js?v=3200"></script>
-
 <script src="./payment-config.js?v=18000"></script>
-
 <script src="./confirmacion.js?v=23020"></script>
-
-
-<script src="./pwa.js?v=2700"></script>
-
+<script src="./pwa.js?v=25000"></script>
 </body>
-
 </html>

@@ -1,62 +1,260 @@
 // @ts-nocheck
-(function(){
- let promptEvent=null,timer=null;
+(function () {
+  "use strict";
 
- if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-   navigator.serviceWorker.register("./sw.js",{scope:"./"})
-    .catch(e=>console.warn("SIXTEEN PWA:",e));
-  });
- }
+  let promptEvent = null;
+  let timer = null;
 
- window.addEventListener("beforeinstallprompt",e=>{
-  e.preventDefault();
-  promptEvent=e;
-  showInstall();
- });
+  function status(message, persistent = false) {
+    let notice =
+      document.getElementById(
+        "sixteenPwaStatus"
+      );
 
- window.addEventListener("appinstalled",()=>{
-  promptEvent=null;
-  document.getElementById("sixteenInstallBtn")?.remove();
-  status("SIXTEEN se instaló correctamente.");
- });
+    if (!notice) {
+      notice =
+        document.createElement(
+          "div"
+        );
 
- function showInstall(){
-  if(document.getElementById("sixteenInstallBtn"))return;
-  const actions=document.querySelector(".header-actions");
-  if(!actions)return;
+      notice.id =
+        "sixteenPwaStatus";
 
-  const b=document.createElement("button");
-  b.type="button";
-  b.id="sixteenInstallBtn";
-  b.className="pwa-install-btn";
-  b.setAttribute("aria-label","Instalar SIXTEEN como aplicación");
-  b.innerHTML='<span aria-hidden="true">↓</span><span class="pwa-install-label">APP</span>';
-  b.addEventListener("click",async()=>{
-   if(!promptEvent)return;
-   promptEvent.prompt();
-   await promptEvent.userChoice;
-   promptEvent=null;
-   b.remove();
-  });
-  actions.insertBefore(b,actions.firstChild);
- }
+      notice.className =
+        "pwa-status-toast";
 
- window.addEventListener("offline",()=>status("Sin conexión · usando contenido disponible."));
- window.addEventListener("online",()=>status("Conexión restablecida."));
+      notice.setAttribute(
+        "aria-live",
+        "polite"
+      );
 
- function status(msg){
-  let n=document.getElementById("sixteenPwaStatus");
-  if(!n){
-   n=document.createElement("div");
-   n.id="sixteenPwaStatus";
-   n.className="pwa-status-toast";
-   n.setAttribute("aria-live","polite");
-   document.body.appendChild(n);
+      document.body
+        .appendChild(
+          notice
+        );
+    }
+
+    clearTimeout(timer);
+
+    notice.textContent =
+      message;
+
+    notice.classList.add(
+      "activo"
+    );
+
+    if (!persistent) {
+      timer =
+        setTimeout(
+          () =>
+            notice.classList
+              .remove(
+                "activo"
+              ),
+          3000
+        );
+    }
   }
-  clearTimeout(timer);
-  n.textContent=msg;
-  n.classList.add("activo");
-  timer=setTimeout(()=>n.classList.remove("activo"),2600);
- }
+
+  function showInstall() {
+    if (
+      document.getElementById(
+        "sixteenInstallBtn"
+      )
+    ) {
+      return;
+    }
+
+    const actions =
+      document.querySelector(
+        ".header-actions"
+      );
+
+    if (!actions) {
+      return;
+    }
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+    button.type =
+      "button";
+
+    button.id =
+      "sixteenInstallBtn";
+
+    button.className =
+      "pwa-install-btn";
+
+    button.setAttribute(
+      "aria-label",
+      "Instalar SIXTEEN como aplicación"
+    );
+
+    const icon =
+      document.createElement(
+        "span"
+      );
+
+    icon.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    icon.textContent =
+      "↓";
+
+    const label =
+      document.createElement(
+        "span"
+      );
+
+    label.className =
+      "pwa-install-label";
+
+    label.textContent =
+      "APP";
+
+    button.append(
+      icon,
+      label
+    );
+
+    button.addEventListener(
+      "click",
+      async () => {
+        if (!promptEvent) {
+          return;
+        }
+
+        promptEvent.prompt();
+
+        await promptEvent
+          .userChoice;
+
+        promptEvent = null;
+        button.remove();
+      }
+    );
+
+    actions.insertBefore(
+      button,
+      actions.firstChild
+    );
+  }
+
+  async function registerServiceWorker() {
+    if (
+      !(
+        "serviceWorker" in
+        navigator
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const registration =
+        await navigator
+          .serviceWorker
+          .register(
+            "./sw.js",
+            {
+              scope: "./"
+            }
+          );
+
+      // GitHub Pages puede mantener una pestaña abierta durante horas.
+      // La comprobación manual reduce el tiempo hasta detectar una versión nueva.
+      registration
+        .update()
+        .catch(() => {});
+
+      registration
+        .addEventListener(
+          "updatefound",
+          () => {
+            const worker =
+              registration
+                .installing;
+
+            if (!worker) {
+              return;
+            }
+
+            worker.addEventListener(
+              "statechange",
+              () => {
+                if (
+                  worker.state ===
+                    "installed" &&
+                  navigator
+                    .serviceWorker
+                    .controller
+                ) {
+                  status(
+                    "Nueva versión de SIXTEEN disponible · recarga para actualizar.",
+                    true
+                  );
+                }
+              }
+            );
+          }
+        );
+    } catch (error) {
+      console.warn(
+        "SIXTEEN PWA:",
+        error
+      );
+    }
+  }
+
+  window.addEventListener(
+    "load",
+    registerServiceWorker
+  );
+
+  window.addEventListener(
+    "beforeinstallprompt",
+    event => {
+      event.preventDefault();
+      promptEvent = event;
+      showInstall();
+    }
+  );
+
+  window.addEventListener(
+    "appinstalled",
+    () => {
+      promptEvent = null;
+
+      document
+        .getElementById(
+          "sixteenInstallBtn"
+        )
+        ?.remove();
+
+      status(
+        "SIXTEEN se instaló correctamente."
+      );
+    }
+  );
+
+  window.addEventListener(
+    "offline",
+    () =>
+      status(
+        "Sin conexión · usando contenido disponible."
+      )
+  );
+
+  window.addEventListener(
+    "online",
+    () =>
+      status(
+        "Conexión restablecida."
+      )
+  );
 })();

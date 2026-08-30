@@ -1576,6 +1576,13 @@ document.addEventListener(
         );
 
 
+      window.SIXTEEN_SEO
+        ?.updateRating(
+          total,
+          promedio
+        );
+
+
       const estrellas =
         estrellasPromedio(
           promedio
