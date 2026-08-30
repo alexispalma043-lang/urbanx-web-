@@ -19,7 +19,7 @@
 
   <link
     rel="stylesheet"
-    href="./seguimiento.css?v=2700"
+    href="./seguimiento.css?v=6000"
   >
 
   <meta name="robots" content="noindex,nofollow,noarchive">
@@ -107,6 +107,8 @@
   <section
     class="track-loading"
     id="trackLoading"
+    role="status"
+    aria-live="polite"
   >
 
     <span></span>
@@ -144,12 +146,34 @@
 
 
   <section
+    class="track-error"
+    id="trackError"
+    role="alert"
+    hidden
+  >
+
+    <div class="track-error-icon">!</div>
+
+    <h2>No pudimos cargar tus pedidos</h2>
+
+    <p>
+      Revisa tu conexión e inténtalo nuevamente. Tus pedidos no se modificaron.
+    </p>
+
+    <button type="button" id="trackRetryBtn">
+      REINTENTAR
+    </button>
+
+  </section>
+
+
+  <section
     class="track-shell"
     id="trackShell"
     hidden
   >
 
-    <div class="track-selector-card">
+    <div class="track-selector-card" id="trackSelectorCard">
 
       <div>
 
@@ -164,11 +188,23 @@
       </div>
 
 
-      <select id="trackOrderSelect">
-        <option value="">
-          Selecciona
-        </option>
-      </select>
+      <div class="track-selector-control">
+
+        <label for="trackOrderSelect" class="sr-only">
+          Selecciona un pedido
+        </label>
+
+        <select id="trackOrderSelect" aria-label="Selecciona un pedido">
+          <option value="">
+            Selecciona
+          </option>
+        </select>
+
+        <small id="trackRealtimeStatus" aria-live="polite">
+          ACTUALIZACIÓN AUTOMÁTICA
+        </small>
+
+      </div>
 
     </div>
 
@@ -205,7 +241,7 @@
             ESTADO ACTUAL
           </span>
 
-          <strong id="trackCurrentStatus">
+          <strong id="trackCurrentStatus" aria-live="polite">
             Pendiente
           </strong>
 
@@ -297,6 +333,16 @@
         <article>
           <span>MÉTODO DE PAGO</span>
           <strong id="trackPayment">-</strong>
+        </article>
+
+        <article>
+          <span>ESTADO DEL PAGO</span>
+          <strong id="trackPaymentStatus">-</strong>
+        </article>
+
+        <article>
+          <span>ENTREGA</span>
+          <strong id="trackDeliveryMethod">-</strong>
         </article>
 
         <article>
@@ -398,6 +444,49 @@
 </main>
 
 
+<footer class="track-footer">
+
+  <div class="track-footer-grid">
+
+    <div class="track-footer-brand">
+      <img src="./assets/logo-sixteen.jpg" alt="SIXTEEN Urban Luxury">
+      <strong>SIXTEEN</strong>
+      <p>Urban Luxury · Street Culture · Art · Identity.</p>
+    </div>
+
+    <div>
+      <h3>COMPRAR</h3>
+      <a href="./index.html#productos">Productos</a>
+      <a href="./index.html#categorias">Categorías</a>
+      <a href="./carrito.html">Carrito</a>
+    </div>
+
+    <div>
+      <h3>AYUDA</h3>
+      <a href="./politicas.html#envios">Envíos</a>
+      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
+      <a href="./soporte.html#faq">Preguntas frecuentes</a>
+      <a href="./soporte.html">Contacto</a>
+    </div>
+
+    <div>
+      <h3>SIXTEEN</h3>
+      <a href="./index.html#sixteen">Nosotros</a>
+      <a href="./politicas.html#terminos">Términos y condiciones</a>
+      <a href="./politicas.html#privacidad">Política de privacidad</a>
+      <a href="../urbanx-3d/index.html">SIXTEEN Experience 3D</a>
+    </div>
+
+  </div>
+
+  <div class="track-footer-bottom">
+    <p>© 2026 SIXTEEN Urban Luxury. Todos los derechos reservados.</p>
+    <p>© 2026 LEX · Diseño y desarrollo de la plataforma web.</p>
+  </div>
+
+</footer>
+
+
 <div
   class="track-toast"
   id="trackToast"
@@ -408,7 +497,7 @@
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 
-<script src="./seguimiento.js?v=2300"></script>
+<script src="./seguimiento.js?v=6000"></script>
 
 
 <script src="./pwa.js?v=2700"></script>
