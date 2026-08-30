@@ -106,6 +106,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const adminEmail = document.getElementById("adminEmail");
   const adminAvatar = document.getElementById("adminAvatar");
   const cerrarSesionBtn = document.getElementById("cerrarSesionBtn");
+  const adminMobileMenuBtn = document.getElementById("adminMobileMenuBtn");
+  const adminSidebar = document.querySelector(".admin-sidebar");
+  const adminLiveStatus = document.getElementById("adminLiveStatus");
+  const adminDataStatus = document.getElementById("adminDataStatus");
+  const adminLastUpdate = document.getElementById("adminLastUpdate");
 
   const kpiProductos = document.getElementById("kpiProductos");
   const kpiPedidos = document.getElementById("kpiPedidos");
@@ -386,6 +391,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let logoutEnProceso = false;
 
+  const estadoFuentesDatos = {
+    productos: "pendiente",
+    pedidos: "pendiente",
+    inventario: "pendiente",
+    cupones: "pendiente",
+    envios: "pendiente"
+  };
+
+  let ultimaActualizacionDatos = 0;
+
 
   // ========================================================
   // PASO 15 · FUENTE DE DATOS PARA ANALÍTICA
@@ -452,6 +467,65 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   document.body.classList.remove("modal-open");
+
+
+  function marcarFuenteDatos(fuente, estado) {
+
+    if (!Object.prototype.hasOwnProperty.call(estadoFuentesDatos, fuente)) {
+      return;
+    }
+
+    estadoFuentesDatos[fuente] = estado;
+
+    if (estado === "ok") {
+      ultimaActualizacionDatos = Date.now();
+    }
+
+    actualizarEstadoFuentesDatos();
+  }
+
+
+  function actualizarEstadoFuentesDatos() {
+
+    if (!adminLiveStatus || !adminDataStatus || !adminLastUpdate) {
+      return;
+    }
+
+    const estados = Object.values(estadoFuentesDatos);
+    const errores = estados.filter(function (estado) { return estado === "error"; }).length;
+    const listos = estados.filter(function (estado) { return estado === "ok"; }).length;
+
+    adminLiveStatus.classList.toggle("error", errores > 0);
+    adminLiveStatus.classList.toggle("listo", errores === 0 && listos === estados.length);
+
+    if (errores > 0) {
+      adminDataStatus.textContent = "REVISAR CONEXIÓN";
+      adminLastUpdate.textContent = errores + (errores === 1 ? " fuente con error" : " fuentes con error");
+      return;
+    }
+
+    if (listos < estados.length) {
+      adminDataStatus.textContent = "SINCRONIZANDO";
+      adminLastUpdate.textContent = listos + "/" + estados.length + " fuentes conectadas";
+      return;
+    }
+
+    adminDataStatus.textContent = "EN TIEMPO REAL";
+
+    if (!ultimaActualizacionDatos) {
+      adminLastUpdate.textContent = "Datos conectados";
+      return;
+    }
+
+    adminLastUpdate.textContent =
+      "Actualizado " +
+      new Intl.DateTimeFormat("es-EC", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      }).format(new Date(ultimaActualizacionDatos));
+  }
+
 
   // ========================================================
   // AUTENTICACIÓN + AUTORIZACIÓN ADMIN
@@ -721,6 +795,7 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
             productosActuales = productos;
+            marcarFuenteDatos("productos", "ok");
 
             renderProductos(productos);
             actualizarCategoriasInventario();
@@ -734,6 +809,7 @@ document.addEventListener("DOMContentLoaded", function () {
           },
 
           function (error) {
+            marcarFuenteDatos("productos", "error");
             console.error("Firestore productos:", error);
 
             if (productosAdminBody) {
@@ -1429,11 +1505,14 @@ document.addEventListener("DOMContentLoaded", function () {
             movimientosInventarioActuales =
               movimientos;
 
+            marcarFuenteDatos("inventario", "ok");
             aplicarFiltrosMovimientos();
             emitirActualizacionBackup();
           },
 
           function (error) {
+
+            marcarFuenteDatos("inventario", "error");
 
             console.error(
               "Firestore inventario:",
@@ -3301,6 +3380,7 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
             pedidosActuales = pedidos;
+            marcarFuenteDatos("pedidos", "ok");
 
             actualizarResumenPedidos();
             aplicarFiltrosPedidos();
@@ -3316,6 +3396,8 @@ document.addEventListener("DOMContentLoaded", function () {
           },
 
           function (error) {
+
+            marcarFuenteDatos("pedidos", "error");
 
             console.error(
               "Firestore pedidos:",
@@ -3784,10 +3866,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function escaparCSV(valor) {
 
-    const texto =
+    let texto =
       String(
         valor ?? ""
       );
+
+    // Evita que Excel/Sheets interprete datos de clientes como fórmulas.
+    if (/^\s*[=+\-@]/.test(texto)) {
+      texto = "'" + texto;
+    }
 
     return (
       '"' +
@@ -6440,12 +6527,15 @@ document.addEventListener("DOMContentLoaded", function () {
             cuponesActuales =
               datos;
 
+            marcarFuenteDatos("cupones", "ok");
             aplicarFiltrosCupones();
             actualizarResumenCupones();
             emitirActualizacionBackup();
           },
 
           function (error) {
+
+            marcarFuenteDatos("cupones", "error");
 
             console.error(
               "Firestore cupones:",
@@ -6456,7 +6546,7 @@ document.addEventListener("DOMContentLoaded", function () {
               cuponesAdminBody.innerHTML = `
                 <tr>
                   <td colspan="6">
-                    No fue posible cargar los cupones. Revisa las reglas de Firestore del Paso 5.
+                    No fue posible cargar los cupones. Revisa la conexión y las reglas actuales de Firestore.
                   </td>
                 </tr>
               `;
@@ -7424,12 +7514,15 @@ document.addEventListener("DOMContentLoaded", function () {
             enviosActuales =
               datos;
 
+            marcarFuenteDatos("envios", "ok");
             renderEnvios();
             actualizarResumenEnvios();
             emitirActualizacionBackup();
           },
 
           function (error) {
+
+            marcarFuenteDatos("envios", "error");
 
             console.error(
               "Firestore envíos:",
@@ -7440,7 +7533,7 @@ document.addEventListener("DOMContentLoaded", function () {
               enviosAdminBody.innerHTML = `
                 <tr>
                   <td colspan="5">
-                    No fue posible cargar las tarifas. Revisa las reglas de Firestore del Paso 5.
+                    No fue posible cargar las tarifas. Revisa la conexión y las reglas actuales de Firestore.
                   </td>
                 </tr>
               `;
@@ -9230,20 +9323,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function exportarReporteCSV() {
 
+    const dias =
+      Math.max(
+        7,
+        Math.min(
+          90,
+          Math.floor(
+            numero(
+              reportePeriodoDias?.value ||
+              30
+            )
+          )
+        )
+      );
+
+    const desde = new Date();
+    desde.setHours(0, 0, 0, 0);
+    desde.setDate(desde.getDate() - (dias - 1));
+
     const pedidosVenta =
       pedidosActuales.filter(
         function (pedido) {
 
-          return ESTADOS_VENTA_REPORTE.has(
-            pedido.estado
-          );
+          if (!ESTADOS_VENTA_REPORTE.has(pedido.estado)) {
+            return false;
+          }
+
+          const fecha = fechaComoDate(pedido.creadoEn);
+          return Boolean(fecha && fecha >= desde);
         }
       );
 
     if (!pedidosVenta.length) {
 
       alert(
-        "No existen ventas válidas para exportar."
+        "No existen ventas válidas en el período seleccionado."
       );
 
       return;
@@ -9405,7 +9519,9 @@ document.addEventListener("DOMContentLoaded", function () {
       url;
 
     enlace.download =
-      "sixteen-reporte-ventas-" +
+      "sixteen-reporte-ventas-ultimos-" +
+      dias +
+      "-dias-" +
       fechaArchivo() +
       ".csv";
 
@@ -9723,6 +9839,46 @@ document.addEventListener("DOMContentLoaded", function () {
     ["menuUrbanx3d", "sixteen3d"]
   ];
 
+
+  function activarMenuAdmin(menuId) {
+
+    document
+      .querySelectorAll(".admin-nav a")
+      .forEach(function (link) {
+        const activo = link.id === menuId;
+        link.classList.toggle("activo", activo);
+
+        if (activo) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+  }
+
+
+  function cerrarMenuAdminMovil() {
+
+    if (!adminSidebar || !adminMobileMenuBtn) {
+      return;
+    }
+
+    adminSidebar.classList.remove("menu-open");
+    adminMobileMenuBtn.setAttribute("aria-expanded", "false");
+  }
+
+
+  adminMobileMenuBtn?.addEventListener("click", function () {
+
+    if (!adminSidebar) {
+      return;
+    }
+
+    const abierto = adminSidebar.classList.toggle("menu-open");
+    adminMobileMenuBtn.setAttribute("aria-expanded", String(abierto));
+  });
+
+
   menuIds.forEach(
     function ([menuId, seccionId]) {
 
@@ -9797,27 +9953,72 @@ document.addEventListener("DOMContentLoaded", function () {
               } catch (_) {}
             }
 
-            document
-              .querySelectorAll(
-                ".admin-nav a"
-              )
-              .forEach(
-                function (link) {
-                  link.classList.remove(
-                    "activo"
-                  );
-                }
-              );
-
-            document
-              .getElementById(menuId)
-              ?.classList.add(
-                "activo"
-              );
+            activarMenuAdmin(menuId);
+            cerrarMenuAdminMovil();
           }
         );
     }
   );
+
+
+  let menuScrollTick = false;
+
+  function sincronizarMenuAdminConScroll() {
+
+    menuScrollTick = false;
+
+    const secciones =
+      menuIds
+        .map(function ([menuId, seccionId]) {
+          return {
+            menuId: menuId,
+            elemento: document.getElementById(seccionId)
+          };
+        })
+        .filter(function (item) { return Boolean(item.elemento); })
+        .sort(function (a, b) { return a.elemento.offsetTop - b.elemento.offsetTop; });
+
+    if (!secciones.length) {
+      return;
+    }
+
+    const referencia = 170;
+    let actual = secciones[0];
+
+    secciones.forEach(function (item) {
+      if (item.elemento.getBoundingClientRect().top <= referencia) {
+        actual = item;
+      }
+    });
+
+    activarMenuAdmin(actual.menuId);
+  }
+
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (menuScrollTick) {
+        return;
+      }
+
+      menuScrollTick = true;
+      window.requestAnimationFrame(sincronizarMenuAdminConScroll);
+    },
+    { passive: true }
+  );
+
+
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 820) {
+      cerrarMenuAdminMovil();
+    }
+
+    sincronizarMenuAdminConScroll();
+  });
+
+
+  setTimeout(sincronizarMenuAdminConScroll, 0);
 
   // ========================================================
   // ESC
@@ -9882,6 +10083,12 @@ document.addEventListener("DOMContentLoaded", function () {
         )
       ) {
         cerrarModalProductoFn();
+        return;
+      }
+
+      if (adminSidebar?.classList.contains("menu-open")) {
+        cerrarMenuAdminMovil();
+        adminMobileMenuBtn?.focus();
       }
     }
   );

@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=11000"
+    href="./admin.css?v=12000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -51,7 +51,7 @@
   <div class="admin-access-card">
     <span class="admin-access-mark" aria-hidden="true">XVI</span>
     <p class="admin-mini">SECURE ACCESS</p>
-    <h1 id="adminAccessTitle">VERIFICANDO ACCESO</h1>
+    <h2 id="adminAccessTitle">VERIFICANDO ACCESO</h2>
     <p id="adminAccessMessage">Comprobando tu sesión y permisos administrativos...</p>
     <button type="button" id="adminAccessRetry" class="admin-primary-btn" hidden>REINTENTAR</button>
   </div>
@@ -81,12 +81,25 @@
     </a>
 
 
-    <nav class="admin-nav">
+    <button
+      type="button"
+      class="admin-mobile-menu-btn"
+      id="adminMobileMenuBtn"
+      aria-expanded="false"
+      aria-controls="adminPrimaryNav"
+    >
+      <span>MENÚ ADMIN</span>
+      <strong aria-hidden="true">☰</strong>
+    </button>
+
+
+    <nav class="admin-nav" id="adminPrimaryNav" aria-label="Navegación administrativa">
 
       <a
         href="#inicio"
         class="activo"
         id="menuDashboard"
+        aria-current="page"
       >
         <span>●</span>
         Dashboard
@@ -244,6 +257,20 @@
       </div>
 
 
+      <div
+        class="admin-live-status"
+        id="adminLiveStatus"
+        role="status"
+        aria-live="polite"
+      >
+        <span class="admin-live-dot" aria-hidden="true"></span>
+        <div>
+          <strong id="adminDataStatus">SINCRONIZANDO</strong>
+          <small id="adminLastUpdate">Esperando datos de Firestore...</small>
+        </div>
+      </div>
+
+
       <div class="admin-user">
 
 
@@ -296,7 +323,7 @@
           </h2>
 
           <p class="admin-page-description">
-            Gestiona productos, stock, pedidos e imágenes SIXTEEN.
+            Gestiona ventas, pedidos, clientes, inventario, productos y configuración operativa de SIXTEEN.
           </p>
 
         </div>
@@ -419,7 +446,7 @@
 
             <select
               id="reportePeriodoDias"
-              aria-label="Periodo del gráfico"
+              aria-label="Periodo del gráfico y de la exportación"
             >
               <option value="7">
                 Últimos 7 días
@@ -1575,9 +1602,9 @@
               CHECKOUT · SIN ALMACENAR DATOS DE TARJETAS
             </p>
 
-            <h1>
+            <h2>
               Métodos de pago
-            </h1>
+            </h2>
 
             <p>
               Configura qué opciones verá el cliente durante la compra.
@@ -5519,7 +5546,7 @@
 
 <script src="../sri-core.js?v=3800"></script>
 
-<script src="./dashboard.js?v=11001"></script>
+<script src="./dashboard.js?v=12000"></script>
 
 <script src="./analitica.js?v=2800"></script>
 

@@ -6917,7 +6917,7 @@ td {
   letter-spacing:.08em
 }
 
-.admin-access-card h1{
+.admin-access-card h2{
   margin:8px 0 12px;
   color:#fff;
   font-size:clamp(24px,5vw,38px);
@@ -6942,3 +6942,197 @@ td {
   outline-offset:3px
 }
 
+
+/* =========================================================
+   PASO 12 · DASHBOARD GENERAL / NAVEGACIÓN / ESTADO LIVE
+========================================================= */
+
+.admin-mobile-menu-btn{
+  display:none;
+  width:100%;
+  min-height:44px;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0 14px;
+  border:1px solid rgba(216,170,85,.34);
+  background:#0b0b0b;
+  color:#eee8df;
+  font:inherit;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  cursor:pointer
+}
+
+.admin-mobile-menu-btn strong{
+  color:#e5c77f;
+  font-size:18px;
+  line-height:1
+}
+
+.admin-live-status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-left:auto;
+  padding:9px 12px;
+  border:1px solid #e8e2d8;
+  background:#faf8f4;
+  color:#332f2a
+}
+
+.admin-live-status>div{
+  min-width:0
+}
+
+.admin-live-status strong,
+.admin-live-status small{
+  display:block
+}
+
+.admin-live-status strong{
+  font-size:9px;
+  letter-spacing:.11em;
+  color:#6f5b31
+}
+
+.admin-live-status small{
+  margin-top:3px;
+  max-width:220px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#777;
+  font-size:8px
+}
+
+.admin-live-dot{
+  width:9px;
+  height:9px;
+  flex:0 0 9px;
+  border-radius:50%;
+  background:#d8aa55;
+  box-shadow:0 0 0 4px rgba(216,170,85,.12)
+}
+
+.admin-live-status.listo .admin-live-dot{
+  background:#2f8f55;
+  box-shadow:0 0 0 4px rgba(47,143,85,.12)
+}
+
+.admin-live-status.error{
+  border-color:rgba(185,49,49,.25);
+  background:#fff8f8
+}
+
+.admin-live-status.error .admin-live-dot{
+  background:#b93131;
+  box-shadow:0 0 0 4px rgba(185,49,49,.12)
+}
+
+.admin-live-status.error strong{
+  color:#9d2929
+}
+
+.admin-nav a[aria-current="page"]{
+  outline:1px solid rgba(216,170,85,.24);
+  outline-offset:-1px
+}
+
+@media (max-width:820px){
+  .admin-sidebar{
+    position:sticky!important;
+    top:0;
+    z-index:500;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:10px 12px;
+    width:100%;
+    height:auto!important;
+    max-height:none!important;
+    padding:11px 15px!important;
+    box-shadow:0 8px 28px rgba(0,0,0,.22)
+  }
+
+  .admin-sidebar-logo{
+    grid-column:1;
+    margin:0;
+    padding:0!important
+  }
+
+  .admin-sidebar-logo img{
+    width:42px;
+    height:42px
+  }
+
+  .admin-mobile-menu-btn{
+    display:flex;
+    grid-column:2;
+    width:auto;
+    min-width:132px
+  }
+
+  .admin-nav,
+  .admin-sidebar-footer{
+    display:none!important;
+    grid-column:1 / -1
+  }
+
+  .admin-sidebar.menu-open .admin-nav{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    max-height:min(64vh,520px);
+    overflow-y:auto;
+    padding:8px 0 4px;
+    border-top:1px solid #242424
+  }
+
+  .admin-sidebar.menu-open .admin-sidebar-footer{
+    display:block!important;
+    margin-top:0;
+    padding-top:10px
+  }
+
+  .admin-topbar{
+    gap:10px;
+    padding:12px 15px
+  }
+
+  .admin-live-status{
+    padding:8px 10px
+  }
+
+  .admin-live-status small{
+    display:none
+  }
+}
+
+@media (max-width:600px){
+  .admin-sidebar.menu-open .admin-nav{
+    grid-template-columns:1fr
+  }
+
+  .admin-mobile-menu-btn{
+    min-width:110px;
+    padding:0 11px
+  }
+
+  .admin-mobile-menu-btn span{
+    font-size:0
+  }
+
+  .admin-mobile-menu-btn span::after{
+    content:"MENÚ";
+    font-size:10px
+  }
+
+  .admin-live-status{
+    margin-left:0
+  }
+
+  .admin-live-status strong{
+    font-size:8px
+  }
+}
