@@ -7136,3 +7136,139 @@ td {
     font-size:8px
   }
 }
+
+/* =========================================================
+   PASO 13 · ADMINISTRACIÓN DE PRODUCTOS
+========================================================= */
+
+.productos-toolbar {
+  display: grid;
+  grid-template-columns:
+    minmax(230px, 1.6fr)
+    minmax(170px, .9fr)
+    minmax(170px, .9fr)
+    auto;
+  gap: 10px;
+  align-items: end;
+  padding: 16px 20px 10px;
+  border-top: 1px solid var(--gold-line);
+}
+
+.productos-toolbar > div {
+  min-width: 0;
+}
+
+.productos-toolbar label {
+  display: block;
+  margin-bottom: 7px;
+  color: #858077;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.productos-toolbar input,
+.productos-toolbar select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 11px;
+  border: 1px solid var(--gold-line);
+  outline: 0;
+  background: #080808;
+  color: #eee8df;
+  font-size: 9px;
+}
+
+.productos-toolbar input:focus-visible,
+.productos-toolbar select:focus-visible {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(216,170,85,.10);
+}
+
+.productos-resultado {
+  margin: 0;
+  padding: 0 20px 14px;
+  color: #79736b;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+#productos .admin-table tr.producto-archivado {
+  opacity: .62;
+}
+
+#productos .admin-actions .reactivar {
+  border-color: rgba(216,170,85,.55);
+  color: var(--gold-light);
+}
+
+.producto-fotos-ayuda {
+  display: block;
+  margin: -4px 0 10px;
+  color: #777168;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.producto-imagenes-galeria {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.producto-imagen-thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid #d9d1c6;
+  background: #f4f0e9;
+}
+
+.producto-imagen-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.producto-imagen-thumb span {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  padding: 3px 5px;
+  background: rgba(0,0,0,.78);
+  color: #fff;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: .6px;
+}
+
+.producto-imagen-thumb:first-child {
+  border-color: #b9842c;
+  box-shadow: 0 0 0 1px rgba(185,132,44,.25);
+}
+
+.producto-modal-card:focus {
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  .productos-toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .producto-imagenes-galeria {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .productos-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .productos-toolbar .admin-secondary-btn {
+    width: 100%;
+  }
+}

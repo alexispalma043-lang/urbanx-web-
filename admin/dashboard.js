@@ -186,6 +186,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const guardarEnvioBtn = document.getElementById("guardarEnvioBtn");
 
   const productosAdminBody = document.getElementById("productosAdminBody");
+  const productoBuscar = document.getElementById("productoBuscar");
+  const productoFiltroCategoria = document.getElementById("productoFiltroCategoria");
+  const productoFiltroEstado = document.getElementById("productoFiltroEstado");
+  const limpiarFiltrosProductosBtn = document.getElementById("limpiarFiltrosProductosBtn");
+  const productosResultadoTexto = document.getElementById("productosResultadoTexto");
+  const productosEstadoBadge = document.getElementById("productosEstadoBadge");
   const pedidosAdminBody = document.getElementById("pedidosAdminBody");
   const inventarioAdminBody = document.getElementById("inventarioAdminBody");
   const sixteen3dAdminBody = document.getElementById("sixteen3dAdminBody");
@@ -249,6 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const productoImagenNombre = document.getElementById("productoImagenNombre");
   const productoImagenActual = document.getElementById("productoImagenActual");
   const productoImagenPublicId = document.getElementById("productoImagenPublicId");
+  const productoImagenesGaleria = document.getElementById("productoImagenesGaleria");
 
   const productoUsaVariantes = document.getElementById("productoUsaVariantes");
   const agregarVarianteProductoBtn = document.getElementById("agregarVarianteProductoBtn");
@@ -356,6 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let usuarioActual = null;
 
   let productosActuales = [];
+  let productosFiltrados = [];
   let pedidosActuales = [];
   let pedidosFiltradosActuales = [];
 
@@ -388,6 +396,11 @@ document.addEventListener("DOMContentLoaded", function () {
   let imagenArchivoSeleccionado = null;
   let imagenPreviewObjectUrl = null;
   let imagenEliminada = false;
+  let imagenesProductoActuales = [];
+  let imagenesPublicIdsActuales = [];
+  let imagenesArchivosSeleccionados = [];
+  let imagenesPreviewObjectUrls = [];
+  let focoAntesProductoModal = null;
 
   let logoutEnProceso = false;
 
@@ -797,7 +810,7 @@ document.addEventListener("DOMContentLoaded", function () {
             productosActuales = productos;
             marcarFuenteDatos("productos", "ok");
 
-            renderProductos(productos);
+            aplicarFiltrosProductos();
             actualizarCategoriasInventario();
             aplicarFiltrosInventario();
             actualizarResumenInventario();
@@ -839,6 +852,67 @@ document.addEventListener("DOMContentLoaded", function () {
   // RENDER PRODUCTOS
   // ========================================================
 
+  function aplicarFiltrosProductos() {
+
+    const busqueda = normalizarTexto(productoBuscar?.value || "");
+    const categoria = String(productoFiltroCategoria?.value || "").trim();
+    const estado = String(productoFiltroEstado?.value || "").trim();
+
+    productosFiltrados = productosActuales.filter(function (producto) {
+      const estadoProducto = String(producto.estado || "Activo").trim();
+
+      if (categoria && String(producto.categoria || "").trim() !== categoria) {
+        return false;
+      }
+
+      if (estado && estadoProducto !== estado) {
+        return false;
+      }
+
+      if (busqueda) {
+        const texto = normalizarTexto([
+          producto.codigo,
+          producto.nombre,
+          producto.categoria,
+          producto.color
+        ].join(" "));
+
+        if (!texto.includes(busqueda)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    renderProductos(productosFiltrados);
+
+    const visibles = productosFiltrados.length;
+    const total = productosActuales.length;
+
+    if (productosResultadoTexto) {
+      productosResultadoTexto.textContent = visibles === total
+        ? (total === 1 ? "Mostrando 1 producto." : `Mostrando ${total} productos.`)
+        : `Mostrando ${visibles} de ${total} productos.`;
+    }
+
+    if (productosEstadoBadge) {
+      productosEstadoBadge.textContent = `${total} ${total === 1 ? "PRODUCTO" : "PRODUCTOS"}`;
+    }
+  }
+
+  productoBuscar?.addEventListener("input", aplicarFiltrosProductos);
+  productoFiltroCategoria?.addEventListener("change", aplicarFiltrosProductos);
+  productoFiltroEstado?.addEventListener("change", aplicarFiltrosProductos);
+
+  limpiarFiltrosProductosBtn?.addEventListener("click", function () {
+    if (productoBuscar) productoBuscar.value = "";
+    if (productoFiltroCategoria) productoFiltroCategoria.value = "";
+    if (productoFiltroEstado) productoFiltroEstado.value = "";
+    aplicarFiltrosProductos();
+    productoBuscar?.focus();
+  });
+
   function renderProductos(productos) {
 
     if (!productosAdminBody) {
@@ -846,10 +920,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (!productos.length) {
+      const mensaje = productosActuales.length
+        ? "No existen productos que coincidan con los filtros."
+        : "Todavía no existen productos.";
+
       productosAdminBody.innerHTML = `
         <tr>
           <td colspan="7">
-            Todavía no existen productos.
+            ${escapar(mensaje)}
           </td>
         </tr>
       `;
@@ -866,6 +944,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const fila =
           document.createElement("tr");
+
+        const archivado = producto.archivado === true;
+        const inactivo = estado === "Inactivo";
+        if (archivado || inactivo) fila.classList.add("producto-archivado");
 
         fila.innerHTML = `
           <td>
@@ -937,11 +1019,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
               <button
                 type="button"
-                class="danger"
-                data-action="eliminar"
+                class="${inactivo ? "reactivar" : "danger"}"
+                data-action="${inactivo ? "reactivar" : "archivar"}"
                 data-id="${producto.id}"
               >
-                ELIMINAR
+                ${inactivo ? "REACTIVAR" : "ARCHIVAR"}
               </button>
 
             </div>
@@ -2454,8 +2536,12 @@ document.addEventListener("DOMContentLoaded", function () {
         editarProducto(id);
       }
 
-      if (accion === "eliminar") {
-        eliminarProducto(id);
+      if (accion === "archivar") {
+        archivarProducto(id);
+      }
+
+      if (accion === "reactivar") {
+        reactivarProducto(id);
       }
     }
   );
@@ -2494,13 +2580,17 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    focoAntesProductoModal = document.activeElement;
+
     productoModal.classList.add("activo");
-    productoModal.setAttribute(
-      "aria-hidden",
-      "false"
-    );
+    productoModal.setAttribute("aria-hidden", "false");
 
     actualizarBloqueoBody();
+
+    window.requestAnimationFrame(function () {
+      const primerCampo = document.getElementById("productoCodigo");
+      (primerCampo || productoModal.querySelector(".producto-modal-card"))?.focus();
+    });
   }
 
   function cerrarModalProductoFn() {
@@ -2516,12 +2606,18 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     liberarPreviewObjectUrl();
+    liberarGaleriaObjectUrls();
 
     imagenArchivoSeleccionado = null;
     imagenEliminada = false;
     productoEditandoId = null;
 
     actualizarBloqueoBody();
+
+    if (focoAntesProductoModal && typeof focoAntesProductoModal.focus === "function") {
+      focoAntesProductoModal.focus();
+    }
+    focoAntesProductoModal = null;
   }
 
   cerrarProductoModal?.addEventListener(
@@ -2544,6 +2640,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   );
 
+  productoModal?.addEventListener("keydown", function (event) {
+    if (event.key !== "Tab") return;
+
+    const focusables = Array.from(
+      productoModal.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter(function (elemento) {
+      return !elemento.hidden && elemento.offsetParent !== null;
+    });
+
+    if (!focusables.length) return;
+
+    const primero = focusables[0];
+    const ultimo = focusables[focusables.length - 1];
+
+    if (event.shiftKey && document.activeElement === primero) {
+      event.preventDefault();
+      ultimo.focus();
+    } else if (!event.shiftKey && document.activeElement === ultimo) {
+      event.preventDefault();
+      primero.focus();
+    }
+  });
+
   // ========================================================
   // IMAGEN PRODUCTO
   // ========================================================
@@ -2555,69 +2676,100 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   );
 
+  function liberarGaleriaObjectUrls() {
+    imagenesPreviewObjectUrls.forEach(function (url) {
+      try { URL.revokeObjectURL(url); } catch (_) {}
+    });
+    imagenesPreviewObjectUrls = [];
+  }
+
+  function renderGaleriaProducto(urls) {
+    const lista = Array.from(new Set((urls || []).filter(Boolean))).slice(0, 6);
+
+    if (productoImagenesGaleria) {
+      productoImagenesGaleria.innerHTML = "";
+
+      lista.forEach(function (url, index) {
+        const item = document.createElement("div");
+        item.className = "producto-imagen-thumb";
+
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = index === 0 ? "Imagen principal del producto" : `Imagen adicional ${index + 1}`;
+        img.loading = "lazy";
+
+        const etiqueta = document.createElement("span");
+        etiqueta.textContent = index === 0 ? "PRINCIPAL" : String(index + 1);
+
+        item.append(img, etiqueta);
+        productoImagenesGaleria.appendChild(item);
+      });
+    }
+
+    if (lista.length) {
+      mostrarPreviewImagen(lista[0]);
+      if (quitarImagenBtn) quitarImagenBtn.style.display = "";
+    } else {
+      ocultarPreviewImagen();
+      if (quitarImagenBtn) quitarImagenBtn.style.display = "none";
+    }
+  }
+
   productoImagenArchivo?.addEventListener(
     "change",
     function () {
 
-      const archivo =
-        productoImagenArchivo.files &&
-        productoImagenArchivo.files[0]
-          ? productoImagenArchivo.files[0]
-          : null;
+      const archivos = Array.from(productoImagenArchivo.files || []);
 
-      if (!archivo) {
-        return;
-      }
+      if (!archivos.length) return;
 
-      if (
-        !ALLOWED_IMAGE_TYPES.includes(
-          archivo.type
-        )
-      ) {
-
-        mostrarMensajeProducto(
-          "Formato no permitido. Usa JPG, JPEG, PNG o WEBP.",
-          false
-        );
-
+      if (archivos.length > 6) {
+        mostrarMensajeProducto("Puedes cargar un máximo de 6 fotografías.", false);
         productoImagenArchivo.value = "";
         return;
       }
 
-      if (
-        archivo.size >
-        MAX_IMAGE_SIZE
-      ) {
+      const invalido = archivos.find(function (archivo) {
+        return !ALLOWED_IMAGE_TYPES.includes(archivo.type);
+      });
 
-        mostrarMensajeProducto(
-          "La imagen supera el máximo de 5 MB.",
-          false
-        );
+      if (invalido) {
+        mostrarMensajeProducto("Formato no permitido. Usa JPG, JPEG, PNG o WEBP.", false);
+        productoImagenArchivo.value = "";
+        return;
+      }
 
+      const demasiadoGrande = archivos.find(function (archivo) {
+        return archivo.size > MAX_IMAGE_SIZE;
+      });
+
+      if (demasiadoGrande) {
+        mostrarMensajeProducto(`La imagen ${demasiadoGrande.name} supera el máximo de 5 MB.`, false);
         productoImagenArchivo.value = "";
         return;
       }
 
       liberarPreviewObjectUrl();
+      liberarGaleriaObjectUrls();
 
-      imagenArchivoSeleccionado = archivo;
+      imagenesArchivosSeleccionados = archivos;
+      imagenArchivoSeleccionado = archivos[0] || null;
       imagenEliminada = false;
+      imagenesPreviewObjectUrls = archivos.map(function (archivo) {
+        return URL.createObjectURL(archivo);
+      });
 
-      imagenPreviewObjectUrl =
-        URL.createObjectURL(archivo);
+      renderGaleriaProducto(imagenesPreviewObjectUrls);
 
-      mostrarPreviewImagen(
-        imagenPreviewObjectUrl
-      );
+      const pesoTotal = archivos.reduce(function (total, archivo) {
+        return total + archivo.size;
+      }, 0);
 
-      productoImagenNombre.textContent =
-        archivo.name +
-        " · " +
-        formatearTamano(
-          archivo.size
-        );
+      if (productoImagenNombre) {
+        productoImagenNombre.textContent =
+          `${archivos.length} ${archivos.length === 1 ? "foto seleccionada" : "fotos seleccionadas"} · ${formatearTamano(pesoTotal)}`;
+      }
 
-      quitarImagenBtn.style.display = "";
       mostrarMensajeProducto("");
     }
   );
@@ -2627,28 +2779,24 @@ document.addEventListener("DOMContentLoaded", function () {
     function () {
 
       liberarPreviewObjectUrl();
+      liberarGaleriaObjectUrls();
 
       imagenArchivoSeleccionado = null;
+      imagenesArchivosSeleccionados = [];
+      imagenesProductoActuales = [];
+      imagenesPublicIdsActuales = [];
       imagenEliminada = true;
 
-      if (productoImagenArchivo) {
-        productoImagenArchivo.value = "";
+      if (productoImagenArchivo) productoImagenArchivo.value = "";
+      if (productoImagenActual) productoImagenActual.value = "";
+      if (productoImagenPublicId) productoImagenPublicId.value = "";
+
+      renderGaleriaProducto([]);
+
+      if (productoImagenNombre) {
+        productoImagenNombre.textContent =
+          "JPG, JPEG, PNG o WEBP · máximo 5 MB por foto";
       }
-
-      if (productoImagenActual) {
-        productoImagenActual.value = "";
-      }
-
-      if (productoImagenPublicId) {
-        productoImagenPublicId.value = "";
-      }
-
-      ocultarPreviewImagen();
-
-      productoImagenNombre.textContent =
-        "JPG, JPEG, PNG o WEBP · máximo 5 MB";
-
-      quitarImagenBtn.style.display = "none";
     }
   );
 
@@ -2852,6 +3000,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const categoria =
       valor("productoCategoria");
 
+    const precio = Math.max(0, numero(valor("productoPrecio")));
+    const precioAnterior = Math.max(0, numero(valor("productoPrecioAnterior")));
+    const modelo3d = valor("productoModelo3d");
+    const estadoProductoFormulario = valor("productoEstado") || "Activo";
+
     if (
       !codigo ||
       !nombre ||
@@ -2861,6 +3014,31 @@ document.addEventListener("DOMContentLoaded", function () {
         "Completa los campos obligatorios.",
         false
       );
+      return;
+    }
+
+    if (codigo.length > 40 || nombre.length > 120) {
+      mostrarMensajeProducto("El código o el nombre superan la longitud permitida.", false);
+      return;
+    }
+
+    if (precio <= 0) {
+      mostrarMensajeProducto("El precio debe ser mayor a $0.00.", false);
+      return;
+    }
+
+    if (precioAnterior > 0 && precioAnterior <= precio) {
+      mostrarMensajeProducto("El precio anterior debe ser mayor al precio actual o quedar vacío.", false);
+      return;
+    }
+
+    if (modelo3d && !/^https:\/\//i.test(modelo3d)) {
+      mostrarMensajeProducto("El modelo 3D debe usar una URL HTTPS válida.", false);
+      return;
+    }
+
+    if (estaMarcado("producto3d") && !modelo3d) {
+      mostrarMensajeProducto("Para activar SIXTEEN 3D debes registrar primero la URL del modelo .GLB.", false);
       return;
     }
 
@@ -2906,35 +3084,38 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      let imagenUrl =
-        productoImagenActual?.value || "";
+      let imagenesUrls = imagenEliminada
+        ? []
+        : imagenesProductoActuales.slice(0, 6);
 
-      let imagenPublicId =
-        productoImagenPublicId?.value || "";
+      let imagenesPublicIds = imagenEliminada
+        ? []
+        : imagenesPublicIdsActuales.slice(0, 6);
 
-      if (imagenEliminada) {
-        imagenUrl = "";
-        imagenPublicId = "";
-      }
+      if (imagenesArchivosSeleccionados.length) {
 
-      if (imagenArchivoSeleccionado) {
+        const subidas = [];
 
-        guardarProductoBtn.textContent =
-          "SUBIENDO FOTO...";
+        for (let indice = 0; indice < imagenesArchivosSeleccionados.length; indice += 1) {
+          guardarProductoBtn.textContent =
+            `SUBIENDO FOTO ${indice + 1}/${imagenesArchivosSeleccionados.length}...`;
 
-        mostrarMensajeProducto(
-          "Subiendo fotografía a Cloudinary...",
-          true
-        );
-
-        const subida =
-          await subirImagenCloudinary(
-            imagenArchivoSeleccionado
+          mostrarMensajeProducto(
+            `Subiendo fotografía ${indice + 1} de ${imagenesArchivosSeleccionados.length} a Cloudinary...`,
+            true
           );
 
-        imagenUrl = subida.url;
-        imagenPublicId = subida.publicId;
+          subidas.push(
+            await subirImagenCloudinary(imagenesArchivosSeleccionados[indice])
+          );
+        }
+
+        imagenesUrls = subidas.map(function (item) { return item.url; });
+        imagenesPublicIds = subidas.map(function (item) { return item.publicId || ""; });
       }
+
+      const imagenUrl = imagenesUrls[0] || "";
+      const imagenPublicId = imagenesPublicIds[0] || "";
 
       guardarProductoBtn.textContent =
         "GUARDANDO...";
@@ -2952,23 +3133,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         categoria: categoria,
 
-        precio:
-          Math.max(
-            0,
-            numero(
-              valor("productoPrecio")
-            )
-          ),
+        precio: precio,
 
-        precioAnterior:
-          Math.max(
-            0,
-            numero(
-              valor(
-                "productoPrecioAnterior"
-              )
-            )
-          ),
+        precioAnterior: precioAnterior,
 
         ivaTarifa:
           Math.max(
@@ -3013,9 +3180,12 @@ document.addEventListener("DOMContentLoaded", function () {
             ? leerVariantesFormulario()
             : [],
 
-        estado:
-          valor("productoEstado") ||
-          "Activo",
+        estado: estadoProductoFormulario,
+
+        archivado:
+          estadoProductoFormulario === "Activo"
+            ? false
+            : (productosActuales.find(function (item) { return item.id === productoEditandoId; })?.archivado === true),
 
         imagen:
           imagenUrl,
@@ -3023,8 +3193,14 @@ document.addEventListener("DOMContentLoaded", function () {
         imagenPublicId:
           imagenPublicId,
 
+        imagenes:
+          imagenesUrls.slice(1),
+
+        imagenesPublicIds:
+          imagenesPublicIds.slice(1),
+
         modelo3d:
-          valor("productoModelo3d"),
+          modelo3d,
 
         descripcion:
           valor("productoDescripcion"),
@@ -3070,6 +3246,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (productoEditandoId) {
+
+        if (estadoProductoFormulario === "Activo") {
+          producto.archivadoEn = FieldValue.delete();
+        }
 
         await db
           .collection("productos")
@@ -3264,25 +3444,31 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       if (productoImagenActual) {
-        productoImagenActual.value =
-          producto.imagen || "";
+        productoImagenActual.value = producto.imagen || "";
       }
 
       if (productoImagenPublicId) {
-        productoImagenPublicId.value =
-          producto.imagenPublicId || "";
+        productoImagenPublicId.value = producto.imagenPublicId || "";
       }
 
-      if (producto.imagen) {
+      imagenesProductoActuales = Array.from(new Set([
+        String(producto.imagen || "").trim(),
+        ...(Array.isArray(producto.imagenes) ? producto.imagenes : [])
+      ].filter(Boolean))).slice(0, 6);
 
-        mostrarPreviewImagen(
-          producto.imagen
-        );
+      imagenesPublicIdsActuales = [
+        String(producto.imagenPublicId || "").trim(),
+        ...(Array.isArray(producto.imagenesPublicIds) ? producto.imagenesPublicIds : [])
+      ].slice(0, 6);
 
-        productoImagenNombre.textContent =
-          "Fotografía actual del producto";
+      imagenesArchivosSeleccionados = [];
+      imagenEliminada = false;
+      renderGaleriaProducto(imagenesProductoActuales);
 
-        quitarImagenBtn.style.display = "";
+      if (productoImagenNombre) {
+        productoImagenNombre.textContent = imagenesProductoActuales.length
+          ? `${imagenesProductoActuales.length} ${imagenesProductoActuales.length === 1 ? "fotografía actual" : "fotografías actuales"}`
+          : "JPG, JPEG, PNG o WEBP · máximo 5 MB por foto";
       }
 
       abrirModalProducto();
@@ -3304,44 +3490,43 @@ document.addEventListener("DOMContentLoaded", function () {
   // ELIMINAR PRODUCTO
   // ========================================================
 
-  async function eliminarProducto(id) {
+  async function archivarProducto(id) {
 
-    const producto =
-      productosActuales.find(
-        function (item) {
-          return item.id === id;
-        }
-      );
+    const producto = productosActuales.find(function (item) {
+      return item.id === id;
+    });
 
-    const confirmado =
-      window.confirm(
-        "¿Seguro que deseas eliminar " +
-        (producto?.nombre ||
-          "este producto") +
-        "?"
-      );
+    const confirmado = window.confirm(
+      "¿Archivar " + (producto?.nombre || "este producto") +
+      "? Dejará de mostrarse en la tienda, pero conservará su historial."
+    );
 
-    if (!confirmado) {
-      return;
-    }
+    if (!confirmado) return;
 
     try {
-
-      await db
-        .collection("productos")
-        .doc(id)
-        .delete();
-
+      await db.collection("productos").doc(id).update({
+        estado: "Inactivo",
+        archivado: true,
+        archivadoEn: FieldValue.serverTimestamp(),
+        actualizadoEn: FieldValue.serverTimestamp()
+      });
     } catch (error) {
+      console.error("Archivar producto:", error);
+      alert("No fue posible archivar el producto.");
+    }
+  }
 
-      console.error(
-        "Eliminar:",
-        error
-      );
-
-      alert(
-        "No fue posible eliminar el producto."
-      );
+  async function reactivarProducto(id) {
+    try {
+      await db.collection("productos").doc(id).update({
+        estado: "Activo",
+        archivado: false,
+        archivadoEn: FieldValue.delete(),
+        actualizadoEn: FieldValue.serverTimestamp()
+      });
+    } catch (error) {
+      console.error("Reactivar producto:", error);
+      alert("No fue posible reactivar el producto.");
     }
   }
 
@@ -9742,6 +9927,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     imagenArchivoSeleccionado = null;
     imagenEliminada = false;
+    imagenesProductoActuales = [];
+    imagenesPublicIdsActuales = [];
+    imagenesArchivosSeleccionados = [];
+    liberarGaleriaObjectUrls();
 
     if (productoImagenArchivo) {
       productoImagenArchivo.value = "";
@@ -9756,10 +9945,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     ocultarPreviewImagen();
+    renderGaleriaProducto([]);
 
     if (productoImagenNombre) {
       productoImagenNombre.textContent =
-        "JPG, JPEG, PNG o WEBP · máximo 5 MB";
+        "JPG, JPEG, PNG o WEBP · máximo 5 MB por foto";
     }
 
     if (quitarImagenBtn) {

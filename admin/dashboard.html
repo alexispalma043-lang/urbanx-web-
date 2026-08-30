@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=12000"
+    href="./admin.css?v=13000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -1899,12 +1899,67 @@
           </div>
 
 
-          <span class="admin-status">
-            ACTIVO
+          <span class="admin-status" id="productosEstadoBadge">
+            0 PRODUCTOS
           </span>
 
 
         </div>
+
+        <div class="productos-toolbar">
+
+          <div>
+            <label for="productoBuscar">BUSCAR</label>
+            <input
+              id="productoBuscar"
+              type="search"
+              placeholder="Código o nombre..."
+              autocomplete="off"
+              maxlength="120"
+            >
+          </div>
+
+          <div>
+            <label for="productoFiltroCategoria">CATEGORÍA</label>
+            <select id="productoFiltroCategoria">
+              <option value="">Todas</option>
+              <option value="Camisetas">Camisetas</option>
+              <option value="Buzos y Gorras">Buzos y Gorras</option>
+              <option value="Accesorios">Accesorios</option>
+              <option value="Pantalones Baggy">Pantalones Baggy</option>
+              <option value="Zapatos">Zapatos</option>
+              <option value="Arte y Suministros">Arte y Suministros</option>
+              <option value="Calzado">Calzado</option>
+              <option value="Ropa">Ropa</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="productoFiltroEstado">ESTADO</label>
+            <select id="productoFiltroEstado">
+              <option value="">Todos</option>
+              <option value="Activo">Activos</option>
+              <option value="Inactivo">Inactivos / archivados</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            class="admin-secondary-btn"
+            id="limpiarFiltrosProductosBtn"
+          >
+            LIMPIAR
+          </button>
+
+        </div>
+
+        <p
+          class="productos-resultado"
+          id="productosResultadoTexto"
+          aria-live="polite"
+        >
+          Mostrando 0 productos.
+        </p>
 
 
         <div class="admin-table-wrap">
@@ -3108,11 +3163,14 @@
 <div
   class="producto-modal"
   id="productoAdminModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="productoModalTitulo"
   aria-hidden="true"
 >
 
 
-  <div class="producto-modal-card">
+  <div class="producto-modal-card" tabindex="-1">
 
 
     <div class="producto-modal-header">
@@ -3163,6 +3221,8 @@
             id="productoCodigo"
             type="text"
             placeholder="COD-001"
+            maxlength="40"
+            autocomplete="off"
             required
           >
 
@@ -3182,6 +3242,8 @@
             id="productoNombre"
             type="text"
             placeholder="SIXTEEN Signature Piece"
+            maxlength="120"
+            autocomplete="off"
             required
           >
 
@@ -3229,6 +3291,7 @@
             id="productoPrecio"
             type="number"
             min="0"
+            max="999999.99"
             step="0.01"
             required
           >
@@ -3249,6 +3312,7 @@
             id="productoPrecioAnterior"
             type="number"
             min="0"
+            max="999999.99"
             step="0.01"
           >
 
@@ -3286,6 +3350,7 @@
             id="productoStock"
             type="number"
             min="0"
+            max="999999"
             step="1"
             value="0"
             required
@@ -3307,6 +3372,8 @@
             id="productoColor"
             type="text"
             placeholder="Negro / Dorado"
+            maxlength="160"
+            autocomplete="off"
           >
 
         </div>
@@ -3325,6 +3392,8 @@
             id="productoTallas"
             type="text"
             placeholder="38, 39, 40, 41, 42"
+            maxlength="250"
+            autocomplete="off"
           >
 
         </div>
@@ -3419,6 +3488,8 @@
             id="productoModelo3d"
             type="url"
             placeholder="https://..."
+            maxlength="500"
+            inputmode="url"
           >
 
         </div>
@@ -3433,8 +3504,12 @@
 
 
           <label>
-            FOTO DEL PRODUCTO
+            FOTOS DEL PRODUCTO
           </label>
+
+          <small class="producto-fotos-ayuda">
+            Puedes cargar hasta 6 fotos. La primera será la imagen principal. Al seleccionar nuevas fotos reemplazas el grupo actual.
+          </small>
 
 
           <div class="admin-upload-box">
@@ -3479,6 +3554,7 @@
                 type="file"
                 id="productoImagenArchivo"
                 accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                multiple
                 hidden
               >
 
@@ -3488,7 +3564,7 @@
                 class="admin-upload-select-btn"
                 id="seleccionarImagenBtn"
               >
-                SELECCIONAR FOTO
+                SELECCIONAR FOTOS
               </button>
 
 
@@ -3498,13 +3574,19 @@
                 id="quitarImagenBtn"
                 style="display:none;"
               >
-                QUITAR FOTO
+                QUITAR FOTOS
               </button>
 
 
               <p id="productoImagenNombre">
-                JPG, JPEG, PNG o WEBP · máximo 5 MB
+                JPG, JPEG, PNG o WEBP · máximo 5 MB por foto
               </p>
+
+              <div
+                class="producto-imagenes-galeria"
+                id="productoImagenesGaleria"
+                aria-live="polite"
+              ></div>
 
 
             </div>
@@ -3540,6 +3622,7 @@
           <textarea
             id="productoDescripcion"
             placeholder="Descripción completa..."
+            maxlength="1500"
           ></textarea>
 
         </div>
@@ -3557,6 +3640,7 @@
           <textarea
             id="productoMateriales"
             placeholder="Materiales y composición..."
+            maxlength="800"
           ></textarea>
 
         </div>
@@ -3574,6 +3658,7 @@
           <textarea
             id="productoDetalles"
             placeholder="Detalle 1; Detalle 2; Detalle 3"
+            maxlength="1500"
           ></textarea>
 
         </div>
@@ -5546,7 +5631,7 @@
 
 <script src="../sri-core.js?v=3800"></script>
 
-<script src="./dashboard.js?v=12000"></script>
+<script src="./dashboard.js?v=13000"></script>
 
 <script src="./analitica.js?v=2800"></script>
 
