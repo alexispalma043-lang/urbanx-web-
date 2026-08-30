@@ -357,6 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const clienteModalProvincia = document.getElementById("clienteModalProvincia");
   const clienteModalCiudad = document.getElementById("clienteModalCiudad");
   const clienteModalDireccion = document.getElementById("clienteModalDireccion");
+  const clienteModalTipo = document.getElementById("clienteModalTipo");
   const clienteModalUltimoPedido = document.getElementById("clienteModalUltimoPedido");
   const clienteModalUltimaCompra = document.getElementById("clienteModalUltimaCompra");
   const clienteModalEstado = document.getElementById("clienteModalEstado");
@@ -380,6 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let clientesActuales = [];
   let clientesFiltrados = [];
   let clienteActualClave = null;
+  let focoAntesClienteModal = null;
 
   let cuponesActuales = [];
   let cuponesFiltrados = [];
@@ -5871,6 +5873,9 @@ document.addEventListener("DOMContentLoaded", function () {
               ultimoPedido:
                 null,
 
+              ultimaCompraValida:
+                null,
+
               ultimaEntrega:
                 {}
             }
@@ -5983,6 +5988,10 @@ document.addEventListener("DOMContentLoaded", function () {
             perfil.comprasValidas =
               pedidosValidos.length;
 
+            perfil.ultimaCompraValida =
+              pedidosValidos[0] ||
+              null;
+
             perfil.totalComprado =
               pedidosValidos.reduce(
                 function (
@@ -6036,6 +6045,16 @@ document.addEventListener("DOMContentLoaded", function () {
     pedido
   ) {
 
+    // El UID es la identidad más estable para pedidos hechos por
+    // una misma sesión/cuenta. Evita separar al mismo cliente si
+    // luego actualiza cédula, correo o teléfono.
+    if (pedido.clienteUid) {
+      return "uid:" +
+        String(
+          pedido.clienteUid
+        ).trim();
+    }
+
     const cliente =
       pedido.cliente || {};
 
@@ -6076,11 +6095,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (telefono) {
       return "tel:" +
         telefono;
-    }
-
-    if (pedido.clienteUid) {
-      return "uid:" +
-        pedido.clienteUid;
     }
 
     const nombre =
@@ -6137,6 +6151,20 @@ document.addEventListener("DOMContentLoaded", function () {
             tipo === "recurrente" &&
             cliente.pedidosNoCancelados <
             2
+          ) {
+            return false;
+          }
+
+          if (
+            tipo === "con_compra" &&
+            cliente.comprasValidas < 1
+          ) {
+            return false;
+          }
+
+          if (
+            tipo === "sin_compra" &&
+            cliente.comprasValidas > 0
           ) {
             return false;
           }
@@ -6214,6 +6242,56 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+  function tipoClienteTexto(
+    cliente
+  ) {
+
+    if (
+      cliente.pedidosNoCancelados >=
+      2
+    ) {
+      return "CLIENTE RECURRENTE";
+    }
+
+    if (
+      cliente.comprasValidas > 0
+    ) {
+      return "CLIENTE";
+    }
+
+    return "SIN COMPRA VÁLIDA";
+  }
+
+
+  function crearFilaVacia(
+    tbody,
+    columnas,
+    mensaje
+  ) {
+
+    if (!tbody) {
+      return;
+    }
+
+    tbody.replaceChildren();
+
+    const fila =
+      document.createElement("tr");
+
+    const celda =
+      document.createElement("td");
+
+    celda.colSpan =
+      columnas;
+
+    celda.textContent =
+      mensaje;
+
+    fila.appendChild(celda);
+    tbody.appendChild(fila);
+  }
+
+
   function renderClientes(
     clientes
   ) {
@@ -6224,19 +6302,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!clientes.length) {
 
-      clientesAdminBody.innerHTML = `
-        <tr>
-          <td colspan="7">
-            No existen clientes que coincidan con los filtros.
-          </td>
-        </tr>
-      `;
+      crearFilaVacia(
+        clientesAdminBody,
+        7,
+        "No existen clientes que coincidan con los filtros."
+      );
 
       return;
     }
 
-    clientesAdminBody.innerHTML =
-      "";
+    clientesAdminBody.replaceChildren();
 
     clientes.forEach(
       function (cliente) {
@@ -6244,109 +6319,225 @@ document.addEventListener("DOMContentLoaded", function () {
         const ultimo =
           cliente.ultimoPedido;
 
+        const ultimaCompra =
+          cliente.ultimaCompraValida;
+
         const fila =
           document.createElement(
             "tr"
           );
 
-        fila.innerHTML = `
-          <td>
+        const celdaCliente =
+          document.createElement("td");
 
-            <strong>
-              ${escapar(
-                cliente.nombre ||
-                "Cliente SIXTEEN"
-              )}
-            </strong>
+        const nombre =
+          document.createElement("strong");
 
-            <small class="admin-table-secondary">
-              ${
-                cliente.pedidosNoCancelados >=
-                2
-                  ? "CLIENTE RECURRENTE"
-                  : "CLIENTE"
-              }
-            </small>
+        nombre.textContent =
+          cliente.nombre ||
+          "Cliente SIXTEEN";
 
-          </td>
+        const tipo =
+          document.createElement("small");
 
-          <td>
-            ${escapar(
-              cliente.identificacion ||
-              "-"
-            )}
-          </td>
+        tipo.className =
+          "admin-table-secondary";
 
-          <td>
+        tipo.textContent =
+          tipoClienteTexto(
+            cliente
+          );
 
-            <strong class="cliente-contacto-principal">
-              ${escapar(
-                cliente.email ||
-                cliente.telefono ||
-                "-"
-              )}
-            </strong>
+        celdaCliente.append(
+          nombre,
+          tipo
+        );
 
-            ${
-              cliente.email &&
-              cliente.telefono
-                ? `
-                  <small class="admin-table-secondary">
-                    ${escapar(
-                      cliente.telefono
-                    )}
-                  </small>
-                `
-                : ""
-            }
 
-          </td>
+        const celdaIdentificacion =
+          document.createElement("td");
 
-          <td>
-            <strong>
-              ${cliente.totalPedidos}
-            </strong>
-          </td>
+        celdaIdentificacion.textContent =
+          cliente.identificacion ||
+          "-";
 
-          <td>
-            <strong class="cliente-total-comprado">
-              ${dinero(
-                cliente.totalComprado
-              )}
-            </strong>
-          </td>
 
-          <td>
+        const celdaContacto =
+          document.createElement("td");
 
-            ${escapar(
+        const contactoPrincipal =
+          document.createElement("strong");
+
+        contactoPrincipal.className =
+          "cliente-contacto-principal";
+
+        contactoPrincipal.textContent =
+          cliente.email ||
+          cliente.telefono ||
+          "-";
+
+        celdaContacto.appendChild(
+          contactoPrincipal
+        );
+
+        if (
+          cliente.email &&
+          cliente.telefono
+        ) {
+
+          const telefono =
+            document.createElement("small");
+
+          telefono.className =
+            "admin-table-secondary";
+
+          telefono.textContent =
+            cliente.telefono;
+
+          celdaContacto.appendChild(
+            telefono
+          );
+        }
+
+
+        const celdaPedidos =
+          document.createElement("td");
+
+        const pedidosTotal =
+          document.createElement("strong");
+
+        pedidosTotal.textContent =
+          String(
+            cliente.totalPedidos
+          );
+
+        const pedidosActivos =
+          document.createElement("small");
+
+        pedidosActivos.className =
+          "admin-table-secondary";
+
+        pedidosActivos.textContent =
+          cliente.pedidosNoCancelados +
+          (
+            cliente.pedidosNoCancelados === 1
+              ? " no cancelado"
+              : " no cancelados"
+          );
+
+        celdaPedidos.append(
+          pedidosTotal,
+          pedidosActivos
+        );
+
+
+        const celdaTotal =
+          document.createElement("td");
+
+        const total =
+          document.createElement("strong");
+
+        total.className =
+          "cliente-total-comprado";
+
+        total.textContent =
+          dinero(
+            cliente.totalComprado
+          );
+
+        celdaTotal.appendChild(
+          total
+        );
+
+
+        const celdaUltimaCompra =
+          document.createElement("td");
+
+        if (ultimaCompra) {
+
+          const fecha =
+            document.createTextNode(
               fechaLegible(
-                ultimo?.creadoEn
+                ultimaCompra.creadoEn
               )
-            )}
+            );
 
-            <small class="admin-table-secondary">
-              ${escapar(
-                ultimo?.numero ||
-                ""
-              )}
-            </small>
+          const pedidoCompra =
+            document.createElement("small");
 
-          </td>
+          pedidoCompra.className =
+            "admin-table-secondary";
 
-          <td>
+          pedidoCompra.textContent =
+            ultimaCompra.numero ||
+            ultimaCompra.id ||
+            "";
 
-            <button
-              type="button"
-              class="admin-view-btn"
-              data-cliente-clave="${escaparAtributo(
-                cliente.clave
-              )}"
-            >
-              VER PERFIL
-            </button>
+          celdaUltimaCompra.append(
+            fecha,
+            pedidoCompra
+          );
 
-          </td>
-        `;
+        } else {
+
+          celdaUltimaCompra.textContent =
+            "Sin compra válida";
+
+          if (ultimo) {
+
+            const ultimoPedido =
+              document.createElement("small");
+
+            ultimoPedido.className =
+              "admin-table-secondary";
+
+            ultimoPedido.textContent =
+              "Último pedido: " +
+              (
+                ultimo.numero ||
+                ultimo.id ||
+                "-"
+              );
+
+            celdaUltimaCompra.appendChild(
+              ultimoPedido
+            );
+          }
+        }
+
+
+        const celdaAccion =
+          document.createElement("td");
+
+        const boton =
+          document.createElement("button");
+
+        boton.type =
+          "button";
+
+        boton.className =
+          "admin-view-btn";
+
+        boton.dataset.clienteClave =
+          cliente.clave;
+
+        boton.textContent =
+          "VER PERFIL";
+
+        celdaAccion.appendChild(
+          boton
+        );
+
+
+        fila.append(
+          celdaCliente,
+          celdaIdentificacion,
+          celdaContacto,
+          celdaPedidos,
+          celdaTotal,
+          celdaUltimaCompra,
+          celdaAccion
+        );
 
         clientesAdminBody.appendChild(
           fila
@@ -6563,6 +6754,9 @@ document.addEventListener("DOMContentLoaded", function () {
     clienteActualClave =
       clave;
 
+    focoAntesClienteModal =
+      document.activeElement;
+
     const ultimoPedido =
       cliente.ultimoPedido;
 
@@ -6613,15 +6807,24 @@ document.addEventListener("DOMContentLoaded", function () {
       entrega.direccion ||
       "-";
 
+    if (clienteModalTipo) {
+      clienteModalTipo.textContent =
+        tipoClienteTexto(
+          cliente
+        );
+    }
+
     clienteModalUltimoPedido.textContent =
       ultimoPedido?.numero ||
       ultimoPedido?.id ||
       "-";
 
     clienteModalUltimaCompra.textContent =
-      fechaLegible(
-        ultimoPedido?.creadoEn
-      );
+      cliente.ultimaCompraValida
+        ? fechaLegible(
+            cliente.ultimaCompraValida.creadoEn
+          )
+        : "-";
 
     clienteModalEstado.textContent =
       ultimoPedido?.estado ||
@@ -6641,6 +6844,16 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     actualizarBloqueoBody();
+
+    requestAnimationFrame(
+      function () {
+        clienteAdminModal
+          .querySelector(
+            ".cliente-modal-card"
+          )
+          ?.focus();
+      }
+    );
   }
 
 
@@ -6654,19 +6867,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!cliente.pedidos.length) {
 
-      clienteHistorialBody.innerHTML = `
-        <tr>
-          <td colspan="6">
-            Sin pedidos registrados.
-          </td>
-        </tr>
-      `;
+      crearFilaVacia(
+        clienteHistorialBody,
+        7,
+        "Sin pedidos registrados."
+      );
 
       return;
     }
 
-    clienteHistorialBody.innerHTML =
-      "";
+    clienteHistorialBody.replaceChildren();
 
     cliente.pedidos.forEach(
       function (pedido) {
@@ -6681,67 +6891,122 @@ document.addEventListener("DOMContentLoaded", function () {
             "tr"
           );
 
-        fila.innerHTML = `
-          <td>
-            <strong class="admin-code">
-              ${escapar(
-                pedido.numero ||
-                pedido.id ||
-                "-"
-              )}
-            </strong>
-          </td>
 
-          <td>
-            ${escapar(
-              fechaLegible(
-                pedido.creadoEn
-              )
-            )}
-          </td>
+        const celdaPedido =
+          document.createElement("td");
 
-          <td>
-            <span
-              class="
-                pedido-estado-badge
-                ${claseEstadoPedido(
-                  pedido.estado
-                )}
-              "
-            >
-              ${escapar(
-                pedido.estado ||
-                "Pendiente"
-              )}
-            </span>
-          </td>
+        const codigo =
+          document.createElement("strong");
 
-          <td>
-            ${escapar(
-              nombreMetodoPago(
-                pago.metodo
-              )
-            )}
-          </td>
+        codigo.className =
+          "admin-code";
 
-          <td>
-            <strong>
-              ${dinero(
-                pedido.resumen?.total
-              )}
-            </strong>
-          </td>
+        codigo.textContent =
+          pedido.numero ||
+          pedido.id ||
+          "-";
 
-          <td>
-            <button
-              type="button"
-              class="admin-view-btn"
-              data-cliente-pedido-id="${pedido.id}"
-            >
-              VER PEDIDO
-            </button>
-          </td>
-        `;
+        celdaPedido.appendChild(
+          codigo
+        );
+
+
+        const celdaFecha =
+          document.createElement("td");
+
+        celdaFecha.textContent =
+          fechaLegible(
+            pedido.creadoEn
+          );
+
+
+        const celdaEstado =
+          document.createElement("td");
+
+        const estado =
+          document.createElement("span");
+
+        estado.className =
+          "pedido-estado-badge " +
+          claseEstadoPedido(
+            pedido.estado
+          );
+
+        estado.textContent =
+          pedido.estado ||
+          "Pendiente";
+
+        celdaEstado.appendChild(
+          estado
+        );
+
+
+        const celdaPago =
+          document.createElement("td");
+
+        celdaPago.textContent =
+          nombreMetodoPago(
+            pago.metodo
+          );
+
+
+        const celdaEstadoPago =
+          document.createElement("td");
+
+        celdaEstadoPago.textContent =
+          pago.estado ||
+          pedido.estadoPago ||
+          "Pendiente";
+
+
+        const celdaTotal =
+          document.createElement("td");
+
+        const total =
+          document.createElement("strong");
+
+        total.textContent =
+          dinero(
+            pedido.resumen?.total
+          );
+
+        celdaTotal.appendChild(
+          total
+        );
+
+
+        const celdaAccion =
+          document.createElement("td");
+
+        const boton =
+          document.createElement("button");
+
+        boton.type =
+          "button";
+
+        boton.className =
+          "admin-view-btn";
+
+        boton.dataset.clientePedidoId =
+          pedido.id;
+
+        boton.textContent =
+          "VER PEDIDO";
+
+        celdaAccion.appendChild(
+          boton
+        );
+
+
+        fila.append(
+          celdaPedido,
+          celdaFecha,
+          celdaEstado,
+          celdaPago,
+          celdaEstadoPago,
+          celdaTotal,
+          celdaAccion
+        );
 
         clienteHistorialBody.appendChild(
           fila
@@ -6802,6 +7067,16 @@ document.addEventListener("DOMContentLoaded", function () {
       null;
 
     actualizarBloqueoBody();
+
+    if (
+      focoAntesClienteModal &&
+      typeof focoAntesClienteModal.focus === "function"
+    ) {
+      focoAntesClienteModal.focus();
+    }
+
+    focoAntesClienteModal =
+      null;
   }
 
 
@@ -6822,6 +7097,70 @@ document.addEventListener("DOMContentLoaded", function () {
           clienteAdminModal
         ) {
           cerrarCliente();
+        }
+      }
+    );
+
+
+  clienteAdminModal
+    ?.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (event.key === "Escape") {
+          event.preventDefault();
+          cerrarCliente();
+          return;
+        }
+
+        if (event.key !== "Tab") {
+          return;
+        }
+
+        const focusables =
+          Array.from(
+            clienteAdminModal.querySelectorAll(
+              'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+            )
+          ).filter(
+            function (elemento) {
+              return (
+                !elemento.hidden &&
+                elemento.offsetParent !== null
+              );
+            }
+          );
+
+        if (!focusables.length) {
+          event.preventDefault();
+          clienteAdminModal
+            .querySelector(
+              ".cliente-modal-card"
+            )
+            ?.focus();
+          return;
+        }
+
+        const primero =
+          focusables[0];
+
+        const ultimo =
+          focusables[
+            focusables.length - 1
+          ];
+
+        if (
+          event.shiftKey &&
+          document.activeElement === primero
+        ) {
+          event.preventDefault();
+          ultimo.focus();
+        } else if (
+          !event.shiftKey &&
+          document.activeElement === ultimo
+        ) {
+          event.preventDefault();
+          primero.focus();
         }
       }
     );
@@ -6894,9 +7233,11 @@ document.addEventListener("DOMContentLoaded", function () {
           cliente.ultimoPedido?.numero ||
             cliente.ultimoPedido?.id ||
             "",
-          fechaLegible(
-            cliente.ultimoPedido?.creadoEn
-          ),
+          cliente.ultimaCompraValida
+            ? fechaLegible(
+                cliente.ultimaCompraValida.creadoEn
+              )
+            : "",
           entrega.provincia || "",
           entrega.ciudad || "",
           entrega.direccion || ""

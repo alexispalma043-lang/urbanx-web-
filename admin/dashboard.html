@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=14000"
+    href="./admin.css?v=15000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -2749,6 +2749,14 @@
                 Recurrentes
               </option>
 
+              <option value="con_compra">
+                Con compra válida
+              </option>
+
+              <option value="sin_compra">
+                Sin compra válida
+              </option>
+
             </select>
 
           </div>
@@ -2794,6 +2802,7 @@
         <p
           class="clientes-resultado"
           id="clientesResultadoTexto"
+          aria-live="polite"
         >
           Mostrando 0 clientes.
         </p>
@@ -4093,10 +4102,13 @@
 <div
   class="cliente-modal"
   id="clienteAdminModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="clienteModalNombre"
   aria-hidden="true"
 >
 
-  <div class="cliente-modal-card">
+  <div class="cliente-modal-card" tabindex="-1">
 
     <div class="pedido-modal-header">
 
@@ -4170,7 +4182,7 @@
       <article class="cliente-info-card">
 
         <p class="admin-eyebrow">
-          ÚLTIMA ENTREGA
+          ÚLTIMA DIRECCIÓN
         </p>
 
         <p>
@@ -4197,17 +4209,22 @@
         </p>
 
         <p>
+          <strong>Tipo de cliente:</strong>
+          <span id="clienteModalTipo">-</span>
+        </p>
+
+        <p>
           <strong>Último pedido:</strong>
           <span id="clienteModalUltimoPedido">-</span>
         </p>
 
         <p>
-          <strong>Última compra:</strong>
+          <strong>Última compra válida:</strong>
           <span id="clienteModalUltimaCompra">-</span>
         </p>
 
         <p>
-          <strong>Estado:</strong>
+          <strong>Estado del último pedido:</strong>
           <span id="clienteModalEstado">-</span>
         </p>
 
@@ -4242,6 +4259,7 @@
               <th>FECHA</th>
               <th>ESTADO</th>
               <th>PAGO</th>
+              <th>ESTADO PAGO</th>
               <th>TOTAL</th>
               <th>ACCIÓN</th>
             </tr>
@@ -4251,7 +4269,7 @@
           <tbody id="clienteHistorialBody">
 
             <tr>
-              <td colspan="6">
+              <td colspan="7">
                 Sin pedidos.
               </td>
             </tr>
@@ -5670,7 +5688,7 @@
 
 <script src="../sri-core.js?v=3800"></script>
 
-<script src="./dashboard.js?v=14000"></script>
+<script src="./dashboard.js?v=15000"></script>
 
 <script src="./analitica.js?v=2800"></script>
 

@@ -7369,3 +7369,30 @@ td {
     padding-right: 16px;
   }
 }
+
+
+/* =========================================================
+   SIXTEEN · PASO 15
+   CLIENTES · AJUSTES DE CRM Y ACCESIBILIDAD
+========================================================= */
+
+.cliente-modal-card:focus {
+  outline: none;
+}
+
+.cliente-modal-card:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.clientes-toolbar input:focus-visible,
+.clientes-toolbar select:focus-visible,
+.cliente-modal button:focus-visible,
+.cliente-modal a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.clientes-resultado[aria-live="polite"] {
+  min-height: 1.4em;
+}
