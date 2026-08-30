@@ -1221,7 +1221,7 @@ body.is-authenticated .cuenta-main {
 .modal-kpis {
   display: grid;
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    repeat(5, minmax(0, 1fr));
   gap: 1px;
   background: var(--gold-line);
 }
@@ -1369,14 +1369,58 @@ body.is-authenticated .cuenta-main {
 @media (max-width: 760px) {
 
   .cuenta-header {
-    position: static;
-    align-items: flex-start;
-    flex-direction: column;
+    min-height: 68px;
+    position: sticky;
+    top: 0;
+    flex-direction: row;
+    align-items: center;
+    padding-inline: 14px;
+  }
+
+  .cuenta-menu-btn {
+    display: inline-grid;
   }
 
   .cuenta-header nav {
+    position: fixed;
+    top: var(--cuenta-menu-top, 68px);
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-height: calc(100vh - var(--cuenta-menu-top, 68px) - 16px);
+    overflow-y: auto;
+    padding: 14px;
+    border: 1px solid var(--gold-line);
+    background: rgba(5,5,5,.98);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+
+  .cuenta-header nav.activo {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .cuenta-header nav a,
+  .cuenta-header nav button {
     width: 100%;
-    justify-content: space-between;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
   }
 
   .cuenta-main {
@@ -2183,4 +2227,151 @@ body.is-authenticated .cuenta-main {
   .comprobante-actions button{
     flex:1
   }
+}
+
+
+/* =========================================================
+   PASO 7 · CUENTA · PRE-FINAL
+========================================================= */
+
+.cuenta-menu-btn {
+  width: 44px;
+  height: 44px;
+  display: none;
+  place-content: center;
+  gap: 4px;
+  padding: 0;
+  border: 1px solid var(--gold-line);
+  background: #090909;
+}
+
+.cuenta-menu-btn span {
+  width: 18px;
+  height: 1px;
+  display: block;
+  background: var(--gold-light);
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+}
+
+.auth-tabs button:focus-visible,
+.cuenta-header nav a:focus-visible,
+.cuenta-header nav button:focus-visible,
+.modal-close:focus-visible {
+  position: relative;
+  z-index: 2;
+}
+
+.account-footer {
+  border-top: 1px solid var(--gold-line);
+  background: #030303;
+  padding: 34px clamp(18px, 5vw, 70px) 20px;
+}
+
+.account-footer-grid {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.35fr repeat(3, minmax(0, 1fr));
+  gap: 34px;
+}
+
+.account-footer-grid > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.account-footer-grid > div > strong {
+  color: var(--gold-light);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+}
+
+.account-footer-grid a {
+  color: #89837a;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .55px;
+  transition: color .2s ease;
+}
+
+.account-footer-grid a:hover {
+  color: var(--gold-light);
+}
+
+.account-footer-brand strong {
+  color: var(--white) !important;
+  font-size: 18px !important;
+  letter-spacing: 3px !important;
+}
+
+.account-footer-brand span {
+  color: var(--gold);
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.account-footer-brand p {
+  margin: 5px 0 0;
+  color: #5f5a54;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.account-footer-bottom {
+  width: min(1280px, 100%);
+  margin: 28px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #5f5a54;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 860px) {
+  .account-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .account-footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-footer-bottom {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 760px) {
+  .cuenta-menu-btn {
+    display: inline-grid;
+  }
+}
+
+
+.register-legal {
+  margin: 12px 0 0;
+  color: #706a63;
+  font-size: 7px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.register-legal a {
+  color: var(--gold-light);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }

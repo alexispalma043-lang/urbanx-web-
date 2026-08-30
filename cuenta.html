@@ -19,7 +19,7 @@
 
   <link
     rel="stylesheet"
-    href="./cuenta.css?v=2700"
+    href="./cuenta.css?v=7000"
   >
 
   <meta name="robots" content="noindex,nofollow,noarchive">
@@ -93,7 +93,21 @@
   </a>
 
 
-  <nav>
+  <button
+    type="button"
+    class="cuenta-menu-btn"
+    id="menuBtnCuenta"
+    aria-controls="cuentaNav"
+    aria-expanded="false"
+    aria-label="Abrir menú de navegación"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+
+  <nav id="cuentaNav">
 
     <a href="./index.html">
       TIENDA
@@ -273,12 +287,15 @@
       </div>
 
 
-      <div class="auth-tabs">
+      <div class="auth-tabs" role="tablist" aria-label="Acceso a la cuenta">
 
         <button
           type="button"
           id="tabLogin"
           class="activo"
+          role="tab"
+          aria-selected="true"
+          aria-controls="loginForm"
         >
           INICIAR SESIÓN
         </button>
@@ -286,6 +303,9 @@
         <button
           type="button"
           id="tabRegistro"
+          role="tab"
+          aria-selected="false"
+          aria-controls="registerForm"
         >
           CREAR CUENTA
         </button>
@@ -298,6 +318,8 @@
       <form
         id="loginForm"
         class="auth-form activo"
+        role="tabpanel"
+        aria-labelledby="tabLogin"
       >
 
         <div class="field">
@@ -310,6 +332,7 @@
             type="email"
             id="loginEmail"
             autocomplete="email"
+            maxlength="160"
             placeholder="cliente@correo.com"
             required
           >
@@ -328,6 +351,7 @@
             id="loginPassword"
             autocomplete="current-password"
             minlength="6"
+            maxlength="128"
             placeholder="••••••••"
             required
           >
@@ -360,6 +384,8 @@
       <form
         id="registerForm"
         class="auth-form"
+        role="tabpanel"
+        aria-labelledby="tabRegistro"
       >
 
         <div class="form-grid">
@@ -373,6 +399,8 @@
             <input
               type="text"
               id="regNombres"
+              autocomplete="given-name"
+              maxlength="100"
               required
             >
 
@@ -388,6 +416,8 @@
             <input
               type="text"
               id="regApellidos"
+              autocomplete="family-name"
+              maxlength="100"
               required
             >
 
@@ -404,6 +434,7 @@
               type="email"
               id="regEmail"
               autocomplete="email"
+              maxlength="160"
               required
             >
 
@@ -421,6 +452,7 @@
               id="regPassword"
               autocomplete="new-password"
               minlength="6"
+              maxlength="128"
               required
             >
 
@@ -438,6 +470,7 @@
               id="regPassword2"
               autocomplete="new-password"
               minlength="6"
+              maxlength="128"
               required
             >
 
@@ -453,6 +486,13 @@
         >
           CREAR MI CUENTA
         </button>
+
+        <p class="register-legal">
+          Al crear tu cuenta declaras haber leído nuestros
+          <a href="./politicas.html#terminos">Términos y condiciones</a>
+          y la
+          <a href="./politicas.html#privacidad">Política de privacidad</a>.
+        </p>
 
       </form>
 
@@ -673,6 +713,7 @@
       <div
         class="notifications-list"
         id="notificationsList"
+        aria-live="polite"
       >
 
         <div class="empty notifications-empty">
@@ -760,6 +801,8 @@
                 <input
                   type="text"
                   id="profileNombres"
+                  autocomplete="given-name"
+                  maxlength="100"
                   required
                 >
 
@@ -775,6 +818,8 @@
                 <input
                   type="text"
                   id="profileApellidos"
+                  autocomplete="family-name"
+                  maxlength="100"
                   required
                 >
 
@@ -791,6 +836,10 @@
                   type="text"
                   id="profileId"
                   inputmode="numeric"
+                  autocomplete="off"
+                  maxlength="13"
+                  pattern="(?:[0-9]{10}|[0-9]{13})"
+                  title="Ingresa una cédula de 10 dígitos o un RUC de 13 dígitos"
                 >
 
               </div>
@@ -805,6 +854,9 @@
                 <input
                   type="tel"
                   id="profileTelefono"
+                  inputmode="tel"
+                  autocomplete="tel"
+                  maxlength="15"
                 >
 
               </div>
@@ -819,6 +871,8 @@
                 <input
                   type="email"
                   id="profileEmail"
+                  autocomplete="email"
+                  maxlength="160"
                   disabled
                 >
 
@@ -899,6 +953,8 @@
                 <input
                   type="text"
                   id="profileCiudad"
+                  autocomplete="address-level2"
+                  maxlength="100"
                 >
 
               </div>
@@ -913,6 +969,8 @@
                 <input
                   type="text"
                   id="profileDireccion"
+                  autocomplete="street-address"
+                  maxlength="250"
                 >
 
               </div>
@@ -927,6 +985,7 @@
                 <textarea
                   id="profileReferencia"
                   rows="3"
+                  maxlength="300"
                 ></textarea>
 
               </div>
@@ -982,6 +1041,7 @@
           <select
             id="ordersFilter"
             class="mini-select"
+            aria-label="Filtrar pedidos por estado"
           >
 
             <option value="">
@@ -1020,6 +1080,7 @@
         <div
           class="orders-list"
           id="ordersList"
+          aria-live="polite"
         >
 
           <div class="empty">
@@ -1181,6 +1242,7 @@
       <div
         class="favorites-grid"
         id="favoritesList"
+        aria-live="polite"
       >
 
         <div class="empty favorites-empty">
@@ -1205,16 +1267,63 @@
 
 
 <!-- ======================================================
+     FOOTER SIXTEEN
+====================================================== -->
+
+<footer class="account-footer">
+  <div class="account-footer-grid">
+    <div class="account-footer-brand">
+      <strong>SIXTEEN</strong>
+      <span>URBAN LUXURY</span>
+      <p>STREET MEETS LUXURY.</p>
+    </div>
+
+    <div>
+      <strong>TIENDA</strong>
+      <a href="./index.html#productos">Productos</a>
+      <a href="./index.html#categorias">Categorías</a>
+      <a href="./carrito.html">Carrito</a>
+      <a href="./comparar.html">Comparar</a>
+    </div>
+
+    <div>
+      <strong>AYUDA</strong>
+      <a href="./politicas.html#envios">Envíos</a>
+      <a href="./politicas.html#cambios">Cambios y devoluciones</a>
+      <a href="./soporte.html#faq">Preguntas frecuentes</a>
+      <a href="./soporte.html">Contacto</a>
+    </div>
+
+    <div>
+      <strong>SIXTEEN</strong>
+      <a href="./index.html#sixteen">Nosotros</a>
+      <a href="./politicas.html#terminos">Términos y condiciones</a>
+      <a href="./politicas.html#privacidad">Política de privacidad</a>
+      <a href="../urbanx-3d/index.html">SIXTEEN Experience 3D</a>
+    </div>
+  </div>
+
+  <div class="account-footer-bottom">
+    <span>© 2026 SIXTEEN · URBAN LUXURY</span>
+    <span>THE STREET IS OUR RUNWAY.</span>
+  </div>
+</footer>
+
+
+<!-- ======================================================
      MODAL PEDIDO
 ====================================================== -->
 
 <div
   class="modal"
   id="orderModal"
+  role="dialog"
+  aria-modal="true"
   aria-hidden="true"
+  aria-labelledby="modalOrderNumber"
 >
 
-  <div class="modal-card">
+  <div class="modal-card" tabindex="-1">
 
 
     <div class="modal-header">
@@ -1236,6 +1345,7 @@
         type="button"
         id="closeOrderModal"
         class="modal-close"
+        aria-label="Cerrar detalle del pedido"
       >
         ✕
       </button>
@@ -1258,6 +1368,11 @@
       <article>
         <span>PAGO</span>
         <strong id="modalOrderPayment">-</strong>
+      </article>
+
+      <article>
+        <span>ESTADO PAGO</span>
+        <strong id="modalOrderPaymentStatus">-</strong>
       </article>
 
       <article>
@@ -1339,7 +1454,7 @@
 
 <script src="./ride.js?v=4000"></script>
 
-<script src="./cuenta.js?v=4000"></script>
+<script src="./cuenta.js?v=7000"></script>
 
 
 <script src="./pwa.js?v=2700"></script>

@@ -1,4 +1,4 @@
-const VERSION="sixteen-v16f6d-7";
+const VERSION="sixteen-v16f6d-8";
 const STATIC=`${VERSION}-static`;
 const RUNTIME=`${VERSION}-runtime`;
 const OFFLINE="./offline.html";

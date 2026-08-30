@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const welcomeEmail = $("welcomeEmail");
   const logoutBtn = $("logoutBtn");
   const logoutHeaderBtn = $("logoutHeaderBtn");
+  const menuBtnCuenta = $("menuBtnCuenta");
+  const cuentaNav = $("cuentaNav");
 
   const kpiPedidos = $("kpiPedidos");
   const kpiCompras = $("kpiCompras");
@@ -91,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const modalOrderDate = $("modalOrderDate");
   const modalOrderStatus = $("modalOrderStatus");
   const modalOrderPayment = $("modalOrderPayment");
+  const modalOrderPaymentStatus = $("modalOrderPaymentStatus");
   const modalOrderTotal = $("modalOrderTotal");
   const modalProducts = $("modalProducts");
   const modalAddress = $("modalAddress");
@@ -108,10 +111,41 @@ document.addEventListener("DOMContentLoaded", function () {
   let unsubscribeFavorites = null;
   let unsubscribeNotifications = null;
   let toastTimer = null;
+  let lastModalFocus = null;
 
   const VALID_SALE_STATES = new Set([
     "Confirmado", "En preparación", "Enviado", "Entregado"
   ]);
+
+  function syncAccountMenuPosition() {
+    const header = document.querySelector(".cuenta-header");
+    if (!header) return;
+    const bottom = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+    document.documentElement.style.setProperty("--cuenta-menu-top", bottom + "px");
+  }
+
+  function closeAccountMenu() {
+    cuentaNav?.classList.remove("activo");
+    menuBtnCuenta?.setAttribute("aria-expanded", "false");
+  }
+
+  menuBtnCuenta?.addEventListener("click", function () {
+    syncAccountMenuPosition();
+    const open = cuentaNav?.classList.toggle("activo") === true;
+    menuBtnCuenta.setAttribute("aria-expanded", String(open));
+  });
+
+  cuentaNav?.addEventListener("click", function (event) {
+    if (event.target.closest("a, button")) closeAccountMenu();
+  });
+
+  window.addEventListener("resize", function () {
+    syncAccountMenuPosition();
+    if (window.innerWidth > 760) closeAccountMenu();
+  });
+
+  window.addEventListener("scroll", syncAccountMenuPosition, { passive: true });
+  syncAccountMenuPosition();
 
   function showView(view) {
 
@@ -130,17 +164,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   auth.onAuthStateChanged(async function (user) {
     currentUser = user || null;
+    currentProfile = null;
     stopOrders();
     stopComprobantes();
     stopFavorites();
     stopNotifications();
+    closeAccountMenu();
 
     document.body.classList.toggle(
       "is-authenticated",
-      Boolean(
-        user &&
-        !user.isAnonymous
-      )
+      Boolean(user && !user.isAnonymous)
     );
 
     showView("loading");
@@ -152,25 +185,35 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    guestNote.hidden = true;
+    listenOrders(user.uid);
+    listenComprobantes(user.uid);
+    listenFavorites(user.uid);
+    listenNotifications(user.uid);
+
     try {
       await loadProfile(user);
-      renderUser(user);
-      listenOrders(user.uid);
-      listenComprobantes(user.uid);
-      listenFavorites(user.uid);
-      listenNotifications(user.uid);
-
-      showView("customer");
-
     } catch (error) {
-      console.error("Cuenta:", error);
-
-      showView("customer");
-
-      showToast(
-        "No fue posible cargar todos los datos."
-      );
+      console.error("Perfil de cuenta:", error);
+      const split = splitName(user.displayName);
+      currentProfile = {
+        uid: user.uid,
+        nombres: split.nombres,
+        apellidos: split.apellidos,
+        email: user.email || "",
+        identificacion: "",
+        telefono: "",
+        provincia: "",
+        ciudad: "",
+        direccion: "",
+        referencia: ""
+      };
+      renderProfile();
+      showToast("Tu sesión está activa, pero el perfil no pudo sincronizarse.");
     }
+
+    renderUser(user);
+    showView("customer");
   });
 
   tabLogin.addEventListener("click", () => showTab("login"));
@@ -180,6 +223,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const login = tab === "login";
     tabLogin.classList.toggle("activo", login);
     tabRegistro.classList.toggle("activo", !login);
+    tabLogin.setAttribute("aria-selected", String(login));
+    tabRegistro.setAttribute("aria-selected", String(!login));
+    tabLogin.tabIndex = login ? 0 : -1;
+    tabRegistro.tabIndex = login ? -1 : 0;
     loginForm.classList.toggle("activo", login);
     registerForm.classList.toggle("activo", !login);
     setMessage(authMessage, "");
@@ -214,6 +261,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = normalizeEmail(regEmail.value);
     const password = regPassword.value;
 
+    if (!names || !surnames) {
+      setMessage(authMessage, "Escribe tus nombres y apellidos.", false);
+      return;
+    }
+
+    if (!email || email.length > 160) {
+      setMessage(authMessage, "Ingresa un correo electrónico válido.", false);
+      return;
+    }
+
     if (password !== regPassword2.value) {
       setMessage(authMessage, "Las contraseñas no coinciden.", false);
       return;
@@ -244,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
         displayName: `${names} ${surnames}`.trim()
       });
 
-      await db.collection("cuentas").doc(user.uid).set({
+      const accountData = {
         uid: user.uid,
         nombres: names,
         apellidos: surnames,
@@ -258,7 +315,21 @@ document.addEventListener("DOMContentLoaded", function () {
         activo: true,
         creadoEn: FieldValue.serverTimestamp(),
         actualizadoEn: FieldValue.serverTimestamp()
-      }, { merge: true });
+      };
+
+      await db.collection("cuentas").doc(user.uid).set(accountData, { merge: true });
+
+      currentUser = user;
+      currentProfile = { ...accountData, uid: user.uid };
+      document.body.classList.add("is-authenticated");
+      guestNote.hidden = true;
+      renderProfile();
+      renderUser(user);
+      listenOrders(user.uid);
+      listenComprobantes(user.uid);
+      listenFavorites(user.uid);
+      listenNotifications(user.uid);
+      showView("customer");
 
       setMessage(authMessage, "Cuenta creada correctamente.", true);
       showToast("Bienvenido a SIXTEEN.");
@@ -351,6 +422,28 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     if (!currentUser || currentUser.isAnonymous) return;
 
+    const nombres = clean(profileNombres.value);
+    const apellidos = clean(profileApellidos.value);
+    const identificacion = profileId.value.replace(/\D/g, "").slice(0, 13);
+    const telefono = profileTelefono.value.replace(/\D/g, "").slice(0, 15);
+
+    if (!nombres || !apellidos) {
+      setMessage(profileMessage, "Nombres y apellidos son obligatorios.", false);
+      return;
+    }
+
+    if (identificacion && ![10, 13].includes(identificacion.length)) {
+      setMessage(profileMessage, "La identificación debe tener 10 o 13 dígitos.", false);
+      profileId.focus();
+      return;
+    }
+
+    if (telefono && telefono.length < 7) {
+      setMessage(profileMessage, "Revisa el número de teléfono.", false);
+      profileTelefono.focus();
+      return;
+    }
+
     saveProfileBtn.disabled = true;
     saveProfileBtn.textContent = "GUARDANDO...";
     setMessage(profileMessage, "Actualizando perfil...", true);
@@ -358,15 +451,15 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const data = {
         uid: currentUser.uid,
-        nombres: clean(profileNombres.value),
-        apellidos: clean(profileApellidos.value),
-        email: currentUser.email || "",
-        identificacion: profileId.value.replace(/\D/g, "").slice(0, 13),
-        telefono: profileTelefono.value.replace(/\D/g, "").slice(0, 15),
+        nombres: nombres.slice(0, 100),
+        apellidos: apellidos.slice(0, 100),
+        email: String(currentUser.email || "").slice(0, 160),
+        identificacion: identificacion,
+        telefono: telefono,
         provincia: profileProvincia.value || "",
-        ciudad: clean(profileCiudad.value),
-        direccion: clean(profileDireccion.value),
-        referencia: clean(profileReferencia.value),
+        ciudad: clean(profileCiudad.value).slice(0, 100),
+        direccion: clean(profileDireccion.value).slice(0, 250),
+        referencia: clean(profileReferencia.value).slice(0, 300),
         activo: true,
         actualizadoEn: FieldValue.serverTimestamp()
       };
@@ -1013,27 +1106,36 @@ document.addEventListener("DOMContentLoaded", function () {
     modalOrderDate.textContent = formatDate(order.creadoEn);
     modalOrderStatus.textContent = order.estado || "Pendiente";
     modalOrderPayment.textContent = paymentName(payment.metodo);
+    modalOrderPaymentStatus.textContent = payment.estado || order.estadoPago || "Pendiente";
     modalOrderTotal.textContent = money(order.resumen?.total);
 
     const products = Array.isArray(order.productos) ? order.productos : [];
     modalProducts.innerHTML = "";
 
     if (!products.length) {
-      modalProducts.innerHTML = "<p>Sin productos registrados.</p>";
+      const empty = document.createElement("p");
+      empty.textContent = "Sin productos registrados.";
+      modalProducts.appendChild(empty);
     } else {
       products.forEach(function (item) {
         const qty = Math.max(1, Math.floor(num(item.cantidad)));
         const price = Math.max(0, num(item.precioUnitario ?? item.precio));
         const row = document.createElement("div");
         row.className = "product-row";
-        row.innerHTML = `
-          <div>
-            <strong>${escapeHtml(item.nombre || item.codigo || "Producto")}</strong>
-            <small>${escapeHtml([item.codigo, item.talla, item.color].filter(Boolean).join(" · "))}</small>
-          </div>
-          <span>× ${qty}</span>
-          <span>${money(price * qty)}</span>
-        `;
+
+        const info = document.createElement("div");
+        const name = document.createElement("strong");
+        const detail = document.createElement("small");
+        const quantity = document.createElement("span");
+        const amount = document.createElement("span");
+
+        name.textContent = item.nombre || item.codigo || "Producto";
+        detail.textContent = [item.codigo, item.talla, item.color].filter(Boolean).join(" · ");
+        quantity.textContent = "× " + qty;
+        amount.textContent = money(price * qty);
+
+        info.append(name, detail);
+        row.append(info, quantity, amount);
         modalProducts.appendChild(row);
       });
     }
@@ -1061,15 +1163,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    lastModalFocus = document.activeElement;
     orderModal.classList.add("activo");
     orderModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
+    requestAnimationFrame(() => closeOrderModal.focus());
   }
 
   function closeModal() {
     orderModal.classList.remove("activo");
     orderModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
+
+    if (lastModalFocus && typeof lastModalFocus.focus === "function" && document.contains(lastModalFocus)) {
+      lastModalFocus.focus();
+    }
+    lastModalFocus = null;
   }
 
   closeOrderModal.addEventListener("click", closeModal);
@@ -1078,7 +1187,35 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && orderModal.classList.contains("activo")) closeModal();
+    if (!orderModal.classList.contains("activo")) return;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+
+    if (event.key === "Tab") {
+      const focusable = Array.from(orderModal.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(element => !element.hidden && element.offsetParent !== null);
+
+      if (!focusable.length) {
+        event.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
   });
 
   // ======================================================
@@ -1358,6 +1495,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     data-notification-order="${escapeAttr(
                       item.pedidoId
                     )}"
+                    data-notification-id="${escapeAttr(
+                      item.id
+                    )}"
                   >
                     VER PEDIDO
                   </button>
@@ -1433,27 +1573,17 @@ document.addEventListener("DOMContentLoaded", function () {
               .notificationOrder;
 
 
+          const notificationId =
+            orderButton.dataset
+              .notificationId;
+
           const notification =
             notifications.find(
-              function (item) {
-
-                return (
-                  item.pedidoId ===
-                  orderId &&
-                  item.leida !==
-                  true
-                );
-              }
+              item => item.id === notificationId
             );
 
-
-          if (
-            notification
-          ) {
-
-            markNotificationRead(
-              notification.id
-            );
+          if (notification && notification.leida !== true) {
+            markNotificationRead(notification.id);
           }
 
 
@@ -1621,6 +1751,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
           markAllNotificationsBtn.textContent =
             "MARCAR TODO LEÍDO";
+
+          markAllNotificationsBtn.disabled =
+            notifications.every(item => item.leida === true);
         }
       }
     );
@@ -2015,6 +2148,7 @@ document.addEventListener("DOMContentLoaded", function () {
   async function logout() {
     try {
       stopOrders();
+      stopComprobantes();
       stopFavorites();
       stopNotifications();
       await auth.signOut();
