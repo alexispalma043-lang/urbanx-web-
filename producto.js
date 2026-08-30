@@ -1508,7 +1508,7 @@ document.addEventListener(
 
                   <strong>
                     NO FUE POSIBLE CARGAR LAS RESEÑAS.
-                    REVISA LAS REGLAS DE FIRESTORE DEL PASO 8.
+                    REVISA LA CONEXIÓN Y LAS REGLAS ACTUALES DE FIRESTORE.
                   </strong>
                 </div>
               `;

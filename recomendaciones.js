@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 // ==========================================================
-// SIXTEEN · PASO 13
+// SIXTEEN · PASO 24
 // RECOMENDACIONES INTELIGENTES SIN SERVICIOS EXTERNOS
 // ==========================================================
 
@@ -171,7 +171,7 @@ document.addEventListener(
               {};
 
 
-            products.push({
+            const baseProduct = {
               firestoreId:
                 doc.id,
 
@@ -211,6 +211,13 @@ document.addEventListener(
                   ? data.tallas
                   : [],
 
+              variantes:
+                Array.isArray(
+                  data.variantes
+                )
+                  ? data.variantes
+                  : [],
+
               imagen:
                 String(
                   data.imagen ||
@@ -238,7 +245,61 @@ document.addEventListener(
                   data.descripcion ||
                   ""
                 )
-            });
+            };
+
+
+            if (
+              window.SIXTEEN_VARIANTS
+            ) {
+
+              baseProduct.stock =
+                window.SIXTEEN_VARIANTS
+                  .totalStock(
+                    baseProduct
+                  );
+
+
+              const variantColors =
+                window.SIXTEEN_VARIANTS
+                  .colors(
+                    baseProduct,
+                    true
+                  );
+
+
+              if (
+                variantColors.length
+              ) {
+
+                baseProduct.color =
+                  variantColors.join(
+                    " | "
+                  );
+              }
+
+
+              const variantSizes =
+                window.SIXTEEN_VARIANTS
+                  .sizes(
+                    baseProduct,
+                    "",
+                    true
+                  );
+
+
+              if (
+                variantSizes.length
+              ) {
+
+                baseProduct.tallas =
+                  variantSizes;
+              }
+            }
+
+
+            products.push(
+              baseProduct
+            );
           }
         );
 
@@ -725,12 +786,25 @@ document.addEventListener(
             "producto-card recomendacion-card";
 
 
+          const safeImage =
+            /^https:\/\//i.test(
+              String(
+                product.imagen ||
+                ""
+              )
+            )
+              ? String(
+                  product.imagen
+                )
+              : "";
+
+
           const image =
-            product.imagen
+            safeImage
               ? `
                 <img
                   src="${escapeHtml(
-                    product.imagen
+                    safeImage
                   )}"
                   alt="${escapeHtml(
                     product.nombre
