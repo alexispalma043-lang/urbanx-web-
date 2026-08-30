@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=18000"
+    href="./admin.css?v=20000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -2098,453 +2098,150 @@
       >
 
         <div class="admin-card-header">
-
           <div>
-            <p class="admin-eyebrow">
-              SRI · ESQUEMA OFF-LINE · FACTURA XML 2.1.0
-            </p>
-
-            <h3>
-              Facturación electrónica
-            </h3>
-
+            <p class="admin-eyebrow">SIXTEEN · SISTEMA PROPIO</p>
+            <h3>Facturación SIXTEEN</h3>
             <p class="facturacion-subtitle">
-              Núcleo fiscal SIXTEEN: configuración, secuenciales,
-              clave de acceso, XML, historial y RIDE borrador.
+              Facturas y notas comerciales internas vinculadas a pedidos, con numeración automática,
+              PDF, correo, historial y acceso desde Mi Cuenta.
             </p>
           </div>
 
           <div class="facturacion-header-actions">
-
-            <span
-              class="admin-status"
-              id="facturacionAmbienteBadge"
-            >
-              PRUEBAS
-            </span>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="abrirNotaCreditoBtn"
-            >
-              + NOTA DE CRÉDITO
-            </button>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="abrirNotaDebitoBtn"
-            >
-              + NOTA DE DÉBITO
-            </button>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="abrirGuiaRemisionBtn"
-            >
-              + GUÍA DE REMISIÓN
-            </button>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="abrirRetencionBtn"
-            >
-              + COMPROBANTE DE RETENCIÓN
-            </button>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="probarBackendSriBtn"
-            >
-              PROBAR BACKEND
-            </button>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="verificarProduccionSriBtn"
-            >
-              VERIFICAR PRODUCCIÓN
-            </button>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="abrirConfiguracionSriBtn"
-            >
-              CONFIGURACIÓN SRI
-            </button>
-
+            <span class="admin-status" id="facturacionAmbienteBadge">INTERNO</span>
+            <button type="button" class="admin-secondary-btn" id="abrirNotaCreditoBtn">+ NOTA DE CRÉDITO</button>
+            <button type="button" class="admin-secondary-btn" id="abrirNotaDebitoBtn">+ NOTA DE DÉBITO</button>
           </div>
-
         </div>
 
+        <div class="facturacion-internal-notice" role="note">
+          <strong>DOCUMENTO COMERCIAL INTERNO</strong>
+          <span>Este módulo no se conecta al SRI y no genera XML, firma electrónica ni autorización tributaria.</span>
+        </div>
 
         <div class="facturacion-kpis">
-
-          <article>
-            <span>COMPROBANTES</span>
-            <strong id="facturacionKpiTotal">0</strong>
-          </article>
-
-          <article>
-            <span>XML GENERADO</span>
-            <strong id="facturacionKpiXml">0</strong>
-          </article>
-
-          <article>
-            <span>AUTORIZADOS</span>
-            <strong id="facturacionKpiAutorizados">0</strong>
-          </article>
-
-          <article>
-            <span>PENDIENTES SRI</span>
-            <strong id="facturacionKpiPendientes">0</strong>
-          </article>
-
+          <article><span>DOCUMENTOS</span><strong id="facturacionKpiTotal">0</strong></article>
+          <article><span>FACTURAS EMITIDAS</span><strong id="facturacionKpiFacturas">0</strong></article>
+          <article><span>NOTAS DE CRÉDITO</span><strong id="facturacionKpiNotasCredito">0</strong></article>
+          <article><span>TOTAL FACTURADO</span><strong id="facturacionKpiTotalFacturado">$0.00</strong></article>
         </div>
 
-
         <div class="facturacion-workbench">
-
           <article class="facturacion-generator">
-
-            <p class="admin-eyebrow">
-              NUEVA FACTURA DESDE PEDIDO
-            </p>
-
-            <h4>
-              Generar comprobante
-            </h4>
+            <p class="admin-eyebrow">NUEVA FACTURA DESDE PEDIDO</p>
+            <h4>Generar factura SIXTEEN</h4>
 
             <div class="facturacion-form-grid">
-
               <label>
                 PEDIDO
                 <select id="facturacionPedidoSelect">
-                  <option value="">
-                    Selecciona un pedido
-                  </option>
+                  <option value="">Selecciona un pedido</option>
                 </select>
               </label>
-
               <label>
                 FECHA EMISIÓN
-                <input
-                  type="date"
-                  id="facturacionFechaEmision"
-                >
+                <input type="date" id="facturacionFechaEmision">
               </label>
-
             </div>
 
-
-            <div
-              class="facturacion-order-preview"
-              id="facturacionPedidoPreview"
-            >
-              Selecciona un pedido para revisar los datos que se usarán
-              en la factura.
+            <div class="facturacion-order-preview" id="facturacionPedidoPreview">
+              Selecciona un pedido para revisar los datos que se usarán en la factura.
             </div>
-
 
             <div class="facturacion-action-row">
-
-              <button
-                type="button"
-                class="admin-primary-btn"
-                id="generarFacturaXmlBtn"
-              >
-                GENERAR FACTURA + XML
-              </button>
-
-              <span
-                class="facturacion-action-message"
-                id="facturacionGenerarMensaje"
-                aria-live="polite"
-              >
-              </span>
-
+              <button type="button" class="admin-primary-btn" id="generarFacturaXmlBtn">GENERAR FACTURA</button>
+              <span class="facturacion-action-message" id="facturacionGenerarMensaje" aria-live="polite"></span>
             </div>
-
           </article>
-
 
           <article class="facturacion-status-panel">
-
-            <p class="admin-eyebrow">
-              ESTADO DEL MÓDULO
-            </p>
-
-            <h4>
-              Flujo electrónico
-            </h4>
-
+            <p class="admin-eyebrow">FLUJO ACTIVO</p>
+            <h4>Sistema comercial propio</h4>
             <ol class="facturacion-flow">
               <li class="done">Pedido</li>
-              <li class="done">Clave de acceso</li>
-              <li class="done">XML sin firma</li>
-              <li id="facturacionFlowFirma">Firma XAdES-BES</li>
-              <li id="facturacionFlowRecepcion">Recepción SRI</li>
-              <li id="facturacionFlowAutorizacion">Autorización SRI</li>
-              <li class="done">RIDE autorizado <small>16F5A</small></li>
-              <li class="done">Email / Mi Cuenta <small>16F5B–16F5C</small></li>
+              <li class="done">Numeración SIXTEEN</li>
+              <li class="done">Factura emitida</li>
+              <li class="done">PDF / impresión</li>
+              <li class="done">Mi Cuenta</li>
+              <li class="done">Correo al cliente</li>
             </ol>
-
             <p class="facturacion-security-note">
-              La firma electrónica y su contraseña no se guardarán
-              en GitHub Pages ni en Firestore.
+              La integración SRI anterior se conserva archivada en <code>admin/legacy-sri/</code> y no se ejecuta.
             </p>
-
-            <div class="facturacion-backend-status">
-              <span>BACKEND</span>
-              <strong id="facturacionBackendEstado">
-                NO CONFIGURADO
-              </strong>
-              <small id="facturacionCertificadoInfo">
-                Sin información del certificado.
-              </small>
-            </div>
-
           </article>
-
         </div>
 
-
-
-        <section
-          class="sri-production-check"
-          id="sriProductionCheck"
-        >
-
-          <div class="sri-production-check-head">
-
-            <div>
-              <p class="admin-eyebrow">
-                PASO 16F6A · PUESTA EN PRODUCCIÓN
-              </p>
-
-              <h4>
-                Verificador final SRI
-              </h4>
-
-              <p>
-                Comprueba configuración fiscal, backend y certificado
-                sin mostrar ni almacenar secretos.
-              </p>
-            </div>
-
-            <span
-              class="admin-status"
-              id="sriProductionOverall"
-            >
-              SIN VERIFICAR
-            </span>
-
-          </div>
-
-
-          <div
-            class="sri-production-grid"
-            id="sriProductionGrid"
-          >
-
-            <article data-check="fiscal">
-              <span>01</span>
-              <div>
-                <strong>
-                  CONFIGURACIÓN FISCAL
-                </strong>
-                <small>
-                  Razón social, RUC, matriz, establecimiento y punto de emisión.
-                </small>
-              </div>
-              <b>PENDIENTE</b>
-            </article>
-
-            <article data-check="environment">
-              <span>02</span>
-              <div>
-                <strong>
-                  AMBIENTE
-                </strong>
-                <small>
-                  Pruebas para validación; Producción solo al final.
-                </small>
-              </div>
-              <b>PENDIENTE</b>
-            </article>
-
-            <article data-check="backend">
-              <span>03</span>
-              <div>
-                <strong>
-                  BACKEND SRI
-                </strong>
-                <small>
-                  Servicio privado de firma y comunicación con SRI.
-                </small>
-              </div>
-              <b>PENDIENTE</b>
-            </article>
-
-            <article data-check="certificate">
-              <span>04</span>
-              <div>
-                <strong>
-                  FIRMA ELECTRÓNICA
-                </strong>
-                <small>
-                  Certificado digital válido y vigente en el backend.
-                </small>
-              </div>
-              <b>PENDIENTE</b>
-            </article>
-
-            <article data-check="documents">
-              <span>05</span>
-              <div>
-                <strong>
-                  DOCUMENTOS
-                </strong>
-                <small>
-                  Factura, NC, ND, guía y retención implementados.
-                </small>
-              </div>
-              <b>LISTO</b>
-            </article>
-
-            <article data-check="ride">
-              <span>06</span>
-              <div>
-                <strong>
-                  RIDE / XML / EMAIL
-                </strong>
-                <small>
-                  Entrega al cliente solo después de autorización.
-                </small>
-              </div>
-              <b>LISTO</b>
-            </article>
-
-          </div>
-
-
-          <div
-            class="sri-production-message"
-            id="sriProductionMessage"
-            aria-live="polite"
-          >
-            Pulsa VERIFICAR PRODUCCIÓN para revisar el estado actual.
-          </div>
-
-        </section>
-
-
         <div class="facturacion-toolbar">
-
           <div>
-            <label for="facturacionBuscar">
-              BUSCAR
-            </label>
-
-            <input
-              type="search"
-              id="facturacionBuscar"
-              placeholder="Factura, clave, pedido, cliente..."
-              autocomplete="off"
-            >
+            <label for="facturacionBuscar">BUSCAR</label>
+            <input type="search" id="facturacionBuscar" placeholder="Documento, pedido, cliente, identificación..." autocomplete="off">
           </div>
-
           <div>
-            <label for="facturacionFiltroTipo">
-              TIPO
-            </label>
-
+            <label for="facturacionFiltroTipo">TIPO</label>
             <select id="facturacionFiltroTipo">
               <option value="">Todos</option>
               <option value="FACTURA">Factura</option>
               <option value="NOTA_CREDITO">Nota de crédito</option>
               <option value="NOTA_DEBITO">Nota de débito</option>
-              <option value="GUIA_REMISION">Guía de remisión</option>
-              <option value="RETENCION">Comprobante de retención</option>
             </select>
           </div>
-
           <div>
-            <label for="facturacionFiltroEstado">
-              ESTADO
-            </label>
-
+            <label for="facturacionFiltroEstado">ESTADO</label>
             <select id="facturacionFiltroEstado">
               <option value="">Todos</option>
-              <option value="XML_GENERADO">XML generado</option>
-              <option value="PROCESANDO">Procesando</option>
-              <option value="FIRMADO">Firmado</option>
-              <option value="RECIBIDA">Recibida</option>
-              <option value="AUTORIZADO">Autorizado</option>
-              <option value="DEVUELTA">Devuelta</option>
-              <option value="NO_AUTORIZADO">No autorizado</option>
-              <option value="ERROR">Error</option>
+              <option value="EMITIDA">Emitida</option>
+              <option value="ANULADA">Anulada</option>
             </select>
           </div>
-
-          <button
-            type="button"
-            class="admin-secondary-btn"
-            id="exportarFacturacionCsvBtn"
-          >
-            EXPORTAR CSV
-          </button>
-
+          <button type="button" class="admin-secondary-btn" id="exportarFacturacionCsvBtn">EXPORTAR CSV</button>
         </div>
-
 
         <div class="admin-table-wrap">
-
           <table class="admin-table facturacion-table">
-
             <thead>
               <tr>
-                <th>COMPROBANTE</th>
-                <th>FECHA</th>
-                <th>CLIENTE</th>
-                <th>PEDIDO / SUSTENTO</th>
-                <th>TOTAL</th>
-                <th>AMBIENTE</th>
-                <th>ESTADO</th>
-                <th>ACCIONES</th>
+                <th>DOCUMENTO</th><th>FECHA</th><th>CLIENTE</th><th>PEDIDO / REFERENCIA</th>
+                <th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th>
               </tr>
             </thead>
-
-            <tbody id="facturacionBody">
-              <tr>
-                <td colspan="8">
-                  Cargando comprobantes...
-                </td>
-              </tr>
-            </tbody>
-
+            <tbody id="facturacionBody"><tr><td colspan="7">Cargando documentos...</td></tr></tbody>
           </table>
-
         </div>
 
-
         <div class="facturacion-doc-types">
+          <span>FACTURA SIXTEEN · ACTIVA</span>
+          <span>NOTA DE CRÉDITO INTERNA · ACTIVA</span>
+          <span>NOTA DE DÉBITO INTERNA · ACTIVA</span>
+          <span>PDF / IMPRESIÓN · ACTIVO</span>
+          <span>EMAIL / MI CUENTA · ACTIVO</span>
+        </div>
 
-          <span>FACTURA · ACTIVA</span>
-          <span>NOTA DE CRÉDITO · ACTIVA</span>
-          <span>NOTA DE DÉBITO · ACTIVA</span>
-          <span>GUÍA DE REMISIÓN · ACTIVA</span>
-          <span>COMPROBANTE DE RETENCIÓN · ACTIVO EN 16F4C</span>
-          <span>NOTA DE DÉBITO · SIGUIENTE BLOQUE</span>
-          <span>GUÍA DE REMISIÓN · SIGUIENTE BLOQUE</span>
-          <span>RETENCIÓN · SIGUIENTE BLOQUE</span>
-
+        <div class="admin-modal" id="facturacionNotaModal" hidden>
+          <div class="admin-modal-panel facturacion-config-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionNotaTitulo" tabindex="-1">
+            <div class="admin-modal-header">
+              <div><p class="admin-eyebrow">AJUSTE COMERCIAL INTERNO</p><h3 id="facturacionNotaTitulo">Nueva nota</h3></div>
+              <button type="button" class="admin-modal-close" id="cerrarFacturacionNotaBtn" aria-label="Cerrar">×</button>
+            </div>
+            <form id="facturacionNotaForm" novalidate>
+              <div class="facturacion-config-grid">
+                <label class="span-2">FACTURA DE REFERENCIA
+                  <select id="facturacionNotaFactura" required><option value="">Selecciona una factura</option></select>
+                </label>
+                <label>VALOR
+                  <input id="facturacionNotaValor" type="number" min="0.01" step="0.01" required>
+                </label>
+                <label class="span-2">MOTIVO
+                  <textarea id="facturacionNotaMotivo" maxlength="300" rows="4" required></textarea>
+                </label>
+              </div>
+              <div class="facturacion-config-info" id="facturacionNotaInfo">La nota quedará vinculada a la factura seleccionada y no modifica automáticamente el pedido.</div>
+              <div class="admin-form-message" id="facturacionNotaMensaje" aria-live="polite"></div>
+              <div class="admin-modal-actions">
+                <button type="button" class="admin-secondary-btn" id="cancelarFacturacionNotaBtn">CANCELAR</button>
+                <button type="submit" class="admin-primary-btn" id="guardarFacturacionNotaBtn">GENERAR NOTA</button>
+              </div>
+            </form>
+          </div>
         </div>
 
       </section>
@@ -4750,1026 +4447,31 @@
      PASO 16F4C · COMPROBANTE DE RETENCIÓN ATS
 ============================================= -->
 
-<div
-  class="admin-modal"
-  id="retencionModal"
-  aria-hidden="true"
->
-  <div class="admin-modal-panel facturacion-config-modal retencion-modal-panel">
 
-    <div class="admin-modal-header">
-      <div>
-        <p class="admin-eyebrow">
-          SRI · DOCUMENTO 07 · ATS XML 2.0.0
-        </p>
-        <h3>Nuevo comprobante de retención</h3>
-      </div>
-
-      <button
-        type="button"
-        class="admin-modal-close"
-        id="cerrarRetencionBtn"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-    </div>
-
-    <form id="retencionForm">
-
-      <div class="retencion-section-title">
-        <span>01</span>
-        <div>
-          <strong>SUJETO RETENIDO</strong>
-          <small>Proveedor o beneficiario de la compra.</small>
-        </div>
-      </div>
-
-      <div class="facturacion-config-grid">
-
-        <label>
-          IDENTIFICACIÓN
-          <input
-            id="retencionSujetoId"
-            type="text"
-            maxlength="20"
-            placeholder="RUC / cédula"
-            required
-          >
-        </label>
-
-        <label class="span-2">
-          RAZÓN SOCIAL
-          <input
-            id="retencionSujetoNombre"
-            type="text"
-            maxlength="300"
-            placeholder="Nombre o razón social"
-            required
-          >
-        </label>
-
-        <label>
-          PARTE RELACIONADA
-          <select id="retencionParteRel">
-            <option value="NO">NO</option>
-            <option value="SI">SI</option>
-          </select>
-        </label>
-
-        <label>
-          EMAIL OPCIONAL
-          <input
-            id="retencionSujetoEmail"
-            type="email"
-            maxlength="160"
-            placeholder="proveedor@correo.com"
-          >
-        </label>
-
-        <label>
-          FECHA EMISIÓN
-          <input
-            id="retencionFechaEmision"
-            type="date"
-            required
-          >
-        </label>
-
-        <label>
-          PERÍODO FISCAL
-          <input
-            id="retencionPeriodoFiscal"
-            type="text"
-            maxlength="7"
-            placeholder="MM/AAAA"
-            required
-          >
-        </label>
-
-      </div>
-
-
-      <div class="retencion-section-title">
-        <span>02</span>
-        <div>
-          <strong>DOCUMENTO DE SUSTENTO</strong>
-          <small>Compra local estándar para la primera versión.</small>
-        </div>
-      </div>
-
-      <div class="facturacion-config-grid">
-
-        <label>
-          CÓD. SUSTENTO ATS
-          <input
-            id="retencionCodSustento"
-            type="text"
-            maxlength="3"
-            value="01"
-            required
-          >
-        </label>
-
-        <label>
-          CÓD. DOCUMENTO
-          <input
-            id="retencionCodDocSustento"
-            type="text"
-            maxlength="3"
-            value="01"
-            required
-          >
-        </label>
-
-        <label class="span-2">
-          NÚMERO DOCUMENTO
-          <input
-            id="retencionNumDocSustento"
-            type="text"
-            maxlength="20"
-            placeholder="001001000000001"
-            required
-          >
-        </label>
-
-        <label>
-          FECHA DOCUMENTO
-          <input
-            id="retencionFechaDocSustento"
-            type="date"
-            required
-          >
-        </label>
-
-        <label>
-          FECHA REGISTRO CONTABLE
-          <input
-            id="retencionFechaRegistro"
-            type="date"
-          >
-        </label>
-
-        <label class="span-2">
-          AUTORIZACIÓN / CLAVE DE ACCESO
-          <input
-            id="retencionAutDocSustento"
-            type="text"
-            maxlength="49"
-            placeholder="Opcional"
-          >
-        </label>
-
-        <label>
-          TOTAL SIN IMPUESTOS
-          <input
-            id="retencionSubtotalCompra"
-            type="number"
-            min="0"
-            step="0.01"
-            placeholder="0.00"
-            required
-          >
-        </label>
-
-        <label>
-          IVA COMPRA
-          <select id="retencionIvaCompra">
-            <option value="15">15%</option>
-            <option value="5">5%</option>
-            <option value="0">0%</option>
-          </select>
-        </label>
-
-        <label>
-          IMPORTE TOTAL
-          <input
-            id="retencionImporteCompra"
-            type="number"
-            min="0.01"
-            step="0.01"
-            placeholder="0.00"
-            required
-          >
-        </label>
-
-        <label>
-          FORMA DE PAGO
-          <select id="retencionFormaPago">
-            <option value="01">
-              01 · Sin sistema financiero
-            </option>
-            <option value="20">
-              20 · Otros con sistema financiero
-            </option>
-          </select>
-        </label>
-
-      </div>
-
-
-      <div class="retencion-section-title">
-        <span>03</span>
-        <div>
-          <strong>RETENCIONES</strong>
-          <small>Renta, IVA o ISD. Los códigos deben corresponder al catálogo SRI/ATS.</small>
-        </div>
-      </div>
-
-      <div
-        class="retencion-lines"
-        id="retencionLineas"
-      ></div>
-
-      <div class="retencion-line-actions">
-
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="agregarRetencionLineaBtn"
-        >
-          + AGREGAR RETENCIÓN
-        </button>
-
-        <div
-          class="retencion-total"
-          id="retencionTotalPreview"
-        >
-          <span>TOTAL RETENIDO</span>
-          <strong>$0.00</strong>
-        </div>
-
-      </div>
-
-      <div class="facturacion-config-info">
-        <strong>ALCANCE 16F4C:</strong>
-        compra local estándar con un documento de sustento y múltiples
-        líneas de retención. Casos especiales ATS como pagos al exterior,
-        reembolsos, dividendos y banano se incorporarán en una fase avanzada
-        si fueran necesarios.
-      </div>
-
-      <div
-        class="facturacion-action-message"
-        id="retencionMensaje"
-        aria-live="polite"
-      ></div>
-
-      <div class="admin-modal-actions">
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarRetencionBtn"
-        >
-          CANCELAR
-        </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="generarRetencionBtn"
-        >
-          GENERAR RETENCIÓN + XML
-        </button>
-      </div>
-
-    </form>
-
-  </div>
-</div>
 
 
 <!-- ============================================
      PASO 16F4B · GUÍA DE REMISIÓN
 ============================================= -->
 
-<div
-  class="admin-modal"
-  id="guiaRemisionModal"
-  aria-hidden="true"
->
-  <div class="admin-modal-panel facturacion-config-modal">
 
-    <div class="admin-modal-header">
-      <div>
-        <p class="admin-eyebrow">
-          SRI · DOCUMENTO 06 · XML 1.0.0
-        </p>
-        <h3>Nueva guía de remisión</h3>
-      </div>
-
-      <button
-        type="button"
-        class="admin-modal-close"
-        id="cerrarGuiaRemisionBtn"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-    </div>
-
-    <form id="guiaRemisionForm">
-
-      <div class="facturacion-config-grid">
-
-        <label class="span-2">
-          PEDIDO
-          <select id="guiaPedidoSelect" required>
-            <option value="">
-              Selecciona un pedido
-            </option>
-          </select>
-        </label>
-
-        <label class="span-2">
-          DIRECCIÓN DE PARTIDA
-          <input
-            id="guiaDirPartida"
-            type="text"
-            maxlength="300"
-            placeholder="Dirección desde donde sale la mercadería"
-            required
-          >
-        </label>
-
-        <label>
-          TRANSPORTISTA
-          <input
-            id="guiaTransportistaNombre"
-            type="text"
-            maxlength="300"
-            placeholder="Nombre o razón social"
-            required
-          >
-        </label>
-
-        <label>
-          IDENTIFICACIÓN TRANSPORTISTA
-          <input
-            id="guiaTransportistaId"
-            type="text"
-            maxlength="13"
-            placeholder="Cédula o RUC"
-            required
-          >
-        </label>
-
-        <label>
-          FECHA INICIO TRANSPORTE
-          <input
-            id="guiaFechaInicio"
-            type="date"
-            required
-          >
-        </label>
-
-        <label>
-          FECHA FIN TRANSPORTE
-          <input
-            id="guiaFechaFin"
-            type="date"
-            required
-          >
-        </label>
-
-        <label>
-          PLACA
-          <input
-            id="guiaPlaca"
-            type="text"
-            maxlength="20"
-            placeholder="ABC0123"
-            required
-          >
-        </label>
-
-        <label>
-          CÓD. ESTAB. DESTINO
-          <input
-            id="guiaCodEstabDestino"
-            type="text"
-            maxlength="3"
-            inputmode="numeric"
-            placeholder="001"
-          >
-        </label>
-
-        <label class="span-2">
-          DIRECCIÓN DESTINATARIO
-          <input
-            id="guiaDirDestinatario"
-            type="text"
-            maxlength="300"
-            placeholder="Se completa desde el pedido y puede corregirse"
-            required
-          >
-        </label>
-
-        <label class="span-2">
-          MOTIVO DEL TRASLADO
-          <input
-            id="guiaMotivoTraslado"
-            type="text"
-            maxlength="300"
-            value="VENTA"
-            required
-          >
-        </label>
-
-        <label class="span-2">
-          RUTA
-          <input
-            id="guiaRuta"
-            type="text"
-            maxlength="300"
-            placeholder="Ej.: Quito - Cumbayá"
-          >
-        </label>
-
-      </div>
-
-      <div
-        class="facturacion-order-preview guia-remision-preview"
-        id="guiaRemisionPreview"
-      >
-        Selecciona un pedido para revisar destinatario, productos y
-        factura de sustento si existe.
-      </div>
-
-      <div class="facturacion-config-info">
-        <strong>16F4B:</strong>
-        genera la guía con transportista, placa, fechas, destinatario,
-        motivo, ruta y detalle de productos. Si el pedido ya tiene una
-        factura, se agrega como documento de sustento.
-      </div>
-
-      <div
-        class="facturacion-action-message"
-        id="guiaRemisionMensaje"
-        aria-live="polite"
-      ></div>
-
-      <div class="admin-modal-actions">
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarGuiaRemisionBtn"
-        >
-          CANCELAR
-        </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="generarGuiaRemisionBtn"
-        >
-          GENERAR GUÍA + XML
-        </button>
-      </div>
-
-    </form>
-
-  </div>
-</div>
 
 
 <!-- ============================================
      PASO 16F4A · NOTA DE DÉBITO
 ============================================= -->
 
-<div
-  class="admin-modal"
-  id="notaDebitoModal"
-  aria-hidden="true"
->
-  <div class="admin-modal-panel facturacion-config-modal">
 
-    <div class="admin-modal-header">
-      <div>
-        <p class="admin-eyebrow">
-          SRI · DOCUMENTO 05 · XML 1.0.0
-        </p>
-        <h3>Nueva nota de débito</h3>
-      </div>
-
-      <button
-        type="button"
-        class="admin-modal-close"
-        id="cerrarNotaDebitoBtn"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-    </div>
-
-    <form id="notaDebitoForm">
-
-      <div class="facturacion-config-grid">
-
-        <label class="span-2">
-          FACTURA DE SUSTENTO
-          <select id="notaDebitoFacturaSelect" required>
-            <option value="">
-              Selecciona una factura
-            </option>
-          </select>
-        </label>
-
-        <label>
-          FECHA EMISIÓN
-          <input
-            id="notaDebitoFecha"
-            type="date"
-            required
-          >
-        </label>
-
-        <label>
-          IVA DEL CARGO
-          <select id="notaDebitoIva" required>
-            <option value="15">15%</option>
-            <option value="5">5%</option>
-            <option value="0">0%</option>
-          </select>
-        </label>
-
-        <label class="span-2">
-          RAZÓN DEL DÉBITO
-          <input
-            id="notaDebitoRazon"
-            type="text"
-            maxlength="300"
-            placeholder="Ej.: interés por mora o cargo adicional"
-            required
-          >
-        </label>
-
-        <label>
-          VALOR BASE SIN IVA
-          <input
-            id="notaDebitoValorBase"
-            type="number"
-            min="0.01"
-            step="0.01"
-            placeholder="0.00"
-            required
-          >
-        </label>
-
-      </div>
-
-      <div
-        class="facturacion-order-preview nota-debito-preview"
-        id="notaDebitoPreview"
-      >
-        Selecciona una factura para revisar el documento de sustento.
-      </div>
-
-      <div
-        class="nota-debito-total-box"
-        id="notaDebitoTotal"
-      >
-        <span>VALOR TOTAL</span>
-        <strong>$0.00</strong>
-      </div>
-
-      <div class="facturacion-config-info">
-        <strong>16F4A:</strong>
-        la nota de débito aumenta el valor de una factura por un motivo
-        específico. El XML usa documento SRI 05 y formato notaDebito 1.0.0.
-      </div>
-
-      <div
-        class="facturacion-action-message"
-        id="notaDebitoMensaje"
-        aria-live="polite"
-      ></div>
-
-      <div class="admin-modal-actions">
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarNotaDebitoBtn"
-        >
-          CANCELAR
-        </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="generarNotaDebitoBtn"
-        >
-          GENERAR DÉBITO + XML
-        </button>
-      </div>
-
-    </form>
-
-  </div>
-</div>
 
 
 <!-- ============================================
      PASO 16F3A · NOTA DE CRÉDITO
 ============================================= -->
 
-<div
-  class="admin-modal"
-  id="notaCreditoModal"
-  aria-hidden="true"
->
-  <div class="admin-modal-panel facturacion-config-modal">
 
-    <div class="admin-modal-header">
-      <div>
-        <p class="admin-eyebrow">
-          SRI · DOCUMENTO 04 · XML 1.1.0
-        </p>
-        <h3>Nueva nota de crédito</h3>
-      </div>
 
-      <button
-        type="button"
-        class="admin-modal-close"
-        id="cerrarNotaCreditoBtn"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-    </div>
 
-    <form id="notaCreditoForm">
 
-      <div class="facturacion-config-grid">
-
-        <label class="span-2">
-          FACTURA DE SUSTENTO
-          <select id="notaCreditoFacturaSelect" required>
-            <option value="">
-              Selecciona una factura
-            </option>
-          </select>
-        </label>
-
-        <label>
-          FECHA EMISIÓN
-          <input
-            id="notaCreditoFecha"
-            type="date"
-            required
-          >
-        </label>
-
-        <label class="span-2">
-          MOTIVO
-          <input
-            id="notaCreditoMotivo"
-            type="text"
-            maxlength="300"
-            placeholder="Ej.: devolución parcial de mercadería"
-            required
-          >
-        </label>
-
-      </div>
-
-      <div
-        class="facturacion-order-preview nota-credito-preview"
-        id="notaCreditoPreview"
-      >
-        Selecciona una factura para revisar la nota de crédito.
-      </div>
-
-      <section
-        class="nota-credito-items"
-        aria-labelledby="notaCreditoItemsTitulo"
-      >
-
-        <div class="nota-credito-items-head">
-
-          <div>
-            <span>DETALLE A ACREDITAR</span>
-            <h4 id="notaCreditoItemsTitulo">
-              Productos y cantidades
-            </h4>
-          </div>
-
-          <div class="nota-credito-items-actions">
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="notaCreditoSeleccionarTodoBtn"
-            >
-              SELECCIONAR TODO
-            </button>
-
-            <button
-              type="button"
-              class="admin-secondary-btn"
-              id="notaCreditoLimpiarBtn"
-            >
-              LIMPIAR
-            </button>
-
-          </div>
-
-        </div>
-
-        <div
-          class="nota-credito-detalle-lista"
-          id="notaCreditoDetalleLista"
-        >
-          Selecciona una factura para ver sus productos.
-        </div>
-
-        <div
-          class="nota-credito-resumen"
-          id="notaCreditoResumenSeleccion"
-        >
-          <span>0 líneas seleccionadas</span>
-          <strong>$0.00</strong>
-        </div>
-
-      </section>
-
-      <div class="facturacion-config-info">
-        <strong>16F3B:</strong>
-        puedes acreditar toda la factura o únicamente productos y
-        cantidades específicas. El IVA de cada línea conserva la tarifa
-        utilizada en la factura de sustento.
-      </div>
-
-      <div
-        class="facturacion-action-message"
-        id="notaCreditoMensaje"
-        aria-live="polite"
-      ></div>
-
-      <div class="admin-modal-actions">
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarNotaCreditoBtn"
-        >
-          CANCELAR
-        </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="generarNotaCreditoBtn"
-        >
-          GENERAR NOTA + XML
-        </button>
-      </div>
-
-    </form>
-
-  </div>
-</div>
-
-
-<div
-  class="admin-modal"
-  id="configuracionSriModal"
-  aria-hidden="true"
->
-
-  <div class="admin-modal-panel facturacion-config-modal">
-
-    <div class="admin-modal-header">
-
-      <div>
-        <p class="admin-eyebrow">
-          SIXTEEN · CONFIGURACIÓN FISCAL
-        </p>
-
-        <h3>
-          Configuración SRI
-        </h3>
-      </div>
-
-      <button
-        type="button"
-        class="admin-modal-close"
-        id="cerrarConfiguracionSriBtn"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <form id="configuracionSriForm">
-
-      <div class="facturacion-config-grid">
-
-        <label>
-          AMBIENTE
-          <select id="sriAmbiente" required>
-            <option value="1">PRUEBAS / CERTIFICACIÓN</option>
-            <option value="2">PRODUCCIÓN</option>
-          </select>
-        </label>
-
-        <label>
-          BACKEND SEGURO SRI
-          <input
-            id="sriBackendUrl"
-            type="url"
-            placeholder="https://tu-backend-seguro.example.com"
-          >
-        </label>
-
-        <label>
-          RUC
-          <input
-            id="sriRuc"
-            type="text"
-            inputmode="numeric"
-            maxlength="13"
-            placeholder="179XXXXXXXXXX"
-          >
-        </label>
-
-        <label class="span-2">
-          RAZÓN SOCIAL
-          <input
-            id="sriRazonSocial"
-            type="text"
-            maxlength="300"
-          >
-        </label>
-
-        <label class="span-2">
-          NOMBRE COMERCIAL
-          <input
-            id="sriNombreComercial"
-            type="text"
-            maxlength="300"
-            value="SIXTEEN"
-          >
-        </label>
-
-        <label class="span-2">
-          DIRECCIÓN MATRIZ
-          <input
-            id="sriDirMatriz"
-            type="text"
-            maxlength="300"
-          >
-        </label>
-
-        <label class="span-2">
-          DIRECCIÓN ESTABLECIMIENTO
-          <input
-            id="sriDirEstablecimiento"
-            type="text"
-            maxlength="300"
-          >
-        </label>
-
-        <label>
-          ESTABLECIMIENTO
-          <input
-            id="sriEstab"
-            type="text"
-            inputmode="numeric"
-            maxlength="3"
-            value="001"
-            required
-          >
-        </label>
-
-        <label>
-          PUNTO DE EMISIÓN
-          <input
-            id="sriPtoEmi"
-            type="text"
-            inputmode="numeric"
-            maxlength="3"
-            value="001"
-            required
-          >
-        </label>
-
-        <label>
-          PRÓXIMO SECUENCIAL FACTURA
-          <input
-            id="sriSecuencialFactura"
-            type="number"
-            min="1"
-            step="1"
-            value="1"
-            required
-          >
-        </label>
-
-        <label>
-          IVA PREDETERMINADO
-          <select id="sriIvaDefault">
-            <option value="15">15%</option>
-            <option value="5">5%</option>
-            <option value="0">0%</option>
-          </select>
-        </label>
-
-        <label>
-          IVA ENVÍO
-          <select id="sriIvaEnvio">
-            <option value="15">15%</option>
-            <option value="5">5%</option>
-            <option value="0">0%</option>
-          </select>
-        </label>
-
-        <label>
-          PRECIOS DE TIENDA
-          <select id="sriPreciosIncluyenIva">
-            <option value="true">INCLUYEN IVA</option>
-            <option value="false">NO INCLUYEN IVA</option>
-          </select>
-        </label>
-
-        <label>
-          OBLIGADO A LLEVAR CONTABILIDAD
-          <select id="sriObligadoContabilidad">
-            <option value="false">NO</option>
-            <option value="true">SÍ</option>
-          </select>
-        </label>
-
-        <label>
-          CONTRIBUYENTE ESPECIAL
-          <input
-            id="sriContribuyenteEspecial"
-            type="text"
-            maxlength="13"
-            placeholder="Opcional"
-          >
-        </label>
-
-        <label class="span-2">
-          RÉGIMEN / LEYENDA TRIBUTARIA
-          <input
-            id="sriRegimen"
-            type="text"
-            maxlength="300"
-            placeholder="Ej. CONTRIBUYENTE RÉGIMEN RIMPE"
-          >
-        </label>
-
-      </div>
-
-
-      <div class="facturacion-config-warning">
-        <strong>NO SE GUARDA AQUÍ:</strong>
-        archivo .p12/.pfx, contraseña de firma, clave SRI,
-        claves privadas ni secretos del futuro backend.
-      </div>
-
-      <div class="facturacion-config-info">
-        <strong>CONFIGURACIÓN POR ETAPAS:</strong>
-        puedes guardar primero únicamente la URL del backend para probar
-        la conexión. RUC, razón social y dirección serán obligatorios
-        cuando generemos una factura.
-      </div>
-
-
-      <div
-        class="admin-form-message"
-        id="configuracionSriMensaje"
-      >
-      </div>
-
-
-      <div class="admin-modal-actions">
-
-        <button
-          type="button"
-          class="admin-secondary-btn"
-          id="cancelarConfiguracionSriBtn"
-        >
-          CANCELAR
-        </button>
-
-        <button
-          type="submit"
-          class="admin-primary-btn"
-          id="guardarConfiguracionSriBtn"
-        >
-          GUARDAR CONFIGURACIÓN
-        </button>
-
-      </div>
-
-    </form>
-
-  </div>
-
-</div>
 
 
 <!-- ======================================================
@@ -5806,7 +4508,6 @@
 
 <script src="../payment-config.js?v=18000"></script>
 
-<script src="../sri-core.js?v=3800"></script>
 
 <script src="./dashboard.js?v=17000"></script>
 
@@ -5816,11 +4517,11 @@
 
 <script src="./pagos-admin.js?v=18000"></script>
 
-<script src="../ride.js?v=3900"></script>
+<script src="../factura-sixteen.js?v=20000"></script>
 
-<script src="./comprobante-email.js?v=4100"></script>
+<script src="./comprobante-email.js?v=20000"></script>
 
-<script src="./facturacion.js?v=4200"></script>
+<script src="./facturacion.js?v=20000"></script>
 
 
 </body>

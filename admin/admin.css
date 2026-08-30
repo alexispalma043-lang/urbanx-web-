@@ -7591,3 +7591,26 @@ td {
 .pagos-public-note{
   margin:0 0 16px
 }
+
+
+/* ========================================================
+   PASO 19 · FACTURACIÓN SRI · ACCESIBILIDAD Y SEGURIDAD
+======================================================== */
+
+.facturacion-config-modal[tabindex="-1"]:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.facturacion-config-grid label > small {
+  display: block;
+  margin-top: 7px;
+  line-height: 1.45;
+  opacity: .72;
+}
+
+
+/* PASO 20 · FACTURACIÓN SIXTEEN */
+.facturacion-internal-notice{display:flex;gap:12px;align-items:flex-start;margin:18px 0;padding:14px 16px;border:1px solid rgba(212,175,55,.5);background:rgba(212,175,55,.08)}
+.facturacion-internal-notice strong{white-space:nowrap;color:#d4af37}.facturacion-internal-notice span{opacity:.86}.facturacion-actions{display:flex;flex-wrap:wrap;gap:6px}.admin-table-btn.danger{border-color:#7d3535;color:#d88}.facturacion-status-panel code{font-size:.82em}.admin-modal[hidden]{display:none!important}
+@media(max-width:720px){.facturacion-internal-notice{flex-direction:column}.facturacion-internal-notice strong{white-space:normal}}
