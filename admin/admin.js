@@ -93,6 +93,12 @@ document.addEventListener(
       );
 
 
+    const db =
+      firebase.firestore(
+        adminApp
+      );
+
+
     auth.useDeviceLanguage();
 // ======================================
     // ELEMENTOS
@@ -210,6 +216,16 @@ document.addEventListener(
             verPassword.textContent =
               "OCULTAR";
 
+            verPassword.setAttribute(
+              "aria-pressed",
+              "true"
+            );
+
+            verPassword.setAttribute(
+              "aria-label",
+              "Ocultar contraseña"
+            );
+
           } else {
 
             password.type =
@@ -218,11 +234,80 @@ document.addEventListener(
             verPassword.textContent =
               "VER";
 
+            verPassword.setAttribute(
+              "aria-pressed",
+              "false"
+            );
+
+            verPassword.setAttribute(
+              "aria-label",
+              "Mostrar contraseña"
+            );
+
           }
 
         }
       );
 
+    }
+
+
+    // ======================================
+    // VERIFICAR PERMISO ADMINISTRATIVO
+    // ======================================
+    // La autorización real sigue estando en las reglas de
+    // Firestore. Esta lectura no depende de un UID duplicado
+    // en el frontend: si la cuenta no es administradora,
+    // Firestore responde permission-denied.
+
+    async function verificarAccesoAdmin() {
+
+      try {
+
+        await db
+          .collection("configuracion_sri")
+          .doc("__admin_access_check__")
+          .get({ source: "server" });
+
+        return true;
+
+      } catch (error) {
+
+        if (
+          error &&
+          error.code === "permission-denied"
+        ) {
+
+          return false;
+        }
+
+        throw error;
+      }
+    }
+
+
+    // ======================================
+    // MENSAJES DE REDIRECCIÓN
+    // ======================================
+
+    const parametros =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    if (parametros.has("denied")) {
+      mostrarMensaje(
+        "La cuenta autenticada no tiene permisos de administrador."
+      );
+    } else if (parametros.has("logout")) {
+      mostrarMensaje(
+        "Sesión administrativa cerrada correctamente.",
+        true
+      );
+    } else if (parametros.has("session")) {
+      mostrarMensaje(
+        "Tu sesión administrativa terminó. Inicia sesión nuevamente."
+      );
     }
 
 
@@ -343,11 +428,35 @@ document.addEventListener(
 
 
           // =================================
+          // AUTORIZACIÓN ADMINISTRATIVA
+          // =================================
+
+          mostrarMensaje(
+            "Verificando permisos administrativos..."
+          );
+
+          const autorizado =
+            await verificarAccesoAdmin();
+
+          if (!autorizado) {
+
+            await auth.signOut();
+
+            mostrarMensaje(
+              "La cuenta es válida, pero no tiene permisos de administrador."
+            );
+
+            restaurarBoton();
+            return;
+          }
+
+
+          // =================================
           // LOGIN CORRECTO
           // =================================
 
           mostrarMensaje(
-            "Acceso correcto. Abriendo panel...",
+            "Acceso administrativo verificado. Abriendo panel...",
             true
           );
 
@@ -530,6 +639,16 @@ document.addEventListener(
         case "auth/operation-not-allowed":
 
           return "El acceso por correo y contraseña no está habilitado.";
+
+
+        case "permission-denied":
+
+          return "La cuenta no tiene permisos administrativos.";
+
+
+        case "unavailable":
+
+          return "No fue posible verificar los permisos. Revisa tu conexión e inténtalo nuevamente.";
 
 
         case "auth/unauthorized-domain":

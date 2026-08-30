@@ -14,8 +14,11 @@
 
   <meta
     name="robots"
-    content="noindex, nofollow"
+    content="noindex,nofollow,noarchive"
   >
+
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 
   <link
     rel="stylesheet"
@@ -180,6 +183,8 @@
               id="adminUsuario"
               placeholder="administrador@sixteen.com"
               autocomplete="username"
+              maxlength="160"
+              spellcheck="false"
               required
             >
 
@@ -224,6 +229,8 @@
               type="button"
               id="mostrarPasswordBtn"
               class="mostrar-password"
+              aria-pressed="false"
+              aria-label="Mostrar contraseña"
             >
 
               VER
@@ -361,7 +368,9 @@ admin.js ahora es un módulo JavaScript.
 
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
 
-<script src="./admin.js?v=2310"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+
+<script src="./admin.js?v=11000"></script>
 
 </body>
 </html>

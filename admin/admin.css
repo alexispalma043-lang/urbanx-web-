@@ -6878,3 +6878,67 @@ td {
   }
 
 }
+
+/* =========================================================
+   PASO 11 · GUARDIA DE ACCESO ADMINISTRATIVO
+========================================================= */
+
+.admin-access-state{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  background:#050505;
+  color:#eee8df
+}
+
+.admin-access-state[hidden]{display:none!important}
+
+.admin-access-card{
+  width:min(520px,100%);
+  padding:34px;
+  border:1px solid rgba(216,170,85,.28);
+  background:#080808;
+  text-align:center;
+  box-shadow:0 24px 80px rgba(0,0,0,.38)
+}
+
+.admin-access-mark{
+  width:76px;
+  height:76px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 20px;
+  border:1px solid #d8aa55;
+  color:#e5c77f;
+  font-weight:900;
+  letter-spacing:.08em
+}
+
+.admin-access-card h1{
+  margin:8px 0 12px;
+  color:#fff;
+  font-size:clamp(24px,5vw,38px);
+  letter-spacing:.04em
+}
+
+.admin-access-card > p:not(.admin-mini){
+  margin:0 auto 20px;
+  max-width:420px;
+  color:#8f857a;
+  line-height:1.7
+}
+
+.admin-access-card .admin-primary-btn{
+  margin-top:8px
+}
+
+.admin-login-form :is(input,button,a):focus-visible,
+.admin-access-card button:focus-visible,
+.admin-shell :is(a,button,input,select,textarea):focus-visible{
+  outline:2px solid #d8aa55;
+  outline-offset:3px
+}
+

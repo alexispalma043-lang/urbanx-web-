@@ -14,12 +14,15 @@
 
   <meta
     name="robots"
-    content="noindex, nofollow"
+    content="noindex,nofollow,noarchive"
   >
+
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=4300"
+    href="./admin.css?v=11000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -37,6 +40,22 @@
 
 
 <body class="admin-body">
+
+
+<div
+  class="admin-access-state"
+  id="adminAccessState"
+  role="status"
+  aria-live="polite"
+>
+  <div class="admin-access-card">
+    <span class="admin-access-mark" aria-hidden="true">XVI</span>
+    <p class="admin-mini">SECURE ACCESS</p>
+    <h1 id="adminAccessTitle">VERIFICANDO ACCESO</h1>
+    <p id="adminAccessMessage">Comprobando tu sesión y permisos administrativos...</p>
+    <button type="button" id="adminAccessRetry" class="admin-primary-btn" hidden>REINTENTAR</button>
+  </div>
+</div>
 
 
 <div
@@ -5500,7 +5519,7 @@
 
 <script src="../sri-core.js?v=3800"></script>
 
-<script src="./dashboard.js?v=3100"></script>
+<script src="./dashboard.js?v=11000"></script>
 
 <script src="./analitica.js?v=2800"></script>
 

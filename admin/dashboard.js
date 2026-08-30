@@ -99,6 +99,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // ========================================================
 
   const adminShell = document.getElementById("adminShell");
+  const adminAccessState = document.getElementById("adminAccessState");
+  const adminAccessTitle = document.getElementById("adminAccessTitle");
+  const adminAccessMessage = document.getElementById("adminAccessMessage");
+  const adminAccessRetry = document.getElementById("adminAccessRetry");
   const adminEmail = document.getElementById("adminEmail");
   const adminAvatar = document.getElementById("adminAvatar");
   const cerrarSesionBtn = document.getElementById("cerrarSesionBtn");
@@ -450,52 +454,194 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.classList.remove("modal-open");
 
   // ========================================================
-  // AUTENTICACIÓN ADMIN
+  // AUTENTICACIÓN + AUTORIZACIÓN ADMIN
   // ========================================================
+  // La sesión por sí sola no concede acceso. Antes de mostrar
+  // el panel se realiza una lectura protegida por las reglas
+  // de Firestore. Un usuario autenticado sin permiso admin
+  // recibe permission-denied y nunca ve el panel.
 
-  auth.onAuthStateChanged(
-    function (user) {
+  let validandoAccesoAdmin = false;
+  let listenersAdminIniciados = false;
 
-      if (!user) {
-        const motivo = logoutEnProceso ? "logout" : "session";
+
+  function mostrarEstadoAcceso(titulo, mensaje, reintentar) {
+
+    if (adminAccessTitle) {
+      adminAccessTitle.textContent = titulo || "VERIFICANDO ACCESO";
+    }
+
+    if (adminAccessMessage) {
+      adminAccessMessage.textContent = mensaje || "";
+    }
+
+    if (adminAccessRetry) {
+      adminAccessRetry.hidden = !reintentar;
+    }
+
+    if (adminAccessState) {
+      adminAccessState.hidden = false;
+    }
+  }
+
+
+  async function verificarPermisoAdmin(user) {
+
+    if (!user) {
+      return false;
+    }
+
+    try {
+
+      await db
+        .collection("configuracion_sri")
+        .doc("__admin_access_check__")
+        .get({ source: "server" });
+
+      return true;
+
+    } catch (error) {
+
+      if (
+        error &&
+        error.code === "permission-denied"
+      ) {
+        return false;
+      }
+
+      throw error;
+    }
+  }
+
+
+  function iniciarPanelAutorizado(user) {
+
+    usuarioActual = user;
+
+    if (adminEmail) {
+      adminEmail.textContent =
+        user.email || "Administrador";
+    }
+
+    if (adminAvatar) {
+      adminAvatar.textContent =
+        (user.email || "S")
+          .charAt(0)
+          .toUpperCase();
+    }
+
+    if (adminAccessState) {
+      adminAccessState.hidden = true;
+    }
+
+    if (adminShell) {
+      adminShell.style.visibility = "visible";
+    }
+
+    if (listenersAdminIniciados) {
+      return;
+    }
+
+    listenersAdminIniciados = true;
+
+    escucharProductos();
+    escucharPedidos();
+    escucharMovimientosInventario();
+    escucharCupones();
+    escucharEnvios();
+  }
+
+
+  async function procesarSesionAdmin(user) {
+
+    if (validandoAccesoAdmin) {
+      return;
+    }
+
+    if (!user) {
+      const motivo = logoutEnProceso ? "logout" : "session";
+
+      window.location.replace(
+        "./login.html?" +
+        motivo +
+        "=" +
+        Date.now()
+      );
+
+      return;
+    }
+
+    validandoAccesoAdmin = true;
+
+    mostrarEstadoAcceso(
+      "VERIFICANDO ACCESO",
+      "Comprobando tu sesión y permisos administrativos...",
+      false
+    );
+
+    try {
+
+      const autorizado =
+        await verificarPermisoAdmin(user);
+
+      if (!autorizado) {
+
+        detenerListeners();
+        listenersAdminIniciados = false;
+
+        try {
+          await auth.signOut();
+        } catch (_) {}
 
         window.location.replace(
-          "./login.html?" +
-          motivo +
-          "=" +
+          "./login.html?denied=" +
           Date.now()
         );
 
         return;
       }
 
-      usuarioActual = user;
+      iniciarPanelAutorizado(user);
 
-      if (adminEmail) {
-        adminEmail.textContent =
-          user.email || "Administrador";
-      }
+    } catch (error) {
 
-      if (adminAvatar) {
-        adminAvatar.textContent =
-          (user.email || "S")
-            .charAt(0)
-            .toUpperCase();
-      }
+      console.error("Admin access:", error);
 
-      if (adminShell) {
-        adminShell.style.visibility = "visible";
-      }
+      mostrarEstadoAcceso(
+        "NO PUDIMOS VERIFICAR EL ACCESO",
+        "Revisa tu conexión e inténtalo nuevamente. El panel permanecerá bloqueado hasta verificar tus permisos.",
+        true
+      );
 
-      escucharProductos();
-      escucharPedidos();
-      escucharMovimientosInventario();
-      escucharCupones();
-      escucharEnvios();
+    } finally {
+      validandoAccesoAdmin = false;
+    }
+  }
+
+
+  adminAccessRetry?.addEventListener(
+    "click",
+    function () {
+      procesarSesionAdmin(
+        auth.currentUser
+      );
+    }
+  );
+
+
+  auth.onAuthStateChanged(
+    function (user) {
+      procesarSesionAdmin(user);
     },
 
     function (error) {
       console.error("Auth:", error);
+
+      mostrarEstadoAcceso(
+        "ERROR DE SESIÓN",
+        "No fue posible comprobar la sesión administrativa.",
+        true
+      );
     }
   );
 
@@ -518,6 +664,7 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
 
         detenerListeners();
+        listenersAdminIniciados = false;
 
         await auth.signOut();
 
