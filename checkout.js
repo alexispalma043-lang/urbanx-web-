@@ -2383,6 +2383,126 @@ document.addEventListener(
 
 
     // ======================================================
+    // REVALIDAR ENVÍO EN FIRESTORE
+    // ======================================================
+
+    async function revalidarEnvioFirestore() {
+
+
+      const provinciaActual =
+        String(
+          provincia.value ||
+          ""
+        ).trim();
+
+
+      const envioId =
+        String(
+          enviosIdsPorProvincia[
+            provinciaActual
+          ] ||
+          ""
+        ).trim();
+
+
+      if (
+        !provinciaActual ||
+        !envioId
+      ) {
+
+        throw new Error(
+          "No pudimos verificar la tarifa de envío seleccionada."
+        );
+
+      }
+
+
+      const snapshot =
+        await db
+          .collection("envios")
+          .doc(envioId)
+          .get({
+            source:
+              "server"
+          });
+
+
+      if (!snapshot.exists) {
+
+        throw new Error(
+          "La tarifa de envío seleccionada ya no existe."
+        );
+
+      }
+
+
+      const datos =
+        snapshot.data() ||
+        {};
+
+
+      if (
+        datos.activo !== true ||
+        String(
+          datos.provincia ||
+          ""
+        ).trim() !==
+        provinciaActual
+      ) {
+
+        throw new Error(
+          "La tarifa de envío de " +
+          provinciaActual +
+          " ya no está disponible."
+        );
+
+      }
+
+
+      const tarifaActual =
+        Math.max(
+          0,
+          numero(
+            datos.tarifa
+          )
+        );
+
+
+      if (
+        Math.abs(
+          tarifaActual -
+          costoEnvio
+        ) >
+        0.000001
+      ) {
+
+        tarifasEnvio[
+          provinciaActual
+        ] =
+          tarifaActual;
+
+
+        costoEnvio =
+          tarifaActual;
+
+
+        actualizarTotales();
+
+
+        throw new Error(
+          "La tarifa de envío cambió a $" +
+          tarifaActual.toFixed(2) +
+          ". Revisa el nuevo total y vuelve a realizar el pedido."
+        );
+
+      }
+
+
+      return true;
+    }
+
+
+    // ======================================================
     // MÉTODO ENTREGA
     // ======================================================
 
@@ -2406,7 +2526,9 @@ document.addEventListener(
     // NÚMERO PEDIDO
     // ======================================================
 
-    function generarNumeroPedido() {
+    function generarNumeroPedido(
+      pedidoId
+    ) {
 
 
       const ahora =
@@ -2438,28 +2560,33 @@ document.addEventListener(
         );
 
 
-      const tiempo =
+      const referencia =
         String(
-          Date.now()
-        ).slice(
-          -5
+          pedidoId ||
+          ""
+        )
+          .replace(
+            /[^A-Za-z0-9]/g,
+            ""
+          )
+          .toUpperCase();
+
+
+      if (!referencia) {
+        throw new Error(
+          "No fue posible reservar la referencia del pedido."
         );
+      }
 
 
-      const aleatorio =
-        Math.floor(
-          10 +
-          Math.random() *
-          90
-        );
-
-
+      // El ID aleatorio de Firestore es la clave real y única del pedido.
+      // Usarlo también en el número visible evita depender de Date.now()
+      // + Math.random(), que podía repetir números en compras simultáneas.
       return (
         "SIX-" +
         fecha +
         "-" +
-        tiempo +
-        aleatorio
+        referencia
       );
 
     }
@@ -2841,12 +2968,15 @@ document.addEventListener(
     // ======================================================
 
     function crearPedido(
-      usuario
+      usuario,
+      pedidoId
     ) {
 
 
       const numeroPedido =
-        generarNumeroPedido();
+        generarNumeroPedido(
+          pedidoId
+        );
 
 
       const subtotal =
@@ -3111,10 +3241,12 @@ document.addEventListener(
 
     async function guardarPedidoConCupon(
       pedido,
-      usuario
+      usuario,
+      pedidoRef
     ) {
 
-      const pedidoRef =
+      const refPedido =
+        pedidoRef ||
         db
           .collection("pedidos")
           .doc();
@@ -3132,11 +3264,11 @@ document.addEventListener(
         !cuponRemotoActual
       ) {
 
-        await pedidoRef.set(
+        await refPedido.set(
           pedido
         );
 
-        return pedidoRef;
+        return refPedido;
       }
 
       const cuponRef =
@@ -3204,7 +3336,7 @@ document.addEventListener(
             );
 
           transaction.set(
-            pedidoRef,
+            refPedido,
             pedido
           );
 
@@ -3216,7 +3348,7 @@ document.addEventListener(
                 1,
 
               ultimoPedidoId:
-                pedidoRef.id,
+                refPedido.id,
 
               ultimoUsoUid:
                 usuario.uid,
@@ -3230,7 +3362,7 @@ document.addEventListener(
         }
       );
 
-      return pedidoRef;
+      return refPedido;
     }
 
 
@@ -3380,7 +3512,10 @@ document.addEventListener(
 
 
           // Reconsulta Firestore justo antes de crear el pedido.
-          // Evita usar un método desactivado o una URL de pago antigua.
+          // Evita usar una tarifa, un método o una URL de pago antiguos.
+          await revalidarEnvioFirestore();
+
+
           await revalidarMetodoPagoFirestore();
 
 
@@ -3441,16 +3576,26 @@ document.addEventListener(
           // CREAR PEDIDO
           // ==================================================
 
+          // Se reserva primero el ID de Firestore. Ese mismo ID forma
+          // parte del número visible del pedido y sirve como referencia única.
+          const pedidoRef =
+            db
+              .collection("pedidos")
+              .doc();
+
+
           const pedido =
             crearPedido(
-              usuario
+              usuario,
+              pedidoRef.id
             );
 
 
           const documento =
             await guardarPedidoConCupon(
               pedido,
-              usuario
+              usuario,
+              pedidoRef
             );
 
 

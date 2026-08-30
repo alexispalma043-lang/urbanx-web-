@@ -741,6 +741,27 @@ document.addEventListener(
                           datos.precio
                         ),
 
+                      precioAnterior:
+                        numero(
+                          datos.precioAnterior
+                        ),
+
+                      ivaTarifa:
+                        numero(
+                          datos.ivaTarifa ??
+                          15
+                        ),
+
+                      urbanx3d:
+                        datos.urbanx3d ===
+                        true,
+
+                      modelo3d:
+                        String(
+                          datos.modelo3d ||
+                          ""
+                        ).trim(),
+
                       stock:
                         window.SIXTEEN_VARIANTS
                           ?.totalStock(datos)
@@ -850,8 +871,11 @@ document.addEventListener(
         item.nombre=producto.nombre;
         item.categoria=producto.categoria;
         item.precio=producto.precio;
+        item.precioAnterior=producto.precioAnterior;
         item.ivaTarifa=Number(producto.ivaTarifa ?? item.ivaTarifa ?? 15);
         item.imagen=producto.imagen;
+        item.urbanx3d=producto.urbanx3d===true;
+        item.modelo3d=String(producto.modelo3d||"").trim();
         item.sincronizado=true;
 
         if(normalizar(producto.estado)!=="activo"){

@@ -3710,6 +3710,12 @@ document.addEventListener(
       if(existente){
         existente.cantidad=Math.min(numero(existente.cantidad)+cantidad,stockDisponible);
         existente.stock=stockDisponible;
+        existente.precio=producto.precio;
+        existente.precioAnterior=producto.precioAnterior;
+        existente.ivaTarifa=Number(producto.ivaTarifa ?? 15);
+        existente.imagen=producto.imagen||"";
+        existente.urbanx3d=producto.urbanx3d===true;
+        existente.modelo3d=String(producto.modelo3d||"").trim();
       }else{
         carrito.push({
           id:producto.codigo,
@@ -3725,7 +3731,9 @@ document.addEventListener(
           talla:tallaSeleccionada,
           stock:stockDisponible,
           cantidad,
-          imagen:producto.imagen||""
+          imagen:producto.imagen||"",
+          urbanx3d:producto.urbanx3d===true,
+          modelo3d:String(producto.modelo3d||"").trim()
         });
       }
 

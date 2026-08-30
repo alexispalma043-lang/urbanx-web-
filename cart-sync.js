@@ -235,6 +235,11 @@
                 item?.precio
               ),
 
+            precioAnterior:
+              numero(
+                item?.precioAnterior
+              ),
+
             ivaTarifa:
               numero(
                 item?.ivaTarifa ?? 15
@@ -276,6 +281,16 @@
                 item?.imagen ||
                 ""
               ),
+
+            urbanx3d:
+              item?.urbanx3d ===
+              true,
+
+            modelo3d:
+              String(
+                item?.modelo3d ||
+                ""
+              ).trim(),
 
             stock:
               item?.stock ===
