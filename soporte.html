@@ -7,9 +7,21 @@
   <meta name="description" content="Centro de ayuda y soporte de SIXTEEN Urban Luxury.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#050505">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Soporte | SIXTEEN Urban Luxury">
+  <meta property="og:description" content="Centro de ayuda, contacto y preguntas frecuentes de SIXTEEN Urban Luxury.">
+  <meta property="og:url" content="https://alexispalma043-lang.github.io/urbanx-web-/soporte.html">
+  <meta property="og:image" content="https://alexispalma043-lang.github.io/urbanx-web-/assets/og-sixteen.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Soporte | SIXTEEN Urban Luxury">
+  <meta name="twitter:description" content="Centro de ayuda, contacto y preguntas frecuentes de SIXTEEN Urban Luxury.">
+  <meta name="twitter:image" content="https://alexispalma043-lang.github.io/urbanx-web-/assets/og-sixteen.png">
   <link rel="canonical" href="https://alexispalma043-lang.github.io/urbanx-web-/soporte.html">
   <link rel="icon" href="./assets/favicon-32.png">
-  <link rel="stylesheet" href="./legal.css?v=3000">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./legal.css?v=9000">
 </head>
 <body>
 
@@ -42,9 +54,12 @@
       <span>EMAIL</span>
       <h2>Soporte por correo</h2>
       <p>Para pedidos, cambios, devoluciones, cuenta o consultas generales.</p>
-      <a id="supportEmailLink" href="#">
+      <a id="supportEmailLink">
         <span id="supportEmailText"></span>
       </a>
+      <p id="supportEmailFallback" class="support-muted" hidden>
+        El correo de soporte todavía no está publicado.
+      </p>
     </article>
 
     <article class="support-card">
@@ -56,8 +71,8 @@
       </p>
 
       <div class="support-socials">
-        <a id="supportWhatsappLink" href="#" target="_blank" rel="noopener noreferrer" hidden>WHATSAPP</a>
-        <a id="supportPhoneLink" href="#" hidden><span id="supportPhoneText"></span></a>
+        <a id="supportWhatsappLink" target="_blank" rel="noopener noreferrer" hidden>WHATSAPP</a>
+        <a id="supportPhoneLink" hidden><span id="supportPhoneText"></span></a>
       </div>
     </article>
 
@@ -67,12 +82,25 @@
       <p id="supportHoursText"></p>
 
       <div class="support-socials">
-        <a id="supportInstagramLink" href="#" target="_blank" rel="noopener noreferrer" hidden>INSTAGRAM</a>
-        <a id="supportFacebookLink" href="#" target="_blank" rel="noopener noreferrer" hidden>FACEBOOK</a>
-        <a id="supportTiktokLink" href="#" target="_blank" rel="noopener noreferrer" hidden>TIKTOK</a>
+        <a id="supportInstagramLink" target="_blank" rel="noopener noreferrer" hidden>INSTAGRAM</a>
+        <a id="supportFacebookLink" target="_blank" rel="noopener noreferrer" hidden>FACEBOOK</a>
+        <a id="supportTiktokLink" target="_blank" rel="noopener noreferrer" hidden>TIKTOK</a>
       </div>
     </article>
 
+  </section>
+
+  <section class="support-actions" aria-labelledby="supportActionsTitle">
+    <div>
+      <p class="legal-eyebrow">QUICK ACTIONS</p>
+      <h2 id="supportActionsTitle">Resuelve tu consulta más rápido</h2>
+      <p>Usa el acceso correspondiente si tu consulta está relacionada con una compra o con tu cuenta.</p>
+    </div>
+    <div class="support-action-links">
+      <a href="./seguimiento.html">SEGUIR UN PEDIDO</a>
+      <a href="./cuenta.html">IR A MI CUENTA</a>
+      <a href="./politicas.html#cambios">CAMBIOS Y DEVOLUCIONES</a>
+    </div>
   </section>
 
   <section class="faq-wrap" id="faq">
@@ -81,60 +109,60 @@
     <h2>Preguntas frecuentes</h2>
 
     <article class="faq-item">
-      <button class="faq-question" type="button" data-faq-button aria-expanded="false">
+      <button class="faq-question" type="button" data-faq-button aria-expanded="false" aria-controls="faq-registro" id="faq-registro-button">
         ¿Cómo sé si mi pedido fue registrado?
       </button>
-      <p class="faq-answer" hidden>
+      <p class="faq-answer" id="faq-registro" role="region" aria-labelledby="faq-registro-button" hidden>
         Al completar correctamente el checkout, SIXTEEN genera una confirmación
         y el pedido queda disponible en el historial de tu cuenta y seguimiento.
       </p>
     </article>
 
     <article class="faq-item">
-      <button class="faq-question" type="button" data-faq-button aria-expanded="false">
+      <button class="faq-question" type="button" data-faq-button aria-expanded="false" aria-controls="faq-stock" id="faq-stock-button">
         ¿Puedo comprar una talla o color agotado?
       </button>
-      <p class="faq-answer" hidden>
+      <p class="faq-answer" id="faq-stock" role="region" aria-labelledby="faq-stock-button" hidden>
         No. El sistema valida el stock de la variante exacta antes de agregarla
         al carrito y vuelve a revisarlo durante el checkout.
       </p>
     </article>
 
     <article class="faq-item">
-      <button class="faq-question" type="button" data-faq-button aria-expanded="false">
+      <button class="faq-question" type="button" data-faq-button aria-expanded="false" aria-controls="faq-seguimiento" id="faq-seguimiento-button">
         ¿Dónde reviso el estado de mi pedido?
       </button>
-      <p class="faq-answer" hidden>
+      <p class="faq-answer" id="faq-seguimiento" role="region" aria-labelledby="faq-seguimiento-button" hidden>
         Puedes hacerlo desde Mi Cuenta o mediante la página de seguimiento
         vinculada a tu pedido.
       </p>
     </article>
 
     <article class="faq-item">
-      <button class="faq-question" type="button" data-faq-button aria-expanded="false">
+      <button class="faq-question" type="button" data-faq-button aria-expanded="false" aria-controls="faq-cambios" id="faq-cambios-button">
         ¿Cómo solicito un cambio o reporto una novedad?
       </button>
-      <p class="faq-answer" hidden>
+      <p class="faq-answer" id="faq-cambios" role="region" aria-labelledby="faq-cambios-button" hidden>
         Contacta a soporte indicando número de pedido, producto, variante y
         descripción de la novedad. Adjunta fotografías cuando sea útil.
       </p>
     </article>
 
     <article class="faq-item">
-      <button class="faq-question" type="button" data-faq-button aria-expanded="false">
+      <button class="faq-question" type="button" data-faq-button aria-expanded="false" aria-controls="faq-tarjeta" id="faq-tarjeta-button">
         ¿SIXTEEN almacena directamente números de tarjeta?
       </button>
-      <p class="faq-answer" hidden>
+      <p class="faq-answer" id="faq-tarjeta" role="region" aria-labelledby="faq-tarjeta-button" hidden>
         No. Cuando se incorpore una pasarela de tarjeta, la captura y tokenización
         deberá realizarse mediante el proveedor autorizado.
       </p>
     </article>
 
     <article class="faq-item">
-      <button class="faq-question" type="button" data-faq-button aria-expanded="false">
+      <button class="faq-question" type="button" data-faq-button aria-expanded="false" aria-controls="faq-datos" id="faq-datos-button">
         ¿Cómo solicito acceso, rectificación o eliminación de mis datos?
       </button>
-      <p class="faq-answer" hidden>
+      <p class="faq-answer" id="faq-datos" role="region" aria-labelledby="faq-datos-button" hidden>
         Envía la solicitud al correo de soporte/privacidad indicando el derecho
         que deseas ejercer y la información necesaria para identificar tu cuenta.
       </p>
@@ -154,13 +182,19 @@
 
   <footer class="legal-footer">
     <span>© 2026 SIXTEEN Urban Luxury.</span>
-    <span>Soporte al cliente.</span>
+    <nav class="legal-footer-links" aria-label="Enlaces de soporte">
+      <a href="./index.html">TIENDA</a>
+      <a href="./seguimiento.html">SEGUIMIENTO</a>
+      <a href="./cuenta.html">MI CUENTA</a>
+      <a href="./politicas.html">POLÍTICAS</a>
+    </nav>
   </footer>
 
 </main>
 
-<script src="./store-config.js?v=3000"></script>
-<script src="./support.js?v=3000"></script>
+<script src="./store-config.js?v=9000"></script>
+<script src="./support.js?v=9000"></script>
+<script src="./pwa.js?v=9000"></script>
 
 </body>
 </html>

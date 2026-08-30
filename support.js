@@ -1,86 +1,150 @@
 // @ts-nocheck
 
-document.addEventListener("DOMContentLoaded", function () {
-  const config = window.SIXTEEN_STORE_CONFIG || {};
-  const $ = id => document.getElementById(id);
+(function () {
+  "use strict";
 
-  function value(key, fallback = "") {
-    return String(config[key] || fallback || "").trim();
-  }
+  document.addEventListener("DOMContentLoaded", function () {
+    const config = window.SIXTEEN_STORE_CONFIG || {};
+    const $ = id => document.getElementById(id);
 
-  function setText(id, text) {
-    const node = $(id);
-    if (node) node.textContent = text;
-  }
-
-  function setLink(id, href, text = "") {
-    const node = $(id);
-    if (!node) return;
-
-    const cleanHref = String(href || "").trim();
-
-    if (!cleanHref) {
-      node.hidden = true;
-      return;
+    function value(key, fallback = "") {
+      return String(config[key] || fallback || "").trim();
     }
 
-    node.hidden = false;
-    node.href = cleanHref;
-    if (text) node.textContent = text;
-  }
+    function setText(id, text) {
+      const node = $(id);
+      if (node) node.textContent = text;
+    }
 
-  setText("legalMarca", value("brand", "SIXTEEN Urban Luxury"));
-  setText("legalNombreComercial", value("commercialName", "SIXTEEN"));
-  setText("legalNombreResponsable", value("legalName", value("brand", "SIXTEEN Urban Luxury")));
-  setText("legalRuc", value("ruc", "Dato por registrar antes de publicación"));
+    function setLink(id, href, text = "", allowedProtocols = ["https:"]) {
+      const node = $(id);
+      if (!node) return false;
 
-  const domicilio = [value("address"), value("city"), value("country")]
-    .filter(Boolean)
-    .join(", ");
+      const cleanHref = String(href || "").trim();
+      if (!cleanHref) {
+        node.hidden = true;
+        node.removeAttribute("href");
+        return false;
+      }
 
-  setText("legalDomicilio", domicilio || value("country", "Ecuador"));
-  setText("legalActualizado", value("policiesUpdated"));
+      let protocol = "";
+      try {
+        protocol = new URL(cleanHref, window.location.href).protocol;
+      } catch (_) {
+        node.hidden = true;
+        node.removeAttribute("href");
+        return false;
+      }
 
-  const email = value("supportEmail");
-  setText("supportEmailText", email || "Correo de soporte por configurar");
-  setText("privacyEmailText", email || "Correo de privacidad por configurar");
-  setLink("supportEmailLink", email ? "mailto:" + email : "", email);
-  setLink("privacyEmailLink", email ? "mailto:" + email : "", email);
+      if (!allowedProtocols.includes(protocol)) {
+        node.hidden = true;
+        node.removeAttribute("href");
+        return false;
+      }
 
-  const phone = value("phone");
-  setText("supportPhoneText", phone || "No publicado");
-  setLink(
-    "supportPhoneLink",
-    phone ? "tel:" + phone.replace(/[^\d+]/g, "") : "",
-    phone
-  );
+      node.hidden = false;
+      node.href = cleanHref;
+      if (text) node.textContent = text;
+      return true;
+    }
 
-  const whatsapp = value("whatsapp").replace(/[^\d]/g, "");
-  setLink(
-    "supportWhatsappLink",
-    whatsapp ? "https://wa.me/" + whatsapp : "",
-    "WHATSAPP"
-  );
+    setText("legalMarca", value("brand", "SIXTEEN Urban Luxury"));
+    setText("legalNombreComercial", value("commercialName", "SIXTEEN"));
+    setText("legalNombreResponsable", value("legalName", value("brand", "SIXTEEN Urban Luxury")));
+    setText("legalRuc", value("ruc", "Dato por registrar antes de publicación"));
 
-  setLink("supportInstagramLink", value("instagram"), "INSTAGRAM");
-  setLink("supportFacebookLink", value("facebook"), "FACEBOOK");
-  setLink("supportTiktokLink", value("tiktok"), "TIKTOK");
+    const domicilio = [value("address"), value("city"), value("country")]
+      .filter(Boolean)
+      .join(", ");
 
-  setText(
-    "supportHoursText",
-    value("supportHours", "Horario de atención por configurar")
-  );
+    setText("legalDomicilio", domicilio || value("country", "Ecuador"));
+    setText("legalActualizado", value("policiesUpdated"));
 
-  document.querySelectorAll("[data-faq-button]").forEach(function (button) {
-    button.addEventListener("click", function () {
+    const email = value("supportEmail");
+    setText("supportEmailText", email || "Correo de soporte por configurar");
+    setText("privacyEmailText", email || "Correo de privacidad por configurar");
+
+    const emailOk = setLink(
+      "supportEmailLink",
+      email ? "mailto:" + email : "",
+      email,
+      ["mailto:"]
+    );
+    setLink(
+      "privacyEmailLink",
+      email ? "mailto:" + email : "",
+      email,
+      ["mailto:"]
+    );
+
+    const emailFallback = $("supportEmailFallback");
+    if (emailFallback) emailFallback.hidden = emailOk;
+
+    const phone = value("phone");
+    setText("supportPhoneText", phone || "No publicado");
+    setLink(
+      "supportPhoneLink",
+      phone ? "tel:" + phone.replace(/[^\d+]/g, "") : "",
+      phone,
+      ["tel:"]
+    );
+
+    const whatsapp = value("whatsapp").replace(/[^\d]/g, "");
+    setLink(
+      "supportWhatsappLink",
+      whatsapp ? "https://wa.me/" + whatsapp : "",
+      "WHATSAPP",
+      ["https:"]
+    );
+
+    setLink("supportInstagramLink", value("instagram"), "INSTAGRAM", ["https:"]);
+    setLink("supportFacebookLink", value("facebook"), "FACEBOOK", ["https:"]);
+    setLink("supportTiktokLink", value("tiktok"), "TIKTOK", ["https:"]);
+
+    setText(
+      "supportHoursText",
+      value("supportHours", "Horario de atención por configurar")
+    );
+
+    const faqButtons = Array.from(document.querySelectorAll("[data-faq-button]"));
+
+    function closeFaq(button) {
       const item = button.closest(".faq-item");
-      if (!item) return;
+      const answer = item?.querySelector(".faq-answer");
+      item?.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      if (answer) answer.hidden = true;
+    }
 
-      const open = item.classList.toggle("is-open");
-      button.setAttribute("aria-expanded", open ? "true" : "false");
+    function openFaq(button) {
+      faqButtons.forEach(other => {
+        if (other !== button) closeFaq(other);
+      });
 
-      const answer = item.querySelector(".faq-answer");
-      if (answer) answer.hidden = !open;
+      const item = button.closest(".faq-item");
+      const answer = item?.querySelector(".faq-answer");
+      item?.classList.add("is-open");
+      button.setAttribute("aria-expanded", "true");
+      if (answer) answer.hidden = false;
+    }
+
+    faqButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        if (expanded) closeFaq(button);
+        else openFaq(button);
+      });
     });
+
+    const hash = String(window.location.hash || "");
+    if (hash.startsWith("#faq-") && !hash.endsWith("-button")) {
+      const answer = document.querySelector(hash);
+      const buttonId = answer?.getAttribute("aria-labelledby");
+      const button = buttonId ? document.getElementById(buttonId) : null;
+      if (button) {
+        openFaq(button);
+        requestAnimationFrame(() => button.scrollIntoView({ block: "center" }));
+      }
+    }
   });
-});
+})();
