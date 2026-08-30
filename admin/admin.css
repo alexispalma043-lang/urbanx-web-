@@ -7478,3 +7478,31 @@ td {
     grid-column: auto;
   }
 }
+
+/* =========================================================
+   PASO 17 · CUPONES Y ENVÍOS
+========================================================= */
+
+.comercial-status-badge.programado {
+  color: #e7c883;
+  background: rgba(216,170,85,.07);
+  border-color: rgba(216,170,85,.24);
+}
+
+.comercial-status-badge.agotado {
+  color: #c5beb3;
+  background: rgba(255,255,255,.035);
+  border-color: rgba(255,255,255,.12);
+}
+
+#limpiarFiltrosEnviosBtn {
+  align-self: end;
+  min-height: 42px;
+}
+
+@media (min-width: 821px) {
+  #limpiarFiltrosEnviosBtn {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}

@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=16000"
+    href="./admin.css?v=17000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -1465,13 +1465,29 @@
                   Inactivos
                 </option>
 
+                <option value="programado">
+                  Programados
+                </option>
+
                 <option value="vencido">
                   Vencidos
+                </option>
+
+                <option value="agotado">
+                  Agotados
                 </option>
               </select>
             </div>
 
           </div>
+
+          <p
+            class="productos-resultado"
+            id="cuponesResultadoTexto"
+            aria-live="polite"
+          >
+            Mostrando 0 cupones.
+          </p>
 
           <div class="admin-table-wrap">
 
@@ -1549,6 +1565,51 @@
             </article>
 
           </div>
+
+          <div class="comercial-toolbar">
+
+            <div>
+              <label for="envioBuscar">
+                BUSCAR PROVINCIA
+              </label>
+
+              <input
+                type="search"
+                id="envioBuscar"
+                placeholder="Pichincha..."
+                autocomplete="off"
+              >
+            </div>
+
+            <div>
+              <label for="envioFiltroEstado">
+                ESTADO
+              </label>
+
+              <select id="envioFiltroEstado">
+                <option value="">Todas</option>
+                <option value="activo">Activas</option>
+                <option value="inactivo">Inactivas</option>
+              </select>
+            </div>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="limpiarFiltrosEnviosBtn"
+            >
+              LIMPIAR
+            </button>
+
+          </div>
+
+          <p
+            class="productos-resultado"
+            id="enviosResultadoTexto"
+            aria-live="polite"
+          >
+            Mostrando 0 provincias.
+          </p>
 
           <div class="admin-table-wrap">
 
@@ -3830,10 +3891,13 @@
 <div
   class="comercial-modal"
   id="cuponModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="cuponModalTitulo"
   aria-hidden="true"
 >
 
-  <div class="comercial-modal-card">
+  <div class="comercial-modal-card" tabindex="-1">
 
     <div class="pedido-modal-header">
 
@@ -4004,10 +4068,13 @@
 <div
   class="comercial-modal"
   id="envioModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="envioModalTitulo"
   aria-hidden="true"
 >
 
-  <div class="comercial-modal-card comercial-modal-card-small">
+  <div class="comercial-modal-card comercial-modal-card-small" tabindex="-1">
 
     <div class="pedido-modal-header">
 
@@ -4016,7 +4083,7 @@
           SIXTEEN SHIPPING
         </p>
 
-        <h2>
+        <h2 id="envioModalTitulo">
           Editar tarifa
         </h2>
       </div>
@@ -5727,7 +5794,7 @@
 
 <script src="../sri-core.js?v=3800"></script>
 
-<script src="./dashboard.js?v=16000"></script>
+<script src="./dashboard.js?v=17000"></script>
 
 <script src="./analitica.js?v=2800"></script>
 

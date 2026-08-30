@@ -154,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const cuponesKpiTotal = document.getElementById("cuponesKpiTotal");
   const cuponesKpiActivos = document.getElementById("cuponesKpiActivos");
   const cuponesKpiUsos = document.getElementById("cuponesKpiUsos");
+  const cuponesResultadoTexto = document.getElementById("cuponesResultadoTexto");
 
   const cuponModal = document.getElementById("cuponModal");
   const cuponModalTitulo = document.getElementById("cuponModalTitulo");
@@ -174,6 +175,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const enviosKpiTotal = document.getElementById("enviosKpiTotal");
   const enviosKpiActivos = document.getElementById("enviosKpiActivos");
   const enviosKpiPromedio = document.getElementById("enviosKpiPromedio");
+  const envioBuscar = document.getElementById("envioBuscar");
+  const envioFiltroEstado = document.getElementById("envioFiltroEstado");
+  const limpiarFiltrosEnviosBtn = document.getElementById("limpiarFiltrosEnviosBtn");
+  const enviosResultadoTexto = document.getElementById("enviosResultadoTexto");
 
   const envioModal = document.getElementById("envioModal");
   const cerrarEnvioModal = document.getElementById("cerrarEnvioModal");
@@ -391,9 +396,13 @@ document.addEventListener("DOMContentLoaded", function () {
   let cuponesActuales = [];
   let cuponesFiltrados = [];
   let cuponEditandoId = null;
+  let focoAntesCuponModal = null;
 
   let enviosActuales = [];
+  let enviosFiltrados = [];
   let envioEditandoId = null;
+  let envioOriginal = null;
+  let focoAntesEnvioModal = null;
   let sembrandoEnvios = false;
 
   let unsubscribeProductos = null;
@@ -7095,6 +7104,70 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
 
+  function mostrarEstadoComercialTabla(tbody, colspan, texto) {
+
+    if (!tbody) {
+      return;
+    }
+
+    tbody.textContent = "";
+
+    const fila = document.createElement("tr");
+    const celda = document.createElement("td");
+
+    celda.colSpan = colspan;
+    celda.textContent = texto;
+
+    fila.appendChild(celda);
+    tbody.appendChild(fila);
+  }
+
+
+  function gestionarTabEnModal(event, modal) {
+
+    if (
+      event.key !== "Tab" ||
+      !modal?.classList.contains("activo")
+    ) {
+      return;
+    }
+
+    const focusables = Array.from(
+      modal.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter(function (elemento) {
+      return !elemento.hidden && elemento.offsetParent !== null;
+    });
+
+    if (!focusables.length) {
+      event.preventDefault();
+      modal.querySelector('[tabindex="-1"]')?.focus();
+      return;
+    }
+
+    const primero = focusables[0];
+    const ultimo = focusables[focusables.length - 1];
+
+    if (
+      event.shiftKey &&
+      document.activeElement === primero
+    ) {
+      event.preventDefault();
+      ultimo.focus();
+      return;
+    }
+
+    if (
+      !event.shiftKey &&
+      document.activeElement === ultimo
+    ) {
+      event.preventDefault();
+      primero.focus();
+    }
+  }
+
+
   function escucharCupones() {
 
     if (unsubscribeCupones) {
@@ -7137,8 +7210,7 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             );
 
-            cuponesActuales =
-              datos;
+            cuponesActuales = datos;
 
             marcarFuenteDatos("cupones", "ok");
             aplicarFiltrosCupones();
@@ -7155,15 +7227,16 @@ document.addEventListener("DOMContentLoaded", function () {
               error
             );
 
-            if (cuponesAdminBody) {
-              cuponesAdminBody.innerHTML = `
-                <tr>
-                  <td colspan="6">
-                    No fue posible cargar los cupones. Revisa la conexión y las reglas actuales de Firestore.
-                  </td>
-                </tr>
-              `;
-            }
+            mostrarEstadoComercialTabla(
+              cuponesAdminBody,
+              6,
+              "No fue posible cargar los cupones. Revisa la conexión y las reglas actuales de Firestore."
+            );
+
+            setTexto(
+              cuponesResultadoTexto,
+              "No fue posible cargar los cupones."
+            );
           }
         );
   }
@@ -7188,9 +7261,7 @@ document.addEventListener("DOMContentLoaded", function () {
         function (cupon) {
 
           const estado =
-            estadoCupon(
-              cupon
-            );
+            estadoCupon(cupon);
 
           if (
             filtro &&
@@ -7202,12 +7273,13 @@ document.addEventListener("DOMContentLoaded", function () {
           if (
             busqueda &&
             !normalizarTexto(
-              cupon.codigo ||
-              cupon.id ||
-              ""
-            ).includes(
-              busqueda
-            )
+              [
+                cupon.codigo,
+                cupon.id,
+                textoEstadoCupon(estado),
+                cupon.porcentaje
+              ].filter(Boolean).join(" ")
+            ).includes(busqueda)
           ) {
             return false;
           }
@@ -7216,15 +7288,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       );
 
-    renderCupones(
-      cuponesFiltrados
+    renderCupones(cuponesFiltrados);
+
+    setTexto(
+      cuponesResultadoTexto,
+      "Mostrando " +
+      cuponesFiltrados.length +
+      " de " +
+      cuponesActuales.length +
+      " cupones."
     );
   }
 
 
-  function renderCupones(
-    cupones
-  ) {
+  function renderCupones(cupones) {
 
     if (!cuponesAdminBody) {
       return;
@@ -7232,35 +7309,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!cupones.length) {
 
-      cuponesAdminBody.innerHTML = `
-        <tr>
-          <td colspan="6">
-            No existen cupones que coincidan con los filtros.
-          </td>
-        </tr>
-      `;
+      mostrarEstadoComercialTabla(
+        cuponesAdminBody,
+        6,
+        "No existen cupones que coincidan con los filtros."
+      );
 
       return;
     }
 
-    cuponesAdminBody.innerHTML =
-      "";
+    cuponesAdminBody.textContent = "";
 
     cupones.forEach(
       function (cupon) {
 
         const estado =
-          estadoCupon(
-            cupon
-          );
+          estadoCupon(cupon);
 
         const limite =
           Math.max(
             0,
             Math.floor(
-              numero(
-                cupon.limiteUsos
-              )
+              numero(cupon.limiteUsos)
             )
           );
 
@@ -7268,104 +7338,86 @@ document.addEventListener("DOMContentLoaded", function () {
           Math.max(
             0,
             Math.floor(
-              numero(
-                cupon.usosActuales
-              )
+              numero(cupon.usosActuales)
             )
           );
 
-        const fila =
-          document.createElement(
-            "tr"
+        const fila = document.createElement("tr");
+
+        const codigoTd = document.createElement("td");
+        const codigoStrong = document.createElement("strong");
+        codigoStrong.className = "admin-code";
+        codigoStrong.textContent = cupon.codigo || cupon.id || "-";
+        codigoTd.appendChild(codigoStrong);
+
+        const descuentoTd = document.createElement("td");
+        const descuentoStrong = document.createElement("strong");
+        descuentoStrong.className = "reporte-valor";
+        descuentoStrong.textContent = numero(cupon.porcentaje) + "%";
+        descuentoTd.appendChild(descuentoStrong);
+
+        const vigenciaTd = document.createElement("td");
+        vigenciaTd.textContent = textoVigenciaCupon(cupon);
+
+        const usosTd = document.createElement("td");
+        const usosStrong = document.createElement("strong");
+        usosStrong.textContent = String(usos);
+        const usosSmall = document.createElement("small");
+        usosSmall.className = "admin-table-secondary";
+        usosSmall.textContent = limite > 0
+          ? "de " + limite + " · quedan " + Math.max(limite - usos, 0)
+          : "sin límite";
+        usosTd.append(usosStrong, usosSmall);
+
+        const estadoTd = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = "comercial-status-badge " + estado;
+        badge.textContent = textoEstadoCupon(estado);
+        estadoTd.appendChild(badge);
+
+        const accionTd = document.createElement("td");
+        const acciones = document.createElement("div");
+        acciones.className = "comercial-actions";
+
+        const editarBtn = document.createElement("button");
+        editarBtn.type = "button";
+        editarBtn.className = "admin-view-btn";
+        editarBtn.dataset.editarCupon = cupon.id;
+        editarBtn.textContent = "EDITAR";
+
+        const toggleBtn = document.createElement("button");
+        toggleBtn.type = "button";
+        toggleBtn.dataset.toggleCupon = cupon.id;
+
+        if (cupon.activo === true) {
+          toggleBtn.className = "admin-delete-btn";
+          toggleBtn.textContent = "DESACTIVAR";
+          toggleBtn.setAttribute(
+            "aria-label",
+            "Desactivar cupón " + (cupon.codigo || cupon.id || "")
           );
+        } else {
+          toggleBtn.className = "admin-secondary-btn";
+          toggleBtn.textContent = "ACTIVAR";
+          toggleBtn.setAttribute(
+            "aria-label",
+            "Activar cupón " + (cupon.codigo || cupon.id || "")
+          );
+        }
 
-        fila.innerHTML = `
-          <td>
-            <strong class="admin-code">
-              ${escapar(
-                cupon.codigo ||
-                cupon.id ||
-                "-"
-              )}
-            </strong>
-          </td>
+        acciones.append(editarBtn, toggleBtn);
+        accionTd.appendChild(acciones);
 
-          <td>
-            <strong class="reporte-valor">
-              ${numero(
-                cupon.porcentaje
-              )}%
-            </strong>
-          </td>
-
-          <td>
-            <span>
-              ${escapar(
-                textoVigenciaCupon(
-                  cupon
-                )
-              )}
-            </span>
-          </td>
-
-          <td>
-            <strong>
-              ${usos}
-            </strong>
-            <small class="admin-table-secondary">
-              ${
-                limite > 0
-                  ? "de " + limite
-                  : "sin límite"
-              }
-            </small>
-          </td>
-
-          <td>
-            <span
-              class="
-                comercial-status-badge
-                ${estado}
-              "
-            >
-              ${escapar(
-                textoEstadoCupon(
-                  estado
-                )
-              )}
-            </span>
-          </td>
-
-          <td>
-            <div class="comercial-actions">
-
-              <button
-                type="button"
-                class="admin-view-btn"
-                data-editar-cupon="${escaparAtributo(
-                  cupon.id
-                )}"
-              >
-                EDITAR
-              </button>
-
-              <button
-                type="button"
-                class="admin-delete-btn"
-                data-eliminar-cupon="${escaparAtributo(
-                  cupon.id
-                )}"
-              >
-                ELIMINAR
-              </button>
-
-            </div>
-          </td>
-        `;
-
-        cuponesAdminBody.appendChild(
-          fila
+        fila.append(
+          codigoTd,
+          descuentoTd,
+          vigenciaTd,
+          usosTd,
+          estadoTd,
+          accionTd
         );
+
+        cuponesAdminBody.appendChild(fila);
       }
     );
   }
@@ -7373,95 +7425,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function actualizarResumenCupones() {
 
-    const total =
-      cuponesActuales.length;
+    const total = cuponesActuales.length;
 
     const activos =
       cuponesActuales.filter(
         function (cupon) {
-
-          return (
-            estadoCupon(
-              cupon
-            ) === "activo"
-          );
+          return estadoCupon(cupon) === "activo";
         }
       ).length;
 
     const usos =
       cuponesActuales.reduce(
-        function (
-          totalUsos,
-          cupon
-        ) {
+        function (totalUsos, cupon) {
 
           return totalUsos +
             Math.max(
               0,
-              numero(
-                cupon.usosActuales
-              )
+              numero(cupon.usosActuales)
             );
         },
         0
       );
 
-    setTexto(
-      cuponesKpiTotal,
-      String(
-        total
-      )
-    );
-
-    setTexto(
-      cuponesKpiActivos,
-      String(
-        activos
-      )
-    );
-
-    setTexto(
-      cuponesKpiUsos,
-      String(
-        Math.floor(
-          usos
-        )
-      )
-    );
+    setTexto(cuponesKpiTotal, String(total));
+    setTexto(cuponesKpiActivos, String(activos));
+    setTexto(cuponesKpiUsos, String(Math.floor(usos)));
   }
 
 
-  function estadoCupon(
-    cupon
-  ) {
+  function estadoCupon(cupon) {
 
-    if (
-      cupon.activo !==
-      true
-    ) {
+    if (cupon.activo !== true) {
       return "inactivo";
     }
 
-    const hoy =
-      fechaISOHoy();
-
-    const inicio =
-      String(
-        cupon.fechaInicio ||
-        ""
-      );
-
-    const fin =
-      String(
-        cupon.fechaFin ||
-        ""
-      );
+    const hoy = fechaISOHoy();
+    const inicio = String(cupon.fechaInicio || "");
+    const fin = String(cupon.fechaFin || "");
 
     if (
       inicio &&
       hoy < inicio
     ) {
-      return "inactivo";
+      return "programado";
     }
 
     if (
@@ -7474,89 +7480,58 @@ document.addEventListener("DOMContentLoaded", function () {
     const limite =
       Math.max(
         0,
-        Math.floor(
-          numero(
-            cupon.limiteUsos
-          )
-        )
+        Math.floor(numero(cupon.limiteUsos))
       );
 
     const usos =
       Math.max(
         0,
-        Math.floor(
-          numero(
-            cupon.usosActuales
-          )
-        )
+        Math.floor(numero(cupon.usosActuales))
       );
 
     if (
       limite > 0 &&
       usos >= limite
     ) {
-      return "vencido";
+      return "agotado";
     }
 
     return "activo";
   }
 
 
-  function textoEstadoCupon(
-    estado
-  ) {
+  function textoEstadoCupon(estado) {
 
     const textos = {
-      activo:
-        "Activo",
-
-      inactivo:
-        "Inactivo",
-
-      vencido:
-        "Vencido / agotado"
+      activo: "Activo",
+      inactivo: "Inactivo",
+      programado: "Programado",
+      vencido: "Vencido",
+      agotado: "Agotado"
     };
 
-    return textos[estado] ||
-      estado;
+    return textos[estado] || estado;
   }
 
 
-  function textoVigenciaCupon(
-    cupon
-  ) {
+  function textoVigenciaCupon(cupon) {
 
-    const inicio =
-      cupon.fechaInicio ||
-      "";
+    const inicio = cupon.fechaInicio || "";
+    const fin = cupon.fechaFin || "";
 
-    const fin =
-      cupon.fechaFin ||
-      "";
-
-    if (
-      !inicio &&
-      !fin
-    ) {
+    if (!inicio && !fin) {
       return "Sin fecha límite";
     }
 
-    if (
-      inicio &&
-      fin
-    ) {
-      return inicio +
-        " → " +
-        fin;
+    if (inicio && fin) {
+      return inicio + " → " + fin;
     }
 
     if (inicio) {
-      return "Desde " +
-        inicio;
+      return "Desde " + inicio;
     }
 
-    return "Hasta " +
-      fin;
+    return "Hasta " + fin;
   }
 
 
@@ -7578,7 +7553,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ?.addEventListener(
       "click",
       function () {
-
         abrirCuponModal();
       }
     );
@@ -7595,44 +7569,37 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
         if (editar) {
-
           abrirCuponModal(
-            editar.dataset
-              .editarCupon
+            editar.dataset.editarCupon
           );
-
           return;
         }
 
-        const eliminar =
+        const toggle =
           event.target.closest(
-            "button[data-eliminar-cupon]"
+            "button[data-toggle-cupon]"
           );
 
-        if (eliminar) {
-
-          eliminarCupon(
-            eliminar.dataset
-              .eliminarCupon
+        if (toggle) {
+          cambiarDisponibilidadCupon(
+            toggle.dataset.toggleCupon,
+            toggle
           );
         }
       }
     );
 
 
-  function abrirCuponModal(
-    cuponId = null
-  ) {
+  function abrirCuponModal(cuponId = null) {
 
-    cuponEditandoId =
-      cuponId;
+    cuponEditandoId = cuponId;
+    focoAntesCuponModal = document.activeElement;
 
     const cupon =
       cuponId
         ? cuponesActuales.find(
             function (item) {
-              return item.id ===
-                cuponId;
+              return item.id === cuponId;
             }
           )
         : null;
@@ -7645,15 +7612,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (cuponCodigo) {
-
-      cuponCodigo.value =
-        cupon?.codigo ||
-        "";
-
-      cuponCodigo.disabled =
-        Boolean(
-          cupon
-        );
+      cuponCodigo.value = cupon?.codigo || "";
+      cuponCodigo.disabled = Boolean(cupon);
     }
 
     if (cuponPorcentaje) {
@@ -7661,24 +7621,17 @@ document.addEventListener("DOMContentLoaded", function () {
         String(
           Math.max(
             1,
-            numero(
-              cupon?.porcentaje ||
-              10
-            )
+            numero(cupon?.porcentaje || 10)
           )
         );
     }
 
     if (cuponFechaInicio) {
-      cuponFechaInicio.value =
-        cupon?.fechaInicio ||
-        "";
+      cuponFechaInicio.value = cupon?.fechaInicio || "";
     }
 
     if (cuponFechaFin) {
-      cuponFechaFin.value =
-        cupon?.fechaFin ||
-        "";
+      cuponFechaFin.value = cupon?.fechaFin || "";
     }
 
     if (cuponLimiteUsos) {
@@ -7686,11 +7639,7 @@ document.addEventListener("DOMContentLoaded", function () {
         String(
           Math.max(
             0,
-            Math.floor(
-              numero(
-                cupon?.limiteUsos
-              )
-            )
+            Math.floor(numero(cupon?.limiteUsos))
           )
         );
     }
@@ -7698,35 +7647,26 @@ document.addEventListener("DOMContentLoaded", function () {
     if (cuponActivo) {
       cuponActivo.checked =
         cupon
-          ? cupon.activo ===
-            true
+          ? cupon.activo === true
           : true;
     }
 
-    mostrarMensajeComercial(
-      cuponMensaje,
-      ""
-    );
+    mostrarMensajeComercial(cuponMensaje, "");
 
-    cuponModal.classList.add(
-      "activo"
-    );
-
-    cuponModal.setAttribute(
-      "aria-hidden",
-      "false"
-    );
-
+    cuponModal.classList.add("activo");
+    cuponModal.setAttribute("aria-hidden", "false");
     actualizarBloqueoBody();
 
-    if (!cupon) {
-      setTimeout(
-        function () {
+    setTimeout(
+      function () {
+        if (cupon) {
+          cuponPorcentaje?.focus();
+        } else {
           cuponCodigo?.focus();
-        },
-        50
-      );
-    }
+        }
+      },
+      50
+    );
   }
 
 
@@ -7736,24 +7676,25 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    cuponModal.classList.remove(
-      "activo"
-    );
+    cuponModal.classList.remove("activo");
+    cuponModal.setAttribute("aria-hidden", "true");
 
-    cuponModal.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-    cuponEditandoId =
-      null;
+    cuponEditandoId = null;
 
     if (cuponCodigo) {
-      cuponCodigo.disabled =
-        false;
+      cuponCodigo.disabled = false;
     }
 
     actualizarBloqueoBody();
+
+    if (
+      focoAntesCuponModal &&
+      document.contains(focoAntesCuponModal)
+    ) {
+      focoAntesCuponModal.focus();
+    }
+
+    focoAntesCuponModal = null;
   }
 
 
@@ -7775,13 +7716,18 @@ document.addEventListener("DOMContentLoaded", function () {
     ?.addEventListener(
       "click",
       function (event) {
-
-        if (
-          event.target ===
-          cuponModal
-        ) {
+        if (event.target === cuponModal) {
           cerrarCuponModalFn();
         }
+      }
+    );
+
+
+  cuponModal
+    ?.addEventListener(
+      "keydown",
+      function (event) {
+        gestionarTabEnModal(event, cuponModal);
       }
     );
 
@@ -7790,7 +7736,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ?.addEventListener(
       "input",
       function () {
-
         cuponCodigo.value =
           normalizarCodigoCupon(
             cuponCodigo.value
@@ -7812,57 +7757,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const codigo =
           normalizarCodigoCupon(
-            cuponCodigo?.value ||
-            ""
+            cuponCodigo?.value || ""
           );
 
         const porcentaje =
-          Math.max(
-            1,
-            Math.min(
-              100,
-              Math.floor(
-                numero(
-                  cuponPorcentaje?.value
-                )
-              )
-            )
+          Math.floor(
+            numero(cuponPorcentaje?.value)
           );
 
         const fechaInicio =
-          String(
-            cuponFechaInicio?.value ||
-            ""
-          );
+          String(cuponFechaInicio?.value || "");
 
         const fechaFin =
-          String(
-            cuponFechaFin?.value ||
-            ""
-          );
+          String(cuponFechaFin?.value || "");
 
         const limiteUsos =
-          Math.max(
-            0,
-            Math.floor(
-              numero(
-                cuponLimiteUsos?.value
-              )
-            )
+          Math.floor(
+            numero(cuponLimiteUsos?.value)
           );
 
         if (
           !codigo ||
-          codigo.length <
-          3
+          codigo.length < 3 ||
+          codigo.length > 30
         ) {
-
           mostrarMensajeComercial(
             cuponMensaje,
-            "El código debe tener al menos 3 caracteres.",
+            "El código debe tener entre 3 y 30 caracteres.",
             false
           );
+          return;
+        }
 
+        if (
+          porcentaje < 1 ||
+          porcentaje > 100
+        ) {
+          mostrarMensajeComercial(
+            cuponMensaje,
+            "El descuento debe estar entre 1% y 100%.",
+            false
+          );
+          return;
+        }
+
+        if (limiteUsos < 0) {
+          mostrarMensajeComercial(
+            cuponMensaje,
+            "El límite de usos no puede ser negativo.",
+            false
+          );
           return;
         }
 
@@ -7871,21 +7815,16 @@ document.addEventListener("DOMContentLoaded", function () {
           fechaFin &&
           fechaFin < fechaInicio
         ) {
-
           mostrarMensajeComercial(
             cuponMensaje,
             "La fecha final no puede ser anterior a la fecha inicial.",
             false
           );
-
           return;
         }
 
-        guardarCuponBtn.disabled =
-          true;
-
-        guardarCuponBtn.textContent =
-          "GUARDANDO...";
+        guardarCuponBtn.disabled = true;
+        guardarCuponBtn.textContent = "GUARDANDO...";
 
         mostrarMensajeComercial(
           cuponMensaje,
@@ -7895,25 +7834,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-          const docId =
-            cuponEditandoId ||
-            codigo;
-
-          const ref =
-            db
-              .collection("cupones")
-              .doc(
-                docId
-              );
+          const docId = cuponEditandoId || codigo;
+          const ref = db.collection("cupones").doc(docId);
 
           if (!cuponEditandoId) {
 
-            const existente =
-              await ref.get();
+            const existenteSnapshot = await ref.get();
 
-            if (existente.exists) {
+            if (existenteSnapshot.exists) {
               throw new Error(
-                "Ya existe un cupón con ese código."
+                "Ya existe un cupón con ese código. Edita el cupón existente en lugar de reutilizar el código."
               );
             }
           }
@@ -7922,61 +7852,53 @@ document.addEventListener("DOMContentLoaded", function () {
             cuponEditandoId
               ? cuponesActuales.find(
                   function (item) {
-                    return item.id ===
-                      cuponEditandoId;
+                    return item.id === cuponEditandoId;
                   }
                 )
               : null;
 
+          const activo = cuponActivo?.checked === true;
+
           const datos = {
-            codigo:
-              codigo,
-
-            porcentaje:
-              porcentaje,
-
-            fechaInicio:
-              fechaInicio,
-
-            fechaFin:
-              fechaFin,
-
-            limiteUsos:
-              limiteUsos,
-
+            codigo: codigo,
+            porcentaje: porcentaje,
+            fechaInicio: fechaInicio,
+            fechaFin: fechaFin,
+            limiteUsos: limiteUsos,
             usosActuales:
               Math.max(
                 0,
                 Math.floor(
-                  numero(
-                    existente?.usosActuales
-                  )
+                  numero(existente?.usosActuales)
                 )
               ),
-
-            activo:
-              cuponActivo?.checked ===
-              true,
-
-            actualizadoEn:
-              FieldValue.serverTimestamp(),
-
+            activo: activo,
+            actualizadoEn: FieldValue.serverTimestamp(),
             actualizadoPor:
               usuarioActual.email ||
               usuarioActual.uid
           };
 
           if (!existente) {
-            datos.creadoEn =
-              FieldValue.serverTimestamp();
+            datos.creadoEn = FieldValue.serverTimestamp();
+            datos.creadoPor =
+              usuarioActual.email ||
+              usuarioActual.uid;
+          }
+
+          if (activo) {
+            datos.desactivadoEn = FieldValue.delete();
+            datos.desactivadoPor = FieldValue.delete();
+          } else {
+            datos.desactivadoEn = FieldValue.serverTimestamp();
+            datos.desactivadoPor =
+              usuarioActual.email ||
+              usuarioActual.uid;
           }
 
           await ref.set(
             datos,
-            {
-              merge:
-                true
-            }
+            { merge: true }
           );
 
           mostrarMensajeComercial(
@@ -8006,67 +7928,91 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } finally {
 
-          guardarCuponBtn.disabled =
-            false;
-
-          guardarCuponBtn.textContent =
-            "GUARDAR CUPÓN";
+          guardarCuponBtn.disabled = false;
+          guardarCuponBtn.textContent = "GUARDAR CUPÓN";
         }
       }
     );
 
 
-  async function eliminarCupon(
-    cuponId
-  ) {
+  async function cambiarDisponibilidadCupon(cuponId, boton) {
 
     const cupon =
       cuponesActuales.find(
         function (item) {
-          return item.id ===
-            cuponId;
+          return item.id === cuponId;
         }
       );
 
-    if (!cupon) {
+    if (!cupon || !usuarioActual) {
       return;
     }
 
-    const confirmar =
-      window.confirm(
-        "¿Eliminar el cupón " +
-        (
-          cupon.codigo ||
-          cupon.id
-        ) +
-        "?"
-      );
+    const nuevoActivo = cupon.activo !== true;
+    const codigo = cupon.codigo || cupon.id;
+
+    const confirmar = window.confirm(
+      nuevoActivo
+        ? "¿Activar el cupón " + codigo + "? La vigencia y el límite de usos seguirán aplicándose."
+        : "¿Desactivar el cupón " + codigo + "? Se conservarán sus usos y el historial de pedidos."
+    );
 
     if (!confirmar) {
       return;
     }
 
+    const textoAnterior = boton?.textContent || "";
+
+    if (boton) {
+      boton.disabled = true;
+      boton.textContent = nuevoActivo
+        ? "ACTIVANDO..."
+        : "DESACTIVANDO...";
+    }
+
     try {
+
+      const cambios = {
+        activo: nuevoActivo,
+        actualizadoEn: FieldValue.serverTimestamp(),
+        actualizadoPor:
+          usuarioActual.email ||
+          usuarioActual.uid
+      };
+
+      if (nuevoActivo) {
+        cambios.desactivadoEn = FieldValue.delete();
+        cambios.desactivadoPor = FieldValue.delete();
+      } else {
+        cambios.desactivadoEn = FieldValue.serverTimestamp();
+        cambios.desactivadoPor =
+          usuarioActual.email ||
+          usuarioActual.uid;
+      }
 
       await db
         .collection("cupones")
-        .doc(
-          cuponId
-        )
-        .delete();
+        .doc(cuponId)
+        .update(cambios);
 
     } catch (error) {
 
       console.error(
-        "Eliminar cupón:",
+        "Cambiar disponibilidad cupón:",
         error
       );
 
       alert(
-        "No fue posible eliminar el cupón."
+        "No fue posible actualizar la disponibilidad del cupón."
       );
+
+      if (boton) {
+        boton.disabled = false;
+        boton.textContent = textoAnterior;
+      }
     }
   }
+
 
 
   function escucharEnvios() {
@@ -8099,9 +8045,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ) {
 
               try {
-                await crearTarifasBase(
-                  false
-                );
+                await crearTarifasBase(false);
               } catch (error) {
                 console.error(
                   "Crear tarifas base:",
@@ -8115,20 +8059,25 @@ document.addEventListener("DOMContentLoaded", function () {
             datos.sort(
               function (a, b) {
 
-                return numero(
-                  a.orden
-                ) -
-                numero(
-                  b.orden
-                );
+                const ordenA = numero(a.orden);
+                const ordenB = numero(b.orden);
+
+                if (ordenA !== ordenB) {
+                  return ordenA - ordenB;
+                }
+
+                return String(a.provincia || "")
+                  .localeCompare(
+                    String(b.provincia || ""),
+                    "es"
+                  );
               }
             );
 
-            enviosActuales =
-              datos;
+            enviosActuales = datos;
 
             marcarFuenteDatos("envios", "ok");
-            renderEnvios();
+            aplicarFiltrosEnvios();
             actualizarResumenEnvios();
             emitirActualizacionBackup();
           },
@@ -8142,113 +8091,150 @@ document.addEventListener("DOMContentLoaded", function () {
               error
             );
 
-            if (enviosAdminBody) {
-              enviosAdminBody.innerHTML = `
-                <tr>
-                  <td colspan="5">
-                    No fue posible cargar las tarifas. Revisa la conexión y las reglas actuales de Firestore.
-                  </td>
-                </tr>
-              `;
-            }
+            mostrarEstadoComercialTabla(
+              enviosAdminBody,
+              5,
+              "No fue posible cargar las tarifas. Revisa la conexión y las reglas actuales de Firestore."
+            );
+
+            setTexto(
+              enviosResultadoTexto,
+              "No fue posible cargar las tarifas."
+            );
           }
         );
   }
 
 
-  function renderEnvios() {
+  function aplicarFiltrosEnvios() {
+
+    const busqueda =
+      normalizarTexto(
+        envioBuscar?.value || ""
+      );
+
+    const filtro =
+      String(
+        envioFiltroEstado?.value || ""
+      );
+
+    enviosFiltrados =
+      enviosActuales.filter(
+        function (envio) {
+
+          const estado =
+            envio.activo === true
+              ? "activo"
+              : "inactivo";
+
+          if (
+            filtro &&
+            filtro !== estado
+          ) {
+            return false;
+          }
+
+          if (
+            busqueda &&
+            !normalizarTexto(
+              [
+                envio.provincia,
+                envio.id
+              ].filter(Boolean).join(" ")
+            ).includes(busqueda)
+          ) {
+            return false;
+          }
+
+          return true;
+        }
+      );
+
+    renderEnvios(enviosFiltrados);
+
+    setTexto(
+      enviosResultadoTexto,
+      "Mostrando " +
+      enviosFiltrados.length +
+      " de " +
+      enviosActuales.length +
+      " provincias."
+    );
+  }
+
+
+  function renderEnvios(envios) {
 
     if (!enviosAdminBody) {
       return;
     }
 
-    if (!enviosActuales.length) {
+    const lista = Array.isArray(envios)
+      ? envios
+      : enviosActuales;
 
-      enviosAdminBody.innerHTML = `
-        <tr>
-          <td colspan="5">
-            No existen tarifas de envío.
-          </td>
-        </tr>
-      `;
+    if (!lista.length) {
+
+      mostrarEstadoComercialTabla(
+        enviosAdminBody,
+        5,
+        "No existen tarifas que coincidan con los filtros."
+      );
 
       return;
     }
 
-    enviosAdminBody.innerHTML =
-      "";
+    enviosAdminBody.textContent = "";
 
-    enviosActuales.forEach(
+    lista.forEach(
       function (envio) {
 
-        const fila =
-          document.createElement(
-            "tr"
-          );
+        const fila = document.createElement("tr");
 
-        fila.innerHTML = `
-          <td>
-            <strong>
-              ${escapar(
-                envio.provincia ||
-                "-"
-              )}
-            </strong>
-          </td>
+        const provinciaTd = document.createElement("td");
+        const provinciaStrong = document.createElement("strong");
+        provinciaStrong.textContent = envio.provincia || "-";
+        provinciaTd.appendChild(provinciaStrong);
 
-          <td>
-            <strong class="reporte-valor">
-              ${dinero(
-                envio.tarifa
-              )}
-            </strong>
-          </td>
+        const tarifaTd = document.createElement("td");
+        const tarifaStrong = document.createElement("strong");
+        tarifaStrong.className = "reporte-valor";
+        tarifaStrong.textContent = dinero(envio.tarifa);
+        tarifaTd.appendChild(tarifaStrong);
 
-          <td>
-            <span
-              class="
-                comercial-status-badge
-                ${
-                  envio.activo ===
-                  true
-                    ? "activo"
-                    : "inactivo"
-                }
-              "
-            >
-              ${
-                envio.activo ===
-                true
-                  ? "Activa"
-                  : "Inactiva"
-              }
-            </span>
-          </td>
+        const estadoTd = document.createElement("td");
+        const badge = document.createElement("span");
+        const activo = envio.activo === true;
+        badge.className =
+          "comercial-status-badge " +
+          (activo ? "activo" : "inactivo");
+        badge.textContent = activo ? "Activa" : "Inactiva";
+        estadoTd.appendChild(badge);
 
-          <td>
-            ${escapar(
-              fechaLegible(
-                envio.actualizadoEn
-              )
-            )}
-          </td>
+        const actualizadoTd = document.createElement("td");
+        actualizadoTd.textContent = fechaLegible(envio.actualizadoEn);
 
-          <td>
-            <button
-              type="button"
-              class="admin-view-btn"
-              data-editar-envio="${escaparAtributo(
-                envio.id
-              )}"
-            >
-              EDITAR
-            </button>
-          </td>
-        `;
-
-        enviosAdminBody.appendChild(
-          fila
+        const accionTd = document.createElement("td");
+        const editarBtn = document.createElement("button");
+        editarBtn.type = "button";
+        editarBtn.className = "admin-view-btn";
+        editarBtn.dataset.editarEnvio = envio.id;
+        editarBtn.textContent = "EDITAR";
+        editarBtn.setAttribute(
+          "aria-label",
+          "Editar tarifa de " + (envio.provincia || "provincia")
         );
+        accionTd.appendChild(editarBtn);
+
+        fila.append(
+          provinciaTd,
+          tarifaTd,
+          estadoTd,
+          actualizadoTd,
+          accionTd
+        );
+
+        enviosAdminBody.appendChild(fila);
       }
     );
   }
@@ -8256,58 +8242,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function actualizarResumenEnvios() {
 
-    const total =
-      enviosActuales.length;
+    const total = enviosActuales.length;
 
     const activos =
       enviosActuales.filter(
         function (envio) {
-          return envio.activo ===
-            true;
+          return envio.activo === true;
         }
       );
 
     const promedio =
       activos.length > 0
         ? activos.reduce(
-            function (
-              suma,
-              envio
-            ) {
+            function (suma, envio) {
               return suma +
                 Math.max(
                   0,
-                  numero(
-                    envio.tarifa
-                  )
+                  numero(envio.tarifa)
                 );
             },
             0
-          ) /
-          activos.length
+          ) / activos.length
         : 0;
 
-    setTexto(
-      enviosKpiTotal,
-      String(
-        total
-      )
-    );
-
-    setTexto(
-      enviosKpiActivos,
-      String(
-        activos.length
-      )
-    );
-
-    setTexto(
-      enviosKpiPromedio,
-      dinero(
-        promedio
-      )
-    );
+    setTexto(enviosKpiTotal, String(total));
+    setTexto(enviosKpiActivos, String(activos.length));
+    setTexto(enviosKpiPromedio, dinero(promedio));
   }
+
+
+  envioBuscar
+    ?.addEventListener(
+      "input",
+      aplicarFiltrosEnvios
+    );
+
+
+  envioFiltroEstado
+    ?.addEventListener(
+      "change",
+      aplicarFiltrosEnvios
+    );
+
+
+  limpiarFiltrosEnviosBtn
+    ?.addEventListener(
+      "click",
+      function () {
+
+        if (envioBuscar) {
+          envioBuscar.value = "";
+        }
+
+        if (envioFiltroEstado) {
+          envioFiltroEstado.value = "";
+        }
+
+        aplicarFiltrosEnvios();
+        envioBuscar?.focus();
+      }
+    );
 
 
   enviosAdminBody
@@ -8325,8 +8319,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         abrirEnvioModal(
-          boton.dataset
-            .editarEnvio
+          boton.dataset.editarEnvio
         );
       }
     );
@@ -8337,29 +8330,28 @@ document.addEventListener("DOMContentLoaded", function () {
       "click",
       async function () {
 
+        if (!usuarioActual) {
+          return;
+        }
+
         const confirmar =
           window.confirm(
-            "Esto restaurará las 24 tarifas base de SIXTEEN. ¿Continuar?"
+            "Esto reemplazará las tarifas y el estado de las 24 provincias por los valores base de SIXTEEN. Las tarifas personalizadas actuales se perderán. ¿Continuar?"
           );
 
         if (!confirmar) {
           return;
         }
 
-        restaurarTarifasBtn.disabled =
-          true;
-
-        restaurarTarifasBtn.textContent =
-          "RESTAURANDO...";
+        restaurarTarifasBtn.disabled = true;
+        restaurarTarifasBtn.textContent = "RESTAURANDO...";
 
         try {
 
-          await crearTarifasBase(
-            true
-          );
+          await crearTarifasBase(true);
 
           alert(
-            "Tarifas base restauradas."
+            "Las 24 tarifas base fueron restauradas."
           );
 
         } catch (error) {
@@ -8375,72 +8367,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } finally {
 
-          restaurarTarifasBtn.disabled =
-            false;
-
-          restaurarTarifasBtn.textContent =
-            "RESTAURAR TARIFAS BASE";
+          restaurarTarifasBtn.disabled = false;
+          restaurarTarifasBtn.textContent = "RESTAURAR TARIFAS BASE";
         }
       }
     );
 
 
-  async function crearTarifasBase(
-    sobrescribir
-  ) {
+  async function crearTarifasBase(sobrescribir) {
 
     if (sembrandoEnvios) {
       return;
     }
 
-    sembrandoEnvios =
-      true;
+    sembrandoEnvios = true;
 
     try {
 
-      const batch =
-        db.batch();
+      const batch = db.batch();
 
       TARIFAS_ENVIO_BASE.forEach(
-        function (
-          item,
-          indice
-        ) {
+        function (item, indice) {
 
-          const provincia =
-            item[0];
-
-          const tarifa =
-            item[1];
-
-          const docId =
-            slugDocumento(
-              provincia
-            );
-
-          const ref =
-            db
-              .collection("envios")
-              .doc(
-                docId
-              );
+          const provincia = item[0];
+          const tarifa = item[1];
+          const docId = slugDocumento(provincia);
+          const ref = db.collection("envios").doc(docId);
 
           const datos = {
-            provincia:
-              provincia,
-
-            tarifa:
-              tarifa,
-
-            activo:
-              true,
-
-            orden:
-              indice + 1,
-
-            actualizadoEn:
-              FieldValue.serverTimestamp(),
-
+            provincia: provincia,
+            tarifa: tarifa,
+            activo: true,
+            orden: indice + 1,
+            actualizadoEn: FieldValue.serverTimestamp(),
             actualizadoPor:
               usuarioActual?.email ||
               usuarioActual?.uid ||
@@ -8452,10 +8411,7 @@ document.addEventListener("DOMContentLoaded", function () {
             batch.set(
               ref,
               datos,
-              {
-                merge:
-                  true
-              }
+              { merge: true }
             );
 
           } else {
@@ -8464,13 +8420,9 @@ document.addEventListener("DOMContentLoaded", function () {
               ref,
               {
                 ...datos,
-                creadoEn:
-                  FieldValue.serverTimestamp()
+                creadoEn: FieldValue.serverTimestamp()
               },
-              {
-                merge:
-                  false
-              }
+              { merge: false }
             );
           }
         }
@@ -8479,22 +8431,17 @@ document.addEventListener("DOMContentLoaded", function () {
       await batch.commit();
 
     } finally {
-
-      sembrandoEnvios =
-        false;
+      sembrandoEnvios = false;
     }
   }
 
 
-  function abrirEnvioModal(
-    envioId
-  ) {
+  function abrirEnvioModal(envioId) {
 
     const envio =
       enviosActuales.find(
         function (item) {
-          return item.id ===
-            envioId;
+          return item.id === envioId;
         }
       );
 
@@ -8502,45 +8449,43 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    envioEditandoId =
-      envioId;
+    envioEditandoId = envioId;
+    focoAntesEnvioModal = document.activeElement;
+
+    envioOriginal = {
+      tarifa: Math.max(0, numero(envio.tarifa)),
+      activo: envio.activo === true
+    };
 
     setTexto(
       envioModalProvincia,
-      envio.provincia ||
-      "-"
+      envio.provincia || "-"
     );
 
     if (envioTarifa) {
       envioTarifa.value =
-        numero(
-          envio.tarifa
-        ).toFixed(
-          2
-        );
+        numero(envio.tarifa).toFixed(2);
     }
 
     if (envioActivo) {
       envioActivo.checked =
-        envio.activo ===
-        true;
+        envio.activo === true;
     }
 
-    mostrarMensajeComercial(
-      envioMensaje,
-      ""
-    );
+    mostrarMensajeComercial(envioMensaje, "");
 
-    envioModal.classList.add(
-      "activo"
-    );
-
-    envioModal.setAttribute(
-      "aria-hidden",
-      "false"
-    );
-
+    envioModal.classList.add("activo");
+    envioModal.setAttribute("aria-hidden", "false");
     actualizarBloqueoBody();
+    actualizarEstadoGuardarEnvio();
+
+    setTimeout(
+      function () {
+        envioTarifa?.focus();
+        envioTarifa?.select();
+      },
+      50
+    );
   }
 
 
@@ -8550,19 +8495,47 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    envioModal.classList.remove(
-      "activo"
-    );
+    envioModal.classList.remove("activo");
+    envioModal.setAttribute("aria-hidden", "true");
 
-    envioModal.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-    envioEditandoId =
-      null;
+    envioEditandoId = null;
+    envioOriginal = null;
 
     actualizarBloqueoBody();
+
+    if (
+      focoAntesEnvioModal &&
+      document.contains(focoAntesEnvioModal)
+    ) {
+      focoAntesEnvioModal.focus();
+    }
+
+    focoAntesEnvioModal = null;
+  }
+
+
+  function actualizarEstadoGuardarEnvio() {
+
+    if (
+      !guardarEnvioBtn ||
+      !envioOriginal ||
+      !envioModal?.classList.contains("activo")
+    ) {
+      return;
+    }
+
+    const tarifa = numero(envioTarifa?.value);
+    const activo = envioActivo?.checked === true;
+
+    const sinCambios =
+      Math.abs(tarifa - envioOriginal.tarifa) < 0.005 &&
+      activo === envioOriginal.activo;
+
+    guardarEnvioBtn.disabled = sinCambios;
+    guardarEnvioBtn.textContent =
+      sinCambios
+        ? "SIN CAMBIOS"
+        : "GUARDAR TARIFA";
   }
 
 
@@ -8584,14 +8557,33 @@ document.addEventListener("DOMContentLoaded", function () {
     ?.addEventListener(
       "click",
       function (event) {
-
-        if (
-          event.target ===
-          envioModal
-        ) {
+        if (event.target === envioModal) {
           cerrarEnvioModalFn();
         }
       }
+    );
+
+
+  envioModal
+    ?.addEventListener(
+      "keydown",
+      function (event) {
+        gestionarTabEnModal(event, envioModal);
+      }
+    );
+
+
+  envioTarifa
+    ?.addEventListener(
+      "input",
+      actualizarEstadoGuardarEnvio
+    );
+
+
+  envioActivo
+    ?.addEventListener(
+      "change",
+      actualizarEstadoGuardarEnvio
     );
 
 
@@ -8604,24 +8596,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (
           !envioEditandoId ||
-          !usuarioActual
+          !usuarioActual ||
+          !envioOriginal
         ) {
           return;
         }
 
-        const tarifa =
-          Math.max(
-            0,
-            numero(
-              envioTarifa?.value
-            )
+        const tarifa = numero(envioTarifa?.value);
+        const activo = envioActivo?.checked === true;
+
+        if (
+          !Number.isFinite(tarifa) ||
+          tarifa < 0
+        ) {
+          mostrarMensajeComercial(
+            envioMensaje,
+            "La tarifa debe ser un valor válido igual o mayor a $0.00.",
+            false
           );
+          return;
+        }
 
-        guardarEnvioBtn.disabled =
-          true;
+        const sinCambios =
+          Math.abs(tarifa - envioOriginal.tarifa) < 0.005 &&
+          activo === envioOriginal.activo;
 
-        guardarEnvioBtn.textContent =
-          "GUARDANDO...";
+        if (sinCambios) {
+          mostrarMensajeComercial(
+            envioMensaje,
+            "No hay cambios que guardar.",
+            false
+          );
+          actualizarEstadoGuardarEnvio();
+          return;
+        }
+
+        guardarEnvioBtn.disabled = true;
+        guardarEnvioBtn.textContent = "GUARDANDO...";
 
         mostrarMensajeComercial(
           envioMensaje,
@@ -8633,20 +8644,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
           await db
             .collection("envios")
-            .doc(
-              envioEditandoId
-            )
+            .doc(envioEditandoId)
             .update({
-              tarifa:
-                tarifa,
-
-              activo:
-                envioActivo?.checked ===
-                true,
-
-              actualizadoEn:
-                FieldValue.serverTimestamp(),
-
+              tarifa: Math.round(tarifa * 100) / 100,
+              activo: activo,
+              actualizadoEn: FieldValue.serverTimestamp(),
               actualizadoPor:
                 usuarioActual.email ||
                 usuarioActual.uid
@@ -8679,14 +8681,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } finally {
 
-          guardarEnvioBtn.disabled =
-            false;
-
-          guardarEnvioBtn.textContent =
-            "GUARDAR TARIFA";
+          if (
+            envioModal?.classList.contains("activo")
+          ) {
+            actualizarEstadoGuardarEnvio();
+          }
         }
       }
     );
+
 
 
   function normalizarCodigoCupon(
