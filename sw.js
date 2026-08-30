@@ -1,11 +1,11 @@
-const VERSION="sixteen-v16f6d-24";
+const VERSION="sixteen-v16f6d-25";
 const STATIC=`${VERSION}-static`;
 const RUNTIME=`${VERSION}-runtime`;
 const OFFLINE="./offline.html";
 const RUNTIME_MAX=70;
 
 const FILES=[
- "./","./index.html","./producto.html","./carrito.html","./checkout.html",
+ "./","./index.html","./404.html","./producto.html","./carrito.html","./checkout.html",
  "./confirmacion.html","./cuenta.html","./comparar.html","./seguimiento.html",
  "./politicas.html","./soporte.html",
  "./styles.css","./cuenta.css","./comparar.css","./seguimiento.css","./legal.css",

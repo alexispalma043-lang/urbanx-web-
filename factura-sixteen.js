@@ -101,6 +101,9 @@
         URL.revokeObjectURL(url);
         return false;
       }
+      try{
+        w.opener=null;
+      }catch(_err){}
       setTimeout(()=>{try{URL.revokeObjectURL(url);}catch(_err){}},60000);
       return true;
     }catch(err){
@@ -111,6 +114,9 @@
     try{
       const w=window.open("about:blank","_blank");
       if(!w)return false;
+      try{
+        w.opener=null;
+      }catch(_err){}
       w.document.open();
       w.document.write(html);
       w.document.close();

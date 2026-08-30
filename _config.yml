@@ -1,0 +1,8 @@
+# SIXTEEN · GitHub Pages
+# Mantiene las herramientas locales dentro del repositorio,
+# pero evita que formen parte del sitio generado por Pages.
+exclude:
+  - .vscode
+  - .gitignore
+  - AUTO_GITHUB_SYNC_CORREGIDO.ps1
+  - SIXTEEN_RELEASE_PASO_30.txt

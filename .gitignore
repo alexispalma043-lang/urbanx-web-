@@ -1,4 +1,4 @@
-﻿# SIXTEEN - archivos privados / desarrollo
+# SIXTEEN - archivos privados / desarrollo
 
 # Credenciales y variables privadas
 .env
@@ -41,3 +41,10 @@ PARCHE_FIRESTORE_*.txt
 
 # Automatizacion local GitHub
 AUTO_GITHUB_SYNC*.ps1
+
+# Documentación interna acumulativa
+LEEME_PASO_*.txt
+FIRESTORE_NEWSLETTER_REGLA.txt
+
+# Módulos archivados que no deben volver al repositorio público
+admin/legacy-sri/
