@@ -8,7 +8,7 @@
 <meta content="noindex,nofollow,noarchive" name="robots"/>
 <meta content="#050505" name="theme-color"/>
 <link href="../assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="./admin.css?v=27000" rel="stylesheet"/>
+<link href="./admin.css?v=28000" rel="stylesheet"/>
 <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
 <meta content="strict-origin-when-cross-origin" name="referrer"/>
 <meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
@@ -103,6 +103,10 @@
 <a href="#sixteen3d" id="menuUrbanx3d">
 <span>X</span>
         SIXTEEN 3D
+      </a>
+<a href="#sistema" id="menuSistema">
+<span>⚙</span>
+        Sistema
       </a>
 </nav>
 <div class="admin-sidebar-footer">
@@ -2045,43 +2049,131 @@
 </div>
 </section>
 <!-- ========================================
-           SISTEMA
+           PASO 28 · SISTEMA Y DIAGNÓSTICO
       ========================================= -->
-<section class="admin-card admin-system-card">
-<div class="admin-card-header">
-<h3>
-            Sistema SIXTEEN
-          </h3>
-<span class="admin-status">
-            ONLINE
-          </span>
-</div>
-<div class="admin-system-grid">
-<div>
-<span>
-              AUTENTICACIÓN
-            </span>
-<strong>
-              Firebase Auth
-            </strong>
-</div>
-<div>
-<span>
-              BASE DE DATOS
-            </span>
-<strong>
-              Cloud Firestore
-            </strong>
-</div>
-<div>
-<span>
-              IMÁGENES
-            </span>
-<strong>
-              Cloudinary
-            </strong>
-</div>
-</div>
+<section
+  class="admin-card admin-system-card admin-section-anchor"
+  id="sistema"
+>
+  <div class="admin-card-header">
+    <div>
+      <p class="admin-eyebrow">PASO 28 · SYSTEM HEALTH</p>
+      <h3>Sistema SIXTEEN</h3>
+      <p class="system-health-subtitle">
+        Diagnóstico técnico del panel, servicios principales y configuración
+        activa. Las comprobaciones no realizan ventas, cobros ni escrituras.
+      </p>
+    </div>
+
+    <div class="system-health-header-actions">
+      <span
+        class="admin-status"
+        id="systemOverallStatus"
+      >
+        REVISANDO
+      </span>
+
+      <button
+        class="admin-secondary-btn"
+        id="systemRefreshBtn"
+        type="button"
+      >
+        REVISAR SISTEMA
+      </button>
+
+      <button
+        class="admin-secondary-btn"
+        id="systemCopyBtn"
+        type="button"
+      >
+        COPIAR DIAGNÓSTICO
+      </button>
+    </div>
+  </div>
+
+  <div class="system-health-grid">
+    <article class="system-health-item" data-system-item="network">
+      <span>CONEXIÓN</span>
+      <strong id="systemNetworkStatus">REVISANDO</strong>
+      <small id="systemNetworkDetail">Estado del navegador</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="auth">
+      <span>AUTENTICACIÓN ADMIN</span>
+      <strong id="systemAuthStatus">REVISANDO</strong>
+      <small id="systemAuthDetail">Firebase Auth</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="firestore">
+      <span>BASE DE DATOS</span>
+      <strong id="systemFirestoreStatus">REVISANDO</strong>
+      <small id="systemFirestoreDetail">Cloud Firestore</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="cloudinary">
+      <span>IMÁGENES</span>
+      <strong id="systemCloudinaryStatus">REVISANDO</strong>
+      <small id="systemCloudinaryDetail">Cloudinary</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="email">
+      <span>CORREO</span>
+      <strong id="systemEmailStatus">REVISANDO</strong>
+      <small id="systemEmailDetail">EmailJS</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="pwa">
+      <span>PWA</span>
+      <strong id="systemPwaStatus">REVISANDO</strong>
+      <small id="systemPwaDetail">Service Worker</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="experience3d">
+      <span>SIXTEEN EXPERIENCE 3D</span>
+      <strong id="system3dStatus">REVISANDO</strong>
+      <small id="system3dDetail">Módulo separado</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="store">
+      <span>CONFIGURACIÓN DE TIENDA</span>
+      <strong id="systemStoreStatus">REVISANDO</strong>
+      <small id="systemStoreDetail">SIXTEEN Store Config</small>
+    </article>
+
+    <article class="system-health-item" data-system-item="backup">
+      <span>ÚLTIMO BACKUP LOCAL</span>
+      <strong id="systemBackupStatus">REVISANDO</strong>
+      <small id="systemBackupDetail">Este navegador</small>
+    </article>
+  </div>
+
+  <div class="system-health-summary">
+    <div>
+      <span>ÚLTIMA COMPROBACIÓN</span>
+      <strong id="systemLastCheck">-</strong>
+    </div>
+
+    <div>
+      <span>PROYECTO FIREBASE</span>
+      <strong id="systemProjectLabel">-</strong>
+    </div>
+
+    <div>
+      <span>VERSIÓN PANEL</span>
+      <strong>PASO 28</strong>
+    </div>
+  </div>
+
+  <div class="system-health-note">
+    <strong>LECTURA DEL DIAGNÓSTICO</strong>
+    <p>
+      “OPERATIVO” significa que la comprobación directa fue satisfactoria.
+      “CONFIGURADO” confirma que SIXTEEN tiene la configuración necesaria,
+      pero no realiza una operación destructiva para probar el servicio.
+      Los datos legales pendientes se muestran como advertencia y no bloquean
+      el funcionamiento técnico de la tienda.
+    </p>
+  </div>
 </section>
 </section>
 </main>
@@ -2819,7 +2911,7 @@
 <script src="../variant-utils.js?v=2900"></script>
 <script src="../store-config.js?v=3000"></script>
 <script src="../payment-config.js?v=18000"></script>
-<script src="./dashboard.js?v=27000"></script>
+<script src="./dashboard.js?v=28000"></script>
 <script src="./resenas-admin.js?v=24000"></script>
 <script src="./analitica.js?v=21010"></script>
 <script src="./backup.js?v=22000"></script>
@@ -2828,5 +2920,6 @@
 <script src="../factura-sixteen.js?v=21002"></script>
 <script src="./comprobante-email.js?v=21000"></script>
 <script src="./facturacion.js?v=21001"></script>
+<script src="./system-health.js?v=28000"></script>
 </body>
 </html>

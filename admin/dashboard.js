@@ -31,6 +31,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const CLOUDINARY_UPLOAD_PRESET = "urbanx_productos";
   const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
+  // Datos técnicos públicos/no secretos utilizados por el diagnóstico.
+  window.SIXTEEN_ADMIN_RUNTIME = Object.freeze({
+    firebaseProject:
+      firebaseConfig.projectId,
+    cloudinaryCloudName:
+      CLOUDINARY_CLOUD_NAME,
+    cloudinaryUploadPreset:
+      CLOUDINARY_UPLOAD_PRESET
+  });
+
+
   const ALLOWED_IMAGE_TYPES = [
     "image/jpeg",
     "image/png",
@@ -10963,7 +10974,8 @@ document.addEventListener("DOMContentLoaded", function () {
     ["menuFacturacion", "facturacion"],
     ["menuClientes", "clientes"],
     ["menuInventario", "inventario"],
-    ["menuUrbanx3d", "sixteen3d"]
+    ["menuUrbanx3d", "sixteen3d"],
+    ["menuSistema", "sistema"]
   ];
 
 

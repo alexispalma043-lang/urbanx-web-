@@ -8211,3 +8211,165 @@ td {
 @media (max-width: 1100px) {
   .pedido-info-grid { grid-template-columns: 1fr; }
 }
+
+
+/* =========================================
+   PASO 28 · SISTEMA Y DIAGNÓSTICO
+========================================= */
+
+.system-health-subtitle{
+  max-width:720px;
+  margin:8px 0 0;
+  color:#81786f;
+  font-size:8px;
+  line-height:1.7;
+}
+
+.system-health-header-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.system-health-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:16px;
+}
+
+.system-health-item{
+  min-width:0;
+  padding:15px;
+  border:1px solid rgba(216,170,85,.13);
+  background:#080808;
+  transition:border-color .2s ease,background .2s ease;
+}
+
+.system-health-item>span{
+  display:block;
+  margin-bottom:8px;
+  color:#716960;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.9px;
+}
+
+.system-health-item>strong{
+  display:block;
+  color:#e9e3dc;
+  font-size:13px;
+  overflow-wrap:anywhere;
+}
+
+.system-health-item>small{
+  display:block;
+  margin-top:7px;
+  color:#756d65;
+  font-size:7px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+
+.system-health-item.ok{
+  border-color:rgba(79,165,111,.28);
+  background:linear-gradient(135deg,rgba(79,165,111,.045),transparent 55%),#080808;
+}
+
+.system-health-item.ok>strong{
+  color:#8bc99f;
+}
+
+.system-health-item.warning{
+  border-color:rgba(216,170,85,.30);
+  background:linear-gradient(135deg,rgba(216,170,85,.055),transparent 55%),#080808;
+}
+
+.system-health-item.warning>strong{
+  color:#e4be6c;
+}
+
+.system-health-item.error{
+  border-color:rgba(201,71,60,.34);
+  background:linear-gradient(135deg,rgba(201,71,60,.055),transparent 55%),#080808;
+}
+
+.system-health-item.error>strong{
+  color:#d9857d;
+}
+
+.system-health-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:10px;
+}
+
+.system-health-summary>div{
+  padding:12px 14px;
+  border:1px solid rgba(216,170,85,.10);
+  background:#070707;
+}
+
+.system-health-summary span{
+  display:block;
+  color:#6e665e;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.8px;
+}
+
+.system-health-summary strong{
+  display:block;
+  margin-top:6px;
+  color:#cfc7be;
+  font-size:9px;
+  overflow-wrap:anywhere;
+}
+
+.system-health-note{
+  margin-top:10px;
+  padding:14px;
+  border-left:3px solid #d8aa55;
+  background:#0b0906;
+}
+
+.system-health-note strong{
+  color:#e7c77f;
+  font-size:7px;
+  letter-spacing:.9px;
+}
+
+.system-health-note p{
+  margin:7px 0 0;
+  color:#847a70;
+  font-size:7px;
+  line-height:1.7;
+}
+
+@media(max-width:1180px){
+  .system-health-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .system-health-summary{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:680px){
+  .system-health-grid{
+    grid-template-columns:1fr;
+  }
+
+  .system-health-header-actions{
+    width:100%;
+    justify-content:flex-start;
+  }
+
+  .system-health-header-actions .admin-secondary-btn{
+    width:100%;
+  }
+}
