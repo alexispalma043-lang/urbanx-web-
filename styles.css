@@ -7727,7 +7727,7 @@ body {
 
 
 /* =========================================================
-   PASO 16C · MÉTODOS DE PAGO CHECKOUT
+   PASO 18 · MÉTODOS DE PAGO CHECKOUT
 ========================================================= */
 
 .opcion-checkout.payment-disabled{
@@ -8035,4 +8035,20 @@ body {
   .confirmacion-verificacion {
     line-height: 1.5;
   }
+}
+
+
+/* =========================================================
+   SIXTEEN · PASO 18 · PAGOS
+========================================================= */
+
+.checkout-payment-info .payment-after-order,
+.checkout-payment-info .payment-order-reference{
+  margin-top:12px;
+  padding:10px 12px;
+  border-left:2px solid var(--sixteen-gold,#d0a85e);
+  background:rgba(208,168,94,.05);
+  color:#c9b991;
+  font-size:10px;
+  line-height:1.6
 }

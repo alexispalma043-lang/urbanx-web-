@@ -2140,17 +2140,11 @@ document.addEventListener(
         &&
         info.actionUrl
           ? (
-              '<a class="payment-secure-link" href="'
+              '<p class="payment-after-order">'
               +
-              escaparAtributo(
-                info.actionUrl
-              )
+              "Por seguridad, el enlace de pago se habilitará después de registrar tu pedido."
               +
-              '" target="_blank" rel="noopener noreferrer">'
-              +
-              "ABRIR PAGO SEGURO"
-              +
-              "</a>"
+              "</p>"
             )
           : "";
 
@@ -2334,6 +2328,55 @@ document.addEventListener(
       actualizarEstadoConfiguracion();
 
       return pagosConfiguracionLista;
+    }
+
+
+    async function revalidarMetodoPagoFirestore() {
+
+      const metodoSeleccionado =
+        obtenerMetodoPago();
+
+      if (!PAYMENTS || !metodoSeleccionado) {
+        throw new Error(
+          "Selecciona un método de pago válido."
+        );
+      }
+
+      const resultado =
+        await PAYMENTS.loadWithStatus(db);
+
+      if (!resultado.remoteLoaded) {
+        pagosConfiguracionLista = false;
+        configuracionPagoMotivo =
+          resultado.reason
+          || "No pudimos verificar los métodos de pago.";
+        actualizarEstadoConfiguracion();
+        throw new Error(configuracionPagoMotivo);
+      }
+
+      const configuracionActual =
+        resultado.config;
+
+      if (!PAYMENTS.ready(
+        metodoSeleccionado,
+        configuracionActual
+      )) {
+        paymentConfig = configuracionActual;
+        pagosConfiguracionLista = true;
+        renderMetodosPago();
+        actualizarEstadoConfiguracion();
+        throw new Error(
+          "El método de pago seleccionado cambió o dejó de estar disponible. Selecciona otro método."
+        );
+      }
+
+      paymentConfig = configuracionActual;
+      pagosConfiguracionLista = true;
+      configuracionPagoMotivo = "";
+      renderMetodosPago();
+      actualizarEstadoConfiguracion();
+
+      return true;
     }
 
 
@@ -3323,6 +3366,11 @@ document.addEventListener(
           }
 
 
+          // Reconsulta Firestore justo antes de crear el pedido.
+          // Evita usar un método desactivado o una URL de pago antigua.
+          await revalidarMetodoPagoFirestore();
+
+
           if (
             resumenCompra.cupon
           ) {
@@ -3517,7 +3565,7 @@ document.addEventListener(
 
 
             mensajeCheckout.textContent =
-              "Firestore todavía no permite crear pedidos de clientes.";
+              "Firestore rechazó el pedido. Verifica que las reglas estén publicadas y que la tarifa, el cupón y el método de pago sigan vigentes.";
 
 
           } else {

@@ -905,6 +905,17 @@
       metodo === "tarjeta"
       && actionUrl
     ) {
+      const referencia =
+        document.createElement("p");
+      referencia.className =
+        "payment-order-reference";
+      referencia.textContent =
+        "Referencia del pedido: "
+        + String(pedido?.numero || "").trim()
+        + ". Conserva este número para cualquier verificación del pago.";
+      confirmacionPagoInstrucciones
+        .appendChild(referencia);
+
       const link =
         document.createElement("a");
       link.className =
