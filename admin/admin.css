@@ -3401,7 +3401,7 @@ body.admin-body {
   margin-top: 5px;
 }
 
-@media (max-width: 1350px) {
+@media (max-width: 1550px) {
 
   .pedidos-filtros {
     grid-template-columns:
@@ -8380,3 +8380,91 @@ td {
 .admin-session-guard-status.warning{border-color:rgba(216,170,85,.30);background:rgba(216,170,85,.045);color:#e5bd68}
 .pedido-integridad-box{display:grid;grid-template-columns:minmax(180px,.35fr) minmax(0,1fr);gap:12px;align-items:center;margin:10px 0;padding:12px 14px;border:1px solid rgba(216,170,85,.14);background:#080808}
 .pedido-integridad-box>div span{display:block;color:#746c64;font-size:6px;font-weight:900;letter-spacing:.8px}.pedido-integridad-box>div strong{display:block;margin-top:5px;color:#d7d0c8;font-size:10px}.pedido-integridad-box p{margin:0;color:#827970;font-size:7px;line-height:1.6}.pedido-integridad-box.ok{border-color:rgba(79,165,111,.28)}.pedido-integridad-box.ok>div strong{color:#83c899}.pedido-integridad-box.warning{border-color:rgba(216,170,85,.32)}.pedido-integridad-box.warning>div strong{color:#e5bd68}.pedido-integridad-box.error{border-color:rgba(201,71,60,.38);background:rgba(201,71,60,.025)}.pedido-integridad-box.error>div strong{color:#dc857c}@media(max-width:700px){.pedido-integridad-box{grid-template-columns:1fr}}
+
+
+/* =========================================================
+   PASO 31 · QA VISUAL FINAL / DASHBOARD RESPONSIVE
+========================================================= */
+
+:root{
+  color-scheme:dark;
+}
+
+.admin-login-body,
+.admin-dashboard-body{
+  overflow-x:hidden;
+}
+
+.admin-shell,
+.admin-main,
+.admin-content,
+.admin-card,
+.reportes-grid,
+.reporte-panel,
+.analitica-grid,
+.analitica-panel,
+.pedidos-toolbar{
+  min-width:0;
+  max-width:100%;
+}
+
+.admin-table-wrap,
+.reporte-table-wrap{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+}
+
+.admin-table{
+  max-width:none;
+}
+
+.admin-table td,
+.admin-table th,
+.pedido-info-card,
+.facturacion-detail-content{
+  overflow-wrap:anywhere;
+}
+
+.admin-field input,
+.admin-field select,
+.admin-field textarea,
+.admin-input-wrap input{
+  color-scheme:dark;
+}
+
+.admin-field input:-webkit-autofill,
+.admin-input-wrap input:-webkit-autofill,
+.admin-field textarea:-webkit-autofill,
+.admin-field select:-webkit-autofill{
+  -webkit-text-fill-color:#fff!important;
+  -webkit-box-shadow:0 0 0 1000px #0a0a0a inset!important;
+  box-shadow:0 0 0 1000px #0a0a0a inset!important;
+  caret-color:#fff;
+}
+
+@media(max-width:820px){
+  .admin-shell,
+  .admin-main,
+  .admin-content{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+  }
+
+  .admin-main{
+    overflow-x:hidden;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
