@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 // ==========================================================
-// SIXTEEN ADMIN · PASO 15
+// SIXTEEN ADMIN · PASO 21
 // ANALÍTICA COMERCIAL + COMPORTAMIENTO DE CLIENTES
 // ==========================================================
 
@@ -111,6 +111,11 @@ document.addEventListener(
       );
 
 
+    if (exportBtn) {
+      exportBtn.disabled = true;
+    }
+
+
     exportBtn
       ?.addEventListener(
         "click",
@@ -202,36 +207,32 @@ document.addEventListener(
           : 0;
 
 
-      const customerStats =
-        buildCustomerPeriodStats(
+      const allValidOrders =
+        pedidos.filter(
+          pedido =>
+            VALID_STATES.has(
+              pedido.estado
+            )
+        );
+
+
+      const repeatStats =
+        buildRepeatStats(
+          allValidOrders,
           validos
         );
 
 
       const customersWithPurchase =
-        customerStats.size;
+        repeatStats.buyers;
 
 
       const returningCustomers =
-        [
-          ...customerStats.values()
-        ]
-          .filter(
-            item =>
-              item.orders >=
-              2
-          )
-          .length;
+        repeatStats.returning;
 
 
       const repeatRate =
-        customersWithPurchase
-          ? (
-              returningCustomers /
-              customersWithPurchase
-            ) *
-            100
-          : 0;
+        repeatStats.rate;
 
 
       const cancellationRate =
@@ -297,10 +298,10 @@ document.addEventListener(
 
       setText(
         recompraMetaEl,
-        `${returningCustomers} ${
-          returningCustomers === 1
-            ? "cliente recurrente"
-            : "clientes recurrentes"
+        `${returningCustomers} de ${customersWithPurchase} ${
+          customersWithPurchase === 1
+            ? "comprador"
+            : "compradores"
         }`
       );
 
@@ -538,8 +539,20 @@ document.addEventListener(
           provinceData,
 
         couponData:
-          couponData
+          couponData,
+
+        customersWithPurchase:
+          customersWithPurchase,
+
+        returningCustomers:
+          returningCustomers
       };
+
+
+      if (exportBtn) {
+        exportBtn.disabled = false;
+        exportBtn.title = "Exportar la analítica del periodo seleccionado";
+      }
     }
 
 
@@ -610,9 +623,14 @@ document.addEventListener(
         );
 
 
+      // "Últimos N días" incluye hoy, por lo que el inicio es N-1
+      // días atrás. Antes se incluía accidentalmente un día adicional.
       from.setDate(
         from.getDate() -
-        period.days
+        (
+          period.days -
+          1
+        )
       );
 
 
@@ -649,15 +667,16 @@ document.addEventListener(
     // CLIENTES EN PERIODO
     // ======================================================
 
-    function buildCustomerPeriodStats(
-      orders
+    function buildRepeatStats(
+      allValidOrders,
+      periodValidOrders
     ) {
 
-      const map =
+      const lifetimeCounts =
         new Map();
 
 
-      orders.forEach(
+      allValidOrders.forEach(
         function (order) {
 
           const key =
@@ -666,43 +685,80 @@ document.addEventListener(
             );
 
 
-          if (
-            !map.has(
-              key
-            )
-          ) {
-
-            map.set(
-              key,
-              {
-                orders:
-                  0,
-                revenue:
-                  0
-              }
-            );
-          }
-
-
-          const item =
-            map.get(
-              key
-            );
-
-
-          item.orders +=
-            1;
-
-
-          item.revenue +=
-            positive(
-              order.resumen?.total
-            );
+          lifetimeCounts.set(
+            key,
+            (
+              lifetimeCounts.get(
+                key
+              ) ||
+              0
+            ) +
+            1
+          );
         }
       );
 
 
-      return map;
+      const periodBuyers =
+        new Set();
+
+
+      periodValidOrders.forEach(
+        function (order) {
+
+          periodBuyers.add(
+            customerKey(
+              order
+            )
+          );
+        }
+      );
+
+
+      let returning =
+        0;
+
+
+      periodBuyers.forEach(
+        function (key) {
+
+          if (
+            (
+              lifetimeCounts.get(
+                key
+              ) ||
+              0
+            ) >=
+            2
+          ) {
+
+            returning +=
+              1;
+          }
+        }
+      );
+
+
+      const buyers =
+        periodBuyers.size;
+
+
+      return {
+        buyers:
+          buyers,
+
+        returning:
+          returning,
+
+        rate:
+          buyers
+            ? (
+                returning /
+                buyers
+              ) *
+              100
+            : 0
+      };
     }
 
 
@@ -784,19 +840,29 @@ document.addEventListener(
 
 
           const lastValid =
+            client.ultimaCompraValida ||
             (
               Array.isArray(
                 client.pedidos
               )
                 ? client.pedidos
-                : []
-            )
-              .find(
-                order =>
-                  VALID_STATES.has(
-                    order.estado
-                  )
-              );
+                    .filter(
+                      order =>
+                        VALID_STATES.has(
+                          order.estado
+                        )
+                    )
+                    .sort(
+                      (a, b) =>
+                        timestampMs(
+                          b.creadoEn
+                        ) -
+                        timestampMs(
+                          a.creadoEn
+                        )
+                    )[0]
+                : null
+            );
 
 
           const lastMs =
@@ -2060,6 +2126,14 @@ document.addEventListener(
           r.ticket.toFixed(2)
         ],
         [
+          "Compradores del periodo",
+          r.customersWithPurchase
+        ],
+        [
+          "Compradores recurrentes",
+          r.returningCustomers
+        ],
+        [
           "Tasa recompra",
           r.repeatRate.toFixed(2) + "%"
         ],
@@ -2134,6 +2208,46 @@ document.addEventListener(
           item.uses,
           item.discount.toFixed(2),
           item.revenue.toFixed(2)
+        ])
+      );
+
+
+      rows.push(
+        [],
+        [
+          "DIAS DE COMPRA"
+        ],
+        [
+          "Dia",
+          "Pedidos"
+        ]
+      );
+
+
+      r.dayData.forEach(
+        item => rows.push([
+          item.name,
+          item.orders
+        ])
+      );
+
+
+      rows.push(
+        [],
+        [
+          "HORARIOS"
+        ],
+        [
+          "Franja",
+          "Pedidos"
+        ]
+      );
+
+
+      r.hourData.forEach(
+        item => rows.push([
+          item.name,
+          item.orders
         ])
       );
 
@@ -2285,28 +2399,105 @@ document.addEventListener(
         {};
 
 
-      return String(
-        order.clienteUid ||
-        client.uid ||
-        client.email ||
-        client.identificacion ||
-        client.telefono ||
+      const uid =
+        String(
+          order.clienteUid ||
+          client.uid ||
+          ""
+        ).trim();
+
+
+      if (uid) {
+        return "uid:" + uid.toLowerCase();
+      }
+
+
+      const identification =
+        String(
+          client.identificacion ||
+          ""
+        )
+          .replace(
+            /\s+/g,
+            ""
+          )
+          .trim();
+
+
+      if (identification) {
+        return "id:" + identification.toLowerCase();
+      }
+
+
+      const email =
+        String(
+          client.email ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      if (email) {
+        return "email:" + email;
+      }
+
+
+      const phone =
+        String(
+          client.telefono ||
+          ""
+        )
+          .replace(
+            /\D+/g,
+            ""
+          );
+
+
+      if (phone) {
+        return "tel:" + phone;
+      }
+
+
+      const name =
         (
-          (
+          String(
             client.nombres ||
             ""
           ) +
           "|" +
-          (
+          String(
             client.apellidos ||
             ""
           )
-        ) ||
-        order.id ||
-        Math.random()
-      )
-        .trim()
-        .toLowerCase();
+        )
+          .trim()
+          .toLowerCase();
+
+
+      if (
+        name &&
+        name !==
+        "|"
+      ) {
+        return "name:" + name;
+      }
+
+
+      return (
+        "order:" +
+        String(
+          order.id ||
+          order.numero ||
+          order.firestoreId ||
+          timestampMs(
+            order.creadoEn
+          ) ||
+          "sin-id"
+        )
+          .trim()
+          .toLowerCase()
+      );
     }
 
 
@@ -2475,11 +2666,34 @@ document.addEventListener(
       value
     ) {
 
-      const text =
+      const numeric =
+        typeof value ===
+          "number" &&
+        Number.isFinite(
+          value
+        );
+
+
+      let text =
         String(
           value ??
           ""
         );
+
+
+      // Evita que Excel/Sheets interpreten contenido de clientes,
+      // categorías, provincias o cupones como fórmulas.
+      if (
+        !numeric &&
+        /^[\s]*[=+\-@]/.test(
+          text
+        )
+      ) {
+
+        text =
+          "'" +
+          text;
+      }
 
 
       return (

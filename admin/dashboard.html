@@ -757,6 +757,8 @@
               type="button"
               class="admin-primary-btn"
               id="exportarAnaliticaBtn"
+              disabled
+              title="Se habilita cuando la analítica termine de calcularse"
             >
               EXPORTAR CSV
             </button>
@@ -773,7 +775,7 @@
           <article>
 
             <span>
-              VENTAS DEL PERIODO
+              VENTAS NETAS DEL PERIODO
             </span>
 
             <strong id="analiticaVentasPeriodo">
@@ -995,7 +997,7 @@
                 </p>
 
                 <h4>
-                  Categorías con mayor venta
+                  Categorías por venta bruta de producto
                 </h4>
 
               </div>
@@ -1215,7 +1217,9 @@
         <p class="analitica-nota">
           Esta analítica usa pedidos y clientes ya existentes. No instala
           rastreadores externos, no crea nuevas colecciones y no añade costos.
-          La tasa de recompra se calcula sobre clientes con compras válidas.
+          Los periodos incluyen el día actual. La tasa de recompra considera si
+          un comprador del periodo ya había comprado antes o repitió durante el
+          mismo periodo. La segmentación de clientes usa el historial total.
         </p>
 
       </section>
@@ -4606,7 +4610,7 @@
 
 <script src="./dashboard.js?v=17000"></script>
 
-<script src="./analitica.js?v=2800"></script>
+<script src="./analitica.js?v=21010"></script>
 
 <script src="./backup.js?v=3100"></script>
 
