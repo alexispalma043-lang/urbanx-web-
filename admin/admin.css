@@ -2858,6 +2858,27 @@ body.admin-body {
     var(--gold-line);
 }
 
+.pedido-stock-aviso {
+  min-height: 34px;
+  margin: 0;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--gold-line);
+  background: rgba(255,255,255,.015);
+  color: #8f887e;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.pedido-stock-aviso[data-tipo="salida"] {
+  color: var(--gold-light);
+  background: rgba(216,170,85,.06);
+}
+
+.pedido-stock-aviso[data-tipo="entrada"] {
+  color: #d4cec5;
+  background: rgba(255,255,255,.035);
+}
+
 .pedido-info-grid {
   display: grid;
   grid-template-columns:
@@ -2962,6 +2983,21 @@ body.admin-body {
   margin-top: 4px;
   color: #777168;
   font-size: 8px;
+}
+
+.pedido-producto-link {
+  display: inline-flex;
+  margin-top: 7px;
+  color: var(--gold-light);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .7px;
+  text-decoration: none;
+}
+
+.pedido-producto-link:hover,
+.pedido-producto-link:focus-visible {
+  text-decoration: underline;
 }
 
 .pedido-producto-item > strong {
@@ -3248,7 +3284,7 @@ body.admin-body {
 .pedidos-resumen {
   display: grid;
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    repeat(5, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 16px;
 }
@@ -3280,9 +3316,10 @@ body.admin-body {
 .pedidos-filtros {
   display: grid;
   grid-template-columns:
-    minmax(210px, 1.8fr)
+    minmax(210px, 1.7fr)
     minmax(135px, .8fr)
     minmax(160px, .9fr)
+    minmax(165px, .9fr)
     minmax(130px, .7fr)
     minmax(130px, .7fr)
     auto
@@ -3341,6 +3378,27 @@ body.admin-body {
   color: #79736b;
   font-size: 8px;
   font-weight: 700;
+}
+
+.pedidos-filtro-aviso {
+  min-height: 17px;
+  margin-top: 12px;
+  color: #df7469;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.pedidos-filtro-aviso:empty {
+  display: none;
+}
+
+.pedidos-filtros input[aria-invalid="true"] {
+  border-color: rgba(221,118,108,.75);
+  box-shadow: 0 0 0 2px rgba(221,118,108,.08);
+}
+
+.pedido-pago-estado {
+  margin-top: 5px;
 }
 
 @media (max-width: 1350px) {
@@ -7270,5 +7328,44 @@ td {
 
   .productos-toolbar .admin-secondary-btn {
     width: 100%;
+  }
+}
+
+
+/* =========================================================
+   SIXTEEN · PASO 14
+   PEDIDOS · CONTROL OPERATIVO Y ACCESIBILIDAD
+========================================================= */
+
+#guardarEstadoPedidoBtn:disabled {
+  cursor: not-allowed;
+  opacity: .48;
+  filter: grayscale(.35);
+}
+
+.pedido-modal-card:focus {
+  outline: none;
+}
+
+@media (max-width: 1180px) {
+  .pedidos-resumen {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .pedidos-resumen {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .pedidos-resumen {
+    grid-template-columns: 1fr;
+  }
+
+  .pedido-stock-aviso {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }

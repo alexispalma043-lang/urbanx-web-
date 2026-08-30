@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=13000"
+    href="./admin.css?v=14000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -2514,6 +2514,11 @@
               <strong id="pedidosConteoEntregados">0</strong>
             </article>
 
+            <article>
+              <span>CANCELADOS</span>
+              <strong id="pedidosConteoCancelados">0</strong>
+            </article>
+
           </div>
 
           <div class="pedidos-filtros">
@@ -2547,7 +2552,7 @@
 
             <div>
               <label for="pedidoFiltroPago">
-                PAGO
+                MÉTODO DE PAGO
               </label>
               <select id="pedidoFiltroPago">
                 <option value="">Todos</option>
@@ -2555,6 +2560,21 @@
                 <option value="qr">Pago QR</option>
                 <option value="tarjeta">Tarjeta crédito / débito</option>
                 <option value="efectivo">Pago contra entrega</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="pedidoFiltroEstadoPago">
+                ESTADO DE PAGO
+              </label>
+              <select id="pedidoFiltroEstadoPago">
+                <option value="">Todos</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Pendiente de pasarela">Pendiente de pasarela</option>
+                <option value="Pendiente contra entrega">Pendiente contra entrega</option>
+                <option value="Por verificar">Por verificar</option>
+                <option value="Pagado">Pagado</option>
+                <option value="Reembolsado">Reembolsado</option>
               </select>
             </div>
 
@@ -2595,6 +2615,12 @@
             </button>
 
           </div>
+
+          <p
+            class="pedidos-filtro-aviso"
+            id="pedidosFiltroAviso"
+            aria-live="polite"
+          ></p>
 
           <p
             class="pedidos-resultado"
@@ -2970,6 +2996,7 @@
               <option value="">Todos</option>
               <option value="SALIDA_VENTA">Salida por venta</option>
               <option value="ENTRADA_CANCELACION">Entrada por cancelación</option>
+              <option value="ENTRADA_REVERSO_PEDIDO">Entrada por reverso a Pendiente</option>
               <option value="AJUSTE_ENTRADA">Ajuste de entrada</option>
               <option value="AJUSTE_SALIDA">Ajuste de salida</option>
               <option value="AJUSTE_EXACTO">Ajuste exacto</option>
@@ -4415,10 +4442,13 @@
 <div
   class="pedido-modal"
   id="pedidoAdminModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="pedidoModalNumero"
   aria-hidden="true"
 >
 
-  <div class="pedido-modal-card">
+  <div class="pedido-modal-card" tabindex="-1">
 
     <div class="pedido-modal-header">
 
@@ -4468,11 +4498,18 @@
         type="button"
         class="admin-primary-btn"
         id="guardarEstadoPedidoBtn"
+        disabled
       >
-        GUARDAR ESTADO
+        SIN CAMBIOS
       </button>
 
     </div>
+
+    <p
+      class="pedido-stock-aviso"
+      id="pedidoStockAviso"
+      aria-live="polite"
+    ></p>
 
     <p
       id="pedidoAdminMensaje"
@@ -4493,6 +4530,7 @@
       <article class="pedido-info-card">
         <p class="admin-eyebrow">ENTREGA</p>
         <h3 id="pedidoEntregaCiudad">-</h3>
+        <p><strong>Método:</strong> <span id="pedidoEntregaMetodo">-</span></p>
         <p><strong>Provincia:</strong> <span id="pedidoEntregaProvincia">-</span></p>
         <p><strong>Dirección:</strong> <span id="pedidoEntregaDireccion">-</span></p>
         <p><strong>Referencia:</strong> <span id="pedidoEntregaReferencia">-</span></p>
@@ -4503,6 +4541,7 @@
         <h3 id="pedidoMetodoPago">-</h3>
         <p><strong>Estado:</strong> <span id="pedidoEstadoPago">-</span></p>
         <p><strong>Fecha:</strong> <span id="pedidoFecha">-</span></p>
+        <p><strong>Cupón:</strong> <span id="pedidoCupon">-</span></p>
         <p>
           <strong>Inventario:</strong>
           <span
@@ -5631,7 +5670,7 @@
 
 <script src="../sri-core.js?v=3800"></script>
 
-<script src="./dashboard.js?v=13000"></script>
+<script src="./dashboard.js?v=14000"></script>
 
 <script src="./analitica.js?v=2800"></script>
 

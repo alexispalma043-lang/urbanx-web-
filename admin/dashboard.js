@@ -286,6 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const pedidoClienteTelefono = document.getElementById("pedidoClienteTelefono");
 
   const pedidoEntregaCiudad = document.getElementById("pedidoEntregaCiudad");
+  const pedidoEntregaMetodo = document.getElementById("pedidoEntregaMetodo");
   const pedidoEntregaProvincia = document.getElementById("pedidoEntregaProvincia");
   const pedidoEntregaDireccion = document.getElementById("pedidoEntregaDireccion");
   const pedidoEntregaReferencia = document.getElementById("pedidoEntregaReferencia");
@@ -293,7 +294,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const pedidoMetodoPago = document.getElementById("pedidoMetodoPago");
   const pedidoEstadoPago = document.getElementById("pedidoEstadoPago");
   const pedidoFecha = document.getElementById("pedidoFecha");
+  const pedidoCupon = document.getElementById("pedidoCupon");
   const pedidoEstadoInventario = document.getElementById("pedidoEstadoInventario");
+  const pedidoStockAviso = document.getElementById("pedidoStockAviso");
 
   const pedidoProductosLista = document.getElementById("pedidoProductosLista");
   const pedidoSubtotal = document.getElementById("pedidoSubtotal");
@@ -308,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const pedidoBuscar = document.getElementById("pedidoBuscar");
   const pedidoFiltroEstado = document.getElementById("pedidoFiltroEstado");
   const pedidoFiltroPago = document.getElementById("pedidoFiltroPago");
+  const pedidoFiltroEstadoPago = document.getElementById("pedidoFiltroEstadoPago");
   const pedidoFechaDesde = document.getElementById("pedidoFechaDesde");
   const pedidoFechaHasta = document.getElementById("pedidoFechaHasta");
   const limpiarFiltrosPedidosBtn = document.getElementById("limpiarFiltrosPedidosBtn");
@@ -317,7 +321,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const pedidosConteoPendientes = document.getElementById("pedidosConteoPendientes");
   const pedidosConteoProceso = document.getElementById("pedidosConteoProceso");
   const pedidosConteoEntregados = document.getElementById("pedidosConteoEntregados");
+  const pedidosConteoCancelados = document.getElementById("pedidosConteoCancelados");
   const pedidosPendientesBadge = document.getElementById("pedidosPendientesBadge");
+  const pedidosFiltroAviso = document.getElementById("pedidosFiltroAviso");
   const pedidosResultadoTexto = document.getElementById("pedidosResultadoTexto");
 
   // ========================================================
@@ -391,6 +397,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let productoEditandoId = null;
   let pedidoEditandoId = null;
+  let pedidoEstadoOriginal = "";
+  let pedidoEstadoPagoOriginal = "";
+  let focoAntesPedidoModal = null;
   let productoAjusteInventarioId = null;
 
   let imagenArchivoSeleccionado = null;
@@ -1856,7 +1865,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const textos = {
       SALIDA_VENTA: "Salida venta",
-      ENTRADA_CANCELACION: "Devolución",
+      ENTRADA_CANCELACION: "Devolución por cancelación",
+      ENTRADA_REVERSO_PEDIDO: "Reverso a Pendiente",
       AJUSTE_ENTRADA: "Entrada manual",
       AJUSTE_SALIDA: "Salida manual",
       AJUSTE_EXACTO: "Ajuste exacto"
@@ -1879,6 +1889,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (
       tipo === "ENTRADA_CANCELACION" ||
+      tipo === "ENTRADA_REVERSO_PEDIDO" ||
       tipo === "AJUSTE_ENTRADA"
     ) {
       return "entrada";
@@ -3623,6 +3634,11 @@ document.addEventListener("DOMContentLoaded", function () {
         pedidoFiltroPago?.value || ""
       ).trim();
 
+    const estadoPago =
+      String(
+        pedidoFiltroEstadoPago?.value || ""
+      ).trim();
+
     const desde =
       crearFechaFiltro(
         pedidoFechaDesde?.value,
@@ -3634,6 +3650,41 @@ document.addEventListener("DOMContentLoaded", function () {
         pedidoFechaHasta?.value,
         true
       );
+
+    const rangoInvalido =
+      Boolean(
+        desde &&
+        hasta &&
+        desde > hasta
+      );
+
+    if (pedidoFechaDesde) {
+      pedidoFechaDesde.setAttribute(
+        "aria-invalid",
+        rangoInvalido ? "true" : "false"
+      );
+    }
+
+    if (pedidoFechaHasta) {
+      pedidoFechaHasta.setAttribute(
+        "aria-invalid",
+        rangoInvalido ? "true" : "false"
+      );
+    }
+
+    if (pedidosFiltroAviso) {
+      pedidosFiltroAviso.textContent =
+        rangoInvalido
+          ? "La fecha DESDE no puede ser posterior a HASTA."
+          : "";
+    }
+
+    if (rangoInvalido) {
+      pedidosFiltradosActuales = [];
+      renderPedidos([]);
+      actualizarTextoResultados();
+      return;
+    }
 
     pedidosFiltradosActuales =
       pedidosActuales.filter(
@@ -3659,6 +3710,14 @@ document.addEventListener("DOMContentLoaded", function () {
             metodoPago &&
             pago.metodo !==
             metodoPago
+          ) {
+            return false;
+          }
+
+          if (
+            estadoPago &&
+            (pago.estado || "Pendiente") !==
+            estadoPago
           ) {
             return false;
           }
@@ -3700,10 +3759,24 @@ document.addEventListener("DOMContentLoaded", function () {
                   cliente.email,
                   cliente.telefono,
                   cliente.identificacion,
+                  pedido.entrega?.provincia,
+                  pedido.entrega?.ciudad,
+                  pedido.resumen?.cupon,
                   pedido.estado,
+                  pago.estado,
                   nombreMetodoPago(
                     pago.metodo
-                  )
+                  ),
+                  ...(Array.isArray(pedido.productos)
+                    ? pedido.productos.flatMap(function (producto) {
+                        return [
+                          producto.nombre,
+                          producto.codigo,
+                          producto.color,
+                          producto.talla
+                        ];
+                      })
+                    : [])
                 ]
                   .filter(Boolean)
                   .join(" ")
@@ -3767,6 +3840,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       ).length;
 
+    const cancelados =
+      pedidosActuales.filter(
+        function (pedido) {
+          return pedido.estado ===
+            "Cancelado";
+        }
+      ).length;
+
     if (pedidosConteoTotal) {
       pedidosConteoTotal.textContent =
         total;
@@ -3785,6 +3866,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (pedidosConteoEntregados) {
       pedidosConteoEntregados.textContent =
         entregados;
+    }
+
+    if (pedidosConteoCancelados) {
+      pedidosConteoCancelados.textContent =
+        cancelados;
     }
 
     if (pedidosPendientesBadge) {
@@ -3841,6 +3927,10 @@ document.addEventListener("DOMContentLoaded", function () {
       pedidoFiltroPago.value = "";
     }
 
+    if (pedidoFiltroEstadoPago) {
+      pedidoFiltroEstadoPago.value = "";
+    }
+
     if (pedidoFechaDesde) {
       pedidoFechaDesde.value = "";
     }
@@ -3857,6 +3947,7 @@ document.addEventListener("DOMContentLoaded", function () {
     pedidoBuscar,
     pedidoFiltroEstado,
     pedidoFiltroPago,
+    pedidoFiltroEstadoPago,
     pedidoFechaDesde,
     pedidoFechaHasta
   ]
@@ -4043,6 +4134,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ).trim() ||
       pedidoFiltroEstado?.value ||
       pedidoFiltroPago?.value ||
+      pedidoFiltroEstadoPago?.value ||
       pedidoFechaDesde?.value ||
       pedidoFechaHasta?.value
     );
@@ -4186,124 +4278,96 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    pedidosAdminBody.replaceChildren();
+
     if (!pedidos.length) {
-      pedidosAdminBody.innerHTML = `
-        <tr>
-          <td colspan="8">
-            Todavía no existen pedidos.
-          </td>
-        </tr>
-      `;
+      const fila = document.createElement("tr");
+      const celda = document.createElement("td");
+      celda.colSpan = 8;
+      celda.textContent = filtrosPedidosActivos()
+        ? "No existen pedidos que coincidan con los filtros."
+        : "Todavía no existen pedidos.";
+      fila.appendChild(celda);
+      pedidosAdminBody.appendChild(fila);
       return;
     }
 
-    pedidosAdminBody.innerHTML = "";
+    pedidos.forEach(function (pedido) {
 
-    pedidos.forEach(
-      function (pedido) {
+      const cliente = pedido.cliente || {};
+      const pago = normalizarPago(pedido);
 
-        const cliente =
-          pedido.cliente || {};
+      const fila = document.createElement("tr");
 
-        const pago =
-          normalizarPago(
-            pedido
-          );
+      const celdaPedido = document.createElement("td");
+      const codigo = document.createElement("strong");
+      codigo.className = "admin-code";
+      codigo.textContent = pedido.numero || pedido.id || "-";
+      celdaPedido.appendChild(codigo);
 
-        const fila =
-          document.createElement("tr");
+      const celdaCliente = document.createElement("td");
+      const clienteNombre = document.createElement("strong");
+      clienteNombre.textContent = nombreCliente(cliente);
+      const clienteCorreo = document.createElement("small");
+      clienteCorreo.className = "admin-table-secondary";
+      clienteCorreo.textContent = cliente.email || "";
+      celdaCliente.append(clienteNombre, clienteCorreo);
 
-        fila.innerHTML = `
-          <td>
-            <strong class="admin-code">
-              ${escapar(pedido.numero || pedido.id)}
-            </strong>
-          </td>
+      const celdaFecha = document.createElement("td");
+      celdaFecha.textContent = fechaLegible(pedido.creadoEn);
 
-          <td>
-            <strong>
-              ${escapar(
-                nombreCliente(cliente)
-              )}
-            </strong>
-            <small class="admin-table-secondary">
-              ${escapar(cliente.email || "")}
-            </small>
-          </td>
+      const celdaTotal = document.createElement("td");
+      const total = document.createElement("strong");
+      total.textContent = dinero(pedido.resumen?.total);
+      celdaTotal.appendChild(total);
 
-          <td>
-            ${escapar(
-              fechaLegible(
-                pedido.creadoEn
-              )
-            )}
-          </td>
+      const celdaPago = document.createElement("td");
+      const metodo = document.createElement("strong");
+      metodo.textContent = nombreMetodoPago(pago.metodo);
+      const estadoPago = document.createElement("small");
+      estadoPago.className = "admin-table-secondary pedido-pago-estado";
+      estadoPago.textContent = pago.estado || "Pendiente";
+      celdaPago.append(metodo, estadoPago);
 
-          <td>
-            <strong>
-              ${dinero(
-                pedido.resumen?.total
-              )}
-            </strong>
-          </td>
+      const celdaEstado = document.createElement("td");
+      const badgeEstado = document.createElement("span");
+      badgeEstado.className =
+        "pedido-estado-badge " + claseEstadoPedido(pedido.estado);
+      badgeEstado.textContent = pedido.estado || "Pendiente";
+      celdaEstado.appendChild(badgeEstado);
 
-          <td>
-            ${escapar(
-              nombreMetodoPago(
-                pago.metodo
-              )
-            )}
-          </td>
+      const celdaInventario = document.createElement("td");
+      const badgeInventario = document.createElement("span");
+      badgeInventario.className =
+        "pedido-inventario-badge " + claseEstadoInventario(pedido);
+      badgeInventario.textContent = textoEstadoInventario(pedido);
+      celdaInventario.appendChild(badgeInventario);
 
-          <td>
-            <span
-              class="
-                pedido-estado-badge
-                ${claseEstadoPedido(
-                  pedido.estado
-                )}
-              "
-            >
-              ${escapar(
-                pedido.estado ||
-                "Pendiente"
-              )}
-            </span>
-          </td>
+      const celdaAccion = document.createElement("td");
+      const boton = document.createElement("button");
+      boton.type = "button";
+      boton.className = "admin-view-btn";
+      boton.dataset.pedidoId = pedido.id;
+      boton.setAttribute(
+        "aria-label",
+        "Ver pedido " + (pedido.numero || pedido.id || "")
+      );
+      boton.textContent = "VER";
+      celdaAccion.appendChild(boton);
 
-          <td>
-            <span
-              class="
-                pedido-inventario-badge
-                ${claseEstadoInventario(
-                  pedido
-                )}
-              "
-            >
-              ${escapar(
-                textoEstadoInventario(
-                  pedido
-                )
-              )}
-            </span>
-          </td>
+      fila.append(
+        celdaPedido,
+        celdaCliente,
+        celdaFecha,
+        celdaTotal,
+        celdaPago,
+        celdaEstado,
+        celdaInventario,
+        celdaAccion
+      );
 
-          <td>
-            <button
-              type="button"
-              class="admin-view-btn"
-              data-pedido-id="${pedido.id}"
-            >
-              VER
-            </button>
-          </td>
-        `;
-
-        pedidosAdminBody.appendChild(
-          fila
-        );
-      }
-    );
+      pedidosAdminBody.appendChild(fila);
+    });
   }
 
   pedidosAdminBody?.addEventListener(
@@ -4346,6 +4410,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     pedidoEditandoId = id;
+    focoAntesPedidoModal = document.activeElement;
 
     const cliente =
       pedido.cliente || {};
@@ -4404,6 +4469,12 @@ document.addEventListener("DOMContentLoaded", function () {
         pedido.creadoEn
       );
 
+    if (pedidoCupon) {
+      pedidoCupon.textContent =
+        pedido.resumen?.cupon ||
+        "Sin cupón";
+    }
+
     if (pedidoEstadoInventario) {
       pedidoEstadoInventario.textContent =
         textoEstadoInventario(
@@ -4436,6 +4507,14 @@ document.addEventListener("DOMContentLoaded", function () {
     pedidoEstadoPagoSelect.value =
       pago.estado ||
       "Pendiente";
+
+    pedidoEstadoOriginal =
+      pedidoEstadoSelect.value;
+
+    pedidoEstadoPagoOriginal =
+      pedidoEstadoPagoSelect.value;
+
+    actualizarBotonGuardarPedido();
 
     renderProductosPedido(
       pedido.productos || []
@@ -4473,109 +4552,136 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     actualizarBloqueoBody();
+
+    window.requestAnimationFrame(function () {
+      const primerControl =
+        pedidoEstadoSelect ||
+        cerrarPedidoModal ||
+        pedidoModal.querySelector(".pedido-modal-card");
+
+      primerControl?.focus();
+    });
   }
 
   function renderProductosPedido(productos) {
 
-    pedidoProductosLista.innerHTML = "";
+    pedidoProductosLista.replaceChildren();
 
-    if (!Array.isArray(productos) ||
-        !productos.length) {
-
-      pedidoProductosLista.innerHTML = `
-        <p class="pedido-sin-productos">
-          No hay productos registrados.
-        </p>
-      `;
-
+    if (
+      !Array.isArray(productos) ||
+      !productos.length
+    ) {
+      const vacio = document.createElement("p");
+      vacio.className = "pedido-sin-productos";
+      vacio.textContent = "No hay productos registrados.";
+      pedidoProductosLista.appendChild(vacio);
       return;
     }
 
-    productos.forEach(
-      function (producto) {
+    productos.forEach(function (producto) {
 
-        const cantidad =
-          Math.max(
-            1,
-            numero(
-              producto.cantidad
-            )
-          );
-
-        const precio =
-          numero(
-            producto.precioUnitario ??
-            producto.precio
-          );
-
-        const item =
-          document.createElement(
-            "article"
-          );
-
-        item.className =
-          "pedido-producto-item";
-
-        item.innerHTML = `
-          <div class="pedido-producto-imagen">
-            ${
-              producto.imagen
-                ? `
-                  <img
-                    src="${escaparAtributo(producto.imagen)}"
-                    alt="${escaparAtributo(producto.nombre || "Producto SIXTEEN")}"
-                  >
-                `
-                : "XVI"
-            }
-          </div>
-
-          <div class="pedido-producto-info">
-
-            <h4>
-              ${escapar(
-                producto.nombre ||
-                "Producto SIXTEEN"
-              )}
-            </h4>
-
-            <p>
-              ${escapar(
-                producto.codigo ||
-                producto.id ||
-                "-"
-              )}
-              · Talla:
-              ${escapar(
-                producto.talla ||
-                "Única"
-              )}
-            </p>
-
-            <p>
-              Color:
-              ${escapar(
-                producto.color ||
-                "-"
-              )}
-              · Cantidad:
-              ${cantidad}
-            </p>
-
-          </div>
-
-          <strong>
-            ${dinero(
-              precio * cantidad
-            )}
-          </strong>
-        `;
-
-        pedidoProductosLista.appendChild(
-          item
+      const cantidad =
+        Math.max(
+          1,
+          Math.floor(
+            numero(producto.cantidad)
+          )
         );
+
+      const precio =
+        numero(
+          producto.precioUnitario ??
+          producto.precio
+        );
+
+      const item =
+        document.createElement("article");
+
+      item.className =
+        "pedido-producto-item";
+
+      const imagenBox =
+        document.createElement("div");
+
+      imagenBox.className =
+        "pedido-producto-imagen";
+
+      const imagenUrl =
+        String(producto.imagen || "").trim();
+
+      if (esUrlHttpsValida(imagenUrl)) {
+        const imagen = document.createElement("img");
+        imagen.src = imagenUrl;
+        imagen.alt = producto.nombre || "Producto SIXTEEN";
+        imagen.loading = "lazy";
+        imagen.decoding = "async";
+        imagen.addEventListener("error", function () {
+          imagen.remove();
+          imagenBox.textContent = "XVI";
+        }, { once: true });
+        imagenBox.appendChild(imagen);
+      } else {
+        imagenBox.textContent = "XVI";
       }
-    );
+
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "pedido-producto-info";
+
+      const titulo =
+        document.createElement("h4");
+
+      titulo.textContent =
+        producto.nombre ||
+        "Producto SIXTEEN";
+
+      const variante =
+        document.createElement("p");
+
+      variante.textContent =
+        `${producto.codigo || producto.id || "-"} · Talla: ${producto.talla || "Única"}`;
+
+      const detalle =
+        document.createElement("p");
+
+      detalle.textContent =
+        `Color: ${producto.color || "-"} · Cantidad: ${cantidad}`;
+
+      info.append(
+        titulo,
+        variante,
+        detalle
+      );
+
+      const firestoreId =
+        String(producto.firestoreId || "").trim();
+
+      if (firestoreId) {
+        const enlace = document.createElement("a");
+        enlace.className = "pedido-producto-link";
+        enlace.href = "../producto.html?id=" + encodeURIComponent(firestoreId);
+        enlace.target = "_blank";
+        enlace.rel = "noopener noreferrer";
+        enlace.textContent = "VER PRODUCTO ↗";
+        info.appendChild(enlace);
+      }
+
+      const importe =
+        document.createElement("strong");
+
+      importe.textContent =
+        dinero(precio * cantidad);
+
+      item.append(
+        imagenBox,
+        info,
+        importe
+      );
+
+      pedidoProductosLista.appendChild(item);
+    });
   }
 
   // ========================================================
@@ -4584,13 +4690,162 @@ document.addEventListener("DOMContentLoaded", function () {
   // REGLAS:
   // - Al pasar a Confirmado / En preparación / Enviado /
   //   Entregado, el stock se descuenta UNA sola vez.
-  // - Si el pedido se cancela después de descontar stock,
-  //   el stock se devuelve UNA sola vez.
-  // - Si un pedido cancelado vuelve a un estado operativo,
+  // - Si el pedido se cancela o vuelve a Pendiente después de
+  //   descontar stock, el stock se devuelve UNA sola vez.
+  // - Si un pedido con stock devuelto vuelve a un estado operativo,
   //   el stock se vuelve a descontar, validando existencia.
   // - Todo se hace dentro de una transacción Firestore.
   // - Cada movimiento se registra en "inventario".
   // ========================================================
+
+  const ESTADOS_PEDIDO_CON_STOCK =
+    new Set([
+      "Confirmado",
+      "En preparación",
+      "Enviado",
+      "Entregado"
+    ]);
+
+
+  function actualizarBotonGuardarPedido() {
+
+    if (!guardarEstadoPedidoBtn) {
+      return;
+    }
+
+    const pedido =
+      pedidosActuales.find(function (item) {
+        return item.id === pedidoEditandoId;
+      }) || null;
+
+    const estadoActual =
+      pedidoEstadoSelect?.value || "";
+
+    const pagoActual =
+      pedidoEstadoPagoSelect?.value || "";
+
+    const hayCambios =
+      Boolean(
+        pedidoEditandoId &&
+        (
+          estadoActual !== pedidoEstadoOriginal ||
+          pagoActual !== pedidoEstadoPagoOriginal
+        )
+      );
+
+    guardarEstadoPedidoBtn.disabled =
+      !hayCambios;
+
+    guardarEstadoPedidoBtn.textContent =
+      hayCambios
+        ? "GUARDAR CAMBIOS"
+        : "SIN CAMBIOS";
+
+    if (!pedidoStockAviso) {
+      return;
+    }
+
+    if (!pedido) {
+      pedidoStockAviso.textContent = "";
+      return;
+    }
+
+    const stockDescontado =
+      pedido.stockDescontado === true;
+
+    const stockDevuelto =
+      pedido.stockDevuelto === true;
+
+    if (
+      ESTADOS_PEDIDO_CON_STOCK.has(estadoActual) &&
+      (!stockDescontado || stockDevuelto)
+    ) {
+      pedidoStockAviso.textContent =
+        "Este cambio descontará del inventario las unidades del pedido.";
+      pedidoStockAviso.dataset.tipo = "salida";
+      return;
+    }
+
+    if (
+      ["Pendiente", "Cancelado"].includes(estadoActual) &&
+      stockDescontado &&
+      !stockDevuelto
+    ) {
+      pedidoStockAviso.textContent =
+        estadoActual === "Cancelado"
+          ? "Cancelar este pedido devolverá automáticamente sus unidades al inventario."
+          : "Volver este pedido a Pendiente devolverá automáticamente sus unidades al inventario.";
+      pedidoStockAviso.dataset.tipo = "entrada";
+      return;
+    }
+
+    pedidoStockAviso.textContent =
+      "El cambio no modificará el stock actual.";
+    pedidoStockAviso.dataset.tipo = "neutral";
+  }
+
+
+  function confirmarCambioPedido(
+    pedido,
+    nuevoEstado
+  ) {
+
+    if (!pedido) {
+      return false;
+    }
+
+    const estadoAnterior =
+      pedido.estado || "Pendiente";
+
+    if (
+      nuevoEstado === "Cancelado" &&
+      estadoAnterior !== "Cancelado"
+    ) {
+      const mensaje =
+        pedido.stockDescontado === true &&
+        pedido.stockDevuelto !== true
+          ? "Vas a cancelar el pedido y devolver sus unidades al inventario. ¿Deseas continuar?"
+          : "Vas a cancelar este pedido. ¿Deseas continuar?";
+
+      return window.confirm(mensaje);
+    }
+
+    if (
+      ESTADOS_PEDIDO_CON_STOCK.has(nuevoEstado) &&
+      (
+        pedido.stockDescontado !== true ||
+        pedido.stockDevuelto === true
+      )
+    ) {
+      return window.confirm(
+        "Este cambio descontará del inventario las unidades del pedido. ¿Deseas continuar?"
+      );
+    }
+
+    if (
+      nuevoEstado === "Pendiente" &&
+      pedido.stockDescontado === true &&
+      pedido.stockDevuelto !== true
+    ) {
+      return window.confirm(
+        "Volver el pedido a Pendiente devolverá sus unidades al inventario. ¿Deseas continuar?"
+      );
+    }
+
+    return true;
+  }
+
+
+  pedidoEstadoSelect?.addEventListener(
+    "change",
+    actualizarBotonGuardarPedido
+  );
+
+  pedidoEstadoPagoSelect?.addEventListener(
+    "change",
+    actualizarBotonGuardarPedido
+  );
+
 
   // ========================================================
   // PASO 9B · NOTIFICACIONES + EMAILJS FREE
@@ -5056,6 +5311,25 @@ document.addEventListener("DOMContentLoaded", function () {
       const nuevoEstadoPago =
         pedidoEstadoPagoSelect.value;
 
+      const pedidoAntes =
+        pedidosActuales.find(
+          function (pedido) {
+            return pedido.id === pedidoEditandoId;
+          }
+        ) || null;
+
+      if (
+        nuevoEstado === pedidoEstadoOriginal &&
+        nuevoEstadoPago === pedidoEstadoPagoOriginal
+      ) {
+        actualizarBotonGuardarPedido();
+        return;
+      }
+
+      if (!confirmarCambioPedido(pedidoAntes, nuevoEstado)) {
+        return;
+      }
+
       guardarEstadoPedidoBtn.disabled =
         true;
 
@@ -5069,24 +5343,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
 
-        const pedidoAntes =
-          pedidosActuales.find(
-            function (pedido) {
-
-              return (
-                pedido.id ===
-                pedidoEditandoId
-              );
-            }
-          ) ||
-          null;
-
-
-        const estadoAnterior =
-          pedidoAntes?.estado ||
-          "Pendiente";
-
-
         const resultado =
           await actualizarPedidoConInventario(
             pedidoEditandoId,
@@ -5096,10 +5352,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         await registrarActualizacionCliente(
-          pedidoAntes,
-          estadoAnterior,
+          resultado.pedidoAntes,
+          resultado.estadoAnterior,
           nuevoEstado
         );
+
+        pedidoEstadoOriginal =
+          nuevoEstado;
+
+        pedidoEstadoPagoOriginal =
+          nuevoEstadoPago;
+
+        if (pedidoAntes) {
+          pedidoAntes.estado = nuevoEstado;
+          pedidoAntes.estadoPago = nuevoEstadoPago;
+          pedidoAntes.pago = {
+            ...(typeof pedidoAntes.pago === "object" && pedidoAntes.pago
+              ? pedidoAntes.pago
+              : {}),
+            estado: nuevoEstadoPago
+          };
+          pedidoAntes.stockDescontado = resultado.stockDescontado;
+          pedidoAntes.stockDevuelto = resultado.stockDevuelto;
+        }
 
         mostrarMensajePedido(
           resultado.mensaje,
@@ -5134,11 +5409,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       } finally {
 
-        guardarEstadoPedidoBtn.disabled =
-          false;
-
-        guardarEstadoPedidoBtn.textContent =
-          "GUARDAR ESTADO";
+        actualizarBotonGuardarPedido();
       }
     }
   );
@@ -5150,7 +5421,7 @@ document.addEventListener("DOMContentLoaded", function () {
     nuevoEstadoPago
   ) {
     const pedidoRef=db.collection("pedidos").doc(pedidoId);
-    const estadosConStock=new Set(["Confirmado","En preparación","Enviado","Entregado"]);
+    const estadosConStock=ESTADOS_PEDIDO_CON_STOCK;
 
     return await db.runTransaction(async transaction=>{
       const pedidoSnapshot=await transaction.get(pedidoRef);
@@ -5165,7 +5436,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       let accion="NINGUNA";
       if(estadosConStock.has(nuevoEstado)&&(!stockDescontado||stockDevuelto))accion="DESCONTAR";
-      if(nuevoEstado==="Cancelado"&&stockDescontado&&!stockDevuelto)accion="DEVOLVER";
+      if(["Pendiente","Cancelado"].includes(nuevoEstado)&&stockDescontado&&!stockDevuelto)accion="DEVOLVER";
 
       const grupos=new Map();
 
@@ -5256,7 +5527,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 talla:variante.talla,
                 stockAnterior:before,
                 stockNuevo:after,
-                tipo:accion==="DESCONTAR"?"SALIDA_VENTA":"ENTRADA_CANCELACION"
+                tipo:accion==="DESCONTAR"
+                  ?"SALIDA_VENTA"
+                  :nuevoEstado==="Cancelado"
+                    ?"ENTRADA_CANCELACION"
+                    :"ENTRADA_REVERSO_PEDIDO"
               });
 
             }else{
@@ -5284,7 +5559,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 talla:reg.item.talla||"",
                 stockAnterior:before,
                 stockNuevo:after,
-                tipo:accion==="DESCONTAR"?"SALIDA_VENTA":"ENTRADA_CANCELACION"
+                tipo:accion==="DESCONTAR"
+                  ?"SALIDA_VENTA"
+                  :nuevoEstado==="Cancelado"
+                    ?"ENTRADA_CANCELACION"
+                    :"ENTRADA_REVERSO_PEDIDO"
               });
             }
           }
@@ -5363,12 +5642,18 @@ document.addEventListener("DOMContentLoaded", function () {
       return {
         mensaje:
           accion==="DESCONTAR"
-            ?"Pedido actualizado y stock de variantes descontado correctamente."
+            ?"Pedido actualizado y stock descontado correctamente."
             :accion==="DEVOLVER"
-              ?"Pedido cancelado y stock de variantes devuelto correctamente."
+              ?nuevoEstado==="Cancelado"
+                ?"Pedido cancelado y stock devuelto correctamente."
+                :"Pedido actualizado y stock devuelto al pasar a Pendiente."
               :"Pedido actualizado correctamente.",
         inventarioTexto:textoEstadoInventario(virtual),
-        inventarioClase:claseEstadoInventario(virtual)
+        inventarioClase:claseEstadoInventario(virtual),
+        pedidoAntes:{id:pedidoId,...pedido},
+        estadoAnterior:pedido.estado||"Pendiente",
+        stockDescontado:virtual.stockDescontado===true,
+        stockDevuelto:virtual.stockDevuelto===true
       };
     });
   }
@@ -5438,8 +5723,24 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     pedidoEditandoId = null;
+    pedidoEstadoOriginal = "";
+    pedidoEstadoPagoOriginal = "";
+
+    if (pedidoStockAviso) {
+      pedidoStockAviso.textContent = "";
+      delete pedidoStockAviso.dataset.tipo;
+    }
 
     actualizarBloqueoBody();
+
+    if (
+      focoAntesPedidoModal &&
+      typeof focoAntesPedidoModal.focus === "function"
+    ) {
+      focoAntesPedidoModal.focus();
+    }
+
+    focoAntesPedidoModal = null;
   }
 
   cerrarPedidoModal?.addEventListener(
@@ -5453,6 +5754,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (event.target === pedidoModal) {
         cerrarModalPedidoFn();
+      }
+    }
+  );
+
+  pedidoModal?.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusables =
+        Array.from(
+          pedidoModal.querySelectorAll(
+            'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter(function (elemento) {
+          return !elemento.hidden && elemento.offsetParent !== null;
+        });
+
+      if (!focusables.length) {
+        event.preventDefault();
+        pedidoModal.querySelector(".pedido-modal-card")?.focus();
+        return;
+      }
+
+      const primero = focusables[0];
+      const ultimo = focusables[focusables.length - 1];
+
+      if (
+        event.shiftKey &&
+        document.activeElement === primero
+      ) {
+        event.preventDefault();
+        ultimo.focus();
+      } else if (
+        !event.shiftKey &&
+        document.activeElement === ultimo
+      ) {
+        event.preventDefault();
+        primero.focus();
       }
     }
   );
@@ -10558,6 +10901,23 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
     return div.innerHTML;
+  }
+
+  function esUrlHttpsValida(valor) {
+
+    const texto =
+      String(valor || "").trim();
+
+    if (!texto) {
+      return false;
+    }
+
+    try {
+      const url = new URL(texto);
+      return url.protocol === "https:";
+    } catch (_) {
+      return false;
+    }
   }
 
   function escaparAtributo(dato) {
