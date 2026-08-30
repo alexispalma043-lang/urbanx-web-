@@ -85,6 +85,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const notificationsBadge = $("notificationsBadge");
   const notificationsUnreadLabel = $("notificationsUnreadLabel");
   const markAllNotificationsBtn = $("markAllNotificationsBtn");
+  const notificationsFilter = $("notificationsFilter");
+  const deleteReadNotificationsBtn = $("deleteReadNotificationsBtn");
+  const notificationsLimitNotice = $("notificationsLimitNotice");
   const notificationsList = $("notificationsList");
 
   const orderModal = $("orderModal");
@@ -106,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let comprobantes = [];
   let favorites = [];
   let notifications = [];
+  let notificationsTruncated = false;
   let unsubscribeOrders = null;
   let unsubscribeComprobantes = null;
   let unsubscribeFavorites = null;
@@ -852,6 +856,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .collection("notificaciones")
         .doc(uid)
         .collection("items")
+        .orderBy("creadoEn", "desc")
+        .limit(201)
         .onSnapshot(
           function (snapshot) {
 
@@ -871,24 +877,12 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            items.sort(
-              function (a, b) {
-
-                return (
-                  dateMillis(
-                    b.creadoEn
-                  )
-                  -
-                  dateMillis(
-                    a.creadoEn
-                  )
-                );
-              }
-            );
+            notificationsTruncated =
+              items.length > 200;
 
 
             notifications =
-              items;
+              items.slice(0, 200);
 
 
             renderNotifications();
@@ -911,7 +905,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <strong>
                   NO FUE POSIBLE CARGAR LAS NOTIFICACIONES.
-                  REVISA LAS REGLAS DE FIRESTORE DEL PASO 9.
+                  REVISA LA CONEXIÓN Y LAS REGLAS ACTUALES DE FIRESTORE.
                 </strong>
 
               </div>
@@ -935,7 +929,45 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+  function filteredNotifications() {
+
+    const filter = String(notificationsFilter?.value || "");
+
+    if (filter === "unread") {
+      return notifications.filter(item => item.leida !== true);
+    }
+
+    if (filter === "orders") {
+      return notifications.filter(item =>
+        item.tipo === "pedido_creado" ||
+        item.tipo === "estado_pedido"
+      );
+    }
+
+    if (filter === "payments") {
+      return notifications.filter(item => item.tipo === "estado_pago");
+    }
+
+    return notifications;
+  }
+
+
+  function updateNotificationsLimitNotice() {
+
+    if (!notificationsLimitNotice) return;
+
+    notificationsLimitNotice.hidden = !notificationsTruncated;
+    notificationsLimitNotice.textContent = notificationsTruncated
+      ? "Mostrando las 200 notificaciones más recientes para mantener Mi Cuenta rápida."
+      : "";
+  }
+
+
   function renderNotifications() {
+
+    updateNotificationsLimitNotice();
+
+    const list = filteredNotifications();
 
     const unread =
       notifications.filter(
@@ -966,9 +998,14 @@ document.addEventListener("DOMContentLoaded", function () {
     markAllNotificationsBtn.disabled =
       unread === 0;
 
+    if (deleteReadNotificationsBtn) {
+      deleteReadNotificationsBtn.disabled =
+        !notifications.some(item => item.leida === true);
+    }
+
 
     if (
-      !notifications.length
+      !list.length
     ) {
 
       notificationsList.innerHTML = `
@@ -979,7 +1016,11 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
 
           <strong>
-            TODAVÍA NO TIENES NOTIFICACIONES.
+            ${
+              notifications.length
+                ? "NO HAY NOTIFICACIONES PARA ESTE FILTRO."
+                : "TODAVÍA NO TIENES NOTIFICACIONES."
+            }
           </strong>
 
         </div>
@@ -993,7 +1034,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "";
 
 
-    notifications.forEach(
+    list.forEach(
       function (item) {
 
         const row =
@@ -1132,6 +1173,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     );
   }
+
+
+  notificationsFilter
+    ?.addEventListener(
+      "change",
+      renderNotifications
+    );
 
 
   notificationsList
@@ -1355,6 +1403,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
           markAllNotificationsBtn.disabled =
             notifications.every(item => item.leida === true);
+        }
+      }
+    );
+
+
+  deleteReadNotificationsBtn
+    ?.addEventListener(
+      "click",
+      async function () {
+
+        if (!currentUser || currentUser.isAnonymous) return;
+
+        const readItems = notifications.filter(item => item.leida === true);
+        if (!readItems.length) return;
+
+        const confirmed = window.confirm(
+          `¿Eliminar ${readItems.length} notificación(es) ya leída(s)?\n\nEsta acción no elimina pedidos ni facturas.`
+        );
+        if (!confirmed) return;
+
+        deleteReadNotificationsBtn.disabled = true;
+        deleteReadNotificationsBtn.textContent = "ELIMINANDO...";
+
+        try {
+          for (let start = 0; start < readItems.length; start += 400) {
+            const batch = db.batch();
+
+            readItems.slice(start, start + 400).forEach(item => {
+              batch.delete(
+                db.collection("notificaciones")
+                  .doc(currentUser.uid)
+                  .collection("items")
+                  .doc(item.id)
+              );
+            });
+
+            await batch.commit();
+          }
+
+          showToast("Notificaciones leídas eliminadas.");
+        } catch (error) {
+          console.error("Eliminar notificaciones leídas:", error);
+          showToast("No fue posible eliminar las notificaciones.");
+        } finally {
+          deleteReadNotificationsBtn.textContent = "ELIMINAR LEÍDAS";
+          deleteReadNotificationsBtn.disabled =
+            !notifications.some(item => item.leida === true);
         }
       }
     );

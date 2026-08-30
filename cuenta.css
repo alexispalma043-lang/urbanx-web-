@@ -2420,3 +2420,60 @@ body.is-authenticated .cuenta-main {
     width:100%;
   }
 }
+
+
+/* =========================================
+   PASO 27 · NOTIFICACIONES
+========================================= */
+
+.notifications-filter,
+.notifications-delete-read-btn {
+  min-height: 34px;
+  border: 1px solid var(--gold-line);
+  background: #080808;
+  color: #9e978d;
+  font-size: 6px;
+  font-weight: 900;
+  letter-spacing: .8px;
+}
+
+.notifications-filter {
+  padding: 0 28px 0 9px;
+  cursor: pointer;
+}
+
+.notifications-delete-read-btn {
+  padding: 0 11px;
+  cursor: pointer;
+}
+
+.notifications-filter:hover,
+.notifications-delete-read-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+.notifications-delete-read-btn:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
+.notifications-limit-note {
+  margin: 0;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(216,170,85,.10);
+  border-bottom: 1px solid rgba(216,170,85,.10);
+  background: rgba(216,170,85,.025);
+  color: #746d65;
+  font-size: 7px;
+  line-height: 1.55;
+}
+
+@media (max-width: 980px) {
+  .notifications-header-actions { flex-wrap: wrap; }
+}
+
+@media (max-width: 520px) {
+  .notifications-filter,
+  .notifications-delete-read-btn { width: 100%; }
+}

@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Mi cuenta | SIXTEEN Urban Luxury</title>
 <meta content="#050505" name="theme-color"/>
-<link href="./cuenta.css?v=23020" rel="stylesheet"/>
+<link href="./cuenta.css?v=27000" rel="stylesheet"/>
 <meta content="noindex,nofollow,noarchive" name="robots"/>
 <link href="./manifest.webmanifest" rel="manifest"/>
 <link href="./assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
@@ -343,11 +343,21 @@
 <span class="notifications-unread-label" id="notificationsUnreadLabel">
             0 SIN LEER
           </span>
+<select aria-label="Filtrar notificaciones" class="notifications-filter" id="notificationsFilter">
+<option value="">Todas</option>
+<option value="unread">Sin leer</option>
+<option value="orders">Pedidos</option>
+<option value="payments">Pagos</option>
+</select>
 <button class="notifications-read-all-btn" id="markAllNotificationsBtn" type="button">
             MARCAR TODO LEÍDO
           </button>
+<button class="notifications-delete-read-btn" id="deleteReadNotificationsBtn" type="button">
+            ELIMINAR LEÍDAS
+          </button>
 </div>
 </div>
+<p aria-live="polite" class="notifications-limit-note" hidden id="notificationsLimitNotice"></p>
 <div aria-live="polite" class="notifications-list" id="notificationsList">
 <div class="empty notifications-empty">
 <div class="empty-icon">
@@ -751,7 +761,7 @@
 ====================================================== -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="./factura-sixteen.js?v=21002"></script>
-<script src="./cuenta.js?v=23020"></script>
+<script src="./cuenta.js?v=27000"></script>
 <script src="./pwa.js?v=25000"></script>
 </body>
 </html>
