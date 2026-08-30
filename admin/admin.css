@@ -8023,3 +8023,165 @@ td {
     gap:5px;
   }
 }
+
+
+/* =========================================
+   PASO 24 · RESEÑAS Y REPUTACIÓN
+========================================= */
+
+.resenas-admin-subtitle{
+  max-width:720px;
+  margin:8px 0 0;
+  color:#81786f;
+  font-size:8px;
+  line-height:1.7;
+}
+
+.resenas-admin-header-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.resenas-admin-kpis{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:16px 0;
+}
+
+.resenas-admin-kpis article{
+  padding:14px 12px;
+  border:1px solid rgba(216,170,85,.14);
+  background:#080808;
+}
+
+.resenas-admin-kpis span{
+  display:block;
+  color:#736a61;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.8px;
+}
+
+.resenas-admin-kpis strong{
+  display:block;
+  margin-top:7px;
+  color:#f0d08c;
+  font-size:19px;
+}
+
+.resenas-admin-filters{
+  display:grid;
+  grid-template-columns:minmax(220px,1.5fr) minmax(150px,.7fr) minmax(190px,.9fr) auto;
+  gap:8px;
+  align-items:end;
+}
+
+.resenas-admin-table td{
+  vertical-align:top;
+}
+
+.resena-admin-product{
+  display:grid;
+  gap:4px;
+}
+
+.resena-admin-product strong{
+  color:#eee7df;
+}
+
+.resena-admin-product small,
+.resena-admin-client small,
+.resena-admin-date{
+  color:#756d65;
+  font-size:7px;
+}
+
+.resena-admin-client{
+  display:grid;
+  gap:4px;
+}
+
+.resena-admin-stars{
+  color:#e8bd61;
+  white-space:nowrap;
+  letter-spacing:1px;
+}
+
+.resena-admin-comment{
+  min-width:230px;
+  max-width:420px;
+  color:#a49a90;
+  line-height:1.55;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.resena-admin-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.resena-admin-actions a,
+.resena-admin-actions button{
+  min-height:34px;
+  padding:0 10px;
+  border:1px solid rgba(216,170,85,.2);
+  background:#090909;
+  color:#d9b463;
+  font-size:6px;
+  font-weight:900;
+  letter-spacing:.6px;
+  text-decoration:none;
+}
+
+.resena-admin-actions .danger{
+  border-color:rgba(199,74,62,.35);
+  color:#d98278;
+}
+
+.resenas-admin-note{
+  margin-top:12px;
+  padding:14px;
+  border-left:3px solid #d8aa55;
+  background:#0b0906;
+}
+
+.resenas-admin-note strong{
+  color:#e7c77f;
+  font-size:7px;
+  letter-spacing:.9px;
+}
+
+.resenas-admin-note p{
+  margin:7px 0 0;
+  color:#847a70;
+  font-size:7px;
+  line-height:1.7;
+}
+
+@media(max-width:1000px){
+  .resenas-admin-kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .resenas-admin-filters{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:620px){
+  .resenas-admin-kpis,
+  .resenas-admin-filters{
+    grid-template-columns:1fr;
+  }
+
+  .resenas-admin-header-actions{
+    width:100%;
+    justify-content:flex-start;
+  }
+}

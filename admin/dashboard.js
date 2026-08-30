@@ -10593,6 +10593,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ["menuComercial", "comercial"],
     ["menuPagos", "pagos"],
     ["menuProductos", "productos"],
+    ["menuResenas", "resenasAdmin"],
     ["menuPedidos", "pedidos"],
     ["menuFacturacion", "facturacion"],
     ["menuClientes", "clientes"],

@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=23000"
+    href="./admin.css?v=24000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -151,6 +151,20 @@
       >
         <span>◆</span>
         Productos
+      </a>
+
+      <a
+        href="#resenasAdmin"
+        id="menuResenas"
+      >
+        <span>★</span>
+        Reseñas
+        <strong
+          class="admin-menu-count vacio"
+          id="resenasPendientesBadge"
+        >
+          0
+        </strong>
       </a>
 
       <a
@@ -2119,7 +2133,150 @@
            PASO 16F1 · FACTURACIÓN ELECTRÓNICA
       ========================================= -->
 
+      
+      <!-- ========================================
+           PASO 24 · RESEÑAS Y REPUTACIÓN
+      ========================================= -->
+
       <section
+        class="admin-card admin-section-anchor resenas-admin-center"
+        id="resenasAdmin"
+      >
+
+        <div class="admin-card-header">
+          <div>
+            <p class="admin-eyebrow">PASO 24 · REPUTACIÓN</p>
+            <h3>Reseñas de clientes</h3>
+            <p class="resenas-admin-subtitle">
+              Revisa las opiniones publicadas en las fichas de producto y elimina
+              contenido inapropiado sin modificar la calificación del cliente.
+            </p>
+          </div>
+
+          <div class="resenas-admin-header-actions">
+            <span
+              class="admin-status"
+              id="resenasAdminEstado"
+            >
+              SINCRONIZANDO
+            </span>
+
+            <button
+              type="button"
+              class="admin-secondary-btn"
+              id="actualizarResenasAdminBtn"
+            >
+              ACTUALIZAR
+            </button>
+          </div>
+        </div>
+
+        <div class="resenas-admin-kpis">
+          <article>
+            <span>RESEÑAS</span>
+            <strong id="resenasAdminKpiTotal">0</strong>
+          </article>
+
+          <article>
+            <span>PROMEDIO</span>
+            <strong id="resenasAdminKpiPromedio">0.0</strong>
+          </article>
+
+          <article>
+            <span>5 ESTRELLAS</span>
+            <strong id="resenasAdminKpiCinco">0</strong>
+          </article>
+
+          <article>
+            <span>1–2 ESTRELLAS</span>
+            <strong id="resenasAdminKpiBajas">0</strong>
+          </article>
+        </div>
+
+        <div class="admin-filters resenas-admin-filters">
+          <label>
+            BUSCAR
+            <input
+              id="resenasAdminBuscar"
+              type="search"
+              maxlength="120"
+              autocomplete="off"
+              placeholder="Producto, cliente o comentario..."
+            >
+          </label>
+
+          <label>
+            CALIFICACIÓN
+            <select id="resenasAdminFiltroRating">
+              <option value="">Todas</option>
+              <option value="5">5 estrellas</option>
+              <option value="4">4 estrellas</option>
+              <option value="3">3 estrellas</option>
+              <option value="2">2 estrellas</option>
+              <option value="1">1 estrella</option>
+            </select>
+          </label>
+
+          <label>
+            CATÁLOGO
+            <select id="resenasAdminFiltroCatalogo">
+              <option value="">Todos</option>
+              <option value="Activo">Producto activo</option>
+              <option value="Inactivo">Producto inactivo / archivado</option>
+            </select>
+          </label>
+
+          <button
+            type="button"
+            class="admin-secondary-btn"
+            id="limpiarFiltrosResenasBtn"
+          >
+            LIMPIAR
+          </button>
+        </div>
+
+        <div
+          class="admin-results-text"
+          id="resenasAdminResultadoTexto"
+          aria-live="polite"
+        >
+          Cargando reseñas...
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table resenas-admin-table">
+            <thead>
+              <tr>
+                <th>PRODUCTO</th>
+                <th>CLIENTE</th>
+                <th>CALIFICACIÓN</th>
+                <th>COMENTARIO</th>
+                <th>FECHA</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+
+            <tbody id="resenasAdminBody">
+              <tr>
+                <td colspan="6">Cargando reseñas...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="resenas-admin-note">
+          <strong>MODERACIÓN</strong>
+          <p>
+            SIXTEEN no modifica la opinión ni la puntuación escrita por el cliente.
+            La acción administrativa disponible es eliminar una reseña cuando sea
+            spam, ofensiva, fraudulenta o incumpla las normas de la tienda.
+          </p>
+        </div>
+
+      </section>
+
+
+<section
         class="admin-card admin-section-anchor facturacion-section"
         id="facturacion"
       >
@@ -4690,7 +4847,9 @@
 <script src="../payment-config.js?v=18000"></script>
 
 
-<script src="./dashboard.js?v=23020"></script>
+<script src="./dashboard.js?v=24000"></script>
+
+<script src="./resenas-admin.js?v=24000"></script>
 
 <script src="./analitica.js?v=21010"></script>
 
