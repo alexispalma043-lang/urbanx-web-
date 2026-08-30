@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=17000"
+    href="./admin.css?v=18000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -1648,7 +1648,7 @@
 
       
       <!-- ==================================================
-           PASO 16C · MÉTODOS DE PAGO
+           PASO 18 · MÉTODOS DE PAGO
       =================================================== -->
 
       <section
@@ -1669,18 +1669,26 @@
 
             <p>
               Configura qué opciones verá el cliente durante la compra.
-              Transferencia, QR y contra entrega funcionan sin pasarela.
-              Tarjeta solo se habilita mediante un enlace HTTPS externo.
+              Transferencia, QR y contra entrega se verifican manualmente.
+              Tarjeta usa un enlace HTTPS externo y no confirma el pago automáticamente.
             </p>
           </div>
 
-          <div class="pagos-status-card">
-            <span>ESTADO</span>
-            <strong id="pagosConfigEstado">
-              Cargando...
-            </strong>
+          <div class="pagos-status-card" aria-live="polite">
+            <span>ESTADO DE MÉTODOS</span>
+            <strong id="pagosConfigEstado">Cargando...</strong>
+            <small id="pagosConfigRemoteEstado" data-state="CARGANDO">
+              VERIFICANDO FIRESTORE
+            </small>
           </div>
 
+        </div>
+
+        <div class="pagos-security-note pagos-public-note">
+          <strong>DATOS PÚBLICOS:</strong>
+          El Checkout puede leer esta configuración para mostrar instrucciones de cobro.
+          Publica únicamente datos que puedan ver tus compradores. Nunca guardes aquí
+          claves bancarias, contraseñas, tokens, CVV, números de tarjeta ni secretos de una pasarela.
         </div>
 
         <form
@@ -1694,6 +1702,7 @@
               <div>
                 <span>01</span>
                 <h2>Transferencia bancaria</h2>
+                <em class="pago-method-state" id="pagoTransferenciaEstado">CARGANDO</em>
               </div>
 
               <label class="pago-switch">
@@ -1777,6 +1786,7 @@
               <div>
                 <span>02</span>
                 <h2>Pago QR</h2>
+                <em class="pago-method-state" id="pagoQrEstado">CARGANDO</em>
               </div>
 
               <label class="pago-switch">
@@ -1830,6 +1840,7 @@
               <div>
                 <span>03</span>
                 <h2>Tarjeta</h2>
+                <em class="pago-method-state" id="pagoTarjetaEstado">CARGANDO</em>
               </div>
 
               <label class="pago-switch">
@@ -1877,8 +1888,9 @@
             <div class="pagos-security-note">
               <strong>SEGURIDAD:</strong>
               SIXTEEN no solicita, procesa ni almacena números de tarjeta,
-              CVV ni claves. La tarjeta solo se habilita con una pasarela
-              externa HTTPS.
+              CVV ni claves. El enlace HTTPS se muestra al cliente después de
+              registrar el pedido. Este modo no confirma el pago automáticamente;
+              debes verificarlo y cambiar su estado a PAGADO desde Pedidos.
             </div>
 
           </article>
@@ -1890,6 +1902,7 @@
               <div>
                 <span>04</span>
                 <h2>Pago contra entrega</h2>
+                <em class="pago-method-state" id="pagoEfectivoEstado">CARGANDO</em>
               </div>
 
               <label class="pago-switch">
@@ -1928,8 +1941,9 @@
               type="submit"
               class="admin-primary-btn"
               id="guardarPagosConfigBtn"
+              disabled
             >
-              GUARDAR MÉTODOS
+              SIN CAMBIOS
             </button>
           </div>
 
@@ -5790,7 +5804,7 @@
 
 <script src="../store-config.js?v=3000"></script>
 
-<script src="../payment-config.js?v=5000"></script>
+<script src="../payment-config.js?v=18000"></script>
 
 <script src="../sri-core.js?v=3800"></script>
 
@@ -5800,7 +5814,7 @@
 
 <script src="./backup.js?v=3100"></script>
 
-<script src="./pagos-admin.js?v=5000"></script>
+<script src="./pagos-admin.js?v=18000"></script>
 
 <script src="../ride.js?v=3900"></script>
 

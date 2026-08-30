@@ -6183,7 +6183,7 @@ td {
 
 
 /* =========================================================
-   PASO 16C · MÉTODOS DE PAGO
+   PASO 18 · MÉTODOS DE PAGO
 ========================================================= */
 
 .pagos-header{
@@ -7505,4 +7505,89 @@ td {
     grid-column: 1 / -1;
     justify-self: start;
   }
+}
+
+/* =========================================================
+   SIXTEEN · PASO 18 · MÉTODOS DE PAGO
+========================================================= */
+
+.pagos-status-card small{
+  display:block;
+  margin-top:8px;
+  color:#7f756a;
+  font-size:7px;
+  line-height:1.45;
+  letter-spacing:.12em
+}
+
+.pagos-status-card small[data-state="PUBLICADO"]{
+  color:#87c99d
+}
+
+.pagos-status-card small[data-state="ERROR"]{
+  color:#d9877d
+}
+
+.pagos-status-card small[data-state="SIN_CONFIG"]{
+  color:#d8aa55
+}
+
+.pago-method-state{
+  display:inline-flex;
+  align-items:center;
+  min-height:20px;
+  padding:3px 7px;
+  border:1px solid rgba(255,255,255,.1);
+  color:#7f756a;
+  font-size:7px;
+  font-style:normal;
+  font-weight:800;
+  letter-spacing:.11em
+}
+
+.pago-method-state.is-ready{
+  border-color:rgba(135,201,157,.28);
+  color:#87c99d
+}
+
+.pago-method-state.is-warning{
+  border-color:rgba(216,170,85,.28);
+  color:#d8aa55
+}
+
+.pago-method-state.is-off{
+  opacity:.68
+}
+
+#pagosConfigMensaje[data-type="success"]{
+  color:#87c99d
+}
+
+#pagosConfigMensaje[data-type="warning"],
+#pagosConfigMensaje[data-type="info"]{
+  color:#d8aa55
+}
+
+#pagosConfigMensaje[data-type="error"]{
+  color:#d9877d
+}
+
+#guardarPagosConfigBtn:disabled{
+  opacity:.45;
+  cursor:not-allowed
+}
+
+@media(max-width:700px){
+  .pagos-status-card{
+    width:100%;
+    min-width:0
+  }
+
+  .pago-admin-card-head > div{
+    flex-wrap:wrap
+  }
+}
+
+.pagos-public-note{
+  margin:0 0 16px
 }
