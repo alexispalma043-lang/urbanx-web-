@@ -48,21 +48,26 @@
       return true;
     }
 
-    setText("legalMarca", value("brand", "SIXTEEN Urban Luxury"));
     setText("legalNombreComercial", value("commercialName", "SIXTEEN"));
-    setText("legalNombreResponsable", value("legalName", value("brand", "SIXTEEN Urban Luxury")));
-    setText("legalRuc", value("ruc", "Dato por registrar antes de publicación"));
+    setText("legalNombreResponsable", value("legalName", "Dato legal pendiente de completar"));
+    setText("legalRuc", value("ruc", "Dato legal pendiente de completar"));
 
     const domicilio = [value("address"), value("city"), value("country")]
       .filter(Boolean)
       .join(", ");
 
-    setText("legalDomicilio", domicilio || value("country", "Ecuador"));
-    setText("legalActualizado", value("policiesUpdated"));
+    setText(
+      "legalDomicilio",
+      domicilio && (value("address") || value("city"))
+        ? domicilio
+        : `${value("country", "Ecuador")} · domicilio legal pendiente de completar`
+    );
+    setText("legalActualizado", value("policiesUpdated", "Fecha pendiente de actualización"));
 
     const email = value("supportEmail");
     setText("supportEmailText", email || "Correo de soporte por configurar");
     setText("privacyEmailText", email || "Correo de privacidad por configurar");
+    setText("legalEmailText", email || "Dato legal pendiente de completar");
 
     const emailOk = setLink(
       "supportEmailLink",
@@ -82,6 +87,7 @@
 
     const phone = value("phone");
     setText("supportPhoneText", phone || "No publicado");
+    setText("legalPhoneText", phone || "Dato legal pendiente de completar");
     setLink(
       "supportPhoneLink",
       phone ? "tel:" + phone.replace(/[^\d+]/g, "") : "",

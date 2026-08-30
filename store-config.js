@@ -15,5 +15,5 @@ window.SIXTEEN_STORE_CONFIG = {
   facebook: "",
   tiktok: "",
   supportHours: "Lunes a viernes · 09:00 a 18:00",
-  policiesUpdated: "28 de agosto de 2026"
+  policiesUpdated: "29 de agosto de 2026"
 };
