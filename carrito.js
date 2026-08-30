@@ -850,6 +850,7 @@ document.addEventListener(
         item.nombre=producto.nombre;
         item.categoria=producto.categoria;
         item.precio=producto.precio;
+        item.ivaTarifa=Number(producto.ivaTarifa ?? item.ivaTarifa ?? 15);
         item.imagen=producto.imagen;
         item.sincronizado=true;
 

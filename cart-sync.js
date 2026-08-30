@@ -235,6 +235,11 @@
                 item?.precio
               ),
 
+            ivaTarifa:
+              numero(
+                item?.ivaTarifa ?? 15
+              ),
+
             color:
               String(
                 item?.color ||

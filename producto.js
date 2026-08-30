@@ -3699,6 +3699,7 @@ document.addEventListener(
           categoria:producto.categoria,
           precio:producto.precio,
           precioAnterior:producto.precioAnterior,
+          ivaTarifa:Number(producto.ivaTarifa ?? 15),
           color:colorActual,
           talla:tallaSeleccionada,
           stock:stockDisponible,

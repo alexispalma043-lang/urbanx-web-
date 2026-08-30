@@ -22,7 +22,7 @@
 
   <link
     rel="stylesheet"
-    href="./admin.css?v=20000"
+    href="./admin.css?v=21000"
   >
 
   <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
@@ -2102,13 +2102,15 @@
             <p class="admin-eyebrow">SIXTEEN · SISTEMA PROPIO</p>
             <h3>Facturación SIXTEEN</h3>
             <p class="facturacion-subtitle">
-              Facturas y notas comerciales internas vinculadas a pedidos, con numeración automática,
-              PDF, correo, historial y acceso desde Mi Cuenta.
+              Facturador comercial propio: crea facturas desde pedidos o manualmente, calcula IVA,
+              guarda numeración automática, genera PDF descargable, envía correos y conserva historial.
             </p>
           </div>
 
           <div class="facturacion-header-actions">
-            <span class="admin-status" id="facturacionAmbienteBadge">INTERNO</span>
+            <span class="admin-status" id="facturacionAmbienteBadge">OPERATIVO</span>
+            <button type="button" class="admin-primary-btn" id="abrirFacturaManualBtn">+ FACTURA MANUAL</button>
+            <button type="button" class="admin-secondary-btn" id="abrirFacturacionConfigBtn">CONFIGURACIÓN</button>
             <button type="button" class="admin-secondary-btn" id="abrirNotaCreditoBtn">+ NOTA DE CRÉDITO</button>
             <button type="button" class="admin-secondary-btn" id="abrirNotaDebitoBtn">+ NOTA DE DÉBITO</button>
           </div>
@@ -2116,7 +2118,7 @@
 
         <div class="facturacion-internal-notice" role="note">
           <strong>DOCUMENTO COMERCIAL INTERNO</strong>
-          <span>Este módulo no se conecta al SRI y no genera XML, firma electrónica ni autorización tributaria.</span>
+          <span>El facturador funciona de forma independiente dentro de SIXTEEN. Genera documentos comerciales reales del sistema, pero no comprobantes tributarios autorizados por el SRI.</span>
         </div>
 
         <div class="facturacion-kpis">
@@ -2158,11 +2160,11 @@
             <p class="admin-eyebrow">FLUJO ACTIVO</p>
             <h4>Sistema comercial propio</h4>
             <ol class="facturacion-flow">
-              <li class="done">Pedido</li>
-              <li class="done">Numeración SIXTEEN</li>
-              <li class="done">Factura emitida</li>
-              <li class="done">PDF / impresión</li>
-              <li class="done">Mi Cuenta</li>
+              <li class="done">Factura desde pedido o manual</li>
+              <li class="done">Numeración automática</li>
+              <li class="done">Cálculo comercial e IVA</li>
+              <li class="done">PDF descargable / impresión</li>
+              <li class="done">Historial / Mi Cuenta</li>
               <li class="done">Correo al cliente</li>
             </ol>
             <p class="facturacion-security-note">
@@ -2214,6 +2216,102 @@
           <span>NOTA DE DÉBITO INTERNA · ACTIVA</span>
           <span>PDF / IMPRESIÓN · ACTIVO</span>
           <span>EMAIL / MI CUENTA · ACTIVO</span>
+        </div>
+
+
+
+        <div class="admin-modal" id="facturacionManualModal" hidden>
+          <div class="admin-modal-panel facturacion-config-modal facturacion-manual-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionManualTitulo" tabindex="-1">
+            <div class="admin-modal-header">
+              <div><p class="admin-eyebrow">FACTURACIÓN SIXTEEN</p><h3 id="facturacionManualTitulo">Nueva factura manual</h3></div>
+              <button type="button" class="admin-modal-close" id="cerrarFacturaManualBtn" aria-label="Cerrar">×</button>
+            </div>
+            <form id="facturacionManualForm" novalidate>
+              <div class="facturacion-config-grid">
+                <label>NOMBRES / RAZÓN SOCIAL *<input id="facturaManualClienteNombre" maxlength="160" required autocomplete="name"></label>
+                <label>IDENTIFICACIÓN<input id="facturaManualClienteId" maxlength="30" autocomplete="off"></label>
+                <label>CORREO<input id="facturaManualClienteEmail" type="email" maxlength="160" autocomplete="email"></label>
+                <label>TELÉFONO<input id="facturaManualClienteTelefono" maxlength="30" autocomplete="tel"></label>
+                <label class="span-2">DIRECCIÓN<input id="facturaManualClienteDireccion" maxlength="250" autocomplete="street-address"></label>
+                <label>CIUDAD<input id="facturaManualClienteCiudad" maxlength="100"></label>
+                <label>PROVINCIA<input id="facturaManualClienteProvincia" maxlength="100"></label>
+                <label>FECHA EMISIÓN *<input id="facturaManualFecha" type="date" required></label>
+                <label>FECHA VENCIMIENTO<input id="facturaManualVencimiento" type="date"></label>
+                <label>MÉTODO DE PAGO<select id="facturaManualPagoMetodo"><option value="">Sin especificar</option><option value="efectivo">Efectivo</option><option value="transferencia">Transferencia</option><option value="qr">Pago QR</option><option value="tarjeta">Tarjeta</option><option value="credito">Crédito</option></select></label>
+                <label>ESTADO DEL PAGO<select id="facturaManualPagoEstado"><option value="Pendiente">Pendiente</option><option value="Por verificar">Por verificar</option><option value="Pagado">Pagado</option><option value="Vencido">Vencido</option></select></label>
+              </div>
+
+              <div class="facturacion-manual-items-head">
+                <div><p class="admin-eyebrow">DETALLE</p><h4>Productos / servicios</h4></div>
+                <button type="button" class="admin-secondary-btn" id="agregarFacturaManualItemBtn">+ AGREGAR LÍNEA</button>
+              </div>
+              <div class="facturacion-manual-items" id="facturaManualItems"></div>
+
+              <div class="facturacion-manual-bottom">
+                <div class="facturacion-config-grid">
+                  <label>DESCUENTO $<input id="facturaManualDescuento" type="number" min="0" step="0.01" value="0"></label>
+                  <label>ENVÍO / OTROS $<input id="facturaManualEnvio" type="number" min="0" step="0.01" value="0"></label>
+                  <label class="span-2">NOTAS / CONDICIONES<textarea id="facturaManualNotas" maxlength="600" rows="3"></textarea></label>
+                </div>
+                <div class="facturacion-manual-totals" aria-live="polite">
+                  <div><span>Base imponible</span><strong id="facturaManualBase">$0.00</strong></div>
+                  <div><span>IVA</span><strong id="facturaManualIva">$0.00</strong></div>
+                  <div><span>Descuento</span><strong id="facturaManualDescuentoTotal">$0.00</strong></div>
+                  <div><span>Envío / otros</span><strong id="facturaManualEnvioTotal">$0.00</strong></div>
+                  <div class="grand"><span>TOTAL</span><strong id="facturaManualTotal">$0.00</strong></div>
+                </div>
+              </div>
+              <div class="admin-form-message" id="facturaManualMensaje" aria-live="polite"></div>
+              <div class="admin-modal-actions">
+                <button type="button" class="admin-secondary-btn" id="cancelarFacturaManualBtn">CANCELAR</button>
+                <button type="submit" class="admin-primary-btn" id="guardarFacturaManualBtn">EMITIR FACTURA</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="admin-modal" id="facturacionConfigModal" hidden>
+          <div class="admin-modal-panel facturacion-config-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionConfigTitulo" tabindex="-1">
+            <div class="admin-modal-header">
+              <div><p class="admin-eyebrow">CONFIGURACIÓN DEL FACTURADOR</p><h3 id="facturacionConfigTitulo">Datos de emisión</h3></div>
+              <button type="button" class="admin-modal-close" id="cerrarFacturacionConfigBtn" aria-label="Cerrar">×</button>
+            </div>
+            <form id="facturacionConfigForm" novalidate>
+              <div class="facturacion-config-grid">
+                <label>NOMBRE COMERCIAL *<input id="facturacionConfigNombre" maxlength="160" required></label>
+                <label>RAZÓN SOCIAL / TITULAR<input id="facturacionConfigRazonSocial" maxlength="160"></label>
+                <label>IDENTIFICACIÓN / RUC<input id="facturacionConfigIdentificacion" maxlength="30"></label>
+                <label>CORREO<input id="facturacionConfigEmail" type="email" maxlength="160"></label>
+                <label>TELÉFONO<input id="facturacionConfigTelefono" maxlength="30"></label>
+                <label>CIUDAD<input id="facturacionConfigCiudad" maxlength="100"></label>
+                <label class="span-2">DIRECCIÓN<input id="facturacionConfigDireccion" maxlength="250"></label>
+                <label>PAÍS<input id="facturacionConfigPais" maxlength="80" value="Ecuador"></label>
+                <label>IVA PREDETERMINADO<select id="facturacionConfigIva"><option value="15">15%</option><option value="5">5%</option><option value="0">0%</option></select></label>
+                <label>DÍAS DE VENCIMIENTO<input id="facturacionConfigDiasVencimiento" type="number" min="0" max="365" step="1" value="0"></label>
+                <label>PREFIJO FACTURA<input id="facturacionConfigPrefijoFactura" maxlength="20" value="SIX-FAC"></label>
+                <label>PREFIJO NOTA CRÉDITO<input id="facturacionConfigPrefijoNC" maxlength="20" value="SIX-NC"></label>
+                <label>PREFIJO NOTA DÉBITO<input id="facturacionConfigPrefijoND" maxlength="20" value="SIX-ND"></label>
+                <label class="span-2">CONDICIONES / PIE DEL DOCUMENTO<textarea id="facturacionConfigTerminos" maxlength="600" rows="3" placeholder="Gracias por tu compra."></textarea></label>
+              </div>
+              <div class="facturacion-config-info">Estos datos se copian dentro de cada factura al momento de emitirla para conservar el historial aunque después cambies la configuración.</div>
+              <div class="admin-form-message" id="facturacionConfigMensaje" aria-live="polite"></div>
+              <div class="admin-modal-actions">
+                <button type="button" class="admin-secondary-btn" id="cancelarFacturacionConfigBtn">CANCELAR</button>
+                <button type="submit" class="admin-primary-btn" id="guardarFacturacionConfigBtn">GUARDAR CONFIGURACIÓN</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="admin-modal" id="facturacionDetalleModal" hidden>
+          <div class="admin-modal-panel facturacion-config-modal" role="dialog" aria-modal="true" aria-labelledby="facturacionDetalleTitulo" tabindex="-1">
+            <div class="admin-modal-header">
+              <div><p class="admin-eyebrow">DOCUMENTO EMITIDO</p><h3 id="facturacionDetalleTitulo">Detalle</h3></div>
+              <button type="button" class="admin-modal-close" id="cerrarFacturacionDetalleBtn" aria-label="Cerrar">×</button>
+            </div>
+            <div id="facturacionDetalleContenido" class="facturacion-detalle-contenido"></div>
+            <div class="admin-modal-actions"><button type="button" class="admin-secondary-btn" id="cerrarFacturacionDetalleAccionBtn">CERRAR</button></div>
+          </div>
         </div>
 
         <div class="admin-modal" id="facturacionNotaModal" hidden>
@@ -4517,11 +4615,12 @@
 
 <script src="./pagos-admin.js?v=18000"></script>
 
-<script src="../factura-sixteen.js?v=20000"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../factura-sixteen.js?v=21000"></script>
 
-<script src="./comprobante-email.js?v=20000"></script>
+<script src="./comprobante-email.js?v=21000"></script>
 
-<script src="./facturacion.js?v=20000"></script>
+<script src="./facturacion.js?v=21000"></script>
 
 
 </body>

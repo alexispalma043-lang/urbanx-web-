@@ -1106,6 +1106,7 @@ document.addEventListener(
             nombre:producto.nombre||item.nombre,
             categoria:producto.categoria||item.categoria,
             precio:numero(producto.precio),
+            ivaTarifa:numero(producto.ivaTarifa ?? item.ivaTarifa ?? 15),
             imagen:producto.imagen||"",
             varianteId,
             usaVariantes:usa,
@@ -3010,6 +3011,11 @@ document.addEventListener(
                 precioUnitario:
                   numero(
                     item.precio
+                  ),
+
+                ivaTarifa:
+                  numero(
+                    item.ivaTarifa ?? 15
                   ),
 
                 color:

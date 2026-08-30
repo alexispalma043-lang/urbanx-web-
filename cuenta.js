@@ -574,7 +574,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const info=document.createElement("div");info.append(label("TIPO"),strongText(comprobanteTipoNombre(item.tipoDocumento)),smallText(item.numero||item.id||"Documento"),smallText(item.fechaEmision||formatDate(item.creadoEn)||"—"));
       const st=document.createElement("div");st.append(label("ESTADO"));const stateEl=document.createElement("span");stateEl.className="comprobante-state "+comprobanteEstadoClase(item.estado);stateEl.textContent=item.estado||"EMITIDA";st.append(stateEl);
       const total=document.createElement("div");total.append(label("TOTAL"),strongText(money(item.totales?.importeTotal??item.totales?.total)));
-      const actions=document.createElement("div");actions.className="comprobante-actions";const b=document.createElement("button");b.type="button";b.className="primary";b.dataset.comprobantePdf=item.id;b.textContent="PDF / IMPRIMIR";actions.append(b);
+      const actions=document.createElement("div");actions.className="comprobante-actions";const b=document.createElement("button");b.type="button";b.className="primary";b.dataset.comprobantePdf=item.id;b.textContent="DESCARGAR PDF";actions.append(b);
       row.append(info,st,total,actions);comprobantesList.append(row);
     });
   }
@@ -585,8 +585,11 @@ document.addEventListener("DOMContentLoaded", function () {
   function abrirPdfCliente(item){
     if(!item){return;}
     if(!window.SIXTEEN_FACTURA_PDF){showToast("No fue posible cargar el generador PDF.");return;}
-    const opened=window.SIXTEEN_FACTURA_PDF.open(item);
-    if(!opened)showToast("Permite ventanas emergentes para abrir el documento.");
+    const downloaded=window.SIXTEEN_FACTURA_PDF.download(item);
+    if(!downloaded){
+      const opened=window.SIXTEEN_FACTURA_PDF.open(item);
+      if(!opened)showToast("No fue posible descargar ni abrir el documento.");
+    }
   }
   comprobantesTipoFiltro?.addEventListener("change",renderComprobantes);
   comprobantesEstadoFiltro?.addEventListener("change",renderComprobantes);
