@@ -327,6 +327,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const pedidoCupon = document.getElementById("pedidoCupon");
   const pedidoEstadoInventario = document.getElementById("pedidoEstadoInventario");
   const pedidoStockAviso = document.getElementById("pedidoStockAviso");
+  const pedidoIntegridadBox = document.getElementById("pedidoIntegridadBox");
+  const pedidoIntegridadEstado = document.getElementById("pedidoIntegridadEstado");
+  const pedidoIntegridadDetalle = document.getElementById("pedidoIntegridadDetalle");
   const pedidoNotificacionEstado = document.getElementById("pedidoNotificacionEstado");
   const pedidoCorreoEstado = document.getElementById("pedidoCorreoEstado");
   const pedidoComunicacionUltima = document.getElementById("pedidoComunicacionUltima");
@@ -439,6 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let pedidoEditandoId = null;
   let pedidoEstadoOriginal = "";
   let pedidoEstadoPagoOriginal = "";
+  let integridadPedidoActual = { estado: "PENDIENTE", detalle: "Sin comprobar." };
   let focoAntesPedidoModal = null;
   let productoAjusteInventarioId = null;
   let focoAntesInventarioModal = null;
@@ -4432,6 +4436,8 @@ document.addEventListener("DOMContentLoaded", function () {
       pedido.productos || []
     );
 
+    verificarIntegridadPedidoAdmin(pedido);
+
     pedidoSubtotal.textContent =
       dinero(
         resumen.subtotal
@@ -4619,6 +4625,71 @@ document.addEventListener("DOMContentLoaded", function () {
     ]);
 
 
+  function redondearMoneda(value) {
+    return Math.round((numero(value) + Number.EPSILON) * 100) / 100;
+  }
+
+  function validarIntegridadEstructuralPedido(pedido) {
+    const productos=Array.isArray(pedido?.productos)?pedido.productos:[];
+    if(!productos.length||productos.length>50)return{valido:false,motivo:"Cantidad de líneas de producto inválida."};
+    let calculado=0;
+    for(const item of productos){
+      const qRaw=Number(item?.cantidad),q=Math.floor(qRaw),price=Number(item?.precioUnitario??item?.precio);
+      const id=String(item?.firestoreId||"").trim(),code=String(item?.codigo||item?.id||"").trim().toUpperCase();
+      if(!id||!code)return{valido:false,motivo:"Una línea no identifica correctamente su producto."};
+      if(!Number.isFinite(qRaw)||qRaw!==q||q<1||q>100)return{valido:false,motivo:`Cantidad inválida en ${code}.`};
+      if(!Number.isFinite(price)||price<0||price>100000)return{valido:false,motivo:`Precio inválido en ${code}.`};
+      calculado+=redondearMoneda(price*q);
+    }
+    calculado=redondearMoneda(calculado);
+    const r=pedido?.resumen||{},sub=redondearMoneda(r.subtotal),disc=redondearMoneda(r.descuento),ship=redondearMoneda(r.envio),total=redondearMoneda(r.total);
+    if(sub<0||disc<0||ship<0||total<0)return{valido:false,motivo:"El resumen contiene valores negativos."};
+    if(calculado!==sub)return{valido:false,motivo:`El subtotal registrado (${dinero(sub)}) no coincide con las líneas (${dinero(calculado)}).`};
+    if(disc>sub)return{valido:false,motivo:"El descuento supera el subtotal."};
+    const expected=redondearMoneda(sub-disc+ship);
+    if(expected!==total)return{valido:false,motivo:`El total registrado (${dinero(total)}) no coincide con el cálculo (${dinero(expected)}).`};
+    return{valido:true,motivo:"Estructura y totales matemáticos correctos."};
+  }
+
+  function pintarIntegridadPedido(estado,detalle){
+    integridadPedidoActual={estado,detalle};
+    pedidoIntegridadBox?.classList.remove("revisando","ok","warning","error");
+    pedidoIntegridadBox?.classList.add(estado==="OK"?"ok":estado==="WARNING"?"warning":estado==="ERROR"?"error":"revisando");
+    if(pedidoIntegridadEstado)pedidoIntegridadEstado.textContent=estado==="OK"?"VERIFICADO":estado==="WARNING"?"VERIFICADO · AVISOS":estado==="ERROR"?"BLOQUEADO":"REVISANDO";
+    if(pedidoIntegridadDetalle)pedidoIntegridadDetalle.textContent=detalle||"";
+    actualizarBotonGuardarPedido();
+  }
+
+  async function verificarIntegridadPedidoAdmin(pedido){
+    pintarIntegridadPedido("PENDING","Comprobando estructura, totales y referencias del catálogo...");
+    const structure=validarIntegridadEstructuralPedido(pedido);
+    if(!structure.valido){pintarIntegridadPedido("ERROR",structure.motivo);return;}
+    const productos=Array.isArray(pedido.productos)?pedido.productos:[];
+    try{
+      const snaps=await Promise.all(productos.map(item=>db.collection("productos").doc(String(item.firestoreId||"").trim()).get({source:"server"})));
+      const warnings=[];
+      for(let i=0;i<snaps.length;i++){
+        const snap=snaps[i],item=productos[i];
+        if(!snap.exists){pintarIntegridadPedido("ERROR",`El producto ${item.codigo||item.nombre||i+1} ya no existe en Firestore.`);return;}
+        const actual=snap.data()||{},codeOrder=String(item.codigo||"").trim().toUpperCase(),codeNow=String(actual.codigo||snap.id).trim().toUpperCase();
+        if(codeOrder!==codeNow){pintarIntegridadPedido("ERROR",`La referencia ${codeOrder||"sin código"} no coincide con el catálogo actual.`);return;}
+        const pOrder=redondearMoneda(item.precioUnitario??item.precio),pNow=redondearMoneda(actual.precio);
+        if(pOrder!==pNow)warnings.push(`${codeNow}: precio pedido ${dinero(pOrder)} / catálogo actual ${dinero(pNow)}`);
+        if(actual.estado&&actual.estado!=="Activo")warnings.push(`${codeNow}: producto actualmente ${actual.estado}`);
+        if(Array.isArray(actual.variantes)&&actual.variantes.length){
+          const variant=window.SIXTEEN_VARIANTS?.find(actual,{id:item.varianteId||"",color:item.color||"",talla:item.talla||""});
+          if(!variant){pintarIntegridadPedido("ERROR",`La variante comprada de ${codeNow} ya no coincide con el catálogo.`);return;}
+          if(numero(variant.stock)<numero(item.cantidad))warnings.push(`${codeNow}: stock actual ${numero(variant.stock)} / pedido ${numero(item.cantidad)}`);
+        }
+      }
+      pintarIntegridadPedido(warnings.length?"WARNING":"OK",warnings.length?"La estructura es correcta. Revisa: "+warnings.join(" · "):"Estructura, totales y referencias del catálogo verificadas.");
+    }catch(error){console.warn("Integridad del pedido:",error);pintarIntegridadPedido("WARNING","La estructura matemática es correcta, pero no fue posible completar la comparación con el catálogo del servidor.");}
+  }
+
+  function integridadBloqueaCambio(nuevoEstado,nuevoEstadoPago){
+    return Boolean((ESTADOS_PEDIDO_CON_STOCK.has(nuevoEstado)||nuevoEstadoPago==="Pagado")&&(integridadPedidoActual.estado==="ERROR"||integridadPedidoActual.estado==="PENDING"));
+  }
+
   function actualizarBotonGuardarPedido() {
 
     if (!guardarEstadoPedidoBtn) {
@@ -4645,13 +4716,17 @@ document.addEventListener("DOMContentLoaded", function () {
         )
       );
 
+    const bloqueadoPorIntegridad = integridadBloqueaCambio(estadoActual,pagoActual);
+
     guardarEstadoPedidoBtn.disabled =
-      !hayCambios;
+      !hayCambios || bloqueadoPorIntegridad;
 
     guardarEstadoPedidoBtn.textContent =
-      hayCambios
-        ? "GUARDAR CAMBIOS"
-        : "SIN CAMBIOS";
+      bloqueadoPorIntegridad
+        ? "REVISAR INTEGRIDAD"
+        : hayCambios
+          ? "GUARDAR CAMBIOS"
+          : "SIN CAMBIOS";
 
     if (!pedidoStockAviso) {
       return;
@@ -5702,6 +5777,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const productos=Array.isArray(pedido.productos)?pedido.productos:[];
       if(!productos.length)throw new Error("El pedido no contiene productos.");
 
+      const integridadEstructural=validarIntegridadEstructuralPedido(pedido);
+      if(!integridadEstructural.valido&&(ESTADOS_PEDIDO_CON_STOCK.has(nuevoEstado)||nuevoEstadoPago==="Pagado")){
+        throw new Error("Pedido bloqueado por integridad: "+integridadEstructural.motivo);
+      }
+
       const stockDescontado=pedido.stockDescontado===true;
       const stockDevuelto=pedido.stockDevuelto===true;
 
@@ -5739,6 +5819,12 @@ document.addEventListener("DOMContentLoaded", function () {
           grupo.snapshot=await transaction.get(grupo.productoRef);
           if(!grupo.snapshot.exists)throw new Error("Uno de los productos del pedido ya no existe.");
           grupo.producto=grupo.snapshot.data()||{};
+          const codigoCatalogo=String(grupo.producto.codigo||grupo.snapshot.id).trim().toUpperCase();
+          for(const reg of grupo.items){
+            if(reg.codigo&&codigoCatalogo&&reg.codigo!==codigoCatalogo){
+              throw new Error("El código del pedido no coincide con el producto actual en Firestore.");
+            }
+          }
         }
       }
 

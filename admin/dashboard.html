@@ -8,7 +8,7 @@
 <meta content="noindex,nofollow,noarchive" name="robots"/>
 <meta content="#050505" name="theme-color"/>
 <link href="../assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="./admin.css?v=28000" rel="stylesheet"/>
+<link href="./admin.css?v=29000" rel="stylesheet"/>
 <!-- PRODUCCIÓN · SEGURIDAD DEL NAVEGADOR -->
 <meta content="strict-origin-when-cross-origin" name="referrer"/>
 <meta content="geolocation=(), microphone=(), camera=()" http-equiv="Permissions-Policy"/>
@@ -110,6 +110,9 @@
       </a>
 </nav>
 <div class="admin-sidebar-footer">
+<div aria-live="polite" class="admin-session-guard-status" id="adminSessionGuardStatus">
+  SESIÓN PROTEGIDA
+</div>
 <button class="admin-logout-btn" id="cerrarSesionBtn" type="button">
         CERRAR SESIÓN
       </button>
@@ -2808,6 +2811,10 @@
       </button>
 </div>
 <p aria-live="polite" class="pedido-stock-aviso" id="pedidoStockAviso"></p>
+<div aria-live="polite" class="pedido-integridad-box revisando" id="pedidoIntegridadBox">
+  <div><span>INTEGRIDAD DEL PEDIDO</span><strong id="pedidoIntegridadEstado">REVISANDO</strong></div>
+  <p id="pedidoIntegridadDetalle">Comprobando estructura, totales y referencias del catálogo...</p>
+</div>
 <p aria-live="polite" class="producto-mensaje" id="pedidoAdminMensaje"></p>
 <div class="pedido-info-grid">
 <article class="pedido-info-card">
@@ -2911,7 +2918,7 @@
 <script src="../variant-utils.js?v=2900"></script>
 <script src="../store-config.js?v=3000"></script>
 <script src="../payment-config.js?v=18000"></script>
-<script src="./dashboard.js?v=28000"></script>
+<script src="./dashboard.js?v=29000"></script>
 <script src="./resenas-admin.js?v=24000"></script>
 <script src="./analitica.js?v=21010"></script>
 <script src="./backup.js?v=22000"></script>
@@ -2921,5 +2928,6 @@
 <script src="./comprobante-email.js?v=21000"></script>
 <script src="./facturacion.js?v=21001"></script>
 <script src="./system-health.js?v=28000"></script>
+<script src="./session-guard.js?v=29000"></script>
 </body>
 </html>

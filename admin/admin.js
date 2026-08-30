@@ -687,3 +687,13 @@ document.addEventListener(
 
   }
 );
+
+// PASO 29 · mensaje de cierre automático por inactividad.
+document.addEventListener("DOMContentLoaded",function(){
+  try{
+    if(new URLSearchParams(window.location.search).get("motivo")==="inactividad"){
+      const el=document.getElementById("loginMensaje");
+      if(el)el.textContent="La sesión administrativa se cerró por 60 minutos de inactividad.";
+    }
+  }catch(_){}
+});
