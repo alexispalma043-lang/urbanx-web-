@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       await db
         .collection("configuracion_sri")
-        .doc("__admin_access_check__")
+        .doc("admin_access_check")
         .get({ source: "server" });
 
       return true;
