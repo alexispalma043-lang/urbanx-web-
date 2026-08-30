@@ -5,4 +5,5 @@ exclude:
   - .vscode
   - .gitignore
   - AUTO_GITHUB_SYNC_CORREGIDO.ps1
-  - SIXTEEN_RELEASE_PASO_30.txt
+  - SIXTEEN_RELEASE_FINAL.txt
+  - SIXTEEN_QA_FINAL_PASO_31.txt

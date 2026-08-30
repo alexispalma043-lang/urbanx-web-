@@ -8052,3 +8052,69 @@ body {
   font-size:10px;
   line-height:1.6
 }
+
+
+/* =========================================================
+   PASO 31 · QA VISUAL FINAL / ACCESIBILIDAD / RESPONSIVE
+========================================================= */
+
+:root{
+  color-scheme:dark;
+}
+
+input,
+select,
+textarea{
+  color-scheme:dark;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill{
+  -webkit-text-fill-color:#fff!important;
+  -webkit-box-shadow:0 0 0 1000px #080808 inset!important;
+  box-shadow:0 0 0 1000px #080808 inset!important;
+  caret-color:#fff;
+}
+
+.carrito-item-info,
+.checkout-producto-info,
+.numero-pedido-box,
+.confirmacion-dato,
+.confirmacion-resumen{
+  min-width:0;
+}
+
+.numero-pedido-box strong,
+.confirmacion-dato strong,
+.checkout-producto-info h3,
+.carrito-item-info h3{
+  overflow-wrap:anywhere;
+}
+
+@media(max-width:520px){
+  .confirmacion-hero{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .confirmacion-hero h1{
+    max-width:100%;
+    font-size:clamp(42px,14vw,54px);
+    line-height:.88;
+    letter-spacing:-1.5px;
+    overflow-wrap:anywhere;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
