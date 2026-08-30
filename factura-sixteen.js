@@ -80,17 +80,46 @@
     ${item.tipoDocumento==="FACTURA"?`<table><thead><tr><th>CÓDIGO</th><th>DESCRIPCIÓN</th><th class="num">CANT.</th><th class="num">P. UNIT.</th><th class="num">IVA</th><th class="num">IMP.</th><th class="num">TOTAL</th></tr></thead><tbody>${rowsHtml(item)}</tbody></table>`:""}
     <section class="totals"><div><span>Base imponible</span><strong>${money(base)}</strong></div>${n(tax)>0?`<div><span>IVA</span><strong>${money(tax)}</strong></div>`:""}<div><span>Subtotal</span><strong>${money(subtotal)}</strong></div>${n(discount)>0?`<div><span>Descuento</span><strong>-${money(discount)}</strong></div>`:""}${n(shipping)>0?`<div><span>Envío / otros</span><strong>${money(shipping)}</strong></div>`:""}<div class="grand"><span>TOTAL</span><strong>${money(total)}</strong></div></section>
     ${notes?`<section class="notes"><span class="label">NOTAS / CONDICIONES</span>${esc(notes)}</section>`:""}
-    <footer class="footer">Documento generado por Facturación SIXTEEN · ${esc(date(item.creadoEn))}</footer></main><div class="actions"><button class="alt" onclick="window.opener&&window.opener.SIXTEEN_FACTURA_PDF&&window.opener.SIXTEEN_FACTURA_PDF.download(window.__SIXTEEN_DOC__)" style="display:none">DESCARGAR PDF</button><button onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div><script>window.__SIXTEEN_DOC__=${JSON.stringify(item).replace(/</g,"\\u003c")};<\/script></body></html>`;
+    <footer class="footer">Documento generado por Facturación SIXTEEN · ${esc(date(item.creadoEn))}</footer></main><div class="actions"><button onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div></body></html>`;
   }
 
   function open(item){
     if(typeof window==="undefined")return false;
-    const w=window.open("","_blank");
-    if(!w)return false;
-    w.document.open();
-    w.document.write(buildHtml(item));
-    w.document.close();
-    return true;
+    let html="";
+    try{
+      html=buildHtml(item);
+    }catch(err){
+      console.error("Vista imprimible SIXTEEN:",err);
+      return false;
+    }
+
+    // Ruta principal: abre un HTML Blob. Evita pestañas about:blank vacías.
+    try{
+      const blob=new Blob([html],{type:"text/html;charset=utf-8"});
+      const url=URL.createObjectURL(blob);
+      const w=window.open(url,"_blank");
+      if(!w){
+        URL.revokeObjectURL(url);
+        return false;
+      }
+      setTimeout(()=>{try{URL.revokeObjectURL(url);}catch(_err){}},60000);
+      return true;
+    }catch(err){
+      console.error("Vista imprimible Blob SIXTEEN:",err);
+    }
+
+    // Respaldo para navegadores antiguos.
+    try{
+      const w=window.open("about:blank","_blank");
+      if(!w)return false;
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+      return true;
+    }catch(err){
+      console.error("Vista imprimible SIXTEEN (fallback):",err);
+      return false;
+    }
   }
 
   function wrap(doc,text,width){
