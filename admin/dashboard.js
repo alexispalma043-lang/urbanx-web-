@@ -4937,6 +4937,274 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // ========================================================
+  // ACTUALIZACIÓN DE PAGO · CLIENTE + FACTURACIÓN
+  // ========================================================
+
+  function datosNotificacionPago(
+    estadoPago
+  ) {
+
+    const mapa = {
+
+      "Pendiente": {
+        titulo:
+          "Pago pendiente",
+        mensaje:
+          "El pago de tu pedido continúa pendiente.",
+        asunto:
+          "Estado de pago de tu pedido SIXTEEN"
+      },
+
+      "Pendiente de pasarela": {
+        titulo:
+          "Pago pendiente en pasarela",
+        mensaje:
+          "Tu pedido está registrado y el pago con tarjeta todavía está pendiente en la pasarela.",
+        asunto:
+          "Estado de pago de tu pedido SIXTEEN"
+      },
+
+      "Pendiente contra entrega": {
+        titulo:
+          "Pago contra entrega",
+        mensaje:
+          "Tu pedido mantiene el pago contra entrega.",
+        asunto:
+          "Estado de pago de tu pedido SIXTEEN"
+      },
+
+      "Por verificar": {
+        titulo:
+          "Pago por verificar",
+        mensaje:
+          "Recibimos la referencia de pago y el equipo SIXTEEN debe verificarla antes de marcarla como pagada.",
+        asunto:
+          "Estado de pago de tu pedido SIXTEEN"
+      },
+
+      "Pagado": {
+        titulo:
+          "Pago confirmado",
+        mensaje:
+          "El pago de tu pedido fue confirmado correctamente.",
+        asunto:
+          "Pago confirmado · SIXTEEN"
+      },
+
+      "Reembolsado": {
+        titulo:
+          "Pago reembolsado",
+        mensaje:
+          "El pago de tu pedido fue marcado como reembolsado.",
+        asunto:
+          "Actualización de pago · SIXTEEN"
+      }
+    };
+
+
+    return (
+      mapa[
+        estadoPago
+      ] ||
+      null
+    );
+  }
+
+
+  async function registrarActualizacionPagoCliente(
+    pedido,
+    estadoPagoAnterior,
+    nuevoEstadoPago
+  ) {
+
+    if (
+      !pedido ||
+      estadoPagoAnterior ===
+      nuevoEstadoPago
+    ) {
+      return;
+    }
+
+
+    const contenido =
+      datosNotificacionPago(
+        nuevoEstadoPago
+      );
+
+
+    if (!contenido) {
+      return;
+    }
+
+
+    const clienteUid =
+      String(
+        pedido.clienteUid ||
+        ""
+      ).trim();
+
+
+    const pedidoNumero =
+      pedido.numero ||
+      pedido.id ||
+      pedidoEditandoId;
+
+
+    if (clienteUid) {
+
+      try {
+
+        await db
+          .collection("notificaciones")
+          .doc(clienteUid)
+          .collection("items")
+          .add({
+            usuarioUid:
+              clienteUid,
+
+            tipo:
+              "estado_pago",
+
+            pedidoId:
+              pedidoEditandoId,
+
+            pedidoNumero:
+              pedidoNumero,
+
+            estado:
+              nuevoEstadoPago,
+
+            titulo:
+              contenido.titulo,
+
+            mensaje:
+              contenido.mensaje,
+
+            leida:
+              false,
+
+            creadoEn:
+              FieldValue.serverTimestamp(),
+
+            creadoPor:
+              usuarioActual.email ||
+              usuarioActual.uid
+          });
+
+      } catch (error) {
+
+        console.warn(
+          "Notificación de pago:",
+          error
+        );
+      }
+    }
+
+
+    await enviarCorreoEstadoPedidoEmailJS(
+      pedido,
+      contenido,
+      "Pago · " +
+      nuevoEstadoPago
+    );
+  }
+
+
+  async function sincronizarPagoFacturaPedido(
+    pedidoId,
+    nuevoEstadoPago
+  ) {
+
+    if (
+      !pedidoId ||
+      !nuevoEstadoPago
+    ) {
+      return true;
+    }
+
+
+    try {
+
+      const snapshot =
+        await db
+          .collection("facturacion")
+          .where(
+            "pedidoId",
+            "==",
+            pedidoId
+          )
+          .get();
+
+
+      const batch =
+        db.batch();
+
+
+      let cambios =
+        0;
+
+
+      snapshot.forEach(
+        function (doc) {
+
+          const data =
+            doc.data() ||
+            {};
+
+
+          if (
+            data.sistema !==
+              "SIXTEEN_INTERNO" ||
+            data.tipoRegistro !==
+              "DOCUMENTO" ||
+            data.tipoDocumento !==
+              "FACTURA" ||
+            data.estado ===
+              "ANULADA"
+          ) {
+            return;
+          }
+
+
+          batch.update(
+            doc.ref,
+            {
+              "pago.estado":
+                nuevoEstadoPago,
+
+              actualizadoEn:
+                FieldValue.serverTimestamp()
+            }
+          );
+
+
+          cambios +=
+            1;
+        }
+      );
+
+
+      if (cambios) {
+        await batch.commit();
+      }
+
+
+      return true;
+
+    } catch (error) {
+
+      console.warn(
+        "Sincronizar pago con factura:",
+        error
+      );
+
+
+      return false;
+    }
+  }
+
+
+  // ========================================================
   // EMAILJS FREE
   // ========================================================
 
@@ -5252,6 +5520,35 @@ document.addEventListener("DOMContentLoaded", function () {
           nuevoEstado
         );
 
+
+        const estadoPagoAnterior =
+          String(
+            resultado.pedidoAntes
+              ?.pago
+              ?.estado ||
+            resultado.pedidoAntes
+              ?.estadoPago ||
+            "Pendiente"
+          );
+
+
+        await registrarActualizacionPagoCliente(
+          resultado.pedidoAntes,
+          estadoPagoAnterior,
+          nuevoEstadoPago
+        );
+
+
+        const facturaPagoSincronizada =
+          estadoPagoAnterior ===
+            nuevoEstadoPago
+            ? true
+            : await sincronizarPagoFacturaPedido(
+                pedidoEditandoId,
+                nuevoEstadoPago
+              );
+
+
         pedidoEstadoOriginal =
           nuevoEstado;
 
@@ -5272,8 +5569,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         mostrarMensajePedido(
-          resultado.mensaje,
-          true
+          resultado.mensaje +
+          (
+            facturaPagoSincronizada
+              ? ""
+              : " El pedido se actualizó, pero no fue posible sincronizar el estado de pago con una factura existente."
+          ),
+          facturaPagoSincronizada
         );
 
         pedidoEstadoPago.textContent =
